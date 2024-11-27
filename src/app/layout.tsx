@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { Header } from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
 import { initDsfr } from '@/utils/dsfr';
 
@@ -52,7 +53,15 @@ export default function RootLayout({
           rel='manifest'
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header
+          affiliatedMinistry={['Ministère', 'de la transition', 'écologique']}
+          organizationDetails='Vérifiez vos devis de rénovation énergétique'
+          organizationLink='https://mon-devis-sans-oublis.beta.gouv.fr/'
+          organizationName='Mon Devis Sans Oublis'
+        />
+        {children}
+      </body>
     </html>
   );
 }
