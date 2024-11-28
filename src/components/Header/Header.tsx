@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 export interface HeaderProps {
   affiliatedMinistry: string[];
+  buttons: { href: string; icon: string; label: string }[];
   organizationDetails: string;
   organizationLink: string;
   organizationName: string;
@@ -10,6 +11,7 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   affiliatedMinistry,
+  buttons,
   organizationDetails,
   organizationLink,
   organizationName,
@@ -44,6 +46,22 @@ const Header: React.FC<HeaderProps> = ({
                 <p className='fr-header__service-tagline'>
                   {organizationDetails}
                 </p>
+              </div>
+            </div>
+            <div className='fr-header__tools'>
+              <div className='fr-header__tools-links'>
+                <ul className='fr-btns-group'>
+                  {buttons.map((button, index) => (
+                    <li key={index}>
+                      <Link
+                        className={`fr-btn fr-icon-${button.icon}`}
+                        href={button.href}
+                      >
+                        {button.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
