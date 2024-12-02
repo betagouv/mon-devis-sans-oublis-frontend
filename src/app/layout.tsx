@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+// import Script from 'next/script';
 
-import { Header } from '@/components';
+import { Footer, FooterProps, Header, HeaderProps } from '@/components';
 import '@/styles/globals.css';
 import { marianne, spectral } from '@/styles/fonts';
 import { initDsfr } from '@/utils/dsfr';
@@ -18,6 +19,33 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const footerData: FooterProps = {
+    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
+    buttons: [
+      { href: '/', label: 'Plan du site' },
+      {
+        href: '/',
+        label: 'Accessibilité : non/partiellement/totalement conforme',
+      },
+      { href: '/', label: 'Mentions légales' },
+      { href: '/', label: 'Données personnelles' },
+      { href: '/', label: 'Gestion des cookies' },
+    ],
+    organizationDetails:
+      "Mon Devis Sans Oublis est un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations",
+    organizationLink: '/',
+    organizationName: 'Mon Devis Sans Oublis',
+  };
+
+  const headerData: HeaderProps = {
+    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
+    buttons: [
+      { href: '/contact', icon: 'question-line', label: 'Nous contacter' },
+    ],
+    organizationDetails: 'Vérifiez vos devis de rénovation énergétique',
+    organizationLink: '/',
+    organizationName: 'Mon Devis Sans Oublis',
+  };
   return (
     <html
       className={`${marianne.variable} ${spectral.variable}`}
@@ -33,42 +61,35 @@ export default function RootLayout({
           content='width=device-width, initial-scale=1, shrink-to-fit=no'
           name='viewport'
         />
+
         <meta content='#000091' name='theme-color' />
+        <link href='dsfr/favicon/apple-touch-icon.png' rel='apple-touch-icon' />
+        <link href='dsfr/favicon/favicon.svg' rel='icon' type='image/svg+xml' />
         <link
-          href='/dsfr/favicon/apple-touch-icon.png'
-          rel='apple-touch-icon'
-        />
-        <link
-          href='/dsfr/favicon/favicon.svg'
-          rel='icon'
-          type='image/svg+xml'
-        />
-        <link
-          href='/dsfr/favicon/favicon.ico'
+          href='dsfr/favicon/favicon.ico'
           rel='shortcut icon'
           type='image/x-icon'
         />
         <link
           crossOrigin='use-credentials'
-          href='/dsfr/favicon/manifest.webmanifest'
+          href='dsfr/favicon/manifest.webmanifest'
           rel='manifest'
         />
       </head>
       <body>
-        <Header
-          affiliatedMinistry={['Ministère', 'de la transition', 'écologique']}
-          buttons={[
-            {
-              href: '/contact',
-              icon: 'question-line',
-              label: 'Nous contacter',
-            },
-          ]}
-          organizationDetails='Vérifiez vos devis de rénovation énergétique'
-          organizationLink='/'
-          organizationName='Mon Devis Sans Oublis'
-        />
+        <Header {...headerData} />
         {children}
+        <Footer {...footerData} />
+        {/* <Script
+          type='module'
+          src='dsfr/dist/dsfr.module.min.js'
+          strategy='afterInteractive'
+        />
+        <Script
+          noModule
+          src='dsfr/dist/dsfr.nomodule.min.js'
+          strategy='afterInteractive'
+        /> */}
       </body>
     </html>
   );
