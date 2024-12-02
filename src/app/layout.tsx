@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 import { Header } from '@/components';
-import { marianne, spectral } from '@/styles/fonts';
 import '@/styles/globals.css';
+import { marianne, spectral } from '@/styles/fonts';
 import { initDsfr } from '@/utils/dsfr';
 
 // DSFR initialization
