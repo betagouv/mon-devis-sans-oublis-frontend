@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { Header } from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
+import '@/styles/globals.css';
 import { initDsfr } from '@/utils/dsfr';
 
 // DSFR initialization
@@ -58,13 +59,13 @@ export default function RootLayout({
           affiliatedMinistry={['Ministère', 'de la transition', 'écologique']}
           buttons={[
             {
-              href: 'https://mon-devis-sans-oublis.beta.gouv.fr/contact',
+              href: '/contact',
               icon: 'question-line',
               label: 'Nous contacter',
             },
           ]}
           organizationDetails='Vérifiez vos devis de rénovation énergétique'
-          organizationLink='https://mon-devis-sans-oublis.beta.gouv.fr/'
+          organizationLink='/'
           organizationName='Mon Devis Sans Oublis'
         />
         {children}
