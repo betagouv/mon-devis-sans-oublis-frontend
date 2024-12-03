@@ -8,26 +8,14 @@
   max-width: 202px;
 }
 
-.fr-card__header {
-  display: flex;
-  flex: 1;
-  justify-content: flex-start;
-  padding-left: 2rem;
-  padding-top: 1rem;
-}
-
 .fr-card__title a[href] span {
-  /* grey-200 (DSFR color) */
-  color: #3a3a3a;
-  /* fr-text--lead (DSFR classname) */
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 32px;
+  color: var(--text-default-grey);
 }
 
 .fr-responsive-img {
   display: block;
   height: 80px;
   object-fit: contain;
+  object-position: left;
   width: 100%;
 }

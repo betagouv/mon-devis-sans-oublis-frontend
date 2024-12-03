@@ -1,3 +1,13 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 h1 {
   color: #2f4077 !important;
+}
+
+main {
+  flex: 1 0 auto;
 }

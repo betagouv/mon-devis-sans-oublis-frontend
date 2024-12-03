@@ -1,0 +1,11 @@
+.description {
+  text-align: center;
+}
+
+.fr-icon-recycle-fill {
+  color: var(--background-action-high-blue-france);
+}
+
+.section-grey {
+  background-color: var(--background-default-grey-hover);
+}

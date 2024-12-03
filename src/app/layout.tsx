@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-// import Script from 'next/script';
 
 import { Footer, FooterProps, Header, HeaderProps } from '@/components';
 import '@/styles/globals.css';
@@ -40,7 +39,11 @@ export default function RootLayout({
   const headerData: HeaderProps = {
     affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
     buttons: [
-      { href: '/contact', icon: 'question-line', label: 'Nous contacter' },
+      {
+        href: '/contact',
+        icon: 'fr-icon-question-line',
+        label: 'Nous contacter',
+      },
     ],
     organizationDetails: 'Vérifiez vos devis de rénovation énergétique',
     organizationLink: '/',
@@ -76,20 +79,10 @@ export default function RootLayout({
           rel='manifest'
         />
       </head>
-      <body>
+      <body className='flex min-h-screen flex-col'>
         <Header {...headerData} />
-        {children}
+        <main className='flex-grow'>{children}</main>
         <Footer {...footerData} />
-        {/* <Script
-          type='module'
-          src='dsfr/dist/dsfr.module.min.js'
-          strategy='afterInteractive'
-        />
-        <Script
-          noModule
-          src='dsfr/dist/dsfr.nomodule.min.js'
-          strategy='afterInteractive'
-        /> */}
       </body>
     </html>
   );

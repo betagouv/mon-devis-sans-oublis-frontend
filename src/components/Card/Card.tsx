@@ -6,19 +6,29 @@ import styles from './Card.module.css';
 
 export interface CardProps {
   alt: string;
+  className: string;
   description: string;
   image: string;
   title: string;
   url: string;
 }
 
-const Card: React.FC<CardProps> = ({ alt, description, image, title, url }) => {
+const Card: React.FC<CardProps> = ({
+  alt,
+  className,
+  description,
+  image,
+  title,
+  url,
+}) => {
   return (
-    <div className={`${styles['fr-col']}`}>
+    <div className={`${styles['fr-col']} ${className}`}>
       <div className={`fr-card ${styles['fr-card']} fr-enlarge-link`}>
         <div className='fr-card__body'>
           <div className='fr-card__content'>
-            <p className={`fr-card__title ${styles['fr-card__title']}`}>
+            <p
+              className={`fr-card__title ${styles['fr-card__title']} fr-text--lead`}
+            >
               <Link href={url}>
                 <span>{title}</span>
               </Link>
@@ -28,7 +38,7 @@ const Card: React.FC<CardProps> = ({ alt, description, image, title, url }) => {
             </p>
           </div>
         </div>
-        <div className={`fr-card__header ${styles['fr-card__header']}`}>
+        <div className='fr-card__header fr-ml-4w fr-mt-3w'>
           <div>
             <Image
               alt={alt}

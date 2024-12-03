@@ -1,0 +1,10 @@
+.icon {
+  align-items: center;
+  background-color: var(--background-contrast-info);
+  border-radius: 8px;
+  color: var(--background-action-high-blue-france);
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}

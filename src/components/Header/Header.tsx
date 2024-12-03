@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({
                   {buttons.map((button, index) => (
                     <li key={index}>
                       <Link
-                        className={`fr-btn fr-icon-${button.icon}`}
+                        className={`fr-btn ${button.icon}`}
                         href={button.href}
                       >
                         {button.label}

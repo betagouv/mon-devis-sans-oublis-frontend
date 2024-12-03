@@ -15,7 +15,7 @@ export const Primary: Story = {
     buttons: [
       {
         href: 'https://mon-devis-sans-oublis.beta.gouv.fr/contact',
-        icon: 'question-line',
+        icon: 'fr-icon-question-line',
         label: 'Nous contacter',
       },
     ],
