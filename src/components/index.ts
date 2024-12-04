@@ -21,3 +21,6 @@ export type { HeaderProps } from './Header/Header';
 // IconBackground
 export { default as IconBackground } from './IconBackground/IconBackground';
 export type { IconBackgroundProps } from './IconBackground/IconBackground';
+// Tile
+export { default as Tile } from './Tile/Tile';
+export type { TileProps } from './Tile/Tile';

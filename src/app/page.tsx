@@ -1,8 +1,19 @@
-import { BlockIcon, BlockNumber, Button, Card, CardImage } from '@/components';
+'use client';
 
+import {
+  BlockIcon,
+  BlockNumber,
+  Button,
+  Card,
+  CardImage,
+  Tile,
+} from '@/components';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import styles from './page.module.css';
 
 export default function Home() {
+  const breakpoint = useBreakpoint();
+
   const badgeData = [
     {
       label: 'Ma prime renov',
@@ -60,14 +71,15 @@ export default function Home() {
     {
       alt: '[À MODIFIER - vide ou texte alternatif de l’image]',
       description:
-        'Gagner du temps en évitant les multiples changements sur vos devis',
+        'Je souhaite gagner du temps en évitant les multiples changements sur mes devis',
       image: 'card_artisan.png',
       title: 'Je suis un artisan',
       url: '/artisan',
     },
     {
       alt: '[À MODIFIER - vide ou texte alternatif de l’image]',
-      description: 'Simplifiez votre processus avec notre aide dédiée',
+      description:
+        'Je souhaite vérifier mes devis et gagner du temps dans les démarches',
       image: 'card_individual.png',
       title: 'Je suis un particulier',
       url: '/particulier',
@@ -75,14 +87,15 @@ export default function Home() {
 
     {
       alt: '[À MODIFIER - vide ou texte alternatif de l’image]',
-      description: 'Faire le lien entre les différentes parties prenantes',
+      description:
+        'Je souhaite faire le lien entre les différentes parties prenantes',
       image: 'card_agent.png',
       title: 'Je suis un mandataire',
       url: '/mandataire',
     },
     {
       alt: '[À MODIFIER - vide ou texte alternatif de l’image]',
-      description: 'Accompagner ses clients dans leurs démarches',
+      description: 'Je souhaite accompagner mes clients dans leurs démarches',
       image: 'card_advisor.png',
       title: 'Je suis un conseiller',
       url: '/conseiller',
@@ -126,7 +139,7 @@ export default function Home() {
     <div>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <div className='fr-col-5'>
+          <div className='fr-col-12 fr-col-lg-5'>
             <h1>
               Je souhaite vérifier un devis avant une demande d’aide de
               rénovation énergétique
@@ -143,7 +156,7 @@ export default function Home() {
             <Button {...checkQuoteButton} />
           </div>
           <div className='fr-grid-row fr-grid-row--center'>
-            <h1 className='fr-mt-12w'>
+            <h1 className='fr-mt-12w text-center'>
               Exemple de gestes de rénovation énergétique
             </h1>
             <div className='scroll-container'>
@@ -218,23 +231,33 @@ export default function Home() {
         className={`fr-container-fluid fr-py-10w ${styles['section-grey']}`}
       >
         <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--center'>
+          <div className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
             <h1>Qui êtes-vous ?</h1>
             <p className='fr-text--lead text-center'>
               Simplifier les démarches administratives, les échanges
-              d’informations et la validation de vos projets
+              d&apos;informations et la validation de vos projets
             </p>
-            {cardsData.map((card, index) => (
-              <Card
-                alt={card.alt}
-                className='fr-col-12 fr-col-md-3'
-                description={card.description}
-                image={card.image}
-                key={index}
-                title={card.title}
-                url={card.url}
-              />
-            ))}
+            {breakpoint === 'XS' || breakpoint === 'SM'
+              ? cardsData.map((card, index) => (
+                  <div className='fr-col-12' key={index}>
+                    <Tile
+                      description={card.description}
+                      href={card.url}
+                      title={card.title}
+                    />
+                  </div>
+                ))
+              : cardsData.map((card, index) => (
+                  <Card
+                    alt={card.alt}
+                    className='fr-col-12 fr-col-md-6 fr-col-lg-3'
+                    description={card.description}
+                    image={card.image}
+                    key={index}
+                    title={card.title}
+                    url={card.url}
+                  />
+                ))}
           </div>
         </div>
       </section>

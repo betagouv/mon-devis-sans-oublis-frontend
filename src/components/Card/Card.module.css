@@ -1,11 +1,5 @@
 .fr-card {
-  flex: 0;
   height: 100%;
-  max-width: 282px;
-}
-
-.fr-card__desc {
-  max-width: 202px;
 }
 
 .fr-card__title a[href] span {
@@ -13,6 +7,7 @@
 }
 
 .fr-responsive-img {
+  align-self: flex-start;
   display: block;
   height: 80px;
   object-fit: contain;

@@ -6,7 +6,7 @@ import styles from './Card.module.css';
 
 export interface CardProps {
   alt: string;
-  className: string;
+  className?: string;
   description: string;
   image: string;
   title: string;
@@ -33,9 +33,7 @@ const Card: React.FC<CardProps> = ({
                 <span>{title}</span>
               </Link>
             </p>
-            <p className={`fr-card__desc ${styles['fr-card__desc']}`}>
-              {description}
-            </p>
+            <p className='fr-card__desc'>{description}</p>
           </div>
         </div>
         <div className='fr-card__header fr-ml-4w fr-mt-3w'>

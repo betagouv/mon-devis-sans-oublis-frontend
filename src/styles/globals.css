@@ -36,6 +36,10 @@ li {
   text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+
 @media (max-width: 991px) {
   /* Landing page - CardImages scroll */
   .scroll-container {
