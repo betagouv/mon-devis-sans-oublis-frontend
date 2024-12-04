@@ -9,6 +9,9 @@ export { default as Button } from './Button/Button';
 export type { ButtonProps } from './Button/Button';
 // Card
 export { default as Card } from './Card/Card';
+// CardImage
+export { default as CardImage } from './CardImage/CardImage';
+export type { CardImageProps } from './CardImage/CardImage';
 // Footer
 export { default as Footer } from './Footer/Footer';
 export type { FooterProps } from './Footer/Footer';

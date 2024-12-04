@@ -1,8 +1,19 @@
-import { BlockIcon, BlockNumber, Button, Card } from '@/components';
+import { BlockIcon, BlockNumber, Button, Card, CardImage } from '@/components';
 
 import styles from './page.module.css';
 
 export default function Home() {
+  const badgeData = [
+    {
+      label: 'Ma prime renov',
+    },
+    {
+      label: 'Eco PTZ',
+    },
+    {
+      label: 'Aides CEEe',
+    },
+  ];
   const blockIconData = [
     {
       description:
@@ -78,6 +89,33 @@ export default function Home() {
     },
   ];
 
+  const cardImageData = [
+    {
+      image: 'checker.png',
+      title: 'Isolation',
+    },
+    {
+      image: 'checker.png',
+      title: 'Menuiserie',
+    },
+    {
+      image: 'checker.png',
+      title: 'Eau chaude sanitarire',
+    },
+    {
+      image: 'checker.png',
+      title: 'Système de chauffage',
+    },
+    {
+      image: 'checker.png',
+      title: 'Ventilation',
+    },
+    {
+      image: 'checker.png',
+      title: 'Système de régulation',
+    },
+  ];
+
   const checkQuoteButton = {
     href: '/bienvenue',
     icon: 'fr-icon-arrow-right-line',
@@ -86,13 +124,50 @@ export default function Home() {
 
   return (
     <div>
+      <section className='fr-container-fluid fr-py-10w'>
+        <div className='fr-container'>
+          <div className='fr-col-5'>
+            <h1>
+              Je souhaite vérifier un devis avant une demande d’aide de
+              rénovation énergétique
+            </h1>
+            <ul className='fr-badges-group fr-mb-3w'>
+              {badgeData.map((badge, index) => (
+                <li key={index}>
+                  <p className='fr-badge--green-archipel fr-text--sm fr-mr-2w'>
+                    {badge.label}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <Button {...checkQuoteButton} />
+          </div>
+          <div className='fr-grid-row fr-grid-row--center'>
+            <h1 className='fr-mt-12w'>
+              Exemple de gestes de rénovation énergétique
+            </h1>
+            <div className='scroll-container'>
+              <ul className='fr-grid-row fr-grid-row--gutters'>
+                {cardImageData.map((cardImage, index) => (
+                  <li className='fr-col-4 fr-col-md-2' key={index}>
+                    <CardImage
+                      image={cardImage.image}
+                      title={cardImage.title}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
       <section
         className={`fr-container-fluid fr-py-10w ${styles['section-grey']}`}
       >
         <div className='fr-container'>
           <div className='fr-grid-row fr-grid-row--center'>
             <h1>Une démarche simplifiée en 3 étapes !</h1>
-            <p className={`fr-text--lead ${styles.description}`}>
+            <p className='fr-text--lead text-center'>
               Mon devis sans oublis est un service public gratuit qui vérifie en
               quelques secondes la conformité des devis aux attendus
               réglementaires des aides à la rénovation énergétique.
@@ -109,9 +184,7 @@ export default function Home() {
               />
             ))}
           </div>
-          <p
-            className={`fr-mb-4w fr-mt-1w fr-text--lead ${styles.description}`}
-          >
+          <p className='fr-mb-4w fr-mt-1w fr-text--lead text-center'>
             <span
               aria-hidden='true'
               className={`fr-icon-recycle-fill ${styles['fr-icon-recycle-fill']} fr-mr-1w`}
@@ -126,7 +199,7 @@ export default function Home() {
       </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--center'>
+          <div className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
             {blockIconData.map((blockIcon, index) => (
               <BlockIcon
                 description={blockIcon.description}
@@ -147,7 +220,7 @@ export default function Home() {
         <div className='fr-container'>
           <div className='fr-grid-row fr-grid-row--center'>
             <h1>Qui êtes-vous ?</h1>
-            <p className={`fr-text--lead ${styles.description}`}>
+            <p className='fr-text--lead text-center'>
               Simplifier les démarches administratives, les échanges
               d’informations et la validation de vos projets
             </p>
