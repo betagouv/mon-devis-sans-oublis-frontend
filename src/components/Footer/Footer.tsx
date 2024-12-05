@@ -1,10 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
 
+interface OrganizationDetails {
+  beforeLink: string;
+  link: {
+    text: string;
+    url: string;
+  };
+  afterLink: string;
+  betaGouv: {
+    text: string;
+    url: string;
+  };
+  finalText: string;
+}
+
 export interface FooterProps {
   affiliatedMinistry: string[];
   buttons: { href: string; label: string }[];
-  organizationDetails: string;
+  organizationDetails: OrganizationDetails;
   organizationLink: string;
   organizationName: string;
 }
@@ -38,53 +52,25 @@ const Footer: React.FC<FooterProps> = ({
             </Link>
           </div>
           <div className='fr-footer__content'>
-            <p className='fr-footer__content-desc'>{organizationDetails}</p>
-            <ul className='fr-footer__content-list'>
-              <li className='fr-footer__content-item'>
-                <Link
-                  className='fr-footer__content-link'
-                  href='https://info.gouv.fr'
-                  rel='noopener external'
-                  target='_blank'
-                  title='info.gouv.fr - nouvelle fenêtre'
-                >
-                  info.gouv.fr
-                </Link>
-              </li>
-              <li className='fr-footer__content-item'>
-                <Link
-                  className='fr-footer__content-link'
-                  href='https://service-public.fr'
-                  rel='noopener external'
-                  target='_blank'
-                  title='service-public.fr - nouvelle fenêtre'
-                >
-                  service-public.fr
-                </Link>
-              </li>
-              <li className='fr-footer__content-item'>
-                <Link
-                  className='fr-footer__content-link'
-                  href='https://legifrance.gouv.fr'
-                  rel='noopener external'
-                  target='_blank'
-                  title='legifrance.gouv.fr - nouvelle fenêtre'
-                >
-                  legifrance.gouv.fr
-                </Link>
-              </li>
-              <li className='fr-footer__content-item'>
-                <Link
-                  className='fr-footer__content-link'
-                  href='https://data.gouv.fr'
-                  rel='noopener external'
-                  target='_blank'
-                  title='data.gouv.fr - nouvelle fenêtre'
-                >
-                  data.gouv.fr
-                </Link>
-              </li>
-            </ul>
+            <div className='fr-footer__content-desc'>
+              {organizationDetails.beforeLink}
+              <Link
+                href={organizationDetails.link.url}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {organizationDetails.link.text}
+              </Link>
+              {organizationDetails.afterLink}
+              <Link
+                href={organizationDetails.betaGouv.url}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {organizationDetails.betaGouv.text}
+              </Link>
+              {organizationDetails.finalText}
+            </div>
           </div>
         </div>
         <div className='fr-footer__bottom'>

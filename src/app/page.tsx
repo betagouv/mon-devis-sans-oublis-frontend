@@ -116,18 +116,19 @@ export default function Home() {
       </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
+          <ul className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
             {wording.homepage.section_icon_block.icon_blocks.map(
               (block, index) => (
-                <BlockIcon
-                  description={block.description}
-                  icon={block.icon}
-                  key={index}
-                  title={block.title}
-                />
+                <li className='fr-col-12 fr-col-md-4' key={index}>
+                  <BlockIcon
+                    description={block.description}
+                    icon={block.icon}
+                    title={block.title}
+                  />
+                </li>
               )
             )}
-          </div>
+          </ul>
           <div className='fr-grid-row fr-grid-row--center fr-mt-3w'>
             <Link {...wording.homepage.check_quote_button} />
           </div>
@@ -137,21 +138,23 @@ export default function Home() {
         className={`fr-container-fluid fr-py-10w ${styles['section-grey']}`}
       >
         <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
-            <h1>{wording.homepage.section_who_are_you.title}</h1>
-            <p className='fr-text--lead text-center'>
-              {wording.homepage.section_who_are_you.description}
-            </p>
+          <h2 className='text-center'>
+            {wording.homepage.section_who_are_you.title}
+          </h2>
+          <p className='fr-text--lead text-center'>
+            {wording.homepage.section_who_are_you.description}
+          </p>
+          <ul className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
             {isMobile
               ? wording.homepage.section_who_are_you.cards.map(
                   (card, index) => (
-                    <div className='fr-col-12' key={index}>
+                    <li className='fr-col-12' key={index}>
                       <Tile
                         description={card.description}
                         href={card.url}
                         title={card.title}
                       />
-                    </div>
+                    </li>
                   )
                 )
               : wording.homepage.section_who_are_you.cards.map(
@@ -167,7 +170,7 @@ export default function Home() {
                     />
                   )
                 )}
-          </div>
+          </ul>
         </div>
       </section>
     </div>

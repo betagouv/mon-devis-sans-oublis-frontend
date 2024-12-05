@@ -39,22 +39,31 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
               <div className='fr-header__service'>
-                <Link
-                  href={organizationLink}
-                  title={`Accueil - ${organizationName} - ${plainString}`}
-                >
-                  <p className='fr-header__service-title'>{organizationName}</p>
-                </Link>
-                <p className='fr-header__service-tagline'>
-                  {organizationDetails}
-                </p>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <Link
+                      href={organizationLink}
+                      title={`Accueil - ${organizationName} - ${plainString}`}
+                    >
+                      <p className='fr-header__service-title'>
+                        {organizationName}
+                      </p>
+                    </Link>
+                    <p className='fr-header__service-tagline'>
+                      {organizationDetails}
+                    </p>
+                  </div>
+                  {beta && (
+                    <span
+                      className='fr-badge--green-archipel fr-text--sm fr-ml-3w'
+                      style={{ alignSelf: 'center' }}
+                    >
+                      {beta}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-            {beta && (
-              <p className='fr-badge--green-archipel fr-text--sm fr-ml-2w'>
-                {beta}
-              </p>
-            )}
             <div className='fr-header__tools'>
               <div className='fr-header__tools-links'>
                 <ul className='fr-btns-group'>
