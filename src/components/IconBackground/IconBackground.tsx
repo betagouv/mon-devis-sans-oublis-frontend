@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styles from './IconBackground.module.css';
 
 export interface IconBackgroundProps {

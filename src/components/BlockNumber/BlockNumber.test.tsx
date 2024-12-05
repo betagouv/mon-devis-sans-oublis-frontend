@@ -1,7 +1,12 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import BlockNumber from './BlockNumber';
+import { useBreakpoint } from '@/hooks';
+
+// Mock the useBreakpoint hook
+jest.mock('@/hooks', () => ({
+  useBreakpoint: jest.fn(),
+}));
 
 describe('BlockNumber', () => {
   const defaultProps = {
@@ -10,30 +15,58 @@ describe('BlockNumber', () => {
     title: 'Test title',
   };
 
-  it('renders correctly with required props', () => {
+  // Helper function to set the breakpoint
+  const setBreakpoint = (breakpoint: 'XS' | 'SM' | 'MD' | 'LG' | 'XL') => {
+    (useBreakpoint as jest.Mock).mockReturnValue(breakpoint);
+  };
+
+  beforeEach(() => {
+    // Reset the mock before each test
+    jest.clearAllMocks();
+    // Default to desktop view
+    setBreakpoint('LG');
+  });
+
+  it('renders correctly with required props on desktop', () => {
     render(<BlockNumber {...defaultProps} />);
 
-    // Check if number is rendered
     expect(screen.getByText('42')).toBeInTheDocument();
     expect(screen.getByText('42')).toHaveClass('fr-display--sm', 'fr-m-0');
-
-    // Check if title is rendered
     expect(screen.getByText('Test title')).toBeInTheDocument();
     expect(screen.getByText('Test title')).toHaveClass('fr-mb-1w');
+    expect(screen.getByText('Test description')).toBeInTheDocument();
+  });
 
-    // Check if description is rendered
+  it('hides description on mobile (XS breakpoint)', () => {
+    setBreakpoint('XS');
+    render(<BlockNumber {...defaultProps} />);
+
+    expect(screen.getByText('42')).toBeInTheDocument();
+    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.queryByText('Test description')).not.toBeInTheDocument();
+  });
+
+  it('hides description on mobile (SM breakpoint)', () => {
+    setBreakpoint('SM');
+    render(<BlockNumber {...defaultProps} />);
+
+    expect(screen.getByText('42')).toBeInTheDocument();
+    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.queryByText('Test description')).not.toBeInTheDocument();
+  });
+
+  it('shows description on tablet and above (MD breakpoint)', () => {
+    setBreakpoint('MD');
+    render(<BlockNumber {...defaultProps} />);
+
+    expect(screen.getByText('42')).toBeInTheDocument();
+    expect(screen.getByText('Test title')).toBeInTheDocument();
     expect(screen.getByText('Test description')).toBeInTheDocument();
   });
 
   it('applies custom className when provided', () => {
-    const propsWithClassName = {
-      ...defaultProps,
-      className: 'custom-class',
-    };
+    render(<BlockNumber {...defaultProps} className='custom-class' />);
 
-    render(<BlockNumber {...propsWithClassName} />);
-
-    // Check if the container has the custom class
     const container = screen.getByText('42').parentElement;
     expect(container).toHaveClass('custom-class');
   });

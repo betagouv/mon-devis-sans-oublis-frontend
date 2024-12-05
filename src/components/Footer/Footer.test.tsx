@@ -1,6 +1,5 @@
-// src/components/Footer/Footer.test.tsx
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+
 import Footer, { FooterProps } from './Footer';
 
 describe('Footer Component', () => {

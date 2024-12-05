@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import {
   BlockIcon,
   BlockNumber,
@@ -8,9 +10,8 @@ import {
   Link,
   Tile,
 } from '@/components';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { useBreakpoint } from '@/hooks';
 import styles from './page.module.css';
-import React from 'react';
 
 export default function Home() {
   const breakpoint = useBreakpoint();
