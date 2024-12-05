@@ -23,6 +23,10 @@ li {
   justify-content: center;
 }
 
+.direction-col {
+  flex-direction: column;
+}
+
 /* DSFR badge component style not working */
 .fr-badge--green-archipel {
   border-radius: 4px;

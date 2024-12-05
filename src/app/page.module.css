@@ -1,7 +1,29 @@
+.arrowIcon {
+  color: var(--background-action-high-blue-france);
+  position: relative;
+  bottom: 20px;
+  right: 20px;
+}
+
+.arrowContainer {
+  width: 0;
+}
+
 .fr-icon-recycle-fill {
   color: var(--background-action-high-blue-france);
 }
 
 .section-grey {
   background-color: var(--background-default-grey-hover);
+}
+
+@media (max-width: 767px) {
+  .arrowIcon {
+    bottom: 10px;
+    right: 0;
+  }
+
+  .arrowContainer {
+    width: auto;
+  }
 }

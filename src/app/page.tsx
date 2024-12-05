@@ -190,37 +190,36 @@ export default function Home() {
               réglementaires des aides à la rénovation énergétique.
             </p>
           </div>
-          <div className='fr-grid-row fr-grid-row--gutters fr-mx-1w'>
+          <div
+            className={`fr-grid-row fr-grid-row--gutters fr-mx-1w ${
+              isMobile && 'fr-mb-4w'
+            }`}
+          >
             {blockNumberData.map((blockNumber, index) => (
               <React.Fragment key={index}>
                 <BlockNumber
-                  className='fr-col-12 fr-col-lg-4'
+                  className={`fr-col-12 fr-col-lg-4 ${
+                    isMobile && 'content-center direction-col text-center'
+                  }`}
                   description={blockNumber.description}
                   number={blockNumber.number}
                   title={blockNumber.title}
                 />
                 {index < blockNumberData.length - 1 && (
                   <div
-                    className={
+                    className={`${
                       isMobile
                         ? 'fr-col-12 fr-col-lg-auto'
                         : 'fr-hidden fr-unhidden-lg'
-                    }
-                    style={{ width: isMobile ? 'auto' : 0 }}
+                    } ${styles.arrowContainer}`}
                   >
                     <span
+                      aria-hidden='true'
                       className={`${
                         isMobile
                           ? 'fr-icon-arrow-down-s-line'
                           : 'fr-icon-arrow-right-s-line'
-                      } content-center`}
-                      aria-hidden='true'
-                      style={{
-                        color: '#000091',
-                        bottom: '20px',
-                        position: 'relative',
-                        right: '20px',
-                      }}
+                      } content-center ${styles.arrowIcon}`}
                     ></span>
                   </div>
                 )}
