@@ -30,8 +30,23 @@ The application will be available at [http://localhost:3000](http://localhost:30
 - Edit `src/app/page.tsx` to modify the home page
 - The application will auto-update as you edit files
 
+## Storybook
+
+To run Storybook locally:
+
+```bash copy
+npm run storybook
+```
+
+Storybook will be available at [http://localhost:6006](http://localhost:6006).
+
+Stories are located in `src/components/*.stories.tsx`.
+
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org/)
-- TypeScript
-- Docker
+- [Next.js 15](https://nextjs.org/) - React framework for server-side rendering and static site generation
+- [TypeScript](https://www.typescriptlang.org/) - Typed superset of JavaScript
+- [Jest](https://jestjs.io/) - JavaScript testing framework
+- [React Testing Library](https://testing-library.com/react) - Testing utilities for React components
+- [Storybook](https://storybook.js.org/) - UI component development environment
+- [Docker](https://www.docker.com/) - Containerization platform

@@ -4,6 +4,7 @@ import { Footer, FooterProps, Header, HeaderProps } from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { initDsfr } from '@/utils/dsfr';
+import wording from '@/wording.json';
 
 // DSFR initialization
 initDsfr();
@@ -18,37 +19,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const footerData: FooterProps = {
-    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
-    buttons: [
-      { href: '/', label: 'Plan du site' },
-      {
-        href: '/',
-        label: 'Accessibilité : non/partiellement/totalement conforme',
-      },
-      { href: '/', label: 'Mentions légales' },
-      { href: '/', label: 'Données personnelles' },
-      { href: '/', label: 'Gestion des cookies' },
-    ],
-    organizationDetails:
-      "Mon Devis Sans Oublis est un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations",
-    organizationLink: '/',
-    organizationName: 'Mon Devis Sans Oublis',
-  };
+  const footerData: FooterProps = wording.layout.footer;
+  const headerData: HeaderProps = wording.layout.header;
 
-  const headerData: HeaderProps = {
-    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
-    buttons: [
-      {
-        href: '/contact',
-        icon: 'fr-icon-question-line',
-        label: 'Nous contacter',
-      },
-    ],
-    organizationDetails: 'Vérifiez vos devis de rénovation énergétique',
-    organizationLink: '/',
-    organizationName: 'Mon Devis Sans Oublis',
-  };
   return (
     <html
       className={`${marianne.variable} ${spectral.variable}`}
