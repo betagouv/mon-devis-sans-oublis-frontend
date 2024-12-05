@@ -100,7 +100,7 @@ describe('BlockNumber', () => {
     const title = screen.getByText('Test title');
     const description = screen.getByText('Test description');
 
-    expect(number.tagName).toBe('H2');
+    expect(number.tagName).toBe('H3');
     expect(title.tagName).toBe('H5');
     expect(description.tagName).toBe('P');
   });

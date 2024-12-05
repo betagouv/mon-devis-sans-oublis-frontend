@@ -28,6 +28,10 @@ li {
   flex-direction: column;
 }
 
+.fr-footer__content-desc a::after {
+  content: none;
+}
+
 /* DSFR badge component style not working */
 .fr-badge--green-archipel {
   border-radius: 4px;

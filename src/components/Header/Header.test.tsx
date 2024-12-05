@@ -5,6 +5,7 @@ import Header, { HeaderProps } from './Header';
 describe('Header', () => {
   const mockProps: HeaderProps = {
     affiliatedMinistry: ['Ministère', 'de lIntérieur'],
+    beta: 'beta',
     buttons: [
       { href: '/login', icon: 'fr-icon-account-line', label: 'Se connecter' },
       { href: '/contact', icon: 'fr-icon-mail-line', label: 'Contact' },
@@ -48,6 +49,11 @@ describe('Header', () => {
   it('renders organization details', () => {
     render(<Header {...mockProps} />);
     expect(screen.getByText(mockProps.organizationDetails)).toBeInTheDocument();
+  });
+
+  it('renders the beta label if present', () => {
+    render(<Header {...mockProps} />);
+    expect(screen.getByText('beta')).toBeInTheDocument();
   });
 
   it('renders all navigation buttons', () => {

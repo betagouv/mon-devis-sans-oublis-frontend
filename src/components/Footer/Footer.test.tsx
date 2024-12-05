@@ -4,29 +4,78 @@ import Footer, { FooterProps } from './Footer';
 
 describe('Footer Component', () => {
   const defaultProps: FooterProps = {
-    affiliatedMinistry: ['Ministry of Magic', 'Department of Mysteries'],
+    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
     buttons: [
       { href: '/contact', label: 'Contact' },
       { href: '/about', label: 'About' },
     ],
-    organizationDetails: 'Organization details here',
-    organizationLink: 'https://example.com',
-    organizationName: 'Example Organization',
+    organizationDetails: {
+      beforeLink: 'Mon Devis Sans Oublis est un service public conçu par la',
+      link: {
+        text: "Direction générale de l'aménagement, du logement et de la nature (DGALN)",
+        url: 'https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0',
+      },
+      afterLink: 'en partenariat avec le programme',
+      betaGouv: {
+        text: 'beta.gouv',
+        url: 'https://beta.gouv.fr/',
+      },
+      finalText:
+        ". Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr",
+    },
+    organizationLink: '/',
+    organizationName: 'Mon Devis Sans Oublis',
   };
 
   it('renders affiliated ministry lines', () => {
     render(<Footer {...defaultProps} />);
+    const logoElement = screen.getByText((content, element) => {
+      return element?.classList.contains('fr-logo') ?? false;
+    });
+
     defaultProps.affiliatedMinistry.forEach((line) => {
-      expect(
-        screen.getByText((content) => content.includes(line))
-      ).toBeInTheDocument();
+      expect(logoElement).toHaveTextContent(line);
     });
   });
 
-  it('renders organization details', () => {
+  it('renders organization details with links', () => {
     render(<Footer {...defaultProps} />);
+
+    // Check DGALN link
+    const dgalnLink = screen.getByText(
+      defaultProps.organizationDetails.link.text
+    );
+    expect(dgalnLink).toBeInTheDocument();
+    expect(dgalnLink.closest('a')).toHaveAttribute(
+      'href',
+      defaultProps.organizationDetails.link.url
+    );
+
+    // Check beta.gouv link
+    const betaGouvLink = screen.getByText(
+      defaultProps.organizationDetails.betaGouv.text
+    );
+    expect(betaGouvLink).toBeInTheDocument();
+    expect(betaGouvLink.closest('a')).toHaveAttribute(
+      'href',
+      defaultProps.organizationDetails.betaGouv.url
+    );
+
+    // Check text content
     expect(
-      screen.getByText(defaultProps.organizationDetails)
+      screen.getByText((content) =>
+        content.includes(defaultProps.organizationDetails.beforeLink)
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText((content) =>
+        content.includes(defaultProps.organizationDetails.afterLink)
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText((content) =>
+        content.includes(defaultProps.organizationDetails.finalText)
+      )
     ).toBeInTheDocument();
   });
 
@@ -38,23 +87,7 @@ describe('Footer Component', () => {
       } - ${defaultProps.affiliatedMinistry.join(' ')}`
     );
     expect(linkElement).toBeInTheDocument();
-    expect(linkElement.closest('a')).toHaveAttribute(
-      'href',
-      defaultProps.organizationLink
-    );
-  });
-
-  it('renders footer links', () => {
-    render(<Footer {...defaultProps} />);
-    const links = [
-      'info.gouv.fr',
-      'service-public.fr',
-      'legifrance.gouv.fr',
-      'data.gouv.fr',
-    ];
-    links.forEach((link) => {
-      expect(screen.getByText(link)).toBeInTheDocument();
-    });
+    expect(linkElement).toHaveAttribute('href', defaultProps.organizationLink);
   });
 
   it('renders buttons with correct hrefs and labels', () => {

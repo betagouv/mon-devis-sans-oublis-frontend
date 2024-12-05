@@ -19,7 +19,7 @@ const BlockNumber: React.FC<BlockNumberProps> = ({
 
   return (
     <div className={className}>
-      <h2 className='fr-display--sm fr-m-0'>{number}</h2>
+      <h3 className='fr-display--sm fr-m-0'>{number}</h3>
       <h5 className='fr-mb-1w'>{title}</h5>
       {breakpoint !== 'XS' && breakpoint !== 'SM' ? <p>{description}</p> : null}
     </div>
