@@ -1,0 +1,156 @@
+{
+  "homepage": {
+    "check_quote_button": {
+      "href": "/bienvenue",
+      "icon": "fr-icon-arrow-right-line",
+      "label": "Vérifier mon devis"
+    },
+    "section_icon_block": {
+      "icon_blocks": [
+        {
+          "description": "Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis",
+          "icon": "fr-icon-question-line",
+          "title": "Explications claires"
+        },
+        {
+          "description": "Corrigez facilement vos devis grâce au guide restitué après l’analyse",
+          "icon": "fr-icon-question-line",
+          "title": "Gain de temps"
+        },
+        {
+          "description": "Moins d'allers-retours avec les instructeurs d'aides à la rénovation énergétique et des délais raccourcis",
+          "icon": "fr-icon-question-line",
+          "title": "Instruction accélérée"
+        }
+      ]
+    },
+    "section_examples": {
+      "badges": [
+        {
+          "label": "Ma prime renov"
+        },
+        {
+          "label": "Eco PTZ"
+        },
+        {
+          "label": "Aides CEE"
+        }
+      ],
+      "cards": [
+        {
+          "image": "checker.png",
+          "title": "Isolation"
+        },
+        {
+          "image": "checker.png",
+          "title": "Menuiserie"
+        },
+        {
+          "image": "checker.png",
+          "title": "Eau chaude sanitarire"
+        },
+        {
+          "image": "checker.png",
+          "title": "Système de chauffage"
+        },
+        {
+          "image": "checker.png",
+          "title": "Ventilation"
+        },
+        {
+          "image": "checker.png",
+          "title": "Système de régulation"
+        }
+      ],
+      "subtitle": "Exemple de gestes de rénovation énergétique",
+      "title": "Je souhaite vérifier un devis avant une demande d’aide de rénovation énergétique"
+    },
+    "section_steps": {
+      "correction": "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme.",
+      "description": "Mon devis sans oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.",
+      "number_blocks": [
+        {
+          "description": "Téléchargez en un clic votre devis au format pdf sur Mon Devis Sans Oublis en cliquant sur \"Vérifier mon devis\"",
+          "number": 1,
+          "title": "Envoyez votre devis"
+        },
+        {
+          "description": "Mon Devis Sans Oublis analyse automatiquement votre devis et identifie les mentions manquantes aux attendus réglementaires des aides à la rénovation énergétique",
+          "number": 2,
+          "title": "Découvrez les suggestions de correction"
+        },
+        {
+          "description": "En un clic partagez les les corrections à apporter aux personnes qui vous accompagnent (artisans, mandataires, conseillers, etc.)",
+          "number": 3,
+          "title": "Partagez votre guide personnalisé"
+        }
+      ],
+      "title": "Une démarche simplifiée en 3 étapes !"
+    },
+    "section_who_are_you": {
+      "cards": [
+        {
+          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
+          "image": "card_artisan.png",
+          "title": "Je suis un artisan",
+          "url": "/artisan"
+        },
+        {
+          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
+          "image": "card_individual.png",
+          "title": "Je suis un particulier",
+          "url": "/particulier"
+        },
+        {
+          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
+          "image": "card_agent.png",
+          "title": "Je suis un mandataire",
+          "url": "/mandataire"
+        },
+        {
+          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "description": "Je souhaite accompagner mes clients dans leurs démarches",
+          "image": "card_advisor.png",
+          "title": "Je suis un conseiller",
+          "url": "/conseiller"
+        }
+      ],
+      "description": "Simplifier les démarches administratives, les échanges d'informations et la validation de vos projets",
+      "title": "Qui êtes-vous ?"
+    }
+  },
+  "layout": {
+    "footer": {
+      "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
+      "buttons": [
+        { "href": "/", "label": "Plan du site" },
+        {
+          "href": "/",
+          "label": "Accessibilité : non/partiellement/totalement conforme"
+        },
+        { "href": "/", "label": "Mentions légales" },
+        { "href": "/", "label": "Données personnelles" },
+        { "href": "/", "label": "Gestion des cookies" }
+      ],
+      "organizationDetails": "Mon Devis Sans Oublis est un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations",
+      "organizationLink": "/",
+      "organizationName": "Mon Devis Sans Oublis"
+    },
+    "header": {
+      "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
+      "buttons": [
+        {
+          "href": "/contact",
+          "icon": "fr-icon-question-line",
+          "label": "Nous contacter"
+        }
+      ],
+      "organizationDetails": "Vérifiez vos devis de rénovation énergétique",
+      "organizationLink": "/",
+      "organizationName": "Mon Devis Sans Oublis"
+    }
+  }
+}
