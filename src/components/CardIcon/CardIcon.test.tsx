@@ -1,9 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import Card from './Card';
+import CardIcon from './CardIcon';
 
-describe('Card Component', () => {
+describe('CardIcon Component', () => {
   const mockProps = {
     alt: 'Test image',
     description: 'Test description',
@@ -13,7 +12,7 @@ describe('Card Component', () => {
   };
 
   it('renders with all props correctly', () => {
-    render(<Card {...mockProps} />);
+    render(<CardIcon {...mockProps} />);
 
     expect(screen.getByText(mockProps.title)).toBeInTheDocument();
     expect(screen.getByText(mockProps.description)).toBeInTheDocument();
