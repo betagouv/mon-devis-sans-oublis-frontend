@@ -41,6 +41,7 @@ type Story = StoryObj<typeof Header>;
 export const Default: Story = {
   args: {
     affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
+    beta: 'beta',
     buttons: [
       {
         href: 'https://example.com/contact',

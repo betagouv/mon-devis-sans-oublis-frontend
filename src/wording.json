@@ -141,6 +141,7 @@
     },
     "header": {
       "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
+      "beta": "beta",
       "buttons": [
         {
           "href": "/contact",

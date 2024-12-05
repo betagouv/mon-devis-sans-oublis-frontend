@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 export interface HeaderProps {
   affiliatedMinistry: string[];
+  beta?: string;
   buttons: { href: string; icon: string; label: string }[];
   organizationDetails: string;
   organizationLink: string;
@@ -11,6 +12,7 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   affiliatedMinistry,
+  beta,
   buttons,
   organizationDetails,
   organizationLink,
@@ -48,6 +50,11 @@ const Header: React.FC<HeaderProps> = ({
                 </p>
               </div>
             </div>
+            {beta && (
+              <p className='fr-badge--green-archipel fr-text--sm fr-ml-2w'>
+                {beta}
+              </p>
+            )}
             <div className='fr-header__tools'>
               <div className='fr-header__tools-links'>
                 <ul className='fr-btns-group'>
