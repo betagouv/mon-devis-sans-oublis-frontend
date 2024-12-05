@@ -18,6 +18,7 @@ li {
 }
 
 .content-center {
+  align-items: center;
   display: flex;
   justify-content: center;
 }
@@ -44,6 +45,7 @@ li {
   /* Landing page - CardImages scroll */
   .scroll-container {
     overflow-x: auto;
+    overflow-y: hidden;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Firefox */

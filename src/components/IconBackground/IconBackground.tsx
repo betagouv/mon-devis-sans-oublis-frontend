@@ -7,7 +7,7 @@ export interface IconBackgroundProps {
 }
 
 const IconBackground: React.FC<IconBackgroundProps> = ({ icon }) => {
-  return <div className={`${icon} ${styles.icon}`}></div>;
+  return <div className={`${icon} ${styles.icon} content-center`}></div>;
 };
 
 export default IconBackground;

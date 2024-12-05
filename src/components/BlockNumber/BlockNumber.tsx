@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import { useBreakpoint } from '@/hooks';
 
 export interface BlockNumberProps {
   className?: string;
@@ -13,11 +15,13 @@ const BlockNumber: React.FC<BlockNumberProps> = ({
   number,
   title,
 }) => {
+  const breakpoint = useBreakpoint();
+
   return (
     <div className={className}>
       <h2 className='fr-display--sm fr-m-0'>{number}</h2>
       <h5 className='fr-mb-1w'>{title}</h5>
-      <p>{description}</p>
+      {breakpoint !== 'XS' && breakpoint !== 'SM' ? <p>{description}</p> : null}
     </div>
   );
 };

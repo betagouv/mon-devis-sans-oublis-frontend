@@ -4,11 +4,9 @@ export type { BlockIconProps } from './BlockIcon/BlockIcon';
 // BlockNumber
 export { default as BlockNumber } from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
-// ButtonIcon
-export { default as Button } from './Button/Button';
-export type { ButtonProps } from './Button/Button';
-// Card
-export { default as Card } from './Card/Card';
+// CardIcon
+export { default as CardIcon } from './CardIcon/CardIcon';
+export type { CardIconProps } from './CardIcon/CardIcon';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
@@ -21,6 +19,9 @@ export type { HeaderProps } from './Header/Header';
 // IconBackground
 export { default as IconBackground } from './IconBackground/IconBackground';
 export type { IconBackgroundProps } from './IconBackground/IconBackground';
+// Link
+export { default as Link } from './Link/Link';
+export type { LinkProps } from './Link/Link';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';

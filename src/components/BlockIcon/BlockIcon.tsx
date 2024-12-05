@@ -1,5 +1,3 @@
-import React from 'react';
-
 import IconBackground from '../IconBackground/IconBackground';
 
 export interface BlockIconProps {

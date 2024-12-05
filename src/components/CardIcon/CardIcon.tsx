@@ -2,9 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import styles from './Card.module.css';
+import styles from './CardIcon.module.css';
 
-export interface CardProps {
+export interface CardIconProps {
   alt: string;
   className?: string;
   description: string;
@@ -13,7 +13,7 @@ export interface CardProps {
   url: string;
 }
 
-const Card: React.FC<CardProps> = ({
+const CardIcon: React.FC<CardIconProps> = ({
   alt,
   className,
   description,
@@ -52,4 +52,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export default CardIcon;

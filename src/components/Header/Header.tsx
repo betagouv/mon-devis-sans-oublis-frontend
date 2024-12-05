@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({
   const plainString = affiliatedMinistry.join(' ');
 
   return (
-    <header role='banner' className='fr-header'>
+    <header className='fr-header' role='banner'>
       <div className='fr-header__body'>
         <div className='fr-container'>
           <div className='fr-header__body-row'>

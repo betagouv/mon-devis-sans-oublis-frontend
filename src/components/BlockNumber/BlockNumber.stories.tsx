@@ -18,19 +18,3 @@ export const Default: Story = {
     description: 'This is a sample description for the block number component.',
   },
 };
-
-export const LargeNumber: Story = {
-  args: {
-    number: 1000,
-    title: 'Large Number',
-    description: 'Example with a larger number value.',
-  },
-};
-
-export const ShortContent: Story = {
-  args: {
-    number: 7,
-    title: 'Brief',
-    description: 'Short text.',
-  },
-};

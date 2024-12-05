@@ -3,16 +3,18 @@
 import {
   BlockIcon,
   BlockNumber,
-  Button,
-  Card,
+  CardIcon,
   CardImage,
+  Link,
   Tile,
 } from '@/components';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import styles from './page.module.css';
+import React from 'react';
 
 export default function Home() {
   const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === 'XS' || breakpoint === 'SM';
 
   const badgeData = [
     {
@@ -153,7 +155,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <Button {...checkQuoteButton} />
+            <Link {...checkQuoteButton} />
           </div>
           <div className='fr-grid-row fr-grid-row--center'>
             <h1 className='fr-mt-12w text-center'>
@@ -179,7 +181,9 @@ export default function Home() {
       >
         <div className='fr-container'>
           <div className='fr-grid-row fr-grid-row--center'>
-            <h1>Une démarche simplifiée en 3 étapes !</h1>
+            <h1 className='text-center'>
+              Une démarche simplifiée en 3 étapes !
+            </h1>
             <p className='fr-text--lead text-center'>
               Mon devis sans oublis est un service public gratuit qui vérifie en
               quelques secondes la conformité des devis aux attendus
@@ -188,13 +192,39 @@ export default function Home() {
           </div>
           <div className='fr-grid-row fr-grid-row--gutters fr-mx-1w'>
             {blockNumberData.map((blockNumber, index) => (
-              <BlockNumber
-                className='fr-col-12 fr-col-md-4'
-                description={blockNumber.description}
-                key={index}
-                number={blockNumber.number}
-                title={blockNumber.title}
-              />
+              <React.Fragment key={index}>
+                <BlockNumber
+                  className='fr-col-12 fr-col-lg-4'
+                  description={blockNumber.description}
+                  number={blockNumber.number}
+                  title={blockNumber.title}
+                />
+                {index < blockNumberData.length - 1 && (
+                  <div
+                    className={
+                      isMobile
+                        ? 'fr-col-12 fr-col-lg-auto'
+                        : 'fr-hidden fr-unhidden-lg'
+                    }
+                    style={{ width: isMobile ? 'auto' : 0 }}
+                  >
+                    <span
+                      className={`${
+                        isMobile
+                          ? 'fr-icon-arrow-down-s-line'
+                          : 'fr-icon-arrow-right-s-line'
+                      } content-center`}
+                      aria-hidden='true'
+                      style={{
+                        color: '#000091',
+                        bottom: '20px',
+                        position: 'relative',
+                        right: '20px',
+                      }}
+                    ></span>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
           <p className='fr-mb-4w fr-mt-1w fr-text--lead text-center'>
@@ -206,7 +236,7 @@ export default function Home() {
             qu&apos;il soit conforme.
           </p>
           <div className='fr-grid-row fr-grid-row--center'>
-            <Button {...checkQuoteButton} />
+            <Link {...checkQuoteButton} />
           </div>
         </div>
       </section>
@@ -223,7 +253,7 @@ export default function Home() {
             ))}
           </div>
           <div className='fr-grid-row fr-grid-row--center fr-mt-3w'>
-            <Button {...checkQuoteButton} />
+            <Link {...checkQuoteButton} />
           </div>
         </div>
       </section>
@@ -237,7 +267,7 @@ export default function Home() {
               Simplifier les démarches administratives, les échanges
               d&apos;informations et la validation de vos projets
             </p>
-            {breakpoint === 'XS' || breakpoint === 'SM'
+            {isMobile
               ? cardsData.map((card, index) => (
                   <div className='fr-col-12' key={index}>
                     <Tile
@@ -248,7 +278,7 @@ export default function Home() {
                   </div>
                 ))
               : cardsData.map((card, index) => (
-                  <Card
+                  <CardIcon
                     alt={card.alt}
                     className='fr-col-12 fr-col-md-6 fr-col-lg-3'
                     description={card.description}
