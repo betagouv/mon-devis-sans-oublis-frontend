@@ -73,7 +73,8 @@ export default function Home() {
                 <React.Fragment key={index}>
                   <BlockNumber
                     className={`fr-col-12 fr-col-lg-4 ${
-                      isMobile && 'content-center direction-col text-center'
+                      isMobile &&
+                      'content-center direction-col text-center fr-mb-3w'
                     }`}
                     description={block.description}
                     number={block.number}
