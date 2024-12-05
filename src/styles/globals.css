@@ -1,3 +1,78 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 h1 {
   color: #2f4077 !important;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+.content-center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.direction-col {
+  flex-direction: column;
+}
+
+/* DSFR badge component style not working */
+.fr-badge--green-archipel {
+  border-radius: 4px;
+  color: #0063cb !important;
+  font-weight: 700;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+@media (max-width: 991px) {
+  /* Landing page - CardImages scroll */
+  .scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    width: 100%;
+  }
+
+  .scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .scroll-container .fr-grid-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start !important;
+    width: max-content;
+  }
+
+  .scroll-container li {
+    flex: 0 0 160px; /* Fixed width for mobile */
+    white-space: normal;
+  }
+
+  .scroll-container li:last-child {
+    margin-right: 0;
+  }
 }

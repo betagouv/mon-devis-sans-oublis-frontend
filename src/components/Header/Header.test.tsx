@@ -6,8 +6,8 @@ describe('Header', () => {
   const mockProps: HeaderProps = {
     affiliatedMinistry: ['Ministère', 'de lIntérieur'],
     buttons: [
-      { href: '/login', icon: 'account-line', label: 'Se connecter' },
-      { href: '/contact', icon: 'mail-line', label: 'Contact' },
+      { href: '/login', icon: 'fr-icon-account-line', label: 'Se connecter' },
+      { href: '/contact', icon: 'fr-icon-mail-line', label: 'Contact' },
     ],
     organizationDetails: "Description de l'organisation",
     organizationLink: '/home',
@@ -57,9 +57,7 @@ describe('Header', () => {
       const buttonElement = screen.getByText(button.label);
       expect(buttonElement).toBeInTheDocument();
       expect(buttonElement.closest('a')).toHaveAttribute('href', button.href);
-      expect(buttonElement.closest('a')).toHaveClass(
-        `fr-btn fr-icon-${button.icon}`
-      );
+      expect(buttonElement.closest('a')).toHaveClass(`fr-btn ${button.icon}`);
     });
   });
 

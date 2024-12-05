@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({
   const plainString = affiliatedMinistry.join(' ');
 
   return (
-    <header role='banner' className='fr-header'>
+    <header className='fr-header' role='banner'>
       <div className='fr-header__body'>
         <div className='fr-container'>
           <div className='fr-header__body-row'>
@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({
                   {buttons.map((button, index) => (
                     <li key={index}>
                       <Link
-                        className={`fr-btn fr-icon-${button.icon}`}
+                        className={`fr-btn ${button.icon}`}
                         href={button.href}
                       >
                         {button.label}
