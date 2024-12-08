@@ -6,20 +6,6 @@ const meta = {
   title: 'Components/Tile',
   component: Tile,
   tags: ['autodocs'],
-  argTypes: {
-    title: {
-      control: 'text',
-      description: 'Title of the tile',
-    },
-    description: {
-      control: 'text',
-      description: 'Description text for the tile',
-    },
-    href: {
-      control: 'text',
-      description: 'URL for the tile link',
-    },
-  },
 } satisfies Meta<typeof Tile>;
 
 export default meta;

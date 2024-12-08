@@ -52,7 +52,7 @@ const Footer: React.FC<FooterProps> = ({
             </Link>
           </div>
           <div className='fr-footer__content'>
-            <div className='fr-footer__content-desc'>
+            <div className='fr-footer__content-desc [&_a]:after:content-none'>
               {organizationDetails.beforeLink}
               <Link
                 href={organizationDetails.link.url}

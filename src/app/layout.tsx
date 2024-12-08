@@ -4,7 +4,7 @@ import { Footer, FooterProps, Header, HeaderProps } from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { initDsfr } from '@/utils/dsfr';
-import wording from '@/wording.json';
+import wording from '@/wording';
 
 // DSFR initialization
 initDsfr();
@@ -52,9 +52,9 @@ export default function RootLayout({
           rel='manifest'
         />
       </head>
-      <body>
+      <body className='flex flex-col min-h-screen'>
         <Header {...headerData} />
-        <main>{children}</main>
+        <main className='flex-1'>{children}</main>
         <Footer {...footerData} />
       </body>
     </html>

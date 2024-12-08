@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 
+import Tag from '../Tag/Tag';
+
 export interface HeaderProps {
   affiliatedMinistry: string[];
   beta?: string;
@@ -39,28 +41,22 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
               <div className='fr-header__service'>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className='flex items-center'>
                   <div>
                     <Link
+                      className='flex flex-row items-center'
                       href={organizationLink}
                       title={`Accueil - ${organizationName} - ${plainString}`}
                     >
-                      <p className='fr-header__service-title'>
+                      <p className='fr-header__service-title mr-4'>
                         {organizationName}
                       </p>
+                      {beta && <Tag label={beta} />}
                     </Link>
                     <p className='fr-header__service-tagline'>
                       {organizationDetails}
                     </p>
                   </div>
-                  {beta && (
-                    <span
-                      className='fr-badge--green-archipel fr-text--sm fr-ml-3w'
-                      style={{ alignSelf: 'center' }}
-                    >
-                      {beta}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>

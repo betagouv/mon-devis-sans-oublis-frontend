@@ -9,29 +9,6 @@ const meta = {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-  argTypes: {
-    affiliatedMinistry: {
-      description:
-        'Array of strings representing the ministry name, each element will be on a new line',
-      control: { type: 'object', subtype: 'array' },
-    },
-    buttons: {
-      description: 'Array of navigation links with href and label properties',
-      control: { type: 'object', subtype: 'array' },
-    },
-    organizationDetails: {
-      description: 'Detailed description of the organization with links',
-      control: { type: 'object' },
-    },
-    organizationLink: {
-      description: 'URL of the organization website',
-      control: { type: 'text' },
-    },
-    organizationName: {
-      description: 'Name of the organization',
-      control: { type: 'text' },
-    },
-  },
 } satisfies Meta<typeof Footer>;
 
 export default meta;

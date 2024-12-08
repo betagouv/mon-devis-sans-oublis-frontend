@@ -5,14 +5,7 @@ import IconBackground from './IconBackground';
 const meta = {
   title: 'Components/IconBackground',
   component: IconBackground,
-
   tags: ['autodocs'],
-  argTypes: {
-    icon: {
-      control: 'text',
-      description: 'Icon class name to be displayed',
-    },
-  },
 } satisfies Meta<typeof IconBackground>;
 
 export default meta;

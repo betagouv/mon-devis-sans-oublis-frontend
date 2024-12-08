@@ -6,32 +6,6 @@ const meta = {
   title: 'Components/CardIcon',
   component: CardIcon,
   tags: ['autodocs'],
-  argTypes: {
-    alt: {
-      description: 'Alternative text for the image',
-      control: { type: 'text' },
-    },
-    className: {
-      description: 'Additional CSS classes to apply to the card',
-      control: { type: 'text' },
-    },
-    description: {
-      description: 'Description text displayed in the card',
-      control: { type: 'text' },
-    },
-    image: {
-      description: 'Image source path',
-      control: { type: 'text' },
-    },
-    title: {
-      description: 'Title of the card',
-      control: { type: 'text' },
-    },
-    url: {
-      description: 'URL for the card link',
-      control: { type: 'text' },
-    },
-  },
 } satisfies Meta<typeof CardIcon>;
 
 export default meta;

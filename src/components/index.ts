@@ -22,6 +22,9 @@ export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
 export { default as Link } from './Link/Link';
 export type { LinkProps } from './Link/Link';
+// Tag
+export { default as Tag } from './Tag/Tag';
+export type { TagProps } from './Tag/Tag';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';
