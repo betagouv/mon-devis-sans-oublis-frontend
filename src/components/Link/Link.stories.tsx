@@ -10,19 +10,6 @@ const meta = {
     variant: {
       control: 'radio',
       options: ['primary', 'secondary'],
-      description: 'Style variant of the link',
-    },
-    icon: {
-      control: 'text',
-      description: 'Icon class name (optional)',
-    },
-    href: {
-      control: 'text',
-      description: 'URL the link points to',
-    },
-    label: {
-      control: 'text',
-      description: 'Text content of the link',
     },
   },
 } satisfies Meta<typeof Link>;

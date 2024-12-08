@@ -6,20 +6,6 @@ const meta = {
   title: 'Components/BlockIcon',
   component: BlockIcon,
   tags: ['autodocs'],
-  argTypes: {
-    icon: {
-      description: 'DSFR icon class name',
-      control: { type: 'text' },
-    },
-    title: {
-      description: 'Title displayed below the icon',
-      control: { type: 'text' },
-    },
-    description: {
-      description: 'Description text displayed below the title',
-      control: { type: 'text' },
-    },
-  },
 } satisfies Meta<typeof BlockIcon>;
 
 export default meta;
@@ -27,9 +13,10 @@ type Story = StoryObj<typeof BlockIcon>;
 
 export const Default: Story = {
   args: {
-    icon: 'fr-icon-user-line',
-    title: 'User Profile',
-    description: 'Manage your user profile and settings',
+    description:
+      'Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis',
+    icon: 'fr-icon-question-line',
+    title: 'Explications claires',
   },
 };
 
@@ -38,19 +25,19 @@ export const BlockIconGrid: Story = {
     () => (
       <div className='fr-grid-row fr-grid-row--gutters'>
         <BlockIcon
-          description='Manage your profile'
+          description='Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis'
           icon='fr-icon-user-line'
-          title='Profile'
+          title='Explications claires'
         />
         <BlockIcon
-          description='View your schedule'
+          description='Corrigez facilement vos devis grâce au guide restitué après l’analyse'
           icon='fr-icon-calendar-line'
-          title='Calendar'
+          title='Gain de temps'
         />
         <BlockIcon
-          description='Check your inbox'
+          description="Moins d'allers-retours avec les instructeurs d'aides à la rénovation énergétique et des délais raccourcis"
           icon='fr-icon-mail-line'
-          title='Messages'
+          title='Instruction accélérée'
         />
       </div>
     ),

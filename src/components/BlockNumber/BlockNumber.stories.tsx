@@ -13,8 +13,9 @@ type Story = StoryObj<typeof BlockNumber>;
 
 export const Default: Story = {
   args: {
-    number: 42,
-    title: 'Example Title',
-    description: 'This is a sample description for the block number component.',
+    description:
+      'Téléchargez en un clic votre devis au format pdf sur Mon Devis Sans Oublis en cliquant sur "Vérifier mon devis"',
+    number: 1,
+    title: 'Envoyez votre devis',
   },
 };

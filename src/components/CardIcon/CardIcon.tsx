@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import styles from './CardIcon.module.css';
-
 export interface CardIconProps {
   alt: string;
   className?: string;
@@ -21,15 +19,13 @@ const CardIcon: React.FC<CardIconProps> = ({
   url,
 }) => {
   return (
-    <div className={`${styles['fr-col']} ${className}`}>
-      <div className={`fr-card ${styles['fr-card']} fr-enlarge-link`}>
+    <div className={`fr-col ${className}`}>
+      <div className='fr-card fr-enlarge-link h-full'>
         <div className='fr-card__body'>
           <div className='fr-card__content'>
-            <p
-              className={`fr-card__title ${styles['fr-card__title']} fr-text--lead`}
-            >
+            <p className='fr-card__title fr-text--lead'>
               <Link href={url}>
-                <span>{title}</span>
+                <span className='text-[var(--text-default-grey)]'>{title}</span>
               </Link>
             </p>
             <p className='fr-card__desc'>{description}</p>
@@ -39,7 +35,7 @@ const CardIcon: React.FC<CardIconProps> = ({
           <div>
             <Image
               alt={alt}
-              className={styles['fr-responsive-img']}
+              className='block object-contain object-left self-start h-[80px] w-full'
               height={80}
               src={`/images/${image}`}
               width={102}

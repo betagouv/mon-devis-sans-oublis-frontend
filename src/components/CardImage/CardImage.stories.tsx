@@ -6,16 +6,6 @@ const meta = {
   title: 'Components/CardImage',
   component: CardImage,
   tags: ['autodocs'],
-  argTypes: {
-    image: {
-      description: 'Image filename (will be loaded from /images/ directory)',
-      control: { type: 'text' },
-    },
-    title: {
-      description: 'Title text displayed below the image',
-      control: { type: 'text' },
-    },
-  },
 } satisfies Meta<typeof CardImage>;
 
 export default meta;

@@ -8,12 +8,12 @@ export interface BlockIconProps {
 
 const BlockIcon: React.FC<BlockIconProps> = ({ description, icon, title }) => {
   return (
-    <div className='fr-col-md text-center'>
-      <div className='content-center'>
+    <div className='fr-col-md flex flex-col items-center'>
+      <div>
         <IconBackground icon={icon} />
       </div>
-      <h5 className='fr-mt-2w'>{title}</h5>
-      <p>{description}</p>
+      <h5 className='fr-mt-2w text-center'>{title}</h5>
+      <p className='text-center'>{description}</p>
     </div>
   );
 };

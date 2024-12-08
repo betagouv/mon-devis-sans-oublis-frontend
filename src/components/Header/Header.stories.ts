@@ -9,30 +9,6 @@ const meta = {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-  argTypes: {
-    affiliatedMinistry: {
-      description:
-        'Array of strings representing the ministry name, each element will be on a new line',
-      control: { type: 'object', subtype: 'array' },
-    },
-    buttons: {
-      description:
-        'Array of navigation buttons with href, icon, and label properties',
-      control: { type: 'object' },
-    },
-    organizationDetails: {
-      description: 'Short description of the organization',
-      control: { type: 'text' },
-    },
-    organizationLink: {
-      description: 'URL of the organization website',
-      control: { type: 'text' },
-    },
-    organizationName: {
-      description: 'Name of the organization',
-      control: { type: 'text' },
-    },
-  },
 } satisfies Meta<typeof Header>;
 
 export default meta;
@@ -51,7 +27,7 @@ export const Default: Story = {
     ],
     organizationDetails: 'Vérifiez vos devis de rénovation énergétique',
     organizationLink: 'https://example.com',
-    organizationName: 'Mon Service',
+    organizationName: 'Mon Devis Sans Oublis',
   },
 };
 
