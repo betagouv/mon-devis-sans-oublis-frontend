@@ -1,52 +1,52 @@
 # Mon Devis Sans Oublis - Frontend
 
-## Getting Started
+## Prise en main
 
-You can run this project in two ways: directly with Node.js or using Docker.
+Vous pouvez exécuter ce projet de deux manières : directement avec Node.js ou en utilisant Docker.
 
-### Option 1: Running with Node.js
+### Option 1: Exécution avec Node.js
 
-1. Install dependencies:
+1. Installez les dépendances :
 
 ```bash copy
 npm install
 ```
 
-### Option 2: Running with Docker
+### Option 2: Exécution avec Docker
 
-1. Make sure Docker Desktop is running on your machine
+1. Assurez-vous que Docker Desktop est en cours d'exécution sur votre machine.
 
-2. Build and start the container:
+2. Construisez et démarrez le conteneur :
 
 ```bash copy
 docker-compose up
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+L'application sera disponible à l'adresse [http://localhost:3000](http://localhost:3000).
 
-## Development
+## Développement
 
-- The main application code is in `src/app`
-- Edit `src/app/page.tsx` to modify the home page
-- The application will auto-update as you edit files
+- Le code principal de l'application se trouve dans `src/app`
+- Modifiez `src/app/page.tsx` pour modifier la page d'accueil
+- L'application se mettra à jour automatiquement lorsque vous modifiez des fichiers
 
 ## Storybook
 
-To run Storybook locally:
+Pour exécuter Storybook localement :
 
 ```bash copy
 npm run storybook
 ```
 
-Storybook will be available at [http://localhost:6006](http://localhost:6006).
+Storybook sera disponible à l'adresse [http://localhost:6006](http://localhost:6006).
 
-Stories are located in `src/components/*.stories.tsx`.
+Les stories se trouvent dans `src/components/*.stories.tsx`.
 
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org/) - React framework for server-side rendering and static site generation
-- [TypeScript](https://www.typescriptlang.org/) - Typed superset of JavaScript
-- [Jest](https://jestjs.io/) - JavaScript testing framework
-- [React Testing Library](https://testing-library.com/react) - Testing utilities for React components
-- [Storybook](https://storybook.js.org/) - UI component development environment
-- [Docker](https://www.docker.com/) - Containerization platform
+- [Next.js 15](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [React Testing Library](https://testing-library.com/react)
+- [Storybook](https://storybook.js.org/)
+- [Docker](https://www.docker.com/)

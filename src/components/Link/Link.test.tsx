@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+
 import Link, { LinkVariant } from './Link';
 
 // Mock next/link

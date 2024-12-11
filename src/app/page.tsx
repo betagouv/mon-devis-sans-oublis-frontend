@@ -138,7 +138,7 @@ export default function Home() {
           <ul className='fr-raw-list fr-grid-row fr-grid-row--gutters fr-grid-row--center items-stretch'>
             {wording.homepage.section_who_are_you.cards.map((card, index) => (
               <li
-                className={'fr-col-12 fr-col-md-6 fr-col-lg-3 flex'}
+                className='fr-col-12 fr-col-md-6 fr-col-lg-3 flex'
                 key={index}
               >
                 {isMobile ? (

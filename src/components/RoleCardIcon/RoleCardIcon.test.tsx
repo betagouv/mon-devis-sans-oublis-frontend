@@ -1,7 +1,7 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import RoleCardIcon from './RoleCardIcon';
+
 import { IconBackgroundVariant } from '../IconBackground/IconBackground';
+import RoleCardIcon from './RoleCardIcon';
 
 // Mock the IconBackground component
 jest.mock('../IconBackground/IconBackground', () => {
