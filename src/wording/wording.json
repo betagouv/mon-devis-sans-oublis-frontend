@@ -158,5 +158,37 @@
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
     }
+  },
+  "welcome": {
+    "section_who_are_you": {
+      "cards": [
+        {
+          "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
+          "href": "/artisan",
+          "icon": "fr-icon-tools-line",
+          "title": "Je suis un artisan"
+        },
+        {
+          "description": "Je souhaite accompagner mes clients dans leurs démarches",
+          "href": "/conseiller",
+          "icon": "fr-customer-service-fill",
+          "title": "Je suis un conseiller"
+        },
+        {
+          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
+          "href": "/mandataire",
+          "icon": "fr-icon-compasses-2-fill",
+          "title": "Je suis un mandataire"
+        },
+        {
+          "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
+          "href": "/particulier",
+          "icon": "fr-icon-home-4-fill",
+          "title": "Je suis un particulier"
+        }
+      ],
+      "subtitle": "Pouvez-vous nous en dire plus sur vous ?",
+      "title": "Bienvenue sur Mon Devis Sans Oublis"
+    }
   }
 }

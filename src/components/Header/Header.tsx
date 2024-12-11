@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-import Tag from '../Tag/Tag';
+import Tag, { TagVariant } from '../Tag/Tag';
 
 export interface HeaderProps {
   affiliatedMinistry: string[];
@@ -51,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({
                       <p className='fr-header__service-title mr-4'>
                         {organizationName}
                       </p>
-                      {beta && <Tag label={beta} />}
+                      {beta && <Tag label={beta} variant={TagVariant.GREEN} />}
                     </Link>
                     <p className='fr-header__service-tagline'>
                       {organizationDetails}

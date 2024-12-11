@@ -1,6 +1,8 @@
 // Import main styles from the DSFR
 import '@gouvfr/dsfr/dist/dsfr.min.css';
 // Import icons from the DSFR
+import '@gouvfr/dsfr/dist/utility/icons/icons-media/icons-media.min.css';
+// For icon : fr-icon-headphone-fill
 import '@gouvfr/dsfr/dist/utility/icons/icons-others/icons-others.min.css';
 // For icon : fr-icon-recycle-fill
 import '@gouvfr/dsfr/dist/utility/icons/icons-system/icons-system.min.css';

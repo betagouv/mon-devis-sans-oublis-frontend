@@ -7,7 +7,7 @@ export interface CardImageProps {
 
 const CardImage: React.FC<CardImageProps> = ({ image, title }) => {
   return (
-    <div className='min-h-full w-[136px] border border-[var(--border-disabled-grey)] p-2'>
+    <div className='min-h-full w-[136px] border-grey p-2'>
       <Image alt={title} height={120} src={`/images/${image}`} width={120} />
       <h6 className='text-center'>{title}</h6>
     </div>

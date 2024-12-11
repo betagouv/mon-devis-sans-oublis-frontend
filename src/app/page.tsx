@@ -5,9 +5,9 @@ import React from 'react';
 import {
   BlockIcon,
   BlockNumber,
-  CardIcon,
   CardImage,
   Link,
+  RoleCardImage,
   Tag,
   Tile,
 } from '@/components';
@@ -19,12 +19,12 @@ export default function Home() {
   const isMobile = breakpoint === 'XS' || breakpoint === 'SM';
 
   return (
-    <div className='[&_ul]:list-none [&_ul]:m-0 [&_ul]:p-0 [&_h1]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-center'>
+    <div className='[&_h1]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-center'>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
           <div className='fr-col-12 fr-col-lg-5'>
             <h1>{wording.homepage.section_examples.title}</h1>
-            <ul className='fr-badges-group fr-mb-3w flex flex-wrap gap-4'>
+            <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4'>
               {wording.homepage.section_examples.badges.map((badge, index) => (
                 <li key={index}>
                   <Tag label={badge.label} />
@@ -38,7 +38,7 @@ export default function Home() {
               {wording.homepage.section_examples.subtitle}
             </h2>
             <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-              <ul className='fr-grid-row flex-nowrap !justify-start w-max lg:flex-wrap lg:!justify-center lg:w-full'>
+              <ul className='fr-raw-list fr-grid-row flex-nowrap !justify-start w-max lg:flex-wrap lg:!justify-center lg:w-full'>
                 {wording.homepage.section_examples.cards.map((card, index) => (
                   <li
                     className='flex-none w-[160px] whitespace-normal'
@@ -111,7 +111,7 @@ export default function Home() {
       </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <ul className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
+          <ul className='fr-raw-list fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
             {wording.homepage.section_icon_block.icon_blocks.map(
               (block, index) => (
                 <li className='fr-col-12 fr-col-md-4' key={index}>
@@ -135,32 +135,30 @@ export default function Home() {
           <p className='fr-text--lead text-center'>
             {wording.homepage.section_who_are_you.description}
           </p>
-          <ul className='fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
-            {isMobile
-              ? wording.homepage.section_who_are_you.cards.map(
-                  (card, index) => (
-                    <li className='fr-col-12' key={index}>
-                      <Tile
-                        description={card.description}
-                        href={card.url}
-                        title={card.title}
-                      />
-                    </li>
-                  )
-                )
-              : wording.homepage.section_who_are_you.cards.map(
-                  (card, index) => (
-                    <CardIcon
-                      alt={card.alt}
-                      className='fr-col-12 fr-col-md-6 fr-col-lg-3'
-                      description={card.description}
-                      image={card.image}
-                      key={index}
-                      title={card.title}
-                      url={card.url}
-                    />
-                  )
+          <ul className='fr-raw-list fr-grid-row fr-grid-row--gutters fr-grid-row--center items-stretch'>
+            {wording.homepage.section_who_are_you.cards.map((card, index) => (
+              <li
+                className='fr-col-12 fr-col-md-6 fr-col-lg-3 flex'
+                key={index}
+              >
+                {isMobile ? (
+                  <Tile
+                    description={card.description}
+                    href={card.url}
+                    title={card.title}
+                  />
+                ) : (
+                  <RoleCardImage
+                    alt={card.alt}
+                    description={card.description}
+                    image={card.image}
+                    key={index}
+                    title={card.title}
+                    url={card.url}
+                  />
                 )}
+              </li>
+            ))}
           </ul>
         </div>
       </section>

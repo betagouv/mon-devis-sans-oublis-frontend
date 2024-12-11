@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import CardIcon from './CardIcon';
+import RoleCardImage from './RoleCardImage';
 
 const meta = {
-  title: 'Components/CardIcon',
-  component: CardIcon,
+  title: 'Components/RoleCardImage',
+  component: RoleCardImage,
   tags: ['autodocs'],
-} satisfies Meta<typeof CardIcon>;
+} satisfies Meta<typeof RoleCardImage>;
 
 export default meta;
-type Story = StoryObj<typeof CardIcon>;
+type Story = StoryObj<typeof RoleCardImage>;
 
 export const Artisan: Story = {
   args: {
@@ -66,9 +66,8 @@ export const CardIconGrid: Story = {
         <div className='fr-container'>
           <div className='fr-grid-row fr-grid-row--gutters'>
             {cardsData.map((card, index) => (
-              <CardIcon
+              <RoleCardImage
                 alt={card?.alt ?? ''}
-                className='fr-col-12 fr-col-md-6 fr-col-lg-3'
                 description={card?.description ?? ''}
                 image={card?.image ?? ''}
                 key={index}

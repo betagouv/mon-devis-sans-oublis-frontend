@@ -1,52 +1,62 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import Link, { LinkVariant } from './Link';
 
-import Link from './Link';
-
-const meta = {
+const meta: Meta<typeof Link> = {
   title: 'Components/Link',
   component: Link,
   tags: ['autodocs'],
   argTypes: {
+    href: {
+      control: 'text',
+      description: 'The URL the link points to',
+    },
+    label: {
+      control: 'text',
+      description: 'The text content of the link',
+    },
+    icon: {
+      control: 'text',
+      description: 'Optional icon class to be displayed',
+    },
     variant: {
-      control: 'radio',
-      options: ['primary', 'secondary'],
+      control: 'select',
+      options: Object.values(LinkVariant),
+      description: 'The visual style variant of the link',
     },
   },
-} satisfies Meta<typeof Link>;
+};
 
 export default meta;
 type Story = StoryObj<typeof Link>;
 
 export const Primary: Story = {
   args: {
-    href: '#',
+    href: '/example',
     label: 'Primary Link',
-    variant: 'primary',
+    variant: LinkVariant.PRIMARY,
   },
 };
 
 export const Secondary: Story = {
   args: {
-    href: '#',
+    ...Primary.args,
     label: 'Secondary Link',
-    variant: 'secondary',
+    variant: LinkVariant.SECONDARY,
   },
 };
 
 export const PrimaryWithIcon: Story = {
   args: {
-    href: '#',
-    label: 'Link with Icon',
+    ...Primary.args,
+    label: 'Primary with Icon',
     icon: 'fr-icon-arrow-right-line',
-    variant: 'primary',
   },
 };
 
 export const SecondaryWithIcon: Story = {
   args: {
-    href: '#',
-    label: 'Secondary Link with Icon',
+    ...Secondary.args,
+    label: 'Secondary with Icon',
     icon: 'fr-icon-arrow-right-line',
-    variant: 'secondary',
   },
 };

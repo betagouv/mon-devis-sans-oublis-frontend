@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Since corePlugins: { preflight: false }, borders are not applied by default */
+/* IconBackground */
+.border-blue {
+  border: 1px solid var(--background-action-high-blue-france);
+}
+
+/* CardImage */
+.border-grey {
+  border: 1px solid var(--border-disabled-grey);
+}
