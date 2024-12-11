@@ -52,11 +52,11 @@ export const MultipleButtons: Story = {
       },
     ],
   },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Example with multiple navigation buttons in the header.',
-      },
-    },
+};
+
+export const WithoutBeta: Story = {
+  args: {
+    ...Default.args,
+    beta: undefined,
   },
 };

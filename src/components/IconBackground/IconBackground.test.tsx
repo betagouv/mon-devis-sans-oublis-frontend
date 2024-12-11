@@ -1,28 +1,61 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 
-import IconBackground from './IconBackground';
+import IconBackground, {
+  IconBackgroundProps,
+  IconBackgroundVariant,
+} from './IconBackground';
 
 describe('IconBackground', () => {
-  it('renders correctly with icon prop', () => {
-    const { container } = render(<IconBackground icon='test-icon' />);
+  const renderComponent = (props: IconBackgroundProps) =>
+    render(<IconBackground {...props} />);
+
+  test('renders with the BLUE variant', () => {
+    const { container } = renderComponent({
+      icon: 'test-icon',
+      variant: IconBackgroundVariant.BLUE,
+    });
+
     const element = container.firstChild;
-    expect(element).toBeInTheDocument();
     expect(element).toHaveClass('test-icon');
+    expect(element).toHaveClass(
+      'bg-[var(--background-action-high-blue-france)] text-white'
+    );
   });
 
-  it('renders with different icon values', () => {
-    const { container, rerender } = render(<IconBackground icon='icon-1' />);
-    let element = container.firstChild;
-    expect(element).toHaveClass('icon-1');
+  test('renders with the BLUE_LIGHT variant', () => {
+    const { container } = renderComponent({
+      icon: 'test-icon',
+      variant: IconBackgroundVariant.BLUE_LIGHT,
+    });
 
-    rerender(<IconBackground icon='icon-2' />);
-    element = container.firstChild;
-    expect(element).toHaveClass('icon-2');
-  });
-
-  it('renders with empty icon string', () => {
-    const { container } = render(<IconBackground icon='' />);
     const element = container.firstChild;
-    expect(element).toBeInTheDocument();
+    expect(element).toHaveClass('test-icon');
+    expect(element).toHaveClass(
+      'bg-[var(--background-contrast-info)] text-[var(--background-action-high-blue-france)]'
+    );
+  });
+
+  test('renders with the WHITE variant', () => {
+    const { container } = renderComponent({
+      icon: 'test-icon',
+      variant: IconBackgroundVariant.WHITE,
+    });
+
+    const element = container.firstChild;
+    expect(element).toHaveClass('test-icon');
+    expect(element).toHaveClass(
+      'bg-white text-[var(--background-action-high-blue-france)] border border-[var(--background-action-high-blue-france)]'
+    );
+  });
+
+  test('applies the correct icon class', () => {
+    const { container } = renderComponent({
+      icon: 'custom-icon',
+      variant: IconBackgroundVariant.WHITE,
+    });
+
+    const element = container.firstChild;
+    expect(element).toHaveClass('custom-icon');
   });
 });

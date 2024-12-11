@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import CardIcon from './CardIcon';
+import CardIcon from './RoleCardImage';
 
 describe('CardIcon Component', () => {
   const mockProps = {

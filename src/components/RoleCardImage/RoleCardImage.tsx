@@ -1,25 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export interface CardIconProps {
+export interface RoleCardImageProps {
   alt: string;
-  className?: string;
   description: string;
   image: string;
   title: string;
   url: string;
 }
 
-const CardIcon: React.FC<CardIconProps> = ({
+const RoleCardImage: React.FC<RoleCardImageProps> = ({
   alt,
-  className,
   description,
   image,
   title,
   url,
 }) => {
   return (
-    <div className={`fr-col ${className}`}>
+    <div className='fr-col'>
       <div className='fr-card fr-enlarge-link h-full'>
         <div className='fr-card__body'>
           <div className='fr-card__content'>
@@ -47,4 +45,4 @@ const CardIcon: React.FC<CardIconProps> = ({
   );
 };
 
-export default CardIcon;
+export default RoleCardImage;

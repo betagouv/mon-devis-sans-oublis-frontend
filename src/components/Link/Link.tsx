@@ -1,10 +1,15 @@
 import { default as NextLink } from 'next/link';
 
+export enum LinkVariant {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+}
+
 export interface LinkProps {
   href: string;
   icon?: string;
   label: string;
-  variant?: 'primary' | 'secondary';
+  variant?: LinkVariant;
 }
 
 const Link: React.FC<LinkProps> = ({
@@ -15,9 +20,9 @@ const Link: React.FC<LinkProps> = ({
 }) => {
   return (
     <NextLink
-      className={`fr-btn ${icon ? 'fr-btn--icon-right' : ''} ${
-        icon ?? ''
-      } fr-text--lg ${variant === 'secondary' ? 'fr-btn--secondary' : ''}`}
+      className={`fr-btn ${icon && 'fr-btn--icon-right'} ${icon} fr-text--lg ${
+        variant === LinkVariant.SECONDARY && 'fr-btn--secondary'
+      }`}
       href={href}
     >
       {label}

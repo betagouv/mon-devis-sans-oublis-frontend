@@ -4,9 +4,6 @@ export type { BlockIconProps } from './BlockIcon/BlockIcon';
 // BlockNumber
 export { default as BlockNumber } from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
-// CardIcon
-export { default as CardIcon } from './CardIcon/CardIcon';
-export type { CardIconProps } from './CardIcon/CardIcon';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
@@ -17,13 +14,22 @@ export type { FooterProps } from './Footer/Footer';
 export { default as Header } from './Header/Header';
 export type { HeaderProps } from './Header/Header';
 // IconBackground
-export { default as IconBackground } from './IconBackground/IconBackground';
+export {
+  default as IconBackground,
+  IconBackgroundVariant,
+} from './IconBackground/IconBackground';
 export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
 export { default as Link } from './Link/Link';
 export type { LinkProps } from './Link/Link';
+// RoleCardIcon
+export { default as RoleCardIcon } from './RoleCardIcon/RoleCardIcon';
+export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
+// RoleCardImage
+export { default as RoleCardImage } from './RoleCardImage/RoleCardImage';
+export type { RoleCardImageProps } from './RoleCardImage/RoleCardImage';
 // Tag
-export { default as Tag } from './Tag/Tag';
+export { default as Tag, TagVariant } from './Tag/Tag';
 export type { TagProps } from './Tag/Tag';
 // Tile
 export { default as Tile } from './Tile/Tile';

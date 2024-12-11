@@ -1,46 +1,46 @@
 import { render, screen } from '@testing-library/react';
 
 import BlockIcon from './BlockIcon';
+import { IconBackgroundVariant } from '../IconBackground/IconBackground';
 
-// Mock the IconBackground component
+// Mock the IconBackground component to simplify testing
 jest.mock('../IconBackground/IconBackground', () => {
-  return function MockIconBackground({ icon }: { icon: string }) {
-    return <div data-testid='mock-icon-background'>{icon}</div>;
+  return {
+    __esModule: true,
+    IconBackgroundVariant: {
+      BLUE: 'blue',
+      BLUE_LIGHT: 'blue-light',
+      WHITE: 'white',
+    },
+    default: ({ icon, variant }: { icon: string; variant: string }) => (
+      <div
+        data-testid='icon-background'
+        data-icon={icon}
+        data-variant={variant}
+      />
+    ),
   };
 });
 
 describe('BlockIcon', () => {
-  const mockProps = {
-    description: 'Test description',
+  const defaultProps = {
+    description: 'This is a description.',
     icon: 'test-icon',
-    title: 'Test title',
+    title: 'Test Title',
   };
 
-  it('renders correctly with all props', () => {
-    render(<BlockIcon {...mockProps} />);
+  test('renders title, description, and IconBackground', () => {
+    render(<BlockIcon {...defaultProps} />);
 
-    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.description)).toBeInTheDocument();
 
-    expect(screen.getByText('Test description')).toBeInTheDocument();
-
-    const iconBackground = screen.getByTestId('mock-icon-background');
+    const iconBackground = screen.getByTestId('icon-background');
     expect(iconBackground).toBeInTheDocument();
-    expect(iconBackground).toHaveTextContent('test-icon');
-  });
-
-  it('renders with different props values', () => {
-    const newProps = {
-      description: 'Another description',
-      icon: 'another-icon',
-      title: 'Another title',
-    };
-
-    render(<BlockIcon {...newProps} />);
-
-    expect(screen.getByText('Another title')).toBeInTheDocument();
-    expect(screen.getByText('Another description')).toBeInTheDocument();
-    expect(screen.getByTestId('mock-icon-background')).toHaveTextContent(
-      'another-icon'
+    expect(iconBackground).toHaveAttribute('data-icon', defaultProps.icon);
+    expect(iconBackground).toHaveAttribute(
+      'data-variant',
+      IconBackgroundVariant.BLUE_LIGHT
     );
   });
 });
