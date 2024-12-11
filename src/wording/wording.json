@@ -94,28 +94,28 @@
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "image": "card_artisan.png",
           "title": "Je suis un artisan",
-          "url": "/artisan"
+          "url": "/artisan/televersement"
         },
         {
           "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
           "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
           "image": "card_individual.png",
           "title": "Je suis un particulier",
-          "url": "/particulier"
+          "url": "/particulier/televersement"
         },
         {
           "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
           "image": "card_agent.png",
           "title": "Je suis un mandataire",
-          "url": "/mandataire"
+          "url": "/mandataire/televersement"
         },
         {
           "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "image": "card_advisor.png",
           "title": "Je suis un conseiller",
-          "url": "/conseiller"
+          "url": "/conseiller/televersement"
         }
       ],
       "description": "Simplifier les démarches administratives, les échanges d'informations et la validation de vos projets",
@@ -159,30 +159,55 @@
       "organizationName": "Mon Devis Sans Oublis"
     }
   },
+  "upload": {
+    "section_upload": {
+      "alert": {
+        "description": "Les devis soumis restent strictement confidentiels.",
+        "more_info": "Les devis sont conservés de manière sécurisée pendant une durée de six mois afin de vous permettre l'accès aux corrections si nécessaire, après quoi ils sont automatiquement supprimés de nos systèmes."
+      },
+      "link_back": {
+        "href": "/bienvenue",
+        "label": "Retour"
+      },
+      "link_check_quote": {
+        "href": "",
+        "label": "Vérifiez le devis"
+      },
+      "select": {
+        "label": "Geste(s) techniques concernés par le devis"
+      },
+      "subtitle": "Votre projet",
+      "title": "Vérifier votre devis ({role})",
+      "upload": {
+        "description": "Taille maximale : 1Mo. Formats supportés : jpg, png, pdf. Un seul fichier possible.",
+        "error_message": "Le fichier dépasse la taille maximale de 1Mo."
+      }
+    }
+  },
   "welcome": {
     "section_who_are_you": {
       "cards": [
         {
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
-          "href": "/artisan",
+          "href": "/artisan/televersement",
           "icon": "fr-icon-tools-line",
           "title": "Je suis un artisan"
         },
         {
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
-          "href": "/conseiller",
+          "href": "/conseiller/televersement",
           "icon": "fr-customer-service-fill",
           "title": "Je suis un conseiller"
         },
         {
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "href": "/mandataire",
+          "href": "/mandataire/televersement",
           "icon": "fr-icon-compasses-2-fill",
           "title": "Je suis un mandataire"
         },
         {
           "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
-          "href": "/particulier",
+          "href": "/particulier/televersement",
           "icon": "fr-icon-home-4-fill",
           "title": "Je suis un particulier"
         }

@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+h1,
+h2 {
+  color: var(--artwork-major-blue-ecume);
+}
+
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
-/* IconBackground */
+/* IconBackground, Upload */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);
 }

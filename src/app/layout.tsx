@@ -39,16 +39,23 @@ export default function RootLayout({
         />
 
         <meta content='#000091' name='theme-color' />
-        <link href='dsfr/favicon/apple-touch-icon.png' rel='apple-touch-icon' />
-        <link href='dsfr/favicon/favicon.svg' rel='icon' type='image/svg+xml' />
         <link
-          href='dsfr/favicon/favicon.ico'
+          href='/dsfr/favicon/apple-touch-icon.png'
+          rel='apple-touch-icon'
+        />
+        <link
+          href='/dsfr/favicon/favicon.svg'
+          rel='icon'
+          type='image/svg+xml'
+        />
+        <link
+          href='/dsfr/favicon/favicon.ico'
           rel='shortcut icon'
           type='image/x-icon'
         />
         <link
           crossOrigin='use-credentials'
-          href='dsfr/favicon/manifest.webmanifest'
+          href='/dsfr/favicon/manifest.webmanifest'
           rel='manifest'
         />
       </head>

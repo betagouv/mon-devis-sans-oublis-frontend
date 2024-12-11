@@ -19,7 +19,7 @@ export default function Home() {
   const isMobile = breakpoint === 'XS' || breakpoint === 'SM';
 
   return (
-    <div className='[&_h1]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-[var(--artwork-major-blue-ecume)] [&_h2]:text-center'>
+    <div className='[&_h2]:text-center'>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
           <div className='fr-col-12 fr-col-lg-5'>

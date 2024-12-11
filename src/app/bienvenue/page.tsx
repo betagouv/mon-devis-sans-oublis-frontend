@@ -13,7 +13,7 @@ export default function Bienvenue() {
   return (
     <section className='fr-container-fluid fr-py-10w [&>div>h1]:text-center [&>div>p]:text-center'>
       <div className='fr-container'>
-        <h1 className='text-[var(--artwork-major-blue-ecume)]'>{title}</h1>
+        <h1>{title}</h1>
         <p className='fr-text--lead'>{subtitle}</p>
         <div className='fr-grid-row fr-grid-row--center'>
           <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>

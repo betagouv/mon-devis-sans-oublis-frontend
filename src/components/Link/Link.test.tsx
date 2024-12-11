@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-
 import Link, { LinkVariant } from './Link';
 
 // Mock next/link
@@ -75,6 +74,15 @@ describe('Link', () => {
       render(<Link {...defaultProps} variant={undefined} />);
       const link = screen.getByTestId('next-link');
       expect(link).not.toHaveClass('fr-btn--secondary');
+    });
+
+    it('applies disabled variant', () => {
+      render(<Link {...defaultProps} variant={LinkVariant.DISABLED} />);
+      const link = screen.getByTestId('next-link');
+      expect(link).toHaveClass('bg-[var(--background-disabled-grey)]');
+      expect(link).toHaveClass('text-[var(--text-disabled-grey)]');
+      expect(link).toHaveClass('pointer-events-none');
+      expect(link).toHaveAttribute('href', ''); // Ensure href is empty
     });
   });
 
