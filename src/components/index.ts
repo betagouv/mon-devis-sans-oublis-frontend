@@ -1,3 +1,6 @@
+// Alert
+export { default as Alert } from './Alert/Alert';
+export type { AlertProps } from './Alert/Alert';
 // BlockIcon
 export { default as BlockIcon } from './BlockIcon/BlockIcon';
 export type { BlockIconProps } from './BlockIcon/BlockIcon';
@@ -20,7 +23,7 @@ export {
 } from './IconBackground/IconBackground';
 export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
-export { default as Link } from './Link/Link';
+export { default as Link, LinkVariant } from './Link/Link';
 export type { LinkProps } from './Link/Link';
 // RoleCardIcon
 export { default as RoleCardIcon } from './RoleCardIcon/RoleCardIcon';
@@ -28,9 +31,15 @@ export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
 // RoleCardImage
 export { default as RoleCardImage } from './RoleCardImage/RoleCardImage';
 export type { RoleCardImageProps } from './RoleCardImage/RoleCardImage';
+// Select
+export { default as Select } from './Select/Select';
+export type { SelectProps } from './Select/Select';
 // Tag
 export { default as Tag, TagVariant } from './Tag/Tag';
 export type { TagProps } from './Tag/Tag';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';
+// Upload
+export { default as Upload } from './Upload/Upload';
+export type { UploadProps } from './Upload/Upload';

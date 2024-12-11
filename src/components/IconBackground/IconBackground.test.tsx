@@ -1,5 +1,5 @@
+import React from 'react';
 import { render } from '@testing-library/react';
-
 import IconBackground, {
   IconBackgroundProps,
   IconBackgroundVariant,
@@ -43,9 +43,11 @@ describe('IconBackground', () => {
 
     const element = container.firstChild;
     expect(element).toHaveClass('test-icon');
+    expect(element).toHaveClass('bg-white');
     expect(element).toHaveClass(
-      'bg-white text-[var(--background-action-high-blue-france)] border border-[var(--background-action-high-blue-france)]'
+      'text-[var(--background-action-high-blue-france)]'
     );
+    expect(element).toHaveClass('border-blue'); // Check for border-blue
   });
 
   test('applies the correct icon class', () => {
