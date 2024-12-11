@@ -16,7 +16,7 @@ const IconBackground: React.FC<IconBackgroundProps> = ({ icon, variant }) => {
     [IconBackgroundVariant.BLUE_LIGHT]:
       'bg-[var(--background-contrast-info)] text-[var(--background-action-high-blue-france)]',
     [IconBackgroundVariant.WHITE]:
-      'bg-white text-[var(--background-action-high-blue-france)] border border-[var(--background-action-high-blue-france)]',
+      'bg-white text-[var(--background-action-high-blue-france)] border-blue',
   };
 
   return (
