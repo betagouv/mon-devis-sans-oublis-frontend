@@ -10,6 +10,7 @@ export interface LinkProps {
   href: string;
   icon?: string;
   label: string;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   variant?: LinkVariant;
 }
 
@@ -17,8 +18,17 @@ const Link: React.FC<LinkProps> = ({
   href,
   icon,
   label,
+  onSubmit,
   variant = 'primary',
 }) => {
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onSubmit) {
+      event.preventDefault();
+      const formEvent = new Event('submit', { bubbles: true });
+      onSubmit(formEvent as unknown as React.FormEvent<HTMLFormElement>);
+    }
+  };
+
   return (
     <NextLink
       className={`fr-btn ${icon && 'fr-btn--icon-right'} ${icon} fr-text--lg 
@@ -28,6 +38,7 @@ const Link: React.FC<LinkProps> = ({
         'bg-[var(--background-disabled-grey)] text-[var(--text-disabled-grey)] pointer-events-none'
       }`}
       href={variant === LinkVariant.DISABLED ? '' : href}
+      onClick={handleClick}
     >
       {label}
     </NextLink>

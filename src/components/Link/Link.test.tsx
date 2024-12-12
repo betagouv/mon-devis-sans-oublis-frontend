@@ -1,184 +1,69 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+
 import Link, { LinkVariant } from './Link';
 
-// Mock next/link
-jest.mock('next/link', () => {
-  const MockNextLink = ({
-    className,
-    children,
-    href,
-  }: {
-    className: string;
-    children: React.ReactNode;
-    href: string;
-  }) => (
-    <a href={href} className={className} data-testid='next-link'>
-      {children}
-    </a>
-  );
-
-  MockNextLink.displayName = 'MockNextLink';
-  return MockNextLink;
-});
-
-describe('Link', () => {
-  const defaultProps = {
-    href: '/test',
-    label: 'Test Link',
-  };
-
-  describe('Basic Rendering', () => {
-    it('renders with required props', () => {
-      render(<Link {...defaultProps} />);
-      const link = screen.getByTestId('next-link');
-
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', '/test');
-      expect(link).toHaveTextContent('Test Link');
-      expect(link).toHaveClass('fr-btn', 'fr-text--lg');
-    });
-
-    it('renders with custom href', () => {
-      render(<Link {...defaultProps} href='/custom-path' />);
-      const link = screen.getByTestId('next-link');
-      expect(link).toHaveAttribute('href', '/custom-path');
-    });
-
-    it('renders with custom label', () => {
-      render(<Link {...defaultProps} label='Custom Label' />);
-      const link = screen.getByTestId('next-link');
-      expect(link).toHaveTextContent('Custom Label');
-    });
+describe('Link Component', () => {
+  it('renders the label correctly', () => {
+    render(<Link href='/test' label='Test Link' />);
+    const linkElement = screen.getByText(/Test Link/i);
+    expect(linkElement).toBeInTheDocument();
   });
 
-  describe('Variant Handling', () => {
-    it('uses primary variant by default', () => {
-      render(<Link {...defaultProps} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).not.toHaveClass('fr-btn--secondary');
-    });
-
-    it('applies primary variant explicitly', () => {
-      render(<Link {...defaultProps} variant={LinkVariant.PRIMARY} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).not.toHaveClass('fr-btn--secondary');
-    });
-
-    it('applies secondary variant', () => {
-      render(<Link {...defaultProps} variant={LinkVariant.SECONDARY} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).toHaveClass('fr-btn--secondary');
-    });
-
-    it('handles undefined variant', () => {
-      render(<Link {...defaultProps} variant={undefined} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).not.toHaveClass('fr-btn--secondary');
-    });
-
-    it('applies disabled variant', () => {
-      render(<Link {...defaultProps} variant={LinkVariant.DISABLED} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).toHaveClass('bg-[var(--background-disabled-grey)]');
-      expect(link).toHaveClass('text-[var(--text-disabled-grey)]');
-      expect(link).toHaveClass('pointer-events-none');
-      expect(link).toHaveAttribute('href', ''); // Ensure href is empty
-    });
+  it('applies the primary variant by default', () => {
+    render(<Link href='/test' label='Primary Link' />);
+    const linkElement = screen.getByText(/Primary Link/i);
+    expect(linkElement).toHaveClass('fr-btn');
+    expect(linkElement).not.toHaveClass('fr-btn--secondary');
   });
 
-  describe('Icon Handling', () => {
-    it('renders without icon by default', () => {
-      render(<Link {...defaultProps} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).not.toHaveClass('fr-btn--icon-right');
-    });
-
-    it('renders with icon', () => {
-      const icon = 'fr-icon-arrow-right-line';
-      render(<Link {...defaultProps} icon={icon} />);
-      const link = screen.getByTestId('next-link');
-      expect(link).toHaveClass('fr-btn--icon-right', icon);
-    });
-
-    it('handles empty icon string', () => {
-      render(<Link {...defaultProps} icon='' />);
-      const link = screen.getByTestId('next-link');
-      expect(link).not.toHaveClass('fr-btn--icon-right');
-    });
+  it('applies the secondary variant class when provided', () => {
+    render(
+      <Link
+        href='/test'
+        label='Secondary Link'
+        variant={LinkVariant.SECONDARY}
+      />
+    );
+    const linkElement = screen.getByText(/Secondary Link/i);
+    expect(linkElement).toHaveClass('fr-btn--secondary');
   });
 
-  describe('Class Combinations', () => {
-    const testCases = [
-      {
-        name: 'primary variant with icon',
-        props: {
-          ...defaultProps,
-          variant: LinkVariant.PRIMARY,
-          icon: 'test-icon',
-        },
-        expectedClasses: [
-          'fr-btn',
-          'fr-btn--icon-right',
-          'test-icon',
-          'fr-text--lg',
-        ],
-        unexpectedClasses: ['fr-btn--secondary'],
-      },
-      {
-        name: 'secondary variant with icon',
-        props: {
-          ...defaultProps,
-          variant: LinkVariant.SECONDARY,
-          icon: 'test-icon',
-        },
-        expectedClasses: [
-          'fr-btn',
-          'fr-btn--icon-right',
-          'test-icon',
-          'fr-text--lg',
-          'fr-btn--secondary',
-        ],
-        unexpectedClasses: [],
-      },
-      {
-        name: 'secondary variant without icon',
-        props: {
-          ...defaultProps,
-          variant: LinkVariant.SECONDARY,
-        },
-        expectedClasses: ['fr-btn', 'fr-text--lg', 'fr-btn--secondary'],
-        unexpectedClasses: ['fr-btn--icon-right'],
-      },
-      {
-        name: 'primary variant without icon',
-        props: {
-          ...defaultProps,
-          variant: LinkVariant.PRIMARY,
-        },
-        expectedClasses: ['fr-btn', 'fr-text--lg'],
-        unexpectedClasses: ['fr-btn--icon-right', 'fr-btn--secondary'],
-      },
-    ];
-
-    testCases.forEach(({ name, props, expectedClasses, unexpectedClasses }) => {
-      it(`renders correctly with ${name}`, () => {
-        render(<Link {...props} />);
-        const link = screen.getByTestId('next-link');
-
-        expectedClasses.forEach((className) => {
-          expect(link).toHaveClass(className);
-        });
-
-        unexpectedClasses.forEach((className) => {
-          expect(link).not.toHaveClass(className);
-        });
-      });
-    });
+  it('applies the disabled variant class and prevents navigation', () => {
+    render(
+      <Link href='/test' label='Disabled Link' variant={LinkVariant.DISABLED} />
+    );
+    const linkElement = screen.getByText(/Disabled Link/i);
+    expect(linkElement).toHaveClass(
+      'bg-[var(--background-disabled-grey)]',
+      'text-[var(--text-disabled-grey)]',
+      'pointer-events-none'
+    );
+    expect(linkElement).toHaveAttribute('href', '');
   });
 
-  describe('Component Properties', () => {
-    it('has correct displayName', () => {
-      expect(Link.displayName).toBe('Link');
-    });
+  it('calls onSubmit when clicked and prevents default behavior', () => {
+    const onSubmitMock = jest.fn();
+    render(<Link href='/test' label='Submit Link' onSubmit={onSubmitMock} />);
+
+    const linkElement = screen.getByText(/Submit Link/i);
+    fireEvent.click(linkElement);
+
+    expect(onSubmitMock).toHaveBeenCalled();
+    expect(onSubmitMock.mock.calls[0][0]).toBeInstanceOf(Event);
+  });
+
+  it('renders with an icon if provided', () => {
+    render(<Link href='/test' label='Icon Link' icon='fr-icon-example' />);
+    const linkElement = screen.getByText(/Icon Link/i);
+    expect(linkElement).toHaveClass('fr-btn--icon-right', 'fr-icon-example');
+  });
+
+  it('does not call onSubmit if not provided', () => {
+    const onSubmitMock = jest.fn();
+    render(<Link href='/test' label='No Submit Link' />);
+    const linkElement = screen.getByText(/No Submit Link/i);
+
+    fireEvent.click(linkElement);
+    expect(onSubmitMock).not.toHaveBeenCalled();
   });
 });

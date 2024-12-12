@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-
 import Upload from './Upload';
 
 describe('Upload Component', () => {
@@ -42,8 +41,8 @@ describe('Upload Component', () => {
 
     fireEvent.change(inputElement, { target: { files: [file] } });
 
-    expect(mockOnFileUpload).toHaveBeenCalled(); // Check if onFileUpload was called
-    expect(mockSetError).toHaveBeenCalledWith(undefined); // Check if setError was called with undefined
+    expect(mockOnFileUpload).toHaveBeenCalled();
+    expect(mockSetError).toHaveBeenCalledWith(null);
   });
 
   test('displays an error message when the file exceeds the maximum size', () => {
@@ -90,7 +89,7 @@ describe('Upload Component', () => {
     expect(
       screen.queryByText(/the file exceeds the maximum size of 1 mb/i)
     ).not.toBeInTheDocument();
-    expect(mockSetError).toHaveBeenCalledWith(undefined);
+    expect(mockSetError).toHaveBeenCalledWith(null);
     expect(mockOnFileUpload).toHaveBeenCalled();
   });
 });

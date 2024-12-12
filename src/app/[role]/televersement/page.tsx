@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Alert, Link, LinkVariant, Select, Upload } from '@/components';
 import wording from '@/wording';
@@ -9,19 +9,26 @@ import wording from '@/wording';
 export default function Televersement() {
   const pathname = usePathname();
   const role = pathname.split('/')[1];
+  const router = useRouter();
 
-  const [fileUploaded, setFileUploaded] = useState<boolean>(false);
-  const [fileUploadedError, setFileUploadedError] = useState<
-    string | undefined
-  >(undefined);
+  const [file, setFile] = useState<File | null>(null);
+  const [profile, setProfile] = useState<string>('');
+  const [fileUploadedError, setFileUploadedError] = useState<string | null>(
+    null
+  );
   const [selectedOption, setSelectedOption] = useState<string>('');
+
+  const handleFileUpload = useCallback(
+    (uploadedFile: File) => {
+      setFile(uploadedFile);
+      setFileUploadedError(null);
+      setProfile(role);
+    },
+    [role]
+  );
 
   const handleSelectChange = (value: string) => {
     setSelectedOption(value);
-  };
-
-  const handleFileUpload = () => {
-    setFileUploaded(true);
   };
 
   const options = [
@@ -30,6 +37,41 @@ export default function Televersement() {
     { value: '3', label: 'Option 3' },
     { value: '4', label: 'Option 4' },
   ];
+
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (!file) {
+        setFileUploadedError('Please upload a file.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('profile', profile);
+
+      try {
+        const response = await fetch('/api/quote_checks', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.id) {
+          router.push(`/${role}/televersement/${data.id}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
+    [file, profile, role, router]
+  );
 
   return (
     <section className='fr-container-fluid fr-py-10w'>
@@ -70,7 +112,8 @@ export default function Televersement() {
                 </li>
                 <li
                   className={
-                    !fileUploaded || fileUploadedError || !selectedOption
+                    // !fileUploaded || fileUploadedError || !selectedOption
+                    !file || fileUploadedError
                       ? 'cursor-not-allowed'
                       : undefined
                   }
@@ -78,8 +121,10 @@ export default function Televersement() {
                   <Link
                     href={wording.upload.section_upload.link_check_quote.href}
                     label={wording.upload.section_upload.link_check_quote.label}
+                    onSubmit={handleSubmit}
                     variant={
-                      fileUploaded && !fileUploadedError && selectedOption
+                      // file && !fileUploadedError && selectedOption
+                      file && !fileUploadedError
                         ? LinkVariant.PRIMARY
                         : LinkVariant.DISABLED
                     }

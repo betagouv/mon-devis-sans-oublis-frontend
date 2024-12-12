@@ -3,6 +3,25 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@gouvfr/dsfr'],
+  async rewrites() {
+    const profilesDestination = process.env.NEXT_PUBLIC_API_PROFILES;
+    const quoteChecksDestination = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS;
+
+    if (!profilesDestination || !quoteChecksDestination) {
+      throw new Error('API URLs are not defined in the environment variables.');
+    }
+
+    return [
+      {
+        source: '/api/profiles',
+        destination: profilesDestination,
+      },
+      {
+        source: '/api/quote_checks',
+        destination: quoteChecksDestination,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -20,7 +39,7 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
+  widenClientFileUpload: false,
 
   // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
   // This can increase your server load as well as your hosting bill.
