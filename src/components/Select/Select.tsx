@@ -18,6 +18,7 @@ const Select: React.FC<SelectProps> = ({
       </label>
       <select
         className='fr-select'
+        disabled // to change
         id='select'
         onChange={(e) => onChange(e.target.value)}
         name='select'

@@ -7,8 +7,8 @@ export interface UploadProps {
   errorMessage: string;
   label: string;
   maxFileSize: number;
-  onFileUpload: () => void;
-  setError: (error: string | undefined) => void;
+  onFileUpload: (file: File) => void;
+  setError: (error: string | null) => void;
 }
 
 const Upload: React.FC<UploadProps> = ({
@@ -22,7 +22,8 @@ const Upload: React.FC<UploadProps> = ({
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const files = event.target.files; // multiple files in the futur
+
     if (files && files.length > 0) {
       const file = files[0];
 
@@ -34,8 +35,8 @@ const Upload: React.FC<UploadProps> = ({
       }
 
       setLocalError(null);
-      setError(undefined);
-      onFileUpload();
+      setError(null);
+      onFileUpload(file);
     }
   };
 
@@ -48,6 +49,7 @@ const Upload: React.FC<UploadProps> = ({
       <input
         className='fr-upload'
         id='file-upload'
+        // multiple
         name='file-upload'
         onChange={handleFileChange}
         type='file'
