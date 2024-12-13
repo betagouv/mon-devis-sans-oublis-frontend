@@ -1,14 +1,17 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { use, useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Alert, Link, LinkVariant, Select, Upload } from '@/components';
 import wording from '@/wording';
 
-export default function Televersement() {
-  const pathname = usePathname();
-  const role = pathname.split('/')[1];
+export default function Televersement({
+  params: initialParams,
+}: {
+  params: Promise<{ role: string }>;
+}) {
+  const params = use(initialParams);
   const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
@@ -22,9 +25,9 @@ export default function Televersement() {
     (uploadedFile: File) => {
       setFile(uploadedFile);
       setFileUploadedError(null);
-      setProfile(role);
+      setProfile(params.role);
     },
-    [role]
+    [params.role]
   );
 
   const handleSelectChange = (value: string) => {
@@ -64,13 +67,13 @@ export default function Televersement() {
         const data = await response.json();
 
         if (data.id) {
-          router.push(`/${role}/televersement/${data.id}`);
+          router.push(`/${params.role}/televersement/${data.id}`);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     },
-    [file, profile, role, router]
+    [file, profile, params.role, router]
   );
 
   return (
@@ -79,7 +82,10 @@ export default function Televersement() {
         <div className='fr-grid-row fr-grid-row--center'>
           <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
             <h1>
-              {wording.upload.section_upload.title.replace('{role}', role)}
+              {wording.upload.section_upload.title.replace(
+                '{role}',
+                params.role
+              )}
             </h1>
             <Upload
               description={wording.upload.section_upload.upload.description}
