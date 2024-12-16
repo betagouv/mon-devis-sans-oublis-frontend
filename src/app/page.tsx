@@ -3,12 +3,13 @@
 import React from 'react';
 
 import {
+  Badge,
+  BadgeVariant,
   BlockIcon,
   BlockNumber,
   CardImage,
   Link,
   RoleCardImage,
-  Tag,
   Tile,
 } from '@/components';
 import { useBreakpoint } from '@/hooks';
@@ -27,7 +28,10 @@ export default function Home() {
             <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4'>
               {wording.homepage.section_examples.badges.map((badge, index) => (
                 <li key={index}>
-                  <Tag label={badge.label} />
+                  <Badge
+                    label={badge.label}
+                    variant={BadgeVariant.BLUE_LIGHT}
+                  />
                 </li>
               ))}
             </ul>
