@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   mon-devis-sans-oublis-frontend-development:
     build:
