@@ -13,6 +13,10 @@ RUN npm install
 # Copy all files
 COPY . .
 
+# Environment variables necessary for build
+ENV NEXT_PUBLIC_API_PROFILES=http://host.docker.internal:3001/api/v1/profiles
+ENV NEXT_PUBLIC_API_QUOTE_CHECKS=http://host.docker.internal:3001/api/v1/quote_checks
+
 # Build the Next.js app
 RUN npm run build
 

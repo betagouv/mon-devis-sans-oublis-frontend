@@ -9,6 +9,10 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
+      - NEXT_PUBLIC_API_PROFILES=http://host.docker.internal:3001/api/v1/profiles
+      - NEXT_PUBLIC_API_QUOTE_CHECKS=http://host.docker.internal:3001/api/v1/quote_checks
+      - NEXT_TELEMETRY_DEBUG=0
+    command: npm run dev
     volumes:
       - .:/app
       - /app/node_modules
