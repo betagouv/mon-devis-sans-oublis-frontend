@@ -7,10 +7,20 @@ h2 {
   color: var(--artwork-major-blue-ecume);
 }
 
+/* DSFR */
+.fr-header {
+  z-index: 99;
+}
+
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
 /* IconBackground, Upload */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);
+}
+
+/* QuoteErrorCard */
+.border-bottom-grey {
+  border-bottom: 1px solid var(--border-default-grey);
 }
 
 /* CardImage */
@@ -21,4 +31,12 @@ h2 {
 /* QuoteStatusLink */
 .border-shadow {
   box-shadow: 0px 2px 6px 0px #00001229;
+}
+
+/* Icons missing in DSFR (https://www.systeme-de-design.gouv.fr/fondamentaux/icone) */
+/* Design */
+.fr-icon-edit-circle-line::before,
+.fr-icon-edit-circle-line::after {
+  -webkit-mask-image: url('../../public/svg/design/edit-circle-line.svg');
+  mask-image: url('../../public/svg/design/edit-circle-line.svg');
 }

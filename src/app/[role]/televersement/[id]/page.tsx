@@ -16,8 +16,8 @@ export default function Devis({
 
   return (
     <div>
-      <h1>Devis ID: {params.id}</h1>
-      <h3>Role: {params.role}</h3>
+      {/* <h1>Devis ID: {params.id}</h1>
+      <h3>Role: {params.role}</h3> */}
       {params.role === 'artisan' && <ArtisanPage />}
       {params.role === 'conseiller' && <ConseillerPage />}
       {params.role === 'mandataire' && <MandatairePage />}

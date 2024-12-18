@@ -2,7 +2,7 @@
 export { default as Alert } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';
 // Badge
-export { default as Badge, BadgeVariant } from './Badge/Badge';
+export { default as Badge, BadgeVariant, BadgeSize } from './Badge/Badge';
 export type { BadgeProps } from './Badge/Badge';
 // BlockIcon
 export { default as BlockIcon } from './BlockIcon/BlockIcon';
@@ -28,6 +28,12 @@ export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
 export { default as Link, LinkSize, LinkVariant } from './Link/Link';
 export type { LinkProps } from './Link/Link';
+// Modal
+export { default as Modal } from './Modal/Modal';
+export type { IssueResolution, ModalProps } from './Modal/Modal';
+// QuoteErrorCard
+export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
+export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
 // QuoteStatusCard
 export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
 export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';

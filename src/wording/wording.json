@@ -184,6 +184,38 @@
       }
     }
   },
+  "upload_id": {
+    "badge_correction": "({number}) correction",
+    "badge_correction_plural": "({number}) corrections",
+    "modal": {
+      "button_back_text": "Détail de la correction",
+      "button_contact_text": "Nous contacter",
+      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
+      "icon_alt": "Icône de correction",
+      "icon_src": "/images/quote_correction_details.png",
+      "problem": {
+        "title": "Problème identifié"
+      },
+      "solution": {
+        "title": "Solution"
+      }
+    },
+    "quote_status_card_ok": {
+      "description": "Bravo, votre devis est complet. Il répond aux attentes des différentes aides de rénovation énergétique.",
+      "description_ok_more": "Prochaine étape : partagez votre devis à votre client",
+      "image_alt": "Quote OK",
+      "image_src": "/images/quote_status_ok.png",
+      "title": "Il est top ce devis !"
+    },
+    "quote_status_link_ok": {
+      "image_alt": "Quote ok",
+      "image_src": "/images/quote_link_ok.png",
+      "title": "Revenez quand vous voulez !",
+      "link_href": "/bienvenue",
+      "link_label": "Vérifier un nouveau devis"
+    },
+    "title": "Résultat de l’analyse"
+  },
   "welcome": {
     "section_who_are_you": {
       "cards": [

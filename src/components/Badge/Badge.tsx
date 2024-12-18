@@ -1,3 +1,9 @@
+export enum BadgeSize {
+  X_SMALL = 'x-small',
+  SMALL = 'small',
+  MEDIUM = 'medium',
+}
+
 export enum BadgeVariant {
   BLUE_DARK = 'blue-dark',
   BLUE_LIGHT = 'blue-light',
@@ -6,12 +12,25 @@ export enum BadgeVariant {
 }
 
 export interface BadgeProps {
+  className?: string;
   label: string;
+  size?: BadgeSize;
   variant: BadgeVariant;
 }
 
-const Badge: React.FC<BadgeProps> = ({ label, variant }) => {
+const Badge: React.FC<BadgeProps> = ({
+  className,
+  label,
+  size = BadgeSize.MEDIUM,
+  variant,
+}) => {
   const baseClasses = 'rounded font-bold px-1.5 py-0.5 uppercase h-fit w-fit';
+
+  const sizeClasses = {
+    [BadgeSize.X_SMALL]: 'text-xs',
+    [BadgeSize.SMALL]: 'text-sm',
+    [BadgeSize.MEDIUM]: 'text-md',
+  };
 
   const variantClasses = {
     [BadgeVariant.BLUE_LIGHT]:
@@ -25,7 +44,11 @@ const Badge: React.FC<BadgeProps> = ({ label, variant }) => {
   };
 
   return (
-    <span className={`${baseClasses} ${variantClasses[variant]}`}>{label}</span>
+    <span
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+    >
+      {label}
+    </span>
   );
 };
 

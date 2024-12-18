@@ -8,6 +8,7 @@ export enum QuoteStatusVariant {
 }
 
 export interface QuoteStatusLinkProps {
+  className?: string;
   imageAlt: string;
   imageSrc: string;
   linkHref: string;
@@ -17,6 +18,7 @@ export interface QuoteStatusLinkProps {
 }
 
 const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
+  className,
   imageAlt,
   imageSrc,
   linkHref,
@@ -31,7 +33,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
 
   return (
     <div
-      className={`${backgroundColor} border-shadow flex items-center gap-4 p-8 rounded-lg w-fit`}
+      className={`${backgroundColor} border-shadow flex items-center gap-4 p-8 rounded-lg w-fit ${className}`}
     >
       <Image
         alt={imageAlt}
