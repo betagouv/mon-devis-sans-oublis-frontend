@@ -85,7 +85,7 @@ export default function Pending() {
         <span className='inline-block w-8 text-left'>{dots}</span>
       </h1>
       <p className='text-gray-600 mb-6'>
-        The analysis of your quote is in progress.
+        {`L'analyse de votre devis est en cours.`}
       </p>
     </div>
   );

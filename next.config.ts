@@ -5,8 +5,9 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@gouvfr/dsfr'],
   async rewrites() {
     const quoteChecks = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS;
+    const quoteChecksId = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
 
-    if (!quoteChecks) {
+    if (!quoteChecks || !quoteChecksId) {
       throw new Error('API URLs are not defined in the environment variables.');
     }
 
@@ -16,7 +17,7 @@ const nextConfig: NextConfig = {
         source: '/api/quote_checks',
       },
       {
-        destination: `${quoteChecks}/:id`,
+        destination: quoteChecksId,
         source: '/api/quote_checks/:id',
       },
     ];

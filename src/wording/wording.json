@@ -187,6 +187,20 @@
   "upload_id": {
     "badge_correction": "{number} correction",
     "badge_correction_plural": "{number} corrections",
+    "block_number": [
+      {
+        "number": 1,
+        "title": "Découvrez les corrections"
+      },
+      {
+        "number": 2,
+        "title": "Modifier le devis"
+      },
+      {
+        "number": 3,
+        "title": "Vérifiez le nouveau devis"
+      }
+    ],
     "modal": {
       "button_back_text": "Détail de la correction",
       "button_contact_text": "Nous contacter",
@@ -199,6 +213,13 @@
       "solution": {
         "title": "Solution"
       }
+    },
+    "quote_status_card_ko": {
+      "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
+      "description_ko_more": "Nous vous conseillons de le refaire dès maintenant pour éviter les allers-retours avec votre client.",
+      "image_alt": "Quote KO",
+      "image_src": "/images/quote_status_ko.png",
+      "title": "Aïe, ce devis va coincer..."
     },
     "quote_status_card_ok": {
       "description": "Bravo, votre devis est complet. Il répond aux attentes des différentes aides de rénovation énergétique.",

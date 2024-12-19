@@ -19,7 +19,6 @@ const BlockNumber: React.FC<BlockNumberProps> = ({
   title,
 }) => {
   return (
-    // <div className='border-open-blue rounded-lg p-4 w-[325px]'>
     <div className={className}>
       {size === BlockNumberSize.MEDIUM ? (
         <>

@@ -1,9 +1,12 @@
 'use client';
 
+import React from 'react';
 import {
   Badge,
   BadgeSize,
   BadgeVariant,
+  BlockNumber,
+  BlockNumberSize,
   QuoteErrorCard,
   QuoteStatusCard,
   QuoteStatusLink,
@@ -73,32 +76,31 @@ export default function Devis() {
   ];
 
   return (
-    <>
-      {data?.status}
-      <section className='fr-container-fluid fr-py-10w'>
-        <div className='fr-container fr-gap-8'>
-          <div className='fr-grid-row'>
-            <h1>{wording.upload_id.title}</h1>
-            <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4 ml-8 self-center'>
-              <li>
-                <Badge
-                  label='Nom du fichier du devis'
-                  size={BadgeSize.SMALL}
-                  variant={BadgeVariant.BLUE_DARK}
-                />
-              </li>
-              <li>
-                <Badge
-                  label={(list.length > 1
-                    ? wording.upload_id.badge_correction_plural
-                    : wording.upload_id.badge_correction
-                  ).replace('{number}', list.length.toString())}
-                  size={BadgeSize.SMALL}
-                  variant={BadgeVariant.GREY}
-                />
-              </li>
-            </ul>
-            <div className='fr-col-12'>
+    <div className='fr-container-fluid fr-py-10w'>
+      <section className='fr-container fr-gap-8'>
+        <div className='fr-grid-row'>
+          <h1>{wording.upload_id.title}</h1>
+          <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4 ml-8 self-center'>
+            <li>
+              <Badge
+                label='Nom du fichier du devis'
+                size={BadgeSize.SMALL}
+                variant={BadgeVariant.BLUE_DARK}
+              />
+            </li>
+            <li>
+              <Badge
+                label={(list.length > 1
+                  ? wording.upload_id.badge_correction_plural
+                  : wording.upload_id.badge_correction
+                ).replace('{number}', list.length.toString())}
+                size={BadgeSize.SMALL}
+                variant={BadgeVariant.GREY}
+              />
+            </li>
+          </ul>
+          <div className='fr-col-12'>
+            {data?.status === 'valid' && (
               <QuoteStatusCard
                 description={wording.upload_id.quote_status_card_ok.description}
                 descriptionOKMore={
@@ -108,6 +110,19 @@ export default function Devis() {
                 imageSrc={wording.upload_id.quote_status_card_ok.image_src}
                 title={wording.upload_id.quote_status_card_ok.title}
               />
+            )}
+            {data?.status === 'invalid' && (
+              <QuoteStatusCard
+                description={wording.upload_id.quote_status_card_ko.description}
+                descriptionKOMore={
+                  wording.upload_id.quote_status_card_ko.description_ko_more
+                }
+                imageAlt={wording.upload_id.quote_status_card_ko.image_alt}
+                imageSrc={wording.upload_id.quote_status_card_ko.image_src}
+                title={wording.upload_id.quote_status_card_ko.title}
+              />
+            )}
+            {data?.status === 'valid' && data.profile === 'artisan' && (
               <QuoteStatusLink
                 className='mb-16 mt-8'
                 imageAlt={wording.upload_id.quote_status_link_ok.image_alt}
@@ -117,11 +132,38 @@ export default function Devis() {
                 linkLabel={wording.upload_id.quote_status_link_ok.link_label}
                 variant={QuoteStatusVariant.SECONDARY}
               />
-              <QuoteErrorCard list={list} />
-            </div>
+            )}
+            <ul className='fr-raw-list fr-mx-1w my-8 w-full flex justify-between items-center'>
+              {wording.upload_id.block_number.map((block, index) => (
+                <React.Fragment key={block.number}>
+                  <li className='fr-col-auto flex items-center'>
+                    <BlockNumber
+                      className='border-open-blue rounded-lg p-4 w-full md:w-[325px]' // Utilisation de classes responsive
+                      number={block.number}
+                      size={BlockNumberSize.MEDIUM}
+                      title={block.title}
+                    />
+                  </li>
+                  {index < wording.upload_id.block_number.length - 1 && (
+                    <div className='flex items-center h-full'>
+                      <span
+                        className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
+                        aria-hidden='true'
+                      />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
-    </>
+      <section className='fr-container'>
+        <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
+          Pas de panique, voici les corrections à apporter ⬇️
+        </h2>
+        <QuoteErrorCard list={list} />
+      </section>
+    </div>
   );
 }

@@ -39,6 +39,13 @@ h2 {
 /* used in QuoteStatusLink */
 
 /* Icons missing in DSFR (https://www.systeme-de-design.gouv.fr/fondamentaux/icone) */
+/* Arrows */
+.fr-icon-arrow-right-circle-fill::after,
+.fr-icon-arrow-right-circle-fill::before {
+  mask-image: url('../../public/svg/arrows/arrow-right-circle-fill.svg');
+  -webkit-mask-image: url('../../public/svg/arrows/arrow-right-circle-fill.svg');
+}
+
 /* Design */
 .fr-icon-edit-circle-line::after,
 .fr-icon-edit-circle-line::before {
