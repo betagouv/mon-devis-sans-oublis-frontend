@@ -8,7 +8,10 @@ export type { BadgeProps } from './Badge/Badge';
 export { default as BlockIcon } from './BlockIcon/BlockIcon';
 export type { BlockIconProps } from './BlockIcon/BlockIcon';
 // BlockNumber
-export { default as BlockNumber } from './BlockNumber/BlockNumber';
+export {
+  default as BlockNumber,
+  BlockNumberSize,
+} from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';

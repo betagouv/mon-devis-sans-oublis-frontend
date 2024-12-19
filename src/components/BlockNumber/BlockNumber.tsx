@@ -1,11 +1,13 @@
-'use client';
-
-import { useBreakpoint } from '@/hooks';
+export enum BlockNumberSize {
+  MEDIUM = 'medium',
+  LARGE = 'large',
+}
 
 export interface BlockNumberProps {
   className?: string;
-  description: string;
+  description?: string;
   number: number;
+  size?: BlockNumberSize;
   title: string;
 }
 
@@ -13,15 +15,27 @@ const BlockNumber: React.FC<BlockNumberProps> = ({
   className,
   description,
   number,
+  size = BlockNumberSize.LARGE,
   title,
 }) => {
-  const breakpoint = useBreakpoint();
-
   return (
+    // <div className='border-open-blue rounded-lg p-4 w-[325px]'>
     <div className={className}>
-      <h3 className='fr-display--sm fr-m-0'>{number}</h3>
-      <h5 className='fr-mb-1w'>{title}</h5>
-      {breakpoint !== 'XS' && breakpoint !== 'SM' ? <p>{description}</p> : null}
+      {size === BlockNumberSize.MEDIUM ? (
+        <>
+          <h1 className='fr-m-0 text-[var(--text-title-blue-france)]'>
+            {number}
+          </h1>
+          <h6 className='fr-mb-1w'>{title}</h6>
+        </>
+      ) : (
+        <>
+          <h3 className='fr-display--sm fr-m-0'>{number}</h3>
+          <h5 className='fr-mb-1w'>{title}</h5>
+        </>
+      )}
+
+      {description && <p className='hidden md:block'>{description}</p>}
     </div>
   );
 };

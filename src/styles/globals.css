@@ -13,30 +13,35 @@ h2 {
 }
 
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
-/* IconBackground, Upload */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);
 }
+/* used in IconBackground, Upload */
 
-/* QuoteErrorCard */
 .border-bottom-grey {
   border-bottom: 1px solid var(--border-default-grey);
 }
+/* used in QuoteErrorCard */
 
-/* CardImage */
 .border-grey {
   border: 1px solid var(--border-disabled-grey);
 }
+/* used in CardImage */
 
-/* QuoteStatusLink */
+.border-open-blue {
+  border: 1px solid var(--border-open-blue-france);
+}
+/* used in BlockNumber */
+
 .border-shadow {
   box-shadow: 0px 2px 6px 0px #00001229;
 }
+/* used in QuoteStatusLink */
 
 /* Icons missing in DSFR (https://www.systeme-de-design.gouv.fr/fondamentaux/icone) */
 /* Design */
-.fr-icon-edit-circle-line::before,
-.fr-icon-edit-circle-line::after {
-  -webkit-mask-image: url('../../public/svg/design/edit-circle-line.svg');
+.fr-icon-edit-circle-line::after,
+.fr-icon-edit-circle-line::before {
   mask-image: url('../../public/svg/design/edit-circle-line.svg');
+  -webkit-mask-image: url('../../public/svg/design/edit-circle-line.svg');
 }

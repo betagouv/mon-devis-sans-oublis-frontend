@@ -185,8 +185,8 @@
     }
   },
   "upload_id": {
-    "badge_correction": "({number}) correction",
-    "badge_correction_plural": "({number}) corrections",
+    "badge_correction": "{number} correction",
+    "badge_correction_plural": "{number} corrections",
     "modal": {
       "button_back_text": "Détail de la correction",
       "button_contact_text": "Nous contacter",

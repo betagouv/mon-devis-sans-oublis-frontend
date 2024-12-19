@@ -4,25 +4,19 @@ import { withSentryConfig } from '@sentry/nextjs';
 const nextConfig: NextConfig = {
   transpilePackages: ['@gouvfr/dsfr'],
   async rewrites() {
-    const profiles = process.env.NEXT_PUBLIC_API_PROFILES;
     const quoteChecks = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS;
-    const quoteChecksId = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
 
-    if (!profiles || !quoteChecks || !quoteChecksId) {
+    if (!quoteChecks) {
       throw new Error('API URLs are not defined in the environment variables.');
     }
 
     return [
       {
-        destination: profiles,
-        source: '/api/profiles',
-      },
-      {
         destination: quoteChecks,
         source: '/api/quote_checks',
       },
       {
-        destination: quoteChecksId,
+        destination: `${quoteChecks}/:id`,
         source: '/api/quote_checks/:id',
       },
     ];
