@@ -28,6 +28,8 @@ export default function Televersement({
       setFile(uploadedFile);
       setFileUploadedError(null);
       setProfile(params.role);
+
+      localStorage.setItem('uploadedFileName', uploadedFile.name);
     },
     [params.role]
   );
