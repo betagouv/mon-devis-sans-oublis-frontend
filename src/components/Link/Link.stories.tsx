@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Link, { LinkVariant } from './Link';
+
+import Link, { LinkSize, LinkVariant } from './Link';
 
 const meta: Meta<typeof Link> = {
   title: 'Components/Link',
@@ -18,13 +19,18 @@ const meta: Meta<typeof Link> = {
       control: 'text',
       description: 'Optional icon class to be displayed',
     },
+    size: {
+      control: 'select',
+      options: Object.values(LinkSize),
+      description: 'The size of the link',
+    },
     variant: {
       control: 'select',
       options: Object.values(LinkVariant),
       description: 'The visual style variant of the link',
     },
   },
-};
+} satisfies Meta<typeof Link>;
 
 export default meta;
 type Story = StoryObj<typeof Link>;
@@ -34,29 +40,62 @@ export const Primary: Story = {
     href: '/example',
     label: 'Primary Link',
     variant: LinkVariant.PRIMARY,
+    size: LinkSize.MEDIUM,
   },
 };
 
 export const Secondary: Story = {
   args: {
-    ...Primary.args,
+    href: '/example',
     label: 'Secondary Link',
     variant: LinkVariant.SECONDARY,
+    size: LinkSize.MEDIUM,
   },
 };
 
-export const PrimaryWithIcon: Story = {
+export const Disabled: Story = {
   args: {
-    ...Primary.args,
-    label: 'Primary with Icon',
-    icon: 'fr-icon-arrow-right-line',
+    href: '/example',
+    label: 'Disabled Link',
+    variant: LinkVariant.DISABLED,
+    size: LinkSize.MEDIUM,
   },
 };
 
-export const SecondaryWithIcon: Story = {
+export const LargeLink: Story = {
   args: {
-    ...Secondary.args,
-    label: 'Secondary with Icon',
+    href: '/example',
+    label: 'Large Link',
+    variant: LinkVariant.PRIMARY,
+    size: LinkSize.LARGE,
+  },
+};
+
+export const SmallLink: Story = {
+  args: {
+    href: '/example',
+    label: 'Small Link',
+    variant: LinkVariant.PRIMARY,
+    size: LinkSize.SMALL,
+  },
+};
+
+export const LinkWithIcon: Story = {
+  args: {
+    href: '/example',
+    label: 'Link with Icon',
     icon: 'fr-icon-arrow-right-line',
+    variant: LinkVariant.PRIMARY,
+    size: LinkSize.MEDIUM,
+  },
+};
+
+export const SecondaryLinkWithIcon: Story = {
+  args: {
+    href: '/example',
+    label: 'Secondary Link with Icon',
+    icon: 'fr-icon-arrow-right-line',
+    variant: LinkVariant.SECONDARY,
+    size: LinkSize.MEDIUM,
   },
 };
