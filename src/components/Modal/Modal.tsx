@@ -85,14 +85,22 @@ const Modal: React.FC<ModalProps> = ({
                 width={64}
               />
               <h4 className='mb-8'>{title}</h4>
-              <p className='fr-mb-1w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
-                {problem.title}
-              </p>
-              <p>{problem.description}</p>
-              <p className='fr-mb-1w fr-mt-3w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
-                {solution.title}
-              </p>
-              <p>{solution.description}</p>
+              {problem.description && (
+                <>
+                  <p className='fr-mb-1w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
+                    {problem.title}
+                  </p>
+                  <p>{problem.description}</p>
+                </>
+              )}
+              {solution.description && (
+                <>
+                  <p className='fr-mb-1w fr-mt-3w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
+                    {solution.title}
+                  </p>
+                  <p>{solution.description}</p>
+                </>
+              )}
             </div>
             <div className='mb-8'>
               <p className='font-bold fr-mb-1w text-[var(--text-title-grey)]'>

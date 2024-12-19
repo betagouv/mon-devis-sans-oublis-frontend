@@ -8,11 +8,13 @@ import {
   BlockNumber,
   BlockNumberSize,
   QuoteErrorCard,
+  QuoteErrorCardCategory,
+  QuoteErrorCardType,
   QuoteStatusCard,
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { useDataContext } from '@/context';
+import { ErrorDetail, useDataContext } from '@/context';
 import wording from '@/wording';
 
 export default function Devis() {
@@ -32,48 +34,25 @@ export default function Devis() {
     },
   };
 
-  const list = [
-    {
-      id: 1,
-      title: 'Le terme “devis” doit être indiqué clairement',
-      info: 'Information manquante',
-      infoIcon: 'fr-icon-warning-line',
-      modalContent: {
-        ...commonModalContent,
-        problem: {
-          ...commonModalContent.problem,
-          description:
-            'Nous n’avons pas trouvé le terme “devis”, or les bons de commande et les propositions commerciales ne sont pas acceptées',
-        },
-        solution: {
-          ...commonModalContent.solution,
-          description: 'Ajoutez le terme “devis” au document.',
-        },
-        isOpen: false,
-
-        title: 'Le terme “devis” doit être indiqué clairement',
+  const list = (data?.error_details as ErrorDetail[]).map((error) => ({
+    category: error.category as QuoteErrorCardCategory,
+    id: Number(error.id.replace('#', '')),
+    title: error.title,
+    type: error.type as QuoteErrorCardType,
+    modalContent: {
+      ...commonModalContent,
+      problem: {
+        ...commonModalContent.problem,
+        description: error.problem || '',
       },
-    },
-    {
-      id: 2,
-      title: 'Il manque votre n° de SIRET (14 chiffres)',
-      info: 'Information erronée',
-      infoIcon: 'fr-icon-edit-circle-line',
-      modalContent: {
-        ...commonModalContent,
-        problem: {
-          ...commonModalContent.problem,
-          description: 'Le numéro SIRET est manquant ou incorrect.',
-        },
-        solution: {
-          ...commonModalContent.solution,
-          description: 'Ajoutez un numéro SIRET valide (14 chiffres).',
-        },
-        isOpen: false,
-        title: 'Détails pour le n° de SIRET',
+      solution: {
+        ...commonModalContent.solution,
+        description: error.solution || '',
       },
+      isOpen: false,
+      title: error.title,
     },
-  ];
+  }));
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
@@ -138,7 +117,7 @@ export default function Devis() {
                 <React.Fragment key={block.number}>
                   <li className='fr-col-auto flex items-center'>
                     <BlockNumber
-                      className='border-open-blue rounded-lg p-4 w-full md:w-[325px]' // Utilisation de classes responsive
+                      className='border-open-blue rounded-lg p-4 w-full md:w-[325px]'
                       number={block.number}
                       size={BlockNumberSize.MEDIUM}
                       title={block.title}

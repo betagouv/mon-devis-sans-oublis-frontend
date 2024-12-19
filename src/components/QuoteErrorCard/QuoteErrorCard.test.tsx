@@ -1,67 +1,102 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
-import QuoteErrorCard, { QuoteErrorCardProps } from './QuoteErrorCard';
+import QuoteErrorCard, {
+  QuoteErrorCardProps,
+  QuoteErrorCardCategory,
+  QuoteErrorCardType,
+} from './QuoteErrorCard';
 
 // Mock Modal component
 jest.mock('../Modal/Modal', () => ({
   __esModule: true,
-  default: jest.fn(({ isOpen, onClose }) =>
-    isOpen ? (
+  default: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+    if (!isOpen) return null;
+    return (
       <div>
-        <div>Mock Modal Content</div>
-        <button onClick={onClose}>Close Modal</button>
+        <div data-testid='modal-content'>Modal Content</div>
+        <button onClick={onClose} data-testid='close-modal-button'>
+          Close
+        </button>
       </div>
-    ) : null
-  ),
+    );
+  },
 }));
 
 describe('QuoteErrorCard Component', () => {
   const mockList: QuoteErrorCardProps['list'] = [
     {
+      category: QuoteErrorCardCategory.ADMIN,
       id: 1,
-      title: 'Le terme “devis” doit être indiqué clairement',
-      info: 'Information manquante',
-      infoIcon: 'fr-icon-warning-line',
       modalContent: {
-        buttonBackText: 'Retour',
-        buttonContactText: 'Nous contacter',
-        correctionHelpful: 'Cette correction vous a-t-elle aidé ?',
-        iconAlt: 'Icône de correction',
-        iconSrc: '/images/quote_correction_details.png',
+        buttonBackText: 'Back',
+        buttonContactText: 'Contact',
+        correctionHelpful: 'Was this correction helpful?',
+        iconAlt: 'Warning icon',
+        iconSrc: '/icons/warning.svg',
         isOpen: false,
         onClose: jest.fn(),
         problem: {
-          title: 'Problème identifié',
-          description: 'Le terme “devis” est absent du document.',
+          title: 'Problem Title 1',
+          description: 'Problem Description 1',
         },
         solution: {
-          title: 'Solution',
-          description: 'Ajoutez le terme “devis” au document.',
+          title: 'Solution Title 1',
+          description: 'Solution Description 1',
         },
-        title: 'Détails de la correction',
+        title: 'Modal Title 1',
       },
+      title: 'This is a very long title that should be truncated when rendered',
+      type: QuoteErrorCardType.MISSING,
+    },
+    {
+      category: QuoteErrorCardCategory.GESTES,
+      id: 2,
+      modalContent: {
+        buttonBackText: 'Back',
+        buttonContactText: 'Contact',
+        correctionHelpful: 'Was this correction helpful?',
+        iconAlt: 'Edit icon',
+        iconSrc: '/icons/edit.svg',
+        isOpen: false,
+        onClose: jest.fn(),
+        problem: {
+          title: 'Problem Title 2',
+          description: 'Problem Description 2',
+        },
+        solution: {
+          title: 'Solution Title 2',
+          description: 'Solution Description 2',
+        },
+        title: 'Modal Title 2',
+      },
+      title: 'Short title',
+      type: QuoteErrorCardType.WRONG,
     },
   ];
 
-  it('closes the modal when onClose is called', async () => {
+  it('renders the QuoteErrorCard with the correct number of items', () => {
     render(<QuoteErrorCard list={mockList} />);
 
-    // Get the button to open the modal
-    const button = screen.getByText('Voir le détail');
-    fireEvent.click(button);
+    expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
+    expect(screen.getByText('2 corrections')).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(mockList.length);
+  });
 
-    // Check if modal content appears
-    await waitFor(() => {
-      expect(screen.getByText('Mock Modal Content')).toBeInTheDocument();
-    });
+  it('opens the modal when "Voir le détail" is clicked and closes it correctly', () => {
+    render(<QuoteErrorCard list={mockList} />);
 
-    // Close the modal
-    const closeButton = screen.getByText('Close Modal');
-    fireEvent.click(closeButton);
+    const detailButtons = screen.getAllByText('Voir le détail');
+    fireEvent.click(detailButtons[0]);
 
-    // Check if modal content is removed
-    await waitFor(() => {
-      expect(screen.queryByText('Mock Modal Content')).not.toBeInTheDocument();
-    });
+    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
+    expect(screen.getByTestId('close-modal-button')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('close-modal-button'));
+    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+  });
+
+  it('does not open a modal when no button is clicked', () => {
+    render(<QuoteErrorCard list={mockList} />);
+    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
   });
 });
