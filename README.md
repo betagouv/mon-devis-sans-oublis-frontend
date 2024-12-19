@@ -4,6 +4,11 @@
 
 Vous pouvez exécuter ce projet de deux manières : directement avec Node.js ou en utilisant Docker.
 
+Renseignez les variables pour communiquer avec l'API backend et construire l'application ("builder") :
+
+- `NEXT_PUBLIC_API_PROFILES`
+- `NEXT_PUBLIC_API_QUOTE_CHECKS`
+
 ### Option 1: Exécution avec Node.js
 
 1. Installez les dépendances :
