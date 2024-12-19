@@ -184,32 +184,93 @@
       }
     }
   },
+  "upload_id": {
+    "badge_correction": "{number} correction",
+    "badge_correction_plural": "{number} corrections",
+    "block_number": [
+      {
+        "number": 1,
+        "title": "Découvrez les corrections"
+      },
+      {
+        "number": 2,
+        "title": "Modifier le devis"
+      },
+      {
+        "number": 3,
+        "title": "Vérifiez le nouveau devis"
+      }
+    ],
+    "button_copy_url": "Copier le lien vers les corrections",
+    "modal": {
+      "button_back_text": "Détail de la correction",
+      "button_contact_text": "Nous contacter",
+      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
+      "icon_alt": "Icône de correction",
+      "icon_src": "/images/quote_correction_details.png",
+      "problem": {
+        "title": "Problème identifié"
+      },
+      "solution": {
+        "title": "Solution"
+      }
+    },
+    "quote_status_card_ko": {
+      "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
+      "description_ko_more": "Nous vous conseillons de le refaire dès maintenant pour éviter les allers-retours avec votre client.",
+      "image_alt": "Quote KO",
+      "image_src": "/images/quote_status_ko.png",
+      "title": "Aïe, ce devis va coincer..."
+    },
+    "quote_status_card_ok": {
+      "description": "Bravo, votre devis est complet. Il répond aux attentes des différentes aides de rénovation énergétique.",
+      "description_ok_more": "Prochaine étape : partagez votre devis à votre client",
+      "image_alt": "Quote OK",
+      "image_src": "/images/quote_status_ok.png",
+      "title": "Il est top ce devis !"
+    },
+    "quote_status_link_ko": {
+      "image_alt": "Quote ko",
+      "image_src": "/images/quote_link_ko.png",
+      "title": "Psst, c’est bon vous avez tout corrigé ?",
+      "link_href": "/bienvenue",
+      "link_label": "Vérifier un nouveau devis"
+    },
+    "quote_status_link_ok": {
+      "image_alt": "Quote ok",
+      "image_src": "/images/quote_link_ok.png",
+      "title": "Revenez quand vous voulez !",
+      "link_href": "/bienvenue",
+      "link_label": "Vérifier un nouveau devis"
+    },
+    "title": "Résultat de l’analyse"
+  },
   "welcome": {
     "section_who_are_you": {
       "cards": [
         {
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "href": "/artisan/televersement",
-          "icon": "fr-icon-tools-line",
+          "icon": "fr-icon-tools-fill",
           "title": "Je suis un artisan"
-        },
-        {
-          "description": "Je souhaite accompagner mes clients dans leurs démarches",
-          "href": "/conseiller/televersement",
-          "icon": "fr-customer-service-fill",
-          "title": "Je suis un conseiller"
-        },
-        {
-          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "href": "/mandataire/televersement",
-          "icon": "fr-icon-compasses-2-fill",
-          "title": "Je suis un mandataire"
         },
         {
           "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
           "href": "/particulier/televersement",
           "icon": "fr-icon-home-4-fill",
           "title": "Je suis un particulier"
+        },
+        {
+          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
+          "href": "/mandataire/televersement",
+          "icon": "fr-icon-compasses-2-fill",
+          "title": "Je suis un.e mandataire"
+        },
+        {
+          "description": "Je souhaite accompagner mes clients dans leurs démarches",
+          "href": "/conseiller/televersement",
+          "icon": "fr-icon-customer-service-fill",
+          "title": "Je suis un.e conseiller.e"
         }
       ],
       "subtitle": "Pouvez-vous nous en dire plus sur vous ?",

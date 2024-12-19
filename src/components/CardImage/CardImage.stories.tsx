@@ -64,7 +64,7 @@ export const CardImageGrid: Story = {
       return (
         <div className='fr-grid-row fr-grid-row--center'>
           <div className='scroll-container'>
-            <ul className='fr-grid-row fr-grid-row--gutters'>
+            <ul className='fr-grid-row fr-grid-row--gutters fr-raw-list'>
               {cardImageData.map((cardImage, index) => (
                 <li className='fr-col-4 fr-col-md-2' key={index}>
                   <CardImage image={cardImage.image} title={cardImage.title} />

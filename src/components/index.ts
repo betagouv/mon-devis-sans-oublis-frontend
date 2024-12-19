@@ -1,11 +1,17 @@
 // Alert
 export { default as Alert } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';
+// Badge
+export { default as Badge, BadgeVariant, BadgeSize } from './Badge/Badge';
+export type { BadgeProps } from './Badge/Badge';
 // BlockIcon
 export { default as BlockIcon } from './BlockIcon/BlockIcon';
 export type { BlockIconProps } from './BlockIcon/BlockIcon';
 // BlockNumber
-export { default as BlockNumber } from './BlockNumber/BlockNumber';
+export {
+  default as BlockNumber,
+  BlockNumberSize,
+} from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
@@ -23,8 +29,27 @@ export {
 } from './IconBackground/IconBackground';
 export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
-export { default as Link, LinkVariant } from './Link/Link';
+export { default as Link, LinkSize, LinkVariant } from './Link/Link';
 export type { LinkProps } from './Link/Link';
+// Modal
+export { default as Modal } from './Modal/Modal';
+export type { IssueResolution, ModalProps } from './Modal/Modal';
+// QuoteErrorCard
+export {
+  default as QuoteErrorCard,
+  QuoteErrorCardCategory,
+  QuoteErrorCardType,
+} from './QuoteErrorCard/QuoteErrorCard';
+export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
+// QuoteStatusCard
+export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
+export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
+// QuoteStatusLink
+export {
+  default as QuoteStatusLink,
+  QuoteStatusVariant,
+} from './QuoteStatusLink/QuoteStatusLink';
+export type { QuoteStatusLinkProps } from './QuoteStatusLink/QuoteStatusLink';
 // RoleCardIcon
 export { default as RoleCardIcon } from './RoleCardIcon/RoleCardIcon';
 export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
@@ -34,9 +59,6 @@ export type { RoleCardImageProps } from './RoleCardImage/RoleCardImage';
 // Select
 export { default as Select } from './Select/Select';
 export type { SelectProps } from './Select/Select';
-// Tag
-export { default as Tag, TagVariant } from './Tag/Tag';
-export type { TagProps } from './Tag/Tag';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';

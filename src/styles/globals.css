@@ -7,13 +7,69 @@ h2 {
   color: var(--artwork-major-blue-ecume);
 }
 
+/* DSFR */
+.fr-header {
+  z-index: 99;
+}
+
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
-/* IconBackground, Upload */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);
 }
 
-/* CardImage */
+.border-bottom-grey {
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
 .border-grey {
   border: 1px solid var(--border-disabled-grey);
+}
+
+.border-open-blue {
+  border: 1px solid var(--border-open-blue-france);
+}
+
+.border-shadow {
+  box-shadow: 0px 2px 6px 0px #00001229;
+}
+
+/* Icons missing in DSFR (https://www.systeme-de-design.gouv.fr/fondamentaux/icone) */
+/* Arrows */
+.fr-icon-arrow-right-circle-fill::after,
+.fr-icon-arrow-right-circle-fill::before {
+  mask-image: url('../../public/svg/arrows/arrow-right-circle-fill.svg');
+  -webkit-mask-image: url('../../public/svg/arrows/arrow-right-circle-fill.svg');
+}
+
+/* Buildings */
+.fr-icon-home-4-fill::after,
+.fr-icon-home-4-fill::before {
+  mask-image: url('../../public/svg/buildings/home-4-fill.svg');
+  -webkit-mask-image: url('../../public/svg/buildings/home-4-fill.svg');
+}
+
+/* Business */
+.fr-icon-customer-service-fill::after,
+.fr-icon-customer-service-fill::before {
+  mask-image: url('../../public/svg/business/customer-service-fill.svg');
+  -webkit-mask-image: url('../../public/svg/business/customer-service-fill.svg');
+}
+
+/* Design */
+.fr-icon-compasses-2-fill::after,
+.fr-icon-compasses-2-fill::before {
+  mask-image: url('../../public/svg/design/compasses-2-fill.svg');
+  -webkit-mask-image: url('../../public/svg/design/compasses-2-fill.svg');
+}
+
+.fr-icon-edit-circle-line::after,
+.fr-icon-edit-circle-line::before {
+  mask-image: url('../../public/svg/design/edit-circle-line.svg');
+  -webkit-mask-image: url('../../public/svg/design/edit-circle-line.svg');
+}
+
+.fr-icon-tools-fill::after,
+.fr-icon-tools-fill::before {
+  mask-image: url('../../public/svg/design/tools-fill.svg');
+  -webkit-mask-image: url('../../public/svg/design/tools-fill.svg');
 }

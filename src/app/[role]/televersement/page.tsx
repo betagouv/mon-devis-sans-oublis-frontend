@@ -4,6 +4,7 @@ import { use, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Alert, Link, LinkVariant, Select, Upload } from '@/components';
+import { useDataContext } from '@/context';
 import wording from '@/wording';
 
 export default function Televersement({
@@ -12,6 +13,7 @@ export default function Televersement({
   params: Promise<{ role: string }>;
 }) {
   const params = use(initialParams);
+  const { setData } = useDataContext();
   const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
@@ -26,6 +28,8 @@ export default function Televersement({
       setFile(uploadedFile);
       setFileUploadedError(null);
       setProfile(params.role);
+
+      localStorage.setItem('uploadedFileName', uploadedFile.name);
     },
     [params.role]
   );
@@ -58,6 +62,10 @@ export default function Televersement({
         const response = await fetch('/api/quote_checks', {
           method: 'POST',
           body: formData,
+          headers: {
+            accept: 'application/json',
+            Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+          },
         });
 
         if (!response.ok) {
@@ -65,15 +73,17 @@ export default function Televersement({
         }
 
         const data = await response.json();
+        setData(data);
+        localStorage.setItem('quoteCheckData', JSON.stringify(data));
 
         if (data.id) {
-          router.push(`/${params.role}/televersement/${data.id}`);
+          router.push(`/${params.role}/televersement/${data.id}/pending`);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     },
-    [file, profile, params.role, router]
+    [file, profile, setData, router, params.role]
   );
 
   return (
