@@ -1,4 +1,10 @@
 {
+  "components": {
+    "alert": {
+      "see_less": "Voir moins",
+      "see_more": "Voir plus"
+    }
+  },
   "homepage": {
     "check_quote_button": {
       "href": "/bienvenue",
@@ -9,17 +15,17 @@
       "icon_blocks": [
         {
           "description": "Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis",
-          "icon": "fr-icon-question-line",
+          "icon": "fr-icon-file-download-line",
           "title": "Explications claires"
         },
         {
           "description": "Corrigez facilement vos devis grâce au guide restitué après l’analyse",
-          "icon": "fr-icon-question-line",
+          "icon": "fr-icon-time-line",
           "title": "Gain de temps"
         },
         {
           "description": "Moins d'allers-retours avec les instructeurs d'aides à la rénovation énergétique et des délais raccourcis",
-          "icon": "fr-icon-question-line",
+          "icon": "fr-icon-calendar-event-line",
           "title": "Instruction accélérée"
         }
       ]
@@ -107,14 +113,14 @@
           "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
           "image": "card_agent.png",
-          "title": "Je suis un mandataire",
+          "title": "Je suis un.e mandataire",
           "url": "/mandataire/televersement"
         },
         {
           "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "image": "card_advisor.png",
-          "title": "Je suis un conseiller",
+          "title": "Je suis un.e conseiller.e",
           "url": "/conseiller/televersement"
         }
       ],
@@ -158,6 +164,10 @@
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
     }
+  },
+  "pending_page": {
+    "description": "L'analyse de votre devis est en cours.",
+    "title": "Chargement"
   },
   "upload": {
     "section_upload": {
@@ -243,6 +253,7 @@
       "link_href": "/bienvenue",
       "link_label": "Vérifier un nouveau devis"
     },
+    "subtitle": "Pas de panique, voici les corrections à apporter ⬇️",
     "title": "Résultat de l’analyse"
   },
   "welcome": {

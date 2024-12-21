@@ -14,7 +14,7 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { ErrorDetail, useDataContext } from '@/context';
+import { ErrorDetail, Status, useDataContext } from '@/context';
 import wording from '@/wording';
 
 export default function Devis() {
@@ -98,7 +98,7 @@ export default function Devis() {
           </button>
         </div>
         <div className='fr-col-12'>
-          {data?.status === 'valid' && (
+          {data?.status === Status.VALID && (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ok.description}
               descriptionOKMore={
@@ -109,7 +109,7 @@ export default function Devis() {
               title={wording.upload_id.quote_status_card_ok.title}
             />
           )}
-          {data?.status === 'invalid' && (
+          {data?.status === Status.INVALID && (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ko.description}
               descriptionKOMore={
@@ -134,8 +134,8 @@ export default function Devis() {
                 {index < wording.upload_id.block_number.length - 1 && (
                   <div className='flex items-center h-full'>
                     <span
-                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
                       aria-hidden='true'
+                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
                     />
                   </div>
                 )}
@@ -146,10 +146,10 @@ export default function Devis() {
       </section>
       <section className='fr-container'>
         <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
-          Pas de panique, voici les corrections à apporter ⬇️
+          {wording.upload_id.subtitle}
         </h2>
         <QuoteErrorCard list={list} />
-        {data?.status === 'valid' ? (
+        {data?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'
             imageAlt={wording.upload_id.quote_status_link_ok.image_alt}

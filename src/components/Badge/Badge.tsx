@@ -45,7 +45,7 @@ const Badge: React.FC<BadgeProps> = ({
 
   return (
     <span
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]}  ${className}`}
     >
       {label}
     </span>

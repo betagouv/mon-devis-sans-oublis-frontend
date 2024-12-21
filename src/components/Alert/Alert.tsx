@@ -2,13 +2,19 @@
 
 import { useState } from 'react';
 
+import wording from '@/wording';
+
 export interface AlertProps {
   className?: string;
   description: string;
-  moreInfo?: string;
+  moreDescription?: string;
 }
 
-const Alert: React.FC<AlertProps> = ({ className, description, moreInfo }) => {
+const Alert: React.FC<AlertProps> = ({
+  className,
+  description,
+  moreDescription,
+}) => {
   const [showMore, setShowMore] = useState<boolean>(false);
 
   const handleToggle = () => {
@@ -19,14 +25,16 @@ const Alert: React.FC<AlertProps> = ({ className, description, moreInfo }) => {
     <div className={`fr-alert fr-alert--info ${className}`}>
       <p>
         {`${description} `}
-        {moreInfo && (
+        {moreDescription && (
           <>
-            {showMore && <span>{`${moreInfo} `}</span>}
+            {showMore && <span>{`${moreDescription} `}</span>}
             <span
               className='text-[var(--text-default-grey)] cursor-pointer underline'
               onClick={handleToggle}
             >
-              {showMore ? 'Voir moins' : 'Voir plus'}
+              {showMore
+                ? wording.components.alert.see_less
+                : wording.components.alert.see_more}
             </span>
           </>
         )}

@@ -1,13 +1,9 @@
 'use client';
 
 import { RoleCardIcon, Tile } from '@/components';
-import { useBreakpoint } from '@/hooks';
 import wording from '@/wording';
 
 export default function Bienvenue() {
-  const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === 'XS' || breakpoint === 'SM';
-
   const { cards, subtitle, title } = wording.welcome.section_who_are_you;
 
   return (
@@ -20,20 +16,21 @@ export default function Bienvenue() {
             <ul className='fr-mt-2w fr-mb-6w fr-raw-list space-y-4'>
               {cards.map((card, index) => (
                 <li key={index}>
-                  {isMobile ? (
+                  <div className='block md:hidden'>
                     <Tile
                       description={card.description}
                       href={card.href}
                       title={card.title}
                     />
-                  ) : (
+                  </div>
+                  <div className='hidden md:block'>
                     <RoleCardIcon
                       description={card.description}
                       href={card.href}
                       icon={card.icon}
                       title={card.title}
                     />
-                  )}
+                  </div>
                 </li>
               ))}
             </ul>

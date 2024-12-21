@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useDataContext } from '@/context';
+import { Status, useDataContext } from '@/context';
+import wording from '@/wording';
 
 export default function Pending() {
-  const { data, setData } = useDataContext();
-  const [dots, setDots] = useState<string>('');
   const router = useRouter();
+  const [dots, setDots] = useState<string>('');
+
+  const { data, setData } = useDataContext();
 
   useEffect(() => {
     let dotsInterval: NodeJS.Timeout | null = null;
@@ -55,7 +57,7 @@ export default function Pending() {
           localStorage.setItem('quoteCheckData', JSON.stringify(updatedData));
 
           // Stop fetching and redirect if status is no longer "pending"
-          if (updatedData.status !== 'pending') {
+          if (updatedData.status !== Status.PENDING) {
             if (fetchInterval) clearInterval(fetchInterval);
             router.push(
               `/${updatedData.profile}/televersement/${updatedData.id}`
@@ -68,7 +70,7 @@ export default function Pending() {
     };
 
     // Start periodic API calls if status is "pending"
-    if (data?.status === 'pending') {
+    if (data?.status === Status.PENDING) {
       fetchInterval = setInterval(fetchAndUpdateData, 5000); // Calls every 5 seconds
     }
 
@@ -81,12 +83,10 @@ export default function Pending() {
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-gray-100'>
       <h1 className='text-xl font-semibold text-gray-800 mb-4'>
-        <span>Chargement</span>
+        <span>{wording.pending_page.title}</span>
         <span className='inline-block w-8 text-left'>{dots}</span>
       </h1>
-      <p className='text-gray-600 mb-6'>
-        {`L'analyse de votre devis est en cours.`}
-      </p>
+      <p className='text-gray-600 mb-6'>{wording.pending_page.description}</p>
     </div>
   );
 }

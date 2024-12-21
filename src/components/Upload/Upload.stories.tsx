@@ -15,6 +15,6 @@ export const Default: Story = {
   args: {
     label: 'Ajouter des fichiers',
     description:
-      'Taille maximale : 500 Mo. Formats supportés : jpg, png, pdf. Plusieurs fichiers possibles.',
+      'Taille maximale : 50 Mo. Formats supportés : jpg, png, pdf. Plusieurs fichiers possibles.',
   },
 };

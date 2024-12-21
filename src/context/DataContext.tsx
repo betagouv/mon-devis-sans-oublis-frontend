@@ -2,14 +2,24 @@
 
 import React, {
   createContext,
-  useContext,
-  useState,
-  useEffect,
   ReactNode,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 
-type Profile = 'artisan' | 'conseiller' | 'mandataire' | 'particulier';
-type Status = 'invalid' | 'valid' | 'pending';
+export enum Profile {
+  ARTISAN = 'artisan',
+  CONSEILLER = 'conseiller',
+  MANDATAIRE = 'mandataire',
+  PARTICULIER = 'particulier',
+}
+
+export enum Status {
+  INVALID = 'invalid',
+  VALID = 'valid',
+  PENDING = 'pending',
+}
 
 export interface QuoteChecks {
   id: string;

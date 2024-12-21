@@ -108,7 +108,7 @@ export default function Televersement({
             <Alert
               className='fr-mb-8w fr-mt-4w'
               description={wording.upload.section_upload.alert.description}
-              moreInfo={wording.upload.section_upload.alert.more_info}
+              moreDescription={wording.upload.section_upload.alert.more_info}
             />
             <h2>Votre projet</h2>
             <Select

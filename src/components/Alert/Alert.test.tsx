@@ -5,7 +5,7 @@ import Alert from './Alert';
 describe('Alert Component', () => {
   const defaultProps = {
     description: 'This is an alert message.',
-    moreInfo: 'Here is some more information about the alert.',
+    moreDescription: 'Here is some more information about the alert.',
   };
 
   test('renders the alert with description', () => {
@@ -21,29 +21,27 @@ describe('Alert Component', () => {
     const moreInfoElement = screen.queryByText(
       /here is some more information about the alert/i
     );
-    expect(moreInfoElement).not.toBeInTheDocument(); // More info should not be visible initially
+    expect(moreInfoElement).not.toBeInTheDocument();
   });
 
   test('toggles more info visibility when clicked', () => {
     render(<Alert {...defaultProps} />);
 
-    const toggleButton = screen.getByText(/voir plus/i); // "See more" in French
+    const toggleButton = screen.getByText(/voir plus/i);
     expect(toggleButton).toBeInTheDocument();
 
-    // Click to show more info
     fireEvent.click(toggleButton);
 
-    const moreInfoElement = screen.getByText(
+    const moreDescriptionElement = screen.getByText(
       /here is some more information about the alert/i
     );
-    expect(moreInfoElement).toBeInTheDocument(); // More info should be visible now
-    expect(toggleButton).toHaveTextContent('Voir moins'); // Button text should change to "See less"
+    expect(moreDescriptionElement).toBeInTheDocument();
+    expect(toggleButton).toHaveTextContent('Voir moins');
 
-    // Click to hide more info
     fireEvent.click(toggleButton);
 
-    expect(moreInfoElement).not.toBeInTheDocument(); // More info should be hidden again
-    expect(toggleButton).toHaveTextContent('Voir plus'); // Button text should change back to "See more"
+    expect(moreDescriptionElement).not.toBeInTheDocument();
+    expect(toggleButton).toHaveTextContent('Voir plus');
   });
 
   test('applies custom className if provided', () => {
@@ -53,6 +51,6 @@ describe('Alert Component', () => {
     const alertElement = screen
       .getByText(/this is an alert message/i)
       .closest('div');
-    expect(alertElement).toHaveClass(customClass); // Check if the custom class is applied
+    expect(alertElement).toHaveClass(customClass);
   });
 });
