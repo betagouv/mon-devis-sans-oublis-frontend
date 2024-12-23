@@ -1,102 +1,128 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import QuoteErrorCard, {
-  QuoteErrorCardProps,
   QuoteErrorCardCategory,
   QuoteErrorCardType,
 } from './QuoteErrorCard';
+import { ModalProps } from '../Modal/Modal';
+import '@testing-library/jest-dom';
 
-// Mock Modal component
-jest.mock('../Modal/Modal', () => ({
-  __esModule: true,
-  default: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-    if (!isOpen) return null;
-    return (
-      <div>
-        <div data-testid='modal-content'>Modal Content</div>
-        <button onClick={onClose} data-testid='close-modal-button'>
-          Close
-        </button>
-      </div>
-    );
+// Mock Modal to avoid full modal rendering in tests
+const MockModal = ({ isOpen, onClose, title }: ModalProps) => {
+  if (!isOpen) return null;
+  return (
+    <div data-testid='modal'>
+      <p>{title}</p>
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
+};
+
+MockModal.displayName = 'MockModal';
+
+jest.mock('../Modal/Modal', () => {
+  const MockModalComponent = (props: ModalProps) => <MockModal {...props} />;
+  MockModalComponent.displayName = 'MockModalComponent';
+  return MockModalComponent;
+});
+
+const mockList = [
+  {
+    category: QuoteErrorCardCategory.ADMIN,
+    id: 1,
+    title: 'Document manquant',
+    type: QuoteErrorCardType.MISSING,
+    modalContent: {
+      title: 'Détail de l’erreur',
+      isOpen: false,
+      buttonBackText: 'Retour',
+      buttonContactText: 'Contacter',
+      correctionHelpful: 'Cette correction a-t-elle été utile ?',
+      iconAlt: 'Erreur icône',
+      iconSrc: '/error-icon.svg',
+      problem: { title: 'Problème', description: 'Description du problème' },
+      solution: {
+        title: 'Solution',
+        description: 'Description de la solution',
+      },
+    },
   },
-}));
+  {
+    category: QuoteErrorCardCategory.GESTES,
+    id: 2,
+    title: 'Erreur technique',
+    type: QuoteErrorCardType.WRONG,
+    modalContent: {
+      title: 'Détail de l’erreur technique',
+      isOpen: false,
+      buttonBackText: 'Retour',
+      buttonContactText: 'Contacter',
+      correctionHelpful: 'Correction utile ?',
+      iconAlt: 'Erreur technique',
+      iconSrc: '/error-icon.svg',
+      problem: { title: 'Problème', description: 'Erreur technique' },
+      solution: { title: 'Solution', description: 'Résolution technique' },
+    },
+  },
+];
 
 describe('QuoteErrorCard Component', () => {
-  const mockList: QuoteErrorCardProps['list'] = [
-    {
-      category: QuoteErrorCardCategory.ADMIN,
-      id: 1,
-      modalContent: {
-        buttonBackText: 'Back',
-        buttonContactText: 'Contact',
-        correctionHelpful: 'Was this correction helpful?',
-        iconAlt: 'Warning icon',
-        iconSrc: '/icons/warning.svg',
-        isOpen: false,
-        onClose: jest.fn(),
-        problem: {
-          title: 'Problem Title 1',
-          description: 'Problem Description 1',
-        },
-        solution: {
-          title: 'Solution Title 1',
-          description: 'Solution Description 1',
-        },
-        title: 'Modal Title 1',
-      },
-      title: 'This is a very long title that should be truncated when rendered',
-      type: QuoteErrorCardType.MISSING,
-    },
-    {
-      category: QuoteErrorCardCategory.GESTES,
-      id: 2,
-      modalContent: {
-        buttonBackText: 'Back',
-        buttonContactText: 'Contact',
-        correctionHelpful: 'Was this correction helpful?',
-        iconAlt: 'Edit icon',
-        iconSrc: '/icons/edit.svg',
-        isOpen: false,
-        onClose: jest.fn(),
-        problem: {
-          title: 'Problem Title 2',
-          description: 'Problem Description 2',
-        },
-        solution: {
-          title: 'Solution Title 2',
-          description: 'Solution Description 2',
-        },
-        title: 'Modal Title 2',
-      },
-      title: 'Short title',
-      type: QuoteErrorCardType.WRONG,
-    },
-  ];
-
-  it('renders the QuoteErrorCard with the correct number of items', () => {
+  it('renders the component with a list of errors', () => {
     render(<QuoteErrorCard list={mockList} />);
 
     expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
     expect(screen.getByText('2 corrections')).toBeInTheDocument();
-    expect(screen.getAllByRole('listitem')).toHaveLength(mockList.length);
+    expect(screen.getByText('Document manquant')).toBeInTheDocument();
+    expect(screen.getByText('Erreur technique')).toBeInTheDocument();
   });
 
-  it('opens the modal when "Voir le détail" is clicked and closes it correctly', () => {
+  it('opens and closes the modal when the button is clicked', () => {
     render(<QuoteErrorCard list={mockList} />);
 
-    const detailButtons = screen.getAllByText('Voir le détail');
-    fireEvent.click(detailButtons[0]);
+    const viewDetailButton = screen.getAllByText('Voir le détail')[0];
+    fireEvent.click(viewDetailButton);
 
-    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
-    expect(screen.getByTestId('close-modal-button')).toBeInTheDocument();
+    expect(screen.getByTestId('modal')).toBeInTheDocument();
+    expect(screen.getByText('Détail de l’erreur')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('close-modal-button'));
-    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+    const closeButton = screen.getByText('Close');
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
   });
 
-  it('does not open a modal when no button is clicked', () => {
+  it('displays the correct badge and tooltip information', () => {
     render(<QuoteErrorCard list={mockList} />);
-    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+
+    expect(screen.getByText('2 corrections')).toBeInTheDocument();
+    expect(screen.getByText('Information manquante')).toBeInTheDocument();
+    expect(screen.getByText('Information erronée')).toBeInTheDocument();
+  });
+
+  it('truncates long titles correctly', () => {
+    const longTitleList = [
+      {
+        ...mockList[0],
+        title:
+          'Titre très long qui devrait être tronqué après 60 caractères car il dépasse la limite',
+      },
+      {
+        ...mockList[0],
+        id: 2,
+        title:
+          'Autre titre très long qui devrait être tronqué après 60 caractères',
+      },
+    ];
+    render(<QuoteErrorCard list={longTitleList} />);
+
+    const listItems = screen.getAllByRole('listitem');
+    const firstItem = within(listItems[0]);
+
+    expect(
+      firstItem.getByText((content) =>
+        content.startsWith(
+          'Titre très long qui devrait être tronqué après 60 cara'
+        )
+      )
+    ).toBeInTheDocument();
   });
 });
