@@ -12,13 +12,9 @@ import {
   RoleCardImage,
   Tile,
 } from '@/components';
-import { useBreakpoint } from '@/hooks';
 import wording from '@/wording';
 
 export default function Home() {
-  const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === 'XS' || breakpoint === 'SM';
-
   return (
     <div className='[&_h2]:text-center'>
       <section className='fr-container-fluid fr-py-10w'>
@@ -64,36 +60,26 @@ export default function Home() {
               {wording.homepage.section_steps.description}
             </p>
           </div>
-          <div
-            className={`fr-grid-row fr-grid-row--gutters fr-mx-1w w-full flex justify-between ${
-              isMobile && 'fr-mb-6w fr-mt-1w'
-            }`}
-          >
+          <div className='fr-grid-row fr-grid-row--gutters fr-mx-1w w-full flex justify-between'>
             {wording.homepage.section_steps.number_blocks.map(
               (block, index) => (
                 <React.Fragment key={index}>
                   <BlockNumber
-                    className={`fr-col-12 fr-col-md-3 ${
-                      isMobile && 'text-center'
-                    }`}
+                    className='fr-col-12 fr-col-md-3 text-center md:text-left'
                     description={block.description}
                     number={block.number}
                     title={block.title}
                   />
                   {index <
                     wording.homepage.section_steps.number_blocks.length - 1 && (
-                    <div
-                      className={`text-[var(--background-action-high-blue-france)] flex justify-center items-center h-full ${
-                        isMobile ? 'w-full fr-my-3w' : 'self-center'
-                      }`}
-                    >
+                    <div className='text-[var(--background-action-high-blue-france)] flex justify-center items-center h-full w-full md:w-auto fr-my-3w md:fr-my-0 md:self-center'>
                       <span
                         aria-hidden='true'
-                        className={`${
-                          isMobile
-                            ? 'fr-icon-arrow-down-s-line'
-                            : 'fr-icon-arrow-right-s-line'
-                        }`}
+                        className='fr-icon-arrow-down-s-line md:!hidden'
+                      />
+                      <span
+                        aria-hidden='true'
+                        className='hidden md:!block fr-icon-arrow-right-s-line'
                       />
                     </div>
                   )}
@@ -145,13 +131,14 @@ export default function Home() {
                 className='fr-col-12 fr-col-md-6 fr-col-lg-3 flex'
                 key={index}
               >
-                {isMobile ? (
+                <div className='block md:hidden w-full'>
                   <Tile
                     description={card.description}
                     href={card.url}
                     title={card.title}
                   />
-                ) : (
+                </div>
+                <div className='hidden md:flex w-full'>
                   <RoleCardImage
                     alt={card.alt}
                     description={card.description}
@@ -160,7 +147,7 @@ export default function Home() {
                     title={card.title}
                     url={card.url}
                   />
-                )}
+                </div>
               </li>
             ))}
           </ul>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Badge,
   BadgeSize,
@@ -14,11 +14,12 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { ErrorDetail, useDataContext } from '@/context';
+import { ErrorDetail, Status, useDataContext } from '@/context';
 import wording from '@/wording';
 
 export default function Devis() {
   const { data } = useDataContext();
+  const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
 
   const commonModalContent = {
     buttonBackText: wording.upload_id.modal.button_back_text,
@@ -60,7 +61,25 @@ export default function Devis() {
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
+    setIsUrlCopied(true);
   };
+
+  useEffect(() => {
+    const handleClipboardChange = (event: ClipboardEvent) => {
+      const clipboardData = event.clipboardData;
+      if (clipboardData) {
+        const text = clipboardData.getData('text');
+        if (text !== window.location.href) {
+          setIsUrlCopied(false);
+        }
+      }
+    };
+
+    document.addEventListener('copy', handleClipboardChange);
+    return () => {
+      document.removeEventListener('copy', handleClipboardChange);
+    };
+  }, []);
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
@@ -91,14 +110,18 @@ export default function Devis() {
             </ul>
           </div>
           <button
-            className='fr-btn fr-btn--secondary fr-mb-3w'
+            className={`fr-btn ${!isUrlCopied && 'fr-btn--secondary'} fr-mb-3w`}
+            disabled={isUrlCopied}
             onClick={copyUrlToClipboard}
           >
-            {wording.upload_id.button_copy_url}
+            {isUrlCopied
+              ? wording.upload_id.button_copied_url
+              : wording.upload_id.button_copy_url}
+            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
           </button>
         </div>
         <div className='fr-col-12'>
-          {data?.status === 'valid' && (
+          {data?.status === Status.VALID && (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ok.description}
               descriptionOKMore={
@@ -109,7 +132,7 @@ export default function Devis() {
               title={wording.upload_id.quote_status_card_ok.title}
             />
           )}
-          {data?.status === 'invalid' && (
+          {data?.status === Status.INVALID && (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ko.description}
               descriptionKOMore={
@@ -134,8 +157,8 @@ export default function Devis() {
                 {index < wording.upload_id.block_number.length - 1 && (
                   <div className='flex items-center h-full'>
                     <span
-                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
                       aria-hidden='true'
+                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
                     />
                   </div>
                 )}
@@ -146,10 +169,10 @@ export default function Devis() {
       </section>
       <section className='fr-container'>
         <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
-          Pas de panique, voici les corrections à apporter ⬇️
+          {wording.upload_id.subtitle}
         </h2>
         <QuoteErrorCard list={list} />
-        {data?.status === 'valid' ? (
+        {data?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'
             imageAlt={wording.upload_id.quote_status_link_ok.image_alt}

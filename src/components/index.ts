@@ -62,6 +62,9 @@ export type { SelectProps } from './Select/Select';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';
+// Tooltip
+export { default as Tooltip } from './Tooltip/Tooltip';
+export type { TooltipProps } from './Tooltip/Tooltip';
 // Upload
 export { default as Upload } from './Upload/Upload';
 export type { UploadProps } from './Upload/Upload';

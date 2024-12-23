@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import Modal, { ModalProps } from '../Modal/Modal';
+import Tooltip from '../Tooltip/Tooltip';
 
 export enum QuoteErrorCardCategory {
   ADMIN = 'admin',
@@ -47,7 +48,11 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
       <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between'>
         <span className='flex gap-4'>
-          <p>Mentions administratives</p>
+          <p>
+            {QuoteErrorCardCategory.ADMIN
+              ? 'Mentions administratives'
+              : 'Descriptif technique des gestes'}
+          </p>
           <Badge
             className='self-center'
             label={`${list.length} corrections`}
@@ -55,9 +60,18 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
             variant={BadgeVariant.GREY}
           />
         </span>
-        <span className='fr-icon-information-fill' aria-hidden='true' />
+        <div className='relative inline-block'>
+          <Tooltip
+            className='absolute top-full right-0 !mt-2'
+            icon='fr-icon-information-fill'
+            text={
+              QuoteErrorCardCategory.ADMIN
+                ? 'Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
+                : 'Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
+            }
+          />
+        </div>
       </div>
-
       <ul className='fr-raw-list'>
         {list.map((item) => {
           const icon =
