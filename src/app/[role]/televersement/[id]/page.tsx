@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Badge,
   BadgeSize,
@@ -19,6 +19,7 @@ import wording from '@/wording';
 
 export default function Devis() {
   const { data } = useDataContext();
+  const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
 
   const commonModalContent = {
     buttonBackText: wording.upload_id.modal.button_back_text,
@@ -60,7 +61,25 @@ export default function Devis() {
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
+    setIsUrlCopied(true);
   };
+
+  useEffect(() => {
+    const handleClipboardChange = (event: ClipboardEvent) => {
+      const clipboardData = event.clipboardData;
+      if (clipboardData) {
+        const text = clipboardData.getData('text');
+        if (text !== window.location.href) {
+          setIsUrlCopied(false);
+        }
+      }
+    };
+
+    document.addEventListener('copy', handleClipboardChange);
+    return () => {
+      document.removeEventListener('copy', handleClipboardChange);
+    };
+  }, []);
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
@@ -91,10 +110,14 @@ export default function Devis() {
             </ul>
           </div>
           <button
-            className='fr-btn fr-btn--secondary fr-mb-3w'
+            className={`fr-btn ${!isUrlCopied && 'fr-btn--secondary'} fr-mb-3w`}
+            disabled={isUrlCopied}
             onClick={copyUrlToClipboard}
           >
-            {wording.upload_id.button_copy_url}
+            {isUrlCopied
+              ? wording.upload_id.button_copied_url
+              : wording.upload_id.button_copy_url}
+            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
           </button>
         </div>
         <div className='fr-col-12'>

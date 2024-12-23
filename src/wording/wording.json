@@ -132,7 +132,8 @@
     "footer": {
       "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
       "buttons": [
-        { "href": "/", "label": "Mentions légales / Confidentialité" }
+        { "href": "/", "label": "Mentions légales" },
+        { "href": "/", "label": "Accessibilité : partiellement conforme" }
       ],
       "organizationDetails": {
         "beforeLink": "Mon Devis Sans Oublis est un service public conçu par la ",
@@ -211,7 +212,8 @@
         "title": "Vérifiez le nouveau devis"
       }
     ],
-    "button_copy_url": "Copier le lien vers les corrections",
+    "button_copied_url": "Lien copié",
+    "button_copy_url": "Copier le lien de la page",
     "modal": {
       "button_back_text": "Détail de la correction",
       "button_contact_text": "Nous contacter",

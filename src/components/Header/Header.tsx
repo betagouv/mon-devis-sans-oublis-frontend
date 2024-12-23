@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
       <div className='fr-header__body'>
         <div className='fr-container'>
           <div className='fr-header__body-row'>
-            <div className='fr-header__brand fr-enlarge-link'>
+            <div className='fr-header__brand'>
               <div className='fr-header__brand-top'>
                 <div className='fr-header__logo'>
                   <p className='fr-logo'>
@@ -41,24 +41,24 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
               <div className='fr-header__service'>
-                <div className='flex items-center'>
-                  <div>
-                    <Link
-                      className='flex flex-row items-center'
-                      href={organizationLink}
-                      title={`Accueil - ${organizationName} - ${plainString}`}
-                    >
+                <div className='hover:bg-[var(--background-raised-grey-hover)] active:bg-[var(--background-raised-grey-active)]'>
+                  <Link
+                    className='items-center'
+                    href={organizationLink}
+                    title={`Accueil - ${organizationName} - ${plainString}`}
+                  >
+                    <span className='flex flex-row'>
                       <p className='fr-header__service-title mr-4'>
                         {organizationName}
                       </p>
                       {beta && (
                         <Badge label={beta} variant={BadgeVariant.GREEN} />
                       )}
-                    </Link>
+                    </span>
                     <p className='fr-header__service-tagline'>
                       {organizationDetails}
                     </p>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

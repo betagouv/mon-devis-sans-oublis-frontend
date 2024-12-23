@@ -68,7 +68,7 @@ const Modal: React.FC<ModalProps> = ({
           >
             <div>
               <button
-                className='fr-link fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6'
+                className='fr-link fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6 text-[var(--border-plain-grey)]'
                 onClick={onClose}
               >
                 <span className='text-[20px] ml-2.5 font-bold text-[var(--text-disabled-grey)]'>
