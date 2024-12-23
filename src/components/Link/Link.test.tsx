@@ -43,7 +43,7 @@ describe('Link Component', () => {
     const linkElement = screen.getByText(/Test Link/i);
 
     expect(linkElement.closest('a')).toHaveClass(
-      'bg-[var(--background-disabled-grey)] text-[var(--text-disabled-grey)] pointer-events-none'
+      'fr-btn fr-btn--disabled !bg-[var(--background-disabled-grey)] !text-[var(--text-disabled-grey)] !cursor-not-allowed'
     );
     expect(linkElement.closest('a')).toHaveAttribute('href', '');
   });
