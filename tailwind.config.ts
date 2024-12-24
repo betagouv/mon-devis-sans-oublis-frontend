@@ -9,5 +9,18 @@ export default {
   corePlugins: {
     preflight: false,
   },
+  theme: {
+    extend: {
+      keyframes: {
+        confettiFall: {
+          '0%': { transform: 'translateY(-100%) rotate(0deg)' },
+          '100%': { transform: 'translateY(100vh) rotate(720deg)' },
+        },
+      },
+      animation: {
+        'confetti-fall': 'confettiFall linear forwards',
+      },
+    },
+  },
   plugins: [],
 } satisfies Config;

@@ -7,6 +7,7 @@ import {
   BadgeVariant,
   BlockNumber,
   BlockNumberSize,
+  Confetti,
   QuoteErrorCard,
   QuoteStatusCard,
   QuoteStatusLink,
@@ -94,6 +95,7 @@ export default function Devis() {
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
+      {data?.status === Status.VALID && <Confetti />}
       <section className='fr-container fr-gap-8'>
         <div className='fr-grid-row flex justify-between items-center'>
           <div className='flex items-center'>

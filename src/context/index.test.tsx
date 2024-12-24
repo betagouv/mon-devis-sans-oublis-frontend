@@ -1,4 +1,3 @@
-import * as Context from './index';
 import {
   DataProvider,
   useDataContext,
@@ -7,6 +6,7 @@ import {
   Status,
   Type,
 } from './DataContext';
+import * as Context from './index';
 
 describe('context/index.ts exports', () => {
   it('exports DataProvider and useDataContext correctly', () => {

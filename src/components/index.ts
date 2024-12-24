@@ -16,6 +16,8 @@ export type { BlockNumberProps } from './BlockNumber/BlockNumber';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
+// Confetti
+export { default as Confetti } from './Confetti/Confetti';
 // Footer
 export { default as Footer } from './Footer/Footer';
 export type { FooterProps } from './Footer/Footer';

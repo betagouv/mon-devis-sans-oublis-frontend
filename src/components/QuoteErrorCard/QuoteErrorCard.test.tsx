@@ -87,9 +87,9 @@ describe('QuoteErrorCard Component', () => {
   it('opens and closes the modal when the button is clicked', () => {
     render(
       <QuoteErrorCard
-        list={mockList}
         cardTitle='Mentions administratives'
         cardTooltip="Tooltip d'information"
+        list={mockList}
       />
     );
 
@@ -110,9 +110,9 @@ describe('QuoteErrorCard Component', () => {
   it('displays the correct badge and tooltip information', () => {
     render(
       <QuoteErrorCard
-        list={mockList}
         cardTitle='Mentions administratives'
         cardTooltip="Tooltip d'information"
+        list={mockList}
       />
     );
 
@@ -137,9 +137,9 @@ describe('QuoteErrorCard Component', () => {
     ];
     render(
       <QuoteErrorCard
-        list={longTitleList}
         cardTitle='Mentions administratives'
         cardTooltip="Tooltip d'information"
+        list={longTitleList}
       />
     );
 
