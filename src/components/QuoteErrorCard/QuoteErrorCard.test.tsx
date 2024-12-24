@@ -70,28 +70,16 @@ const mockList = [
 
 describe('QuoteErrorCard Component', () => {
   it('renders the component with a list of errors', () => {
-    render(
-      <QuoteErrorCard
-        list={mockList}
-        cardTitle='Mentions administratives'
-        cardTooltip="Tooltip d'information"
-      />
-    );
+    render(<QuoteErrorCard list={mockList} />);
 
     expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
-    expect(screen.getByText('2 corrections')).toBeInTheDocument();
+    expect(screen.getByText('2 corrections')).toBeInTheDocument(); // Ligne 49
     expect(screen.getByText('Document manquant')).toBeInTheDocument();
     expect(screen.getByText('Erreur technique')).toBeInTheDocument();
   });
 
   it('opens and closes the modal when the button is clicked', () => {
-    render(
-      <QuoteErrorCard
-        cardTitle='Mentions administratives'
-        cardTooltip="Tooltip d'information"
-        list={mockList}
-      />
-    );
+    render(<QuoteErrorCard list={mockList} />);
 
     const viewDetailButton = screen.getAllByText('Voir le détail')[0];
     fireEvent.click(viewDetailButton);
@@ -108,17 +96,15 @@ describe('QuoteErrorCard Component', () => {
   });
 
   it('displays the correct badge and tooltip information', () => {
-    render(
-      <QuoteErrorCard
-        cardTitle='Mentions administratives'
-        cardTooltip="Tooltip d'information"
-        list={mockList}
-      />
-    );
+    render(<QuoteErrorCard list={mockList} />);
 
-    expect(screen.getByText('2 corrections')).toBeInTheDocument();
+    expect(screen.getByText('2 corrections')).toBeInTheDocument(); // Ligne 49
     expect(screen.getByText('Information manquante')).toBeInTheDocument();
     expect(screen.getByText('Information erronée')).toBeInTheDocument();
+
+    // Vérification de l'icône et du texte du tooltip
+    const tooltipText = screen.getByText(/information manquante/i);
+    expect(tooltipText).toBeInTheDocument(); // Ligne 73
   });
 
   it('truncates long titles correctly', () => {
@@ -135,13 +121,7 @@ describe('QuoteErrorCard Component', () => {
           'Autre titre très long qui devrait être tronqué après 60 caractères',
       },
     ];
-    render(
-      <QuoteErrorCard
-        cardTitle='Mentions administratives'
-        cardTooltip="Tooltip d'information"
-        list={longTitleList}
-      />
-    );
+    render(<QuoteErrorCard list={longTitleList} />);
 
     const listItems = screen.getAllByRole('listitem');
     const firstItem = within(listItems[0]);

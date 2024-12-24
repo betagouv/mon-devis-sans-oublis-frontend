@@ -3,13 +3,12 @@
 import { useState } from 'react';
 
 import { Category, Type } from '@/context';
+import wording from '@/wording';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import Modal, { ModalProps } from '../Modal/Modal';
 import Tooltip from '../Tooltip/Tooltip';
 
 export interface QuoteErrorCardProps {
-  cardTitle: string;
-  cardTooltip: string;
   list: {
     id: string;
     category: Category;
@@ -21,11 +20,7 @@ export interface QuoteErrorCardProps {
   }[];
 }
 
-const QuoteErrorCard = ({
-  cardTitle,
-  cardTooltip,
-  list,
-}: QuoteErrorCardProps) => {
+const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
   const openModal = (id: string) => {
@@ -43,14 +38,25 @@ const QuoteErrorCard = ({
     return title;
   };
 
+  const isCategoryAdmin = list[0].category === Category.ADMIN;
+
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
       <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between'>
         <span className='flex gap-4'>
-          <p>{cardTitle}</p>
+          <p>
+            {list.length > 0 &&
+              (isCategoryAdmin
+                ? wording.components.quote_error_card.title_admin
+                : wording.components.quote_error_card.title_gestes)}
+          </p>
           <Badge
             className='self-center'
-            label={`${list.length} corrections`}
+            label={`${(list.length > 1
+              ? wording.upload_id.badge_correction_plural
+              : wording.upload_id.badge_correction
+            ).replace('{number}', list.length.toString())}
+            `}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
           />
@@ -58,8 +64,16 @@ const QuoteErrorCard = ({
         <div className='relative inline-block'>
           <Tooltip
             className='absolute top-full right-0 !mt-2 !font-normal'
-            icon='fr-icon-information-fill'
-            text={cardTooltip}
+            icon={
+              isCategoryAdmin
+                ? wording.components.quote_error_card.tooltip_admin.icon
+                : wording.components.quote_error_card.tooltip_gestes.icon
+            }
+            text={
+              isCategoryAdmin
+                ? wording.components.quote_error_card.tooltip_admin.text
+                : wording.components.quote_error_card.tooltip_gestes.text
+            }
           />
         </div>
       </div>
@@ -67,13 +81,12 @@ const QuoteErrorCard = ({
         {list.map((item) => {
           const icon =
             item.type === Type.MISSING
-              ? 'fr-icon-warning-line'
-              : 'fr-icon-edit-circle-line';
+              ? wording.components.quote_error_card.type_missing.icon
+              : wording.components.quote_error_card.type_wrong.icon;
           const label =
             item.type === Type.MISSING
-              ? 'Information manquante'
-              : 'Information erronée';
-
+              ? wording.components.quote_error_card.type_missing.label
+              : wording.components.quote_error_card.type_wrong.label;
           return (
             <li
               className='flex justify-between p-6 border-bottom-grey items-center'
@@ -93,7 +106,7 @@ const QuoteErrorCard = ({
                 className='fr-btn fr-btn--secondary fr-btn--sm'
                 onClick={() => openModal(item.id.toString())}
               >
-                Voir le détail
+                {wording.components.quote_error_card.button_see_detail}
               </button>
               {openModalId === item.id.toString() && (
                 <Modal

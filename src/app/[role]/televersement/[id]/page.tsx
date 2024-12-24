@@ -156,46 +156,44 @@ export default function Devis() {
               title={wording.upload_id.quote_status_card_ko.title}
             />
           )}
-          <ul className='fr-raw-list fr-mx-1w my-8 w-full flex justify-between items-center'>
-            {wording.upload_id.block_number.map((block, index) => (
-              <React.Fragment key={block.number}>
-                <li className='fr-col-auto flex items-center'>
-                  <BlockNumber
-                    className='border-open-blue rounded-lg p-4 w-full md:w-[325px]'
-                    number={block.number}
-                    size={BlockNumberSize.MEDIUM}
-                    title={block.title}
-                  />
-                </li>
-                {index < wording.upload_id.block_number.length - 1 && (
-                  <div className='flex items-center h-full'>
-                    <span
-                      aria-hidden='true'
-                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
+          {data?.status === Status.INVALID && (
+            <ul className='fr-raw-list fr-mx-1w my-8 w-full flex justify-between items-center'>
+              {wording.upload_id.block_number.map((block, index) => (
+                <React.Fragment key={block.number}>
+                  <li className='fr-col-auto flex items-center'>
+                    <BlockNumber
+                      className='border-open-blue rounded-lg p-4 w-full md:w-[325px]'
+                      number={block.number}
+                      size={BlockNumberSize.MEDIUM}
+                      title={block.title}
                     />
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-          </ul>
+                  </li>
+                  {index < wording.upload_id.block_number.length - 1 && (
+                    <div className='flex items-center h-full'>
+                      <span
+                        aria-hidden='true'
+                        className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
+                      />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
-      <section className='fr-container'>
-        <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
-          {wording.upload_id.subtitle}
-        </h2>
-        <div className='flex flex-col gap-8'>
-          <QuoteErrorCard
-            cardTitle='Mentions administratives'
-            cardTooltip='Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
-            list={adminErrors}
-          />
-          <QuoteErrorCard
-            cardTitle='Descriptif technique des gestes'
-            cardTooltip='Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
-            list={gestesErrors}
-          />
-        </div>
+      {data?.status === Status.INVALID && (
+        <section className='fr-container'>
+          <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
+            {wording.upload_id.subtitle}
+          </h2>
+          <div className='flex flex-col gap-8'>
+            {adminErrors.length > 0 && <QuoteErrorCard list={adminErrors} />}
+            {gestesErrors.length > 0 && <QuoteErrorCard list={gestesErrors} />}
+          </div>
+        </section>
+      )}
+      <section className='fr-container fr-mt-10w'>
         {data?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'

@@ -71,11 +71,7 @@ const dataSingleCategory = [
 export const Default: Story = {
   render: () => (
     <div className='flex flex-col'>
-      <QuoteErrorCard
-        cardTitle='Mentions administratives'
-        cardTooltip='Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
-        list={dataSingleCategory}
-      />
+      <QuoteErrorCard list={dataSingleCategory} />
     </div>
   ),
 };
@@ -220,16 +216,8 @@ const gestesErrors = mapErrorsToQuoteErrorCard(
 export const MultipleCategories: Story = {
   render: () => (
     <div className='flex flex-col gap-8'>
-      <QuoteErrorCard
-        cardTitle='Mentions administratives'
-        cardTooltip='Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
-        list={adminErrors}
-      />
-      <QuoteErrorCard
-        cardTitle='Descriptif technique des gestes'
-        cardTooltip='Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
-        list={gestesErrors}
-      />
+      <QuoteErrorCard list={adminErrors} />
+      <QuoteErrorCard list={gestesErrors} />
     </div>
   ),
 };

@@ -3,6 +3,29 @@
     "alert": {
       "see_less": "Voir moins",
       "see_more": "Voir plus"
+    },
+    "quote_error_card": {
+      "badge_correction": "{number} correction",
+      "badge_correction_plural": "{number} corrections",
+      "button_see_detail": "Voir le détail",
+      "title_admin": "Mentions administratives",
+      "title_gestes": "Descriptif technique des gestes",
+      "tooltip_admin": {
+        "icon": "fr-icon-information-fill",
+        "text": "Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières."
+      },
+      "tooltip_gestes": {
+        "icon": "fr-icon-information-fill",
+        "text": "Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides."
+      },
+      "type_missing": {
+        "icon": "fr-icon-warning-line",
+        "label": "Information manquante"
+      },
+      "type_wrong": {
+        "icon": "fr-icon-edit-circle-line",
+        "label": "Information erronée"
+      }
     }
   },
   "homepage": {

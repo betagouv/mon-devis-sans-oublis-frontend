@@ -34,11 +34,11 @@ describe('Confetti Component', () => {
     confettiElements.forEach((confetti) => {
       const className = confetti.className;
 
-      const hasShape = shapePatterns.some((pattern) => pattern.test(className));
       const hasColor = colorPatterns.some((pattern) => pattern.test(className));
+      const hasShape = shapePatterns.some((pattern) => pattern.test(className));
 
-      expect(hasShape).toBe(true);
       expect(hasColor).toBe(true);
+      expect(hasShape).toBe(true);
     });
   });
 
@@ -48,13 +48,13 @@ describe('Confetti Component', () => {
     const confettiElements = screen.getAllByRole('presentation');
 
     confettiElements.forEach((confetti) => {
-      const duration = confetti.style.animationDuration;
       const delay = confetti.style.animationDelay;
+      const duration = confetti.style.animationDuration;
 
-      expect(parseFloat(duration)).toBeGreaterThanOrEqual(2);
-      expect(parseFloat(duration)).toBeLessThanOrEqual(5);
       expect(parseFloat(delay)).toBeGreaterThanOrEqual(0);
       expect(parseFloat(delay)).toBeLessThanOrEqual(2);
+      expect(parseFloat(duration)).toBeGreaterThanOrEqual(2);
+      expect(parseFloat(duration)).toBeLessThanOrEqual(5);
     });
   });
 });
