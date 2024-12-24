@@ -2,34 +2,33 @@
 
 import { useState } from 'react';
 
+import { Category, Type } from '@/context';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import Modal, { ModalProps } from '../Modal/Modal';
 import Tooltip from '../Tooltip/Tooltip';
 
-export enum QuoteErrorCardCategory {
-  ADMIN = 'admin',
-  GESTES = 'gestes',
-}
-
-export enum QuoteErrorCardType {
-  MISSING = 'missing',
-  WRONG = 'wrong',
-}
-
 export interface QuoteErrorCardProps {
+  cardTitle: string;
+  cardTooltip: string;
   list: {
-    category: QuoteErrorCardCategory;
-    id: number;
-    modalContent: ModalProps;
+    id: string;
+    category: Category;
+    type: Type;
+    code: string;
     title: string;
-    type: QuoteErrorCardType;
+    provided_value: string | null;
+    modalContent: ModalProps;
   }[];
 }
 
-const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
-  const [openModalId, setOpenModalId] = useState<number | null>(null);
+const QuoteErrorCard = ({
+  cardTitle,
+  cardTooltip,
+  list,
+}: QuoteErrorCardProps) => {
+  const [openModalId, setOpenModalId] = useState<string | null>(null);
 
-  const openModal = (id: number) => {
+  const openModal = (id: string) => {
     setOpenModalId(id);
   };
 
@@ -48,11 +47,7 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
       <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between'>
         <span className='flex gap-4'>
-          <p>
-            {QuoteErrorCardCategory.ADMIN
-              ? 'Mentions administratives'
-              : 'Descriptif technique des gestes'}
-          </p>
+          <p>{cardTitle}</p>
           <Badge
             className='self-center'
             label={`${list.length} corrections`}
@@ -62,24 +57,20 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
         </span>
         <div className='relative inline-block'>
           <Tooltip
-            className='absolute top-full right-0 !mt-2'
+            className='absolute top-full right-0 !mt-2 !font-normal'
             icon='fr-icon-information-fill'
-            text={
-              QuoteErrorCardCategory.ADMIN
-                ? 'Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
-                : 'Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
-            }
+            text={cardTooltip}
           />
         </div>
       </div>
       <ul className='fr-raw-list'>
         {list.map((item) => {
           const icon =
-            item.type === QuoteErrorCardType.MISSING
+            item.type === Type.MISSING
               ? 'fr-icon-warning-line'
               : 'fr-icon-edit-circle-line';
           const label =
-            item.type === QuoteErrorCardType.MISSING
+            item.type === Type.MISSING
               ? 'Information manquante'
               : 'Information erronée';
 
@@ -100,14 +91,14 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
               </span>
               <button
                 className='fr-btn fr-btn--secondary fr-btn--sm'
-                onClick={() => openModal(item.id)}
+                onClick={() => openModal(item.id.toString())}
               >
                 Voir le détail
               </button>
-              {openModalId === item.id && (
+              {openModalId === item.id.toString() && (
                 <Modal
                   {...item.modalContent}
-                  isOpen={openModalId === item.id}
+                  isOpen={openModalId === item.id.toString()}
                   onClose={closeModal}
                 />
               )}

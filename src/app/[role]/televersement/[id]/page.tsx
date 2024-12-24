@@ -8,13 +8,17 @@ import {
   BlockNumber,
   BlockNumberSize,
   QuoteErrorCard,
-  QuoteErrorCardCategory,
-  QuoteErrorCardType,
   QuoteStatusCard,
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { ErrorDetail, Status, useDataContext } from '@/context';
+import {
+  Category,
+  ErrorDetails,
+  Status,
+  Type,
+  useDataContext,
+} from '@/context';
 import wording from '@/wording';
 
 export default function Devis() {
@@ -35,20 +39,22 @@ export default function Devis() {
     },
   };
 
-  const list = ((data?.error_details as ErrorDetail[]) || []).map((error) => ({
-    category: error.category as QuoteErrorCardCategory,
-    id: Number(error.id.replace('#', '')),
+  const list = ((data?.error_details as ErrorDetails[]) || []).map((error) => ({
+    id: error.id,
+    category: error.category as Category,
+    type: error.type as Type,
+    code: error.code,
     title: error.title,
-    type: error.type as QuoteErrorCardType,
+    provided_value: error.provided_value || null,
     modalContent: {
       ...commonModalContent,
       problem: {
         ...commonModalContent.problem,
-        description: error.problem || '',
+        description: error.problem || null,
       },
       solution: {
         ...commonModalContent.solution,
-        description: error.solution || '',
+        description: error.solution || null,
       },
       isOpen: false,
       title: error.title,
@@ -80,6 +86,11 @@ export default function Devis() {
       document.removeEventListener('copy', handleClipboardChange);
     };
   }, []);
+
+  const adminErrors = list.filter((error) => error.category === Category.ADMIN);
+  const gestesErrors = list.filter(
+    (error) => error.category === Category.GESTES
+  );
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
@@ -171,7 +182,18 @@ export default function Devis() {
         <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
           {wording.upload_id.subtitle}
         </h2>
-        <QuoteErrorCard list={list} />
+        <div className='flex flex-col gap-8'>
+          <QuoteErrorCard
+            cardTitle='Mentions administratives'
+            cardTooltip='Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
+            list={adminErrors}
+          />
+          <QuoteErrorCard
+            cardTitle='Descriptif technique des gestes'
+            cardTooltip='Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
+            list={gestesErrors}
+          />
+        </div>
         {data?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'

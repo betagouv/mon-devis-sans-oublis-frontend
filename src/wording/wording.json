@@ -190,7 +190,7 @@
       "subtitle": "Votre projet",
       "title": "Vérifier votre devis ({role})",
       "upload": {
-        "description": "Taille maximale : 50Mo. Formats supportés : jpg, png, pdf. Un seul fichier possible.",
+        "description": "Taille maximale : 50Mo. Format supporté : pdf. Un seul fichier possible.",
         "error_message": "Le fichier dépasse la taille maximale de 50Mo."
       }
     }

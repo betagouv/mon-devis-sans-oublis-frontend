@@ -1,10 +1,9 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import QuoteErrorCard, {
-  QuoteErrorCardCategory,
-  QuoteErrorCardType,
-} from './QuoteErrorCard';
-import { ModalProps } from '../Modal/Modal';
 import '@testing-library/jest-dom';
+
+import { Category, Type } from '@/context';
+import QuoteErrorCard from './QuoteErrorCard';
+import { ModalProps } from '../Modal/Modal';
 
 // Mock Modal to avoid full modal rendering in tests
 const MockModal = ({ isOpen, onClose, title }: ModalProps) => {
@@ -27,47 +26,57 @@ jest.mock('../Modal/Modal', () => {
 
 const mockList = [
   {
-    category: QuoteErrorCardCategory.ADMIN,
-    id: 1,
+    id: '1',
+    category: Category.ADMIN,
+    type: Type.MISSING,
+    code: 'code',
     title: 'Document manquant',
-    type: QuoteErrorCardType.MISSING,
+    provided_value: 'value',
     modalContent: {
-      title: 'Détail de l’erreur',
-      isOpen: false,
       buttonBackText: 'Retour',
       buttonContactText: 'Contacter',
       correctionHelpful: 'Cette correction a-t-elle été utile ?',
       iconAlt: 'Erreur icône',
       iconSrc: '/error-icon.svg',
+      isOpen: false,
       problem: { title: 'Problème', description: 'Description du problème' },
       solution: {
         title: 'Solution',
         description: 'Description de la solution',
       },
+      title: 'Document manquant',
     },
   },
   {
-    category: QuoteErrorCardCategory.GESTES,
-    id: 2,
+    id: '2',
+    category: Category.GESTES,
+    type: Type.WRONG,
+    code: 'code',
     title: 'Erreur technique',
-    type: QuoteErrorCardType.WRONG,
+    provided_value: 'value',
     modalContent: {
-      title: 'Détail de l’erreur technique',
-      isOpen: false,
       buttonBackText: 'Retour',
       buttonContactText: 'Contacter',
       correctionHelpful: 'Correction utile ?',
       iconAlt: 'Erreur technique',
       iconSrc: '/error-icon.svg',
+      isOpen: false,
       problem: { title: 'Problème', description: 'Erreur technique' },
       solution: { title: 'Solution', description: 'Résolution technique' },
+      title: 'Détail de l’erreur technique',
     },
   },
 ];
 
 describe('QuoteErrorCard Component', () => {
   it('renders the component with a list of errors', () => {
-    render(<QuoteErrorCard list={mockList} />);
+    render(
+      <QuoteErrorCard
+        list={mockList}
+        cardTitle='Mentions administratives'
+        cardTooltip="Tooltip d'information"
+      />
+    );
 
     expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
     expect(screen.getByText('2 corrections')).toBeInTheDocument();
@@ -76,22 +85,36 @@ describe('QuoteErrorCard Component', () => {
   });
 
   it('opens and closes the modal when the button is clicked', () => {
-    render(<QuoteErrorCard list={mockList} />);
+    render(
+      <QuoteErrorCard
+        list={mockList}
+        cardTitle='Mentions administratives'
+        cardTooltip="Tooltip d'information"
+      />
+    );
 
     const viewDetailButton = screen.getAllByText('Voir le détail')[0];
     fireEvent.click(viewDetailButton);
 
-    expect(screen.getByTestId('modal')).toBeInTheDocument();
-    expect(screen.getByText('Détail de l’erreur')).toBeInTheDocument();
+    const modal = screen.getByTestId('modal');
+    expect(modal).toBeInTheDocument();
 
-    const closeButton = screen.getByText('Close');
+    expect(within(modal).getByText('Document manquant')).toBeInTheDocument();
+
+    const closeButton = within(modal).getByText('Close');
     fireEvent.click(closeButton);
 
     expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
   });
 
   it('displays the correct badge and tooltip information', () => {
-    render(<QuoteErrorCard list={mockList} />);
+    render(
+      <QuoteErrorCard
+        list={mockList}
+        cardTitle='Mentions administratives'
+        cardTooltip="Tooltip d'information"
+      />
+    );
 
     expect(screen.getByText('2 corrections')).toBeInTheDocument();
     expect(screen.getByText('Information manquante')).toBeInTheDocument();
@@ -107,12 +130,18 @@ describe('QuoteErrorCard Component', () => {
       },
       {
         ...mockList[0],
-        id: 2,
+        id: '2',
         title:
           'Autre titre très long qui devrait être tronqué après 60 caractères',
       },
     ];
-    render(<QuoteErrorCard list={longTitleList} />);
+    render(
+      <QuoteErrorCard
+        list={longTitleList}
+        cardTitle='Mentions administratives'
+        cardTooltip="Tooltip d'information"
+      />
+    );
 
     const listItems = screen.getAllByRole('listitem');
     const firstItem = within(listItems[0]);

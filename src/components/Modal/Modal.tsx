@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export interface IssueResolution {
-  description: string;
+  description: string | null;
   title: string;
 }
 

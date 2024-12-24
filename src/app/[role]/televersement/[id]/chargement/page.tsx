@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Status, useDataContext } from '@/context';
 import wording from '@/wording';
 
-export default function Pending() {
+export default function Chargement() {
   const router = useRouter();
   const [dots, setDots] = useState<string>('');
 

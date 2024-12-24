@@ -77,7 +77,7 @@ export default function Televersement({
         localStorage.setItem('quoteCheckData', JSON.stringify(data));
 
         if (data.id) {
-          router.push(`/${params.role}/televersement/${data.id}/pending`);
+          router.push(`/${params.role}/televersement/${data.id}/chargement`);
         }
       } catch (error) {
         console.error('Error:', error);
