@@ -45,7 +45,11 @@ describe('Accordion Component', () => {
 
   it('truncates long title', () => {
     const longTitle = 'This is a very long title that should be truncated';
-    render(<Accordion title={longTitle} children={<div>Content</div>} />);
+    render(
+      <Accordion title={longTitle}>
+        <div>Content</div>
+      </Accordion>
+    );
 
     const displayedTitle = screen.getByText(longTitle, { exact: false });
     expect(displayedTitle).toBeInTheDocument();
