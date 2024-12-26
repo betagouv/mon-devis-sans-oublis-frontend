@@ -29,7 +29,7 @@ const Tooltip: React.FC<TooltipProps> = ({ className, icon, text }) => {
       />
       {showTooltip && (
         <p
-          className={`fr-text--xs bg-[var(--background-default-grey)] shadow-lg w-[383px] p-2 ${className}`}
+          className={`z-50 fr-text--xs bg-[var(--background-default-grey)] shadow-lg w-[383px] p-2 ${className}`}
         >
           {text}
         </p>

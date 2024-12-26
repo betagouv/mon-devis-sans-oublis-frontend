@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 
+import Accordion from '../Accordion/Accordion';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import Modal, { ModalProps } from '../Modal/Modal';
+import { ModalProps } from '../Modal/Modal';
+import ErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
 import { Category, Type } from '@/context';
 import wording from '@/wording';
@@ -30,6 +32,19 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
   const closeModal = () => {
     setOpenModalId(null);
   };
+
+  const groupedProvidedValue = list.reduce((acc, item) => {
+    if (item.provided_value === null) {
+      return {
+        ...acc,
+        noValue: [...(acc.noValue || []), item],
+      };
+    }
+    return {
+      ...acc,
+      [item.provided_value]: [...(acc[item.provided_value] || []), item],
+    };
+  }, {} as Record<string, typeof list>);
 
   const isCategoryAdmin = list[0].category === Category.ADMIN;
 
@@ -70,44 +85,38 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
         </div>
       </div>
       <ul className='fr-raw-list'>
-        {list.map((item) => {
-          const icon =
-            item.type === Type.MISSING
-              ? wording.components.quote_error_card.type_missing.icon
-              : wording.components.quote_error_card.type_wrong.icon;
-          const label =
-            item.type === Type.MISSING
-              ? wording.components.quote_error_card.type_missing.label
-              : wording.components.quote_error_card.type_wrong.label;
+        {/* without provided_value */}
+        {groupedProvidedValue.noValue?.map((item) => (
+          <ErrorItem
+            closeModal={closeModal}
+            item={item}
+            key={item.id}
+            openModal={() => openModal(item.id)}
+            openModalId={openModalId}
+          />
+        ))}
+        {/* with provided_value */}
+        {Object.entries(groupedProvidedValue).map(([value, items]) => {
+          if (value === 'noValue') return null;
           return (
-            <li
-              className='flex p-6 border-bottom-grey items-start gap-4 md:items-center'
-              key={item.id}
+            <Accordion
+              badgeLabel={`${(items.length > 1
+                ? wording.upload_id.badge_correction_plural
+                : wording.upload_id.badge_correction
+              ).replace('{number}', items.length.toString())}`}
+              key={value}
+              title={value}
             >
-              <div className='flex-1'>
-                <span className='inline-flex flex-wrap items-center gap-4'>
-                  <p className='text-[var(--text-title-grey)]'>{item.title}</p>
-                  <p
-                    className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
-                  >
-                    {label}
-                  </p>
-                </span>
-              </div>
-              <button
-                className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-                onClick={() => openModal(item.id.toString())}
-              >
-                {wording.components.quote_error_card.button_see_detail}
-              </button>
-              {openModalId === item.id.toString() && (
-                <Modal
-                  {...item.modalContent}
-                  isOpen={openModalId === item.id.toString()}
-                  onClose={closeModal}
+              {items.map((item) => (
+                <ErrorItem
+                  closeModal={closeModal}
+                  item={item}
+                  key={item.id}
+                  openModal={() => openModal(item.id)}
+                  openModalId={openModalId}
                 />
-              )}
-            </li>
+              ))}
+            </Accordion>
           );
         })}
       </ul>

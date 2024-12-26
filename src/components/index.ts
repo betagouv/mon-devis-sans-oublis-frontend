@@ -1,3 +1,6 @@
+// Accordion
+export { default as Accordion } from './Accordion/Accordion';
+export type { AccordionProps } from './Accordion/Accordion';
 // Alert
 export { default as Alert } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';
@@ -39,6 +42,8 @@ export type { IssueResolution, ModalProps } from './Modal/Modal';
 // QuoteErrorCard
 export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
 export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
+// QuoteErrorItem
+export { default as QuoteErrorItem } from './QuoteErrorItem/QuoteErrorItem';
 // QuoteStatusCard
 export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
 export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
