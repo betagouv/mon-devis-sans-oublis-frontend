@@ -3,6 +3,29 @@
     "alert": {
       "see_less": "Voir moins",
       "see_more": "Voir plus"
+    },
+    "quote_error_card": {
+      "badge_correction": "{number} correction",
+      "badge_correction_plural": "{number} corrections",
+      "button_see_detail": "Voir le détail",
+      "title_admin": "Mentions administratives",
+      "title_gestes": "Descriptif technique des gestes",
+      "tooltip_admin": {
+        "icon": "fr-icon-information-fill",
+        "text": "Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières."
+      },
+      "tooltip_gestes": {
+        "icon": "fr-icon-information-fill",
+        "text": "Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides."
+      },
+      "type_missing": {
+        "icon": "fr-icon-warning-line",
+        "label": "Information manquante"
+      },
+      "type_wrong": {
+        "icon": "fr-icon-edit-circle-line",
+        "label": "Information erronée"
+      }
     }
   },
   "homepage": {
@@ -44,27 +67,27 @@
       ],
       "cards": [
         {
-          "image": "checker.png",
+          "image": "isolation.png",
           "title": "Isolation"
         },
         {
-          "image": "checker.png",
+          "image": "menuiserie.png",
           "title": "Menuiserie"
         },
         {
-          "image": "checker.png",
-          "title": "Eau chaude sanitarire"
+          "image": "eau_chaude_sanitaire.png",
+          "title": "Eau chaude sanitaire"
         },
         {
           "image": "checker.png",
           "title": "Système de chauffage"
         },
         {
-          "image": "checker.png",
+          "image": "ventilation.png",
           "title": "Ventilation"
         },
         {
-          "image": "checker.png",
+          "image": "systeme_regulation.png",
           "title": "Système de régulation"
         }
       ],
@@ -188,9 +211,9 @@
         "label": "Geste(s) techniques concernés par le devis"
       },
       "subtitle": "Votre projet",
-      "title": "Vérifier votre devis ({role})",
+      "title": "Vérifier votre devis",
       "upload": {
-        "description": "Taille maximale : 50Mo. Formats supportés : jpg, png, pdf. Un seul fichier possible.",
+        "description": "Taille maximale : 50Mo. Format supporté : pdf. Un seul fichier possible.",
         "error_message": "Le fichier dépasse la taille maximale de 50Mo."
       }
     }

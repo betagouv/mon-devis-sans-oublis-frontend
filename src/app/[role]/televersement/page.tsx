@@ -77,7 +77,7 @@ export default function Televersement({
         localStorage.setItem('quoteCheckData', JSON.stringify(data));
 
         if (data.id) {
-          router.push(`/${params.role}/televersement/${data.id}/pending`);
+          router.push(`/${params.role}/televersement/${data.id}/chargement`);
         }
       } catch (error) {
         console.error('Error:', error);
@@ -91,12 +91,7 @@ export default function Televersement({
       <div className='fr-container'>
         <div className='fr-grid-row fr-grid-row--center'>
           <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
-            <h1>
-              {wording.upload.section_upload.title.replace(
-                '{role}',
-                params.role
-              )}
-            </h1>
+            <h1>{wording.upload.section_upload.title}</h1>
             <Upload
               description={wording.upload.section_upload.upload.description}
               errorMessage={wording.upload.section_upload.upload.error_message}

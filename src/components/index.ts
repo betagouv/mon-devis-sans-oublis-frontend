@@ -16,6 +16,8 @@ export type { BlockNumberProps } from './BlockNumber/BlockNumber';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
+// Confetti
+export { default as Confetti } from './Confetti/Confetti';
 // Footer
 export { default as Footer } from './Footer/Footer';
 export type { FooterProps } from './Footer/Footer';
@@ -35,11 +37,7 @@ export type { LinkProps } from './Link/Link';
 export { default as Modal } from './Modal/Modal';
 export type { IssueResolution, ModalProps } from './Modal/Modal';
 // QuoteErrorCard
-export {
-  default as QuoteErrorCard,
-  QuoteErrorCardCategory,
-  QuoteErrorCardType,
-} from './QuoteErrorCard/QuoteErrorCard';
+export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
 export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
 // QuoteStatusCard
 export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';

@@ -8,6 +8,11 @@ import React, {
   useState,
 } from 'react';
 
+export enum Category {
+  ADMIN = 'admin',
+  GESTES = 'gestes',
+}
+
 export enum Profile {
   ARTISAN = 'artisan',
   CONSEILLER = 'conseiller',
@@ -21,6 +26,11 @@ export enum Status {
   PENDING = 'pending',
 }
 
+export enum Type {
+  MISSING = 'missing',
+  WRONG = 'wrong',
+}
+
 export interface QuoteChecks {
   id: string;
   status: Status;
@@ -31,15 +41,15 @@ export interface QuoteChecks {
   error_messages: string[] | null;
 }
 
-export interface ErrorDetail {
+export interface ErrorDetails {
   id: string;
+  category: Category;
+  type: Type;
   code: string;
-  type: string;
   title: string;
-  value: string | null;
   problem: string | null;
-  category: string;
   solution: string | null;
+  provided_value: string | null;
 }
 
 export interface QuoteChecksId {
@@ -48,7 +58,7 @@ export interface QuoteChecksId {
   profile: Profile;
   valid: boolean;
   errors: string[];
-  error_details: ErrorDetail[];
+  error_details: ErrorDetails[];
   error_messages: Record<string, string>;
 }
 

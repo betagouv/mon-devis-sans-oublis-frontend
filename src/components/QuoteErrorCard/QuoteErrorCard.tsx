@@ -5,31 +5,25 @@ import { useState } from 'react';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import Modal, { ModalProps } from '../Modal/Modal';
 import Tooltip from '../Tooltip/Tooltip';
-
-export enum QuoteErrorCardCategory {
-  ADMIN = 'admin',
-  GESTES = 'gestes',
-}
-
-export enum QuoteErrorCardType {
-  MISSING = 'missing',
-  WRONG = 'wrong',
-}
+import { Category, Type } from '@/context';
+import wording from '@/wording';
 
 export interface QuoteErrorCardProps {
   list: {
-    category: QuoteErrorCardCategory;
-    id: number;
-    modalContent: ModalProps;
+    id: string;
+    category: Category;
+    type: Type;
+    code: string;
     title: string;
-    type: QuoteErrorCardType;
+    provided_value: string | null;
+    modalContent: ModalProps;
   }[];
 }
 
 const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
-  const [openModalId, setOpenModalId] = useState<number | null>(null);
+  const [openModalId, setOpenModalId] = useState<string | null>(null);
 
-  const openModal = (id: number) => {
+  const openModal = (id: string) => {
     setOpenModalId(id);
   };
 
@@ -37,37 +31,40 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
     setOpenModalId(null);
   };
 
-  const truncateTitle = (title: string, maxLength: number) => {
-    if (title.length > maxLength) {
-      return `${title.substring(0, maxLength)}...`;
-    }
-    return title;
-  };
+  const isCategoryAdmin = list[0].category === Category.ADMIN;
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between'>
-        <span className='flex gap-4'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between items-start'>
+        <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
           <p>
-            {QuoteErrorCardCategory.ADMIN
-              ? 'Mentions administratives'
-              : 'Descriptif technique des gestes'}
+            {list.length > 0 &&
+              (isCategoryAdmin
+                ? wording.components.quote_error_card.title_admin
+                : wording.components.quote_error_card.title_gestes)}
           </p>
           <Badge
-            className='self-center'
-            label={`${list.length} corrections`}
+            className='self-center inline-block'
+            label={`${(list.length > 1
+              ? wording.upload_id.badge_correction_plural
+              : wording.upload_id.badge_correction
+            ).replace('{number}', list.length.toString())}`}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
           />
-        </span>
-        <div className='relative inline-block'>
+        </div>
+        <div className='relative inline-block shrink-0 ml-4'>
           <Tooltip
-            className='absolute top-full right-0 !mt-2'
-            icon='fr-icon-information-fill'
+            className='absolute top-full right-0 !mt-2 !font-normal'
+            icon={
+              isCategoryAdmin
+                ? wording.components.quote_error_card.tooltip_admin.icon
+                : wording.components.quote_error_card.tooltip_gestes.icon
+            }
             text={
-              QuoteErrorCardCategory.ADMIN
-                ? 'Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières.'
-                : 'Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides.'
+              isCategoryAdmin
+                ? wording.components.quote_error_card.tooltip_admin.text
+                : wording.components.quote_error_card.tooltip_gestes.text
             }
           />
         </div>
@@ -75,39 +72,38 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
       <ul className='fr-raw-list'>
         {list.map((item) => {
           const icon =
-            item.type === QuoteErrorCardType.MISSING
-              ? 'fr-icon-warning-line'
-              : 'fr-icon-edit-circle-line';
+            item.type === Type.MISSING
+              ? wording.components.quote_error_card.type_missing.icon
+              : wording.components.quote_error_card.type_wrong.icon;
           const label =
-            item.type === QuoteErrorCardType.MISSING
-              ? 'Information manquante'
-              : 'Information erronée';
-
+            item.type === Type.MISSING
+              ? wording.components.quote_error_card.type_missing.label
+              : wording.components.quote_error_card.type_wrong.label;
           return (
             <li
-              className='flex justify-between p-6 border-bottom-grey items-center'
+              className='flex p-6 border-bottom-grey items-start gap-4 md:items-center'
               key={item.id}
             >
-              <span className='flex gap-4'>
-                <p className='text-[var(--text-title-grey)]'>
-                  {truncateTitle(item.title, 60)}
-                </p>
-                <p
-                  className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
-                >
-                  {label}
-                </p>
-              </span>
+              <div className='flex-1'>
+                <span className='inline-flex flex-wrap items-center gap-4'>
+                  <p className='text-[var(--text-title-grey)]'>{item.title}</p>
+                  <p
+                    className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
+                  >
+                    {label}
+                  </p>
+                </span>
+              </div>
               <button
-                className='fr-btn fr-btn--secondary fr-btn--sm'
-                onClick={() => openModal(item.id)}
+                className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+                onClick={() => openModal(item.id.toString())}
               >
-                Voir le détail
+                {wording.components.quote_error_card.button_see_detail}
               </button>
-              {openModalId === item.id && (
+              {openModalId === item.id.toString() && (
                 <Modal
                   {...item.modalContent}
-                  isOpen={openModalId === item.id}
+                  isOpen={openModalId === item.id.toString()}
                   onClose={closeModal}
                 />
               )}
