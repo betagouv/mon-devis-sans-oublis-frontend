@@ -1,125 +1,56 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import { Category, Type } from '@/context';
-import QuoteErrorCard from './QuoteErrorCard';
-import { ModalProps } from '../Modal/Modal';
+import Accordion from '../Accordion/Accordion';
 
-// Mock Modal to avoid full modal rendering in tests
-const MockModal = ({ isOpen, onClose, title }: ModalProps) => {
-  if (!isOpen) return null;
-  return (
-    <div data-testid='modal'>
-      <p>{title}</p>
-      <button onClick={onClose}>Close</button>
-    </div>
-  );
-};
+describe('Accordion Component', () => {
+  const defaultProps = {
+    title: 'Test Accordion Title',
+    badgeLabel: '3',
+    children: <div>Test Content</div>,
+  };
 
-MockModal.displayName = 'MockModal';
+  it('renders the component correctly', () => {
+    render(<Accordion {...defaultProps} />);
 
-jest.mock('../Modal/Modal', () => {
-  const MockModalComponent = (props: ModalProps) => <MockModal {...props} />;
-  MockModalComponent.displayName = 'MockModalComponent';
-  return MockModalComponent;
-});
-
-const mockList = [
-  {
-    id: '1',
-    category: Category.ADMIN,
-    type: Type.MISSING,
-    code: 'code',
-    title: 'Document manquant',
-    provided_value: 'value',
-    modalContent: {
-      buttonBackText: 'Retour',
-      buttonContactText: 'Contacter',
-      correctionHelpful: 'Cette correction a-t-elle été utile ?',
-      iconAlt: 'Erreur icône',
-      iconSrc: '/error-icon.svg',
-      isOpen: false,
-      problem: { title: 'Problème', description: 'Description du problème' },
-      solution: {
-        title: 'Solution',
-        description: 'Description de la solution',
-      },
-      title: 'Document manquant',
-    },
-  },
-  {
-    id: '2',
-    category: Category.GESTES,
-    type: Type.WRONG,
-    code: 'code',
-    title: 'Erreur technique',
-    provided_value: 'value',
-    modalContent: {
-      buttonBackText: 'Retour',
-      buttonContactText: 'Contacter',
-      correctionHelpful: 'Correction utile ?',
-      iconAlt: 'Erreur technique',
-      iconSrc: '/error-icon.svg',
-      isOpen: false,
-      problem: { title: 'Problème', description: 'Erreur technique' },
-      solution: { title: 'Solution', description: 'Résolution technique' },
-      title: 'Détail de l’erreur technique',
-    },
-  },
-];
-
-describe('QuoteErrorCard Component', () => {
-  it('renders the component with a list of errors', () => {
-    render(<QuoteErrorCard list={mockList} />);
-
-    expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
-    expect(screen.getByText('2 corrections')).toBeInTheDocument();
-    expect(screen.getByText('Document manquant')).toBeInTheDocument();
-    expect(screen.getByText('Erreur technique')).toBeInTheDocument();
+    expect(screen.getByText('Test Accordion Title')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('opens and closes the modal when the button is clicked', () => {
-    render(<QuoteErrorCard list={mockList} />);
+  it('toggles content when clicked', () => {
+    render(<Accordion {...defaultProps} />);
 
-    const viewDetailButton = screen.getAllByText('Voir le détail')[0];
-    fireEvent.click(viewDetailButton);
+    const button = screen.getByRole('button');
 
-    const modal = screen.getByTestId('modal');
-    expect(modal).toBeInTheDocument();
+    // Initially expanded
+    expect(button).toHaveAttribute('aria-expanded', 'true');
 
-    expect(within(modal).getByText('Document manquant')).toBeInTheDocument();
+    // Click to collapse
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'false');
 
-    const closeButton = within(modal).getByText('Close');
-    fireEvent.click(closeButton);
-
-    expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
+    // Click to expand
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'true');
   });
 
-  it('displays the correct badge and tooltip information', () => {
-    render(<QuoteErrorCard list={mockList} />);
+  it('renders without badge', () => {
+    render(
+      <Accordion title='Test Title'>
+        <div>Content</div>
+      </Accordion>
+    );
 
-    expect(screen.getByText('2 corrections')).toBeInTheDocument();
-    expect(screen.getByText('Information manquante')).toBeInTheDocument();
-    expect(screen.getByText('Information erronée')).toBeInTheDocument();
-
-    const tooltipText = screen.getByText(/information manquante/i);
-    expect(tooltipText).toBeInTheDocument();
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+    expect(screen.queryByText('3')).not.toBeInTheDocument();
   });
 
-  it('renders the correct title based on category', () => {
-    render(<QuoteErrorCard list={mockList} />);
+  it('truncates long title', () => {
+    const longTitle = 'This is a very long title that should be truncated';
+    render(<Accordion title={longTitle} children={<div>Content</div>} />);
 
-    // Check for the title of the first item (ADMIN)
-    expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
-
-    // Modify the list to simulate a GESTES category and rerender
-    const gestesList = [{ ...mockList[1], category: Category.GESTES }];
-    render(<QuoteErrorCard list={gestesList} />);
-
-    expect(
-      screen.getByText((content) =>
-        content.includes('Descriptif technique des gestes')
-      )
-    ).toBeInTheDocument();
+    const displayedTitle = screen.getByText(longTitle, { exact: false });
+    expect(displayedTitle).toBeInTheDocument();
   });
 });

@@ -123,18 +123,20 @@ export default function Devis() {
               />
             </div>
           </div>
-          <button
-            className={`fr-btn ${
-              !isUrlCopied && 'fr-btn--secondary'
-            } md:block hidden shrink-0 self-start fr-ml-1w`}
-            disabled={isUrlCopied}
-            onClick={copyUrlToClipboard}
-          >
-            {isUrlCopied
-              ? wording.upload_id.button_copied_url
-              : wording.upload_id.button_copy_url}
-            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-          </button>
+          {data?.status === Status.INVALID && (
+            <button
+              className={`fr-btn ${
+                !isUrlCopied && 'fr-btn--secondary'
+              } md:block hidden shrink-0 self-start fr-ml-1w`}
+              disabled={isUrlCopied}
+              onClick={copyUrlToClipboard}
+            >
+              {isUrlCopied
+                ? wording.upload_id.button_copied_url
+                : wording.upload_id.button_copy_url}
+              {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
+            </button>
+          )}
         </div>
         <div className='fr-col-12'>
           {data?.status === Status.VALID && (

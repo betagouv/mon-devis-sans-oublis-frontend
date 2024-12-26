@@ -183,7 +183,7 @@ const mapErrorsToQuoteErrorCard = (errors: typeof dataMultipleCategories) => {
     type: error.type as Type,
     code: error.code,
     title: error.title,
-    provided_value: error.provided_value || '',
+    provided_value: error.provided_value || null,
     modalContent: {
       buttonBackText: 'Retour',
       buttonContactText: 'Nous contacter',
