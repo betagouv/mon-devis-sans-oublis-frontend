@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
-import { Category, Type } from '@/context';
-import wording from '@/wording';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import Modal, { ModalProps } from '../Modal/Modal';
 import Tooltip from '../Tooltip/Tooltip';
+import { Category, Type } from '@/context';
+import wording from '@/wording';
 
 export interface QuoteErrorCardProps {
   list: {
@@ -29,13 +29,6 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
 
   const closeModal = () => {
     setOpenModalId(null);
-  };
-
-  const truncateTitle = (title: string, maxLength: number) => {
-    if (title.length > maxLength) {
-      return `${title.substring(0, maxLength)}...`;
-    }
-    return title;
   };
 
   const isCategoryAdmin = list[0].category === Category.ADMIN;

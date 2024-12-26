@@ -73,7 +73,7 @@ describe('QuoteErrorCard Component', () => {
     render(<QuoteErrorCard list={mockList} />);
 
     expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
-    expect(screen.getByText('2 corrections')).toBeInTheDocument(); // Ligne 49
+    expect(screen.getByText('2 corrections')).toBeInTheDocument();
     expect(screen.getByText('Document manquant')).toBeInTheDocument();
     expect(screen.getByText('Erreur technique')).toBeInTheDocument();
   });
@@ -98,39 +98,27 @@ describe('QuoteErrorCard Component', () => {
   it('displays the correct badge and tooltip information', () => {
     render(<QuoteErrorCard list={mockList} />);
 
-    expect(screen.getByText('2 corrections')).toBeInTheDocument(); // Ligne 49
+    expect(screen.getByText('2 corrections')).toBeInTheDocument();
     expect(screen.getByText('Information manquante')).toBeInTheDocument();
     expect(screen.getByText('Information erronée')).toBeInTheDocument();
 
-    // Vérification de l'icône et du texte du tooltip
     const tooltipText = screen.getByText(/information manquante/i);
-    expect(tooltipText).toBeInTheDocument(); // Ligne 73
+    expect(tooltipText).toBeInTheDocument();
   });
 
-  it('truncates long titles correctly', () => {
-    const longTitleList = [
-      {
-        ...mockList[0],
-        title:
-          'Titre très long qui devrait être tronqué après 60 caractères car il dépasse la limite',
-      },
-      {
-        ...mockList[0],
-        id: '2',
-        title:
-          'Autre titre très long qui devrait être tronqué après 60 caractères',
-      },
-    ];
-    render(<QuoteErrorCard list={longTitleList} />);
+  it('renders the correct title based on category', () => {
+    render(<QuoteErrorCard list={mockList} />);
 
-    const listItems = screen.getAllByRole('listitem');
-    const firstItem = within(listItems[0]);
+    // Check for the title of the first item (ADMIN)
+    expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
+
+    // Modify the list to simulate a GESTES category and rerender
+    const gestesList = [{ ...mockList[1], category: Category.GESTES }];
+    render(<QuoteErrorCard list={gestesList} />);
 
     expect(
-      firstItem.getByText((content) =>
-        content.startsWith(
-          'Titre très long qui devrait être tronqué après 60 cara'
-        )
+      screen.getByText((content) =>
+        content.includes('Descriptif technique des gestes')
       )
     ).toBeInTheDocument();
   });
