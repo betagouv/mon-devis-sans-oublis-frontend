@@ -5,9 +5,9 @@ import Accordion from '../Accordion/Accordion';
 
 describe('Accordion Component', () => {
   const defaultProps = {
-    title: 'Test Accordion Title',
     badgeLabel: '3',
     children: <div>Test Content</div>,
+    title: 'Test Accordion Title',
   };
 
   it('renders the component correctly', () => {
@@ -23,15 +23,12 @@ describe('Accordion Component', () => {
 
     const button = screen.getByRole('button');
 
-    // Initially expanded
     expect(button).toHaveAttribute('aria-expanded', 'true');
-
-    // Click to collapse
     fireEvent.click(button);
+
     expect(button).toHaveAttribute('aria-expanded', 'false');
-
-    // Click to expand
     fireEvent.click(button);
+
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
 

@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import { Category, Type } from '@/context';
-import QuoteErrorItem from './QuoteErrorItem';
 import { ModalProps } from '../Modal/Modal';
+import QuoteErrorItem from './QuoteErrorItem';
+import { Category, Type } from '@/context';
 
 // Mock Modal
 const MockModal = ({ isOpen, onClose, title }: ModalProps) => {
@@ -49,9 +49,9 @@ describe('QuoteErrorItem Component', () => {
   };
 
   const defaultProps = {
+    closeModal: jest.fn(),
     item: mockItem,
     openModal: jest.fn(),
-    closeModal: jest.fn(),
     openModalId: null as string | null,
   };
 
@@ -66,29 +66,24 @@ describe('QuoteErrorItem Component', () => {
   it('opens and closes modal correctly', () => {
     const { rerender } = render(<QuoteErrorItem {...defaultProps} />);
 
-    // Click to open modal
     const viewDetailButton = screen.getByText('Voir le détail');
     fireEvent.click(viewDetailButton);
     expect(defaultProps.openModal).toHaveBeenCalled();
 
-    // Rerender with modal open
     rerender(<QuoteErrorItem {...defaultProps} openModalId='1' />);
     const modal = screen.getByTestId('modal');
     expect(modal).toBeInTheDocument();
     expect(within(modal).getByText('Document manquant')).toBeInTheDocument();
 
-    // Click to close modal
     const closeButton = within(modal).getByText('Close');
     fireEvent.click(closeButton);
     expect(defaultProps.closeModal).toHaveBeenCalled();
   });
 
   it('displays correct text based on type', () => {
-    // Test MISSING type
     render(<QuoteErrorItem {...defaultProps} />);
     expect(screen.getByText('Information manquante')).toBeInTheDocument();
 
-    // Test WRONG type
     const wrongTypeItem = {
       ...mockItem,
       type: Type.WRONG,

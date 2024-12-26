@@ -88,11 +88,11 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
         {/* without provided_value */}
         {groupedProvidedValue.noValue?.map((item) => (
           <ErrorItem
+            closeModal={closeModal}
             item={item}
             key={item.id}
             openModal={() => openModal(item.id)}
             openModalId={openModalId}
-            closeModal={closeModal}
           />
         ))}
         {/* with provided_value */}
@@ -109,11 +109,11 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
             >
               {items.map((item) => (
                 <ErrorItem
+                  closeModal={closeModal}
                   item={item}
                   key={item.id}
                   openModal={() => openModal(item.id)}
                   openModalId={openModalId}
-                  closeModal={closeModal}
                 />
               ))}
             </Accordion>
