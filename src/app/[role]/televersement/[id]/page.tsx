@@ -8,6 +8,9 @@ import {
   BlockNumber,
   BlockNumberSize,
   Confetti,
+  Link,
+  LinkSize,
+  LinkVariant,
   QuoteErrorCard,
   QuoteStatusCard,
   QuoteStatusLink,
@@ -97,33 +100,33 @@ export default function Devis() {
     <div className='fr-container-fluid fr-py-10w'>
       {data?.status === Status.VALID && <Confetti />}
       <section className='fr-container fr-gap-8'>
-        <div className='fr-grid-row flex justify-between items-center'>
-          <div className='flex items-center'>
-            <h1>{wording.upload_id.title}</h1>
-            <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4 ml-8 self-center'>
+        <div className='flex flex-col md:flex-row justify-between fr-mb-6w'>
+          <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
+            <h1 className='mb-0 text-center md:text-left'>
+              {wording.upload_id.title}
+            </h1>
+            <div className='flex flex-wrap gap-4 justify-center'>
               {uploadedFileName && (
-                <li>
-                  <Badge
-                    label={uploadedFileName}
-                    size={BadgeSize.SMALL}
-                    variant={BadgeVariant.BLUE_DARK}
-                  />
-                </li>
-              )}
-              <li>
                 <Badge
-                  label={(list.length > 1
-                    ? wording.upload_id.badge_correction_plural
-                    : wording.upload_id.badge_correction
-                  ).replace('{number}', list.length.toString())}
+                  label={uploadedFileName}
                   size={BadgeSize.SMALL}
-                  variant={BadgeVariant.GREY}
+                  variant={BadgeVariant.BLUE_DARK}
                 />
-              </li>
-            </ul>
+              )}
+              <Badge
+                label={(list.length > 1
+                  ? wording.upload_id.badge_correction_plural
+                  : wording.upload_id.badge_correction
+                ).replace('{number}', list.length.toString())}
+                size={BadgeSize.SMALL}
+                variant={BadgeVariant.GREY}
+              />
+            </div>
           </div>
           <button
-            className={`fr-btn ${!isUrlCopied && 'fr-btn--secondary'} fr-mb-3w`}
+            className={`fr-btn ${
+              !isUrlCopied && 'fr-btn--secondary'
+            } md:block hidden shrink-0 self-start fr-ml-1w`}
             disabled={isUrlCopied}
             onClick={copyUrlToClipboard}
           >
@@ -157,19 +160,56 @@ export default function Devis() {
             />
           )}
           {data?.status === Status.INVALID && (
-            <ul className='fr-raw-list fr-mx-1w my-8 w-full flex justify-between items-center'>
+            <ul className='fr-raw-list my-8 w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
               {wording.upload_id.block_number.map((block, index) => (
                 <React.Fragment key={block.number}>
-                  <li className='fr-col-auto flex items-center'>
+                  <li className='fr-col-auto flex items-stretch w-full'>
                     <BlockNumber
-                      className='border-open-blue rounded-lg p-4 w-full md:w-[325px]'
+                      className='border-open-blue rounded-lg p-4 w-full h-full'
                       number={block.number}
                       size={BlockNumberSize.MEDIUM}
-                      title={block.title}
+                      title={
+                        <>
+                          <span className='flex flex-row gap-3'>
+                            {block.title}
+                            {index === 0 && (
+                              <span className='block md:hidden'>⬇️</span>
+                            )}
+                          </span>
+                          {index === 2 && (
+                            <span className='block fr-mt-2w md:hidden'>
+                              <Link
+                                href={
+                                  wording.upload_id.quote_status_link_ko
+                                    .link_href
+                                }
+                                label={
+                                  wording.upload_id.quote_status_link_ko
+                                    .link_label
+                                }
+                                size={LinkSize.SMALL}
+                                variant={LinkVariant.SECONDARY}
+                              ></Link>
+                            </span>
+                          )}
+                        </>
+                      }
                     />
                   </li>
+                  {index === 0 && (
+                    <div className='block md:hidden w-full'>
+                      <div className='flex flex-col gap-8'>
+                        {adminErrors.length > 0 && (
+                          <QuoteErrorCard list={adminErrors} />
+                        )}
+                        {gestesErrors.length > 0 && (
+                          <QuoteErrorCard list={gestesErrors} />
+                        )}
+                      </div>
+                    </div>
+                  )}
                   {index < wording.upload_id.block_number.length - 1 && (
-                    <div className='flex items-center h-full'>
+                    <div className='hidden md:flex items-center h-full'>
                       <span
                         aria-hidden='true'
                         className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
@@ -183,7 +223,7 @@ export default function Devis() {
         </div>
       </section>
       {data?.status === Status.INVALID && (
-        <section className='fr-container'>
+        <section className='fr-container hidden md:block'>
           <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
             {wording.upload_id.subtitle}
           </h2>
@@ -193,7 +233,7 @@ export default function Devis() {
           </div>
         </section>
       )}
-      <section className='fr-container fr-mt-10w'>
+      <section className='fr-container fr-mt-10w hidden md:block'>
         {data?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'

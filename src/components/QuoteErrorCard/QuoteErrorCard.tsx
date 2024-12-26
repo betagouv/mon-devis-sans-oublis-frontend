@@ -42,8 +42,8 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between'>
-        <span className='flex gap-4'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between items-start'>
+        <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
           <p>
             {list.length > 0 &&
               (isCategoryAdmin
@@ -51,17 +51,16 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
                 : wording.components.quote_error_card.title_gestes)}
           </p>
           <Badge
-            className='self-center'
+            className='self-center inline-block'
             label={`${(list.length > 1
               ? wording.upload_id.badge_correction_plural
               : wording.upload_id.badge_correction
-            ).replace('{number}', list.length.toString())}
-            `}
+            ).replace('{number}', list.length.toString())}`}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
           />
-        </span>
-        <div className='relative inline-block'>
+        </div>
+        <div className='relative inline-block shrink-0 ml-4'>
           <Tooltip
             className='absolute top-full right-0 !mt-2 !font-normal'
             icon={
@@ -89,21 +88,21 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
               : wording.components.quote_error_card.type_wrong.label;
           return (
             <li
-              className='flex justify-between p-6 border-bottom-grey items-center'
+              className='flex p-6 border-bottom-grey items-start gap-4 md:items-center'
               key={item.id}
             >
-              <span className='flex gap-4'>
-                <p className='text-[var(--text-title-grey)]'>
-                  {truncateTitle(item.title, 60)}
-                </p>
-                <p
-                  className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
-                >
-                  {label}
-                </p>
-              </span>
+              <div className='flex-1'>
+                <span className='inline-flex flex-wrap items-center gap-4'>
+                  <p className='text-[var(--text-title-grey)]'>{item.title}</p>
+                  <p
+                    className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
+                  >
+                    {label}
+                  </p>
+                </span>
+              </div>
               <button
-                className='fr-btn fr-btn--secondary fr-btn--sm'
+                className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
                 onClick={() => openModal(item.id.toString())}
               >
                 {wording.components.quote_error_card.button_see_detail}
