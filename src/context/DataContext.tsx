@@ -69,43 +69,50 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   // Load quotes from localStorage on component mount
   useEffect(() => {
-    const storedData = localStorage.getItem('quoteCheckData');
-    if (storedData) {
-      try {
-        const parsedData = JSON.parse(storedData);
-        setDataState(parsedData);
-      } catch (error) {
-        console.error('Error reading from localStorage:', error);
+    if (typeof window !== 'undefined') {
+      // Protect localStorage usage from server-side
+      const storedData = localStorage.getItem('quoteCheckData');
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          setDataState(parsedData);
+        } catch (error) {
+          console.error('Error reading from localStorage:', error);
+        }
       }
     }
   }, []);
 
   // Automatically save updated data to localStorage
   useEffect(() => {
-    localStorage.setItem('quoteCheckData', JSON.stringify(data));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('quoteCheckData', JSON.stringify(data));
+    }
   }, [data]);
 
-  // Add or update a quote (including PENDING status)
   const updateDevis = (newDevis: QuoteChecksId) => {
     setDataState((prev) => {
       const updatedDevis = prev.filter((d) => d.id !== newDevis.id);
       const newState = [...updatedDevis, newDevis];
-      localStorage.setItem('quoteCheckData', JSON.stringify(newState));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('quoteCheckData', JSON.stringify(newState));
+      }
       return newState;
     });
   };
 
-  // Remove PENDING quotes that have not been validated
   const clearPendingDevis = () => {
     setDataState((prev) => {
       const filteredDevis = prev.filter((d) => d.status !== Status.PENDING);
-      localStorage.setItem('quoteCheckData', JSON.stringify(filteredDevis));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('quoteCheckData', JSON.stringify(filteredDevis));
+      }
       return filteredDevis;
     });
   };
 
   return (
-    <DataContext.Provider value={{ clearPendingDevis, data, updateDevis }}>
+    <DataContext.Provider value={{ data, updateDevis, clearPendingDevis }}>
       {children}
     </DataContext.Provider>
   );
