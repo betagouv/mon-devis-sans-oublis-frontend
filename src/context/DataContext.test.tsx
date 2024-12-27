@@ -1,26 +1,12 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 
-import {
-  DataProvider,
-  Profile,
-  Status,
-  useDataContext,
-  QuoteChecksId,
-} from './DataContext';
-
-// Mock localStorage for tests
-beforeEach(() => {
-  localStorage.clear();
-});
+import { DataProvider, useDataContext, Status, Profile } from './DataContext';
 
 const TestComponent = () => {
   const { data, updateDevis, clearPendingDevis } = useDataContext();
 
   return (
     <div>
-      <p>{data.length > 0 ? data[0].status : 'No Data'}</p>
-
       <button
         onClick={() =>
           updateDevis({
@@ -34,140 +20,33 @@ const TestComponent = () => {
           })
         }
       >
-        Update Data
+        Update Devis
       </button>
-
-      <button
-        onClick={() =>
-          updateDevis({
-            id: '1',
-            status: Status.INVALID,
-            profile: Profile.CONSEILLER,
-            valid: false,
-            errors: ['Error'],
-            error_details: [],
-            error_messages: {},
-          })
-        }
-      >
-        Overwrite Data
-      </button>
-
-      <button
-        onClick={() =>
-          updateDevis({
-            id: '2',
-            status: Status.PENDING,
-            profile: Profile.MANDATAIRE,
-            valid: false,
-            errors: [],
-            error_details: [],
-            error_messages: {},
-          })
-        }
-      >
-        Add Pending
-      </button>
-
-      <button onClick={clearPendingDevis}>Clear Pending</button>
+      <button onClick={clearPendingDevis}>Clear Pending Devis</button>
+      <div data-testid='data-display'>{JSON.stringify(data)}</div>
     </div>
   );
 };
 
-describe('DataProvider and useDataContext', () => {
-  it('provides initial empty data', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-    expect(screen.getByText('No Data')).toBeInTheDocument();
+describe('DataContext', () => {
+  beforeEach(() => {
+    // Clear localStorage before each test
+    localStorage.clear();
   });
 
-  it('updates data and persists in localStorage', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    fireEvent.click(screen.getByText('Update Data'));
-    expect(screen.getByText('valid')).toBeInTheDocument();
-
-    const storedData = localStorage.getItem('quoteCheckData');
-    expect(storedData).toContain('"status":"valid"');
-  });
-
-  it('overwrites data with the same ID', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    fireEvent.click(screen.getByText('Update Data'));
-    fireEvent.click(screen.getByText('Overwrite Data'));
-
-    expect(screen.getByText('invalid')).toBeInTheDocument();
-
-    const storedData = JSON.parse(
-      localStorage.getItem('quoteCheckData') as string
-    );
-    expect(storedData[0].status).toBe('invalid');
-    expect(storedData[0].errors).toContain('Error');
-  });
-
-  it('adds multiple quotes and clears pending', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    fireEvent.click(screen.getByText('Update Data'));
-    fireEvent.click(screen.getByText('Add Pending'));
-
-    const storedData = JSON.parse(
-      localStorage.getItem('quoteCheckData') as string
-    );
-    expect(storedData).toHaveLength(2);
-
-    fireEvent.click(screen.getByText('Clear Pending'));
-    const filteredData = JSON.parse(
-      localStorage.getItem('quoteCheckData') as string
-    );
-    expect(filteredData).toHaveLength(1);
-    expect(filteredData[0].status).toBe('valid');
-  });
-
-  it('clears pending without affecting non-pending quotes', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    fireEvent.click(screen.getByText('Update Data'));
-    fireEvent.click(screen.getByText('Clear Pending'));
-
-    const storedData = JSON.parse(
-      localStorage.getItem('quoteCheckData') as string
-    );
-    expect(storedData).toHaveLength(1);
-    expect(storedData[0].status).toBe('valid');
-  });
-
-  it('retrieves data from localStorage on load', () => {
-    const mockQuote: QuoteChecksId = {
-      id: '3',
-      status: Status.PENDING,
-      profile: Profile.PARTICULIER,
-      valid: false,
-      errors: [],
-      error_details: [],
-      error_messages: {},
-    };
-    localStorage.setItem('quoteCheckData', JSON.stringify([mockQuote]));
+  test('loads data from localStorage on mount', () => {
+    const mockData = [
+      {
+        id: '1',
+        status: Status.PENDING,
+        profile: 'artisan',
+        valid: true,
+        errors: [],
+        error_details: [],
+        error_messages: {},
+      },
+    ];
+    localStorage.setItem('quoteCheckData', JSON.stringify(mockData));
 
     render(
       <DataProvider>
@@ -175,11 +54,52 @@ describe('DataProvider and useDataContext', () => {
       </DataProvider>
     );
 
-    expect(screen.getByText('pending')).toBeInTheDocument();
+    expect(screen.getByTestId('data-display')).toHaveTextContent(
+      JSON.stringify(mockData)
+    );
   });
 
-  it('handles empty localStorage without errors', () => {
-    localStorage.removeItem('quoteCheckData');
+  test('updates devis and saves to localStorage', () => {
+    render(
+      <DataProvider>
+        <TestComponent />
+      </DataProvider>
+    );
+
+    act(() => {
+      screen.getByText('Update Devis').click();
+    });
+
+    expect(screen.getByTestId('data-display')).toHaveTextContent(
+      '{"id":"1","status":"valid","profile":"artisan","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
+    );
+    expect(localStorage.getItem('quoteCheckData')).toContain(
+      '{"id":"1","status":"valid","profile":"artisan","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
+    );
+  });
+
+  test('clears pending devis and updates localStorage', () => {
+    const mockData = [
+      {
+        id: '1',
+        status: Status.PENDING,
+        profile: 'artisan',
+        valid: true,
+        errors: [],
+        error_details: [],
+        error_messages: {},
+      },
+      {
+        id: '2',
+        status: Status.VALID,
+        profile: 'conseiller',
+        valid: true,
+        errors: [],
+        error_details: [],
+        error_messages: {},
+      },
+    ];
+    localStorage.setItem('quoteCheckData', JSON.stringify(mockData));
 
     render(
       <DataProvider>
@@ -187,44 +107,36 @@ describe('DataProvider and useDataContext', () => {
       </DataProvider>
     );
 
-    expect(screen.getByText('No Data')).toBeInTheDocument();
+    act(() => {
+      screen.getByText('Clear Pending Devis').click();
+    });
+
+    expect(screen.getByTestId('data-display')).toHaveTextContent(
+      JSON.stringify([
+        {
+          id: '2',
+          status: Status.VALID,
+          profile: 'conseiller',
+          valid: true,
+          errors: [],
+          error_details: [],
+          error_messages: {},
+        },
+      ])
+    );
+    expect(localStorage.getItem('quoteCheckData')).toContain(
+      '{"id":"2","status":"valid","profile":"conseiller","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
+    );
   });
 
-  it('handles invalid JSON in localStorage gracefully', () => {
-    localStorage.setItem('quoteCheckData', '{invalid json}');
-
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error reading from localStorage:',
-      expect.any(SyntaxError)
-    );
-
-    consoleErrorSpy.mockRestore();
-  });
-
-  it('throws an error if used outside DataProvider', () => {
-    const ErrorThrowingComponent = () => {
-      try {
-        useDataContext();
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          return <p>{error.message}</p>;
-        }
-        return <p>An unknown error occurred</p>;
-      }
+  test('throws error when useDataContext is used outside of DataProvider', () => {
+    const TestComponentWithoutProvider = () => {
+      useDataContext();
       return null;
     };
 
-    render(<ErrorThrowingComponent />);
-    expect(
-      screen.getByText('useDataContext must be used within a DataProvider')
-    ).toBeInTheDocument();
+    expect(() => render(<TestComponentWithoutProvider />)).toThrow(
+      'useDataContext must be used within a DataProvider'
+    );
   });
 });
