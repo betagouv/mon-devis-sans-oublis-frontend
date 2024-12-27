@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 
@@ -11,31 +11,42 @@ export interface AccordionProps {
 }
 
 const Accordion = ({ badgeLabel, children, title }: AccordionProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [maxLength, setMaxLength] = useState<number>(60);
 
-  const truncateTitle = (title: string, maxLength: number = 60) => {
+  const truncateTitle = (title: string) => {
     if (title.length <= maxLength) return title;
 
-    // Find the last space before maxLength that is not preceded by a comma or hyphen
     let lastSpace = title.substring(0, maxLength).lastIndexOf(' ');
 
     while (lastSpace > 0) {
       const charBeforeSpace = title.charAt(lastSpace - 1);
-      if (charBeforeSpace !== ',' && charBeforeSpace !== '-') {
+      if (
+        charBeforeSpace !== ',' &&
+        charBeforeSpace !== '-' &&
+        charBeforeSpace !== '/'
+      ) {
         break;
       }
-      // If we find a comma or hyphen, look for the previous space
       lastSpace = title.substring(0, lastSpace).lastIndexOf(' ');
     }
 
-    if (lastSpace === -1) {
-      // If no valid space is found, cut at maxLength
-      return title.substring(0, maxLength);
-    }
-
-    // Cut at the last valid space
-    return title.substring(0, lastSpace);
+    return title.substring(0, lastSpace > 0 ? lastSpace : maxLength);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setMaxLength(window.innerWidth >= 768 ? 60 : 30);
+      }
+    };
+
+    handleResize();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   return (
     <section className='fr-accordion' data-fr-js-accordion='true'>
