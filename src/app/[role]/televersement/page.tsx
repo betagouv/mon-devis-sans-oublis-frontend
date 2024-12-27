@@ -3,8 +3,15 @@
 import { use, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Alert, Link, LinkVariant, Select, Upload } from '@/components';
-import { useDataContext } from '@/context';
+import {
+  Alert,
+  Link,
+  LinkVariant,
+  LoadingDots,
+  Select,
+  Upload,
+} from '@/components';
+import { Status, useDataContext } from '@/context';
 import wording from '@/wording';
 
 export default function Televersement({
@@ -13,7 +20,7 @@ export default function Televersement({
   params: Promise<{ role: string }>;
 }) {
   const params = use(initialParams);
-  const { setData } = useDataContext();
+  const { updateDevis } = useDataContext();
   const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
@@ -22,6 +29,7 @@ export default function Televersement({
     null
   );
   const [selectedOption, setSelectedOption] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFileUpload = useCallback(
     (uploadedFile: File) => {
@@ -38,13 +46,6 @@ export default function Televersement({
     setSelectedOption(value);
   };
 
-  const options = [
-    { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' },
-    { value: '4', label: 'Option 4' },
-  ];
-
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -59,6 +60,8 @@ export default function Televersement({
       formData.append('profile', profile);
 
       try {
+        setIsLoading(true);
+
         const response = await fetch('/api/quote_checks', {
           method: 'POST',
           body: formData,
@@ -69,24 +72,66 @@ export default function Televersement({
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Error while creating the quote.');
         }
 
         const data = await response.json();
-        setData(data);
-        localStorage.setItem('quoteCheckData', JSON.stringify(data));
 
-        if (data.id) {
-          router.push(`/${params.role}/televersement/${data.id}/chargement`);
+        if (!data.id) {
+          throw new Error("The API didn't return an ID.");
         }
+
+        // Immediately add the quote as PENDING
+        updateDevis({ ...data, status: Status.PENDING });
+
+        let detailedData;
+        let retryCount = 0;
+        const maxRetries = 10;
+
+        // Retry loop to fetch quote details
+        while (retryCount < maxRetries) {
+          const detailsResponse = await fetch(`/api/quote_checks/${data.id}`, {
+            headers: {
+              accept: 'application/json',
+              Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+            },
+          });
+
+          detailedData = await detailsResponse.json();
+
+          if (detailedData.status !== 'pending') {
+            // If the quote is no longer pending, update and break
+            updateDevis(detailedData);
+            break;
+          }
+
+          // Wait for 2 seconds before retrying
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          retryCount += 1;
+        }
+
+        if (!detailedData || detailedData.status === 'pending') {
+          throw new Error('The analysis took too long.');
+        }
+
+        // Redirect to the details page after successful processing
+        router.push(`/${params.role}/televersement/${detailedData.id}`);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error during upload:', error);
+        setFileUploadedError('An error occurred. Please try again.');
+      } finally {
+        setIsLoading(false); // Stop the loader after the process
       }
     },
-    [file, profile, setData, router, params.role]
+    [file, profile, updateDevis, router, params.role]
   );
 
-  return (
+  return isLoading ? (
+    <section className='fr-container h-screen flex flex-col items-center justify-center'>
+      <LoadingDots title='Analyse en cours' />
+      <p>Votre devis est en cours de traitement.</p>
+    </section>
+  ) : (
     <section className='fr-container-fluid fr-py-10w'>
       <div className='fr-container'>
         <div className='fr-grid-row fr-grid-row--center'>
@@ -109,7 +154,10 @@ export default function Televersement({
             <Select
               label={wording.upload.section_upload.select.label}
               onChange={handleSelectChange}
-              options={options}
+              options={[
+                { value: '1', label: 'Option 1' },
+                { value: '2', label: 'Option 2' },
+              ]}
               selectedValue={selectedOption}
             />
             <div className='fr-mt-8w flex justify-center'>

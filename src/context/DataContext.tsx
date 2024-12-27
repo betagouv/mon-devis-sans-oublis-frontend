@@ -4,8 +4,8 @@ import React, {
   createContext,
   ReactNode,
   useContext,
-  useEffect,
   useState,
+  useEffect,
 } from 'react';
 
 export enum Category {
@@ -31,16 +31,6 @@ export enum Type {
   WRONG = 'wrong',
 }
 
-export interface QuoteChecks {
-  id: string;
-  status: Status;
-  profile: Profile;
-  valid: boolean;
-  errors: string | null;
-  error_details: string | null;
-  error_messages: string[] | null;
-}
-
 export interface ErrorDetails {
   id: string;
   category: Category;
@@ -63,8 +53,9 @@ export interface QuoteChecksId {
 }
 
 interface DataContextType {
-  data: QuoteChecks | QuoteChecksId | null;
-  setData: (value: QuoteChecks | QuoteChecksId) => void;
+  clearPendingDevis: () => void;
+  data: QuoteChecksId[];
+  updateDevis: (value: QuoteChecksId) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -74,35 +65,47 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
-  const [data, setDataState] = useState<QuoteChecks | QuoteChecksId | null>(
-    null
-  );
+  const [data, setDataState] = useState<QuoteChecksId[]>([]);
 
+  // Load quotes from localStorage on component mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedData = localStorage.getItem('quoteCheckData');
-      if (storedData) {
-        try {
-          setDataState(JSON.parse(storedData));
-        } catch (error) {
-          console.error('Failed to parse localStorage data:', error);
-        }
+    const storedData = localStorage.getItem('quoteCheckData');
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setDataState(parsedData);
+      } catch (error) {
+        console.error('Error reading from localStorage:', error);
       }
     }
   }, []);
 
+  // Automatically save updated data to localStorage
   useEffect(() => {
-    if (data) {
-      localStorage.setItem('quoteCheckData', JSON.stringify(data));
-    }
+    localStorage.setItem('quoteCheckData', JSON.stringify(data));
   }, [data]);
 
-  const setData = (value: QuoteChecks | QuoteChecksId) => {
-    setDataState(value);
+  // Add or update a quote (including PENDING status)
+  const updateDevis = (newDevis: QuoteChecksId) => {
+    setDataState((prev) => {
+      const updatedDevis = prev.filter((d) => d.id !== newDevis.id);
+      const newState = [...updatedDevis, newDevis];
+      localStorage.setItem('quoteCheckData', JSON.stringify(newState));
+      return newState;
+    });
+  };
+
+  // Remove PENDING quotes that have not been validated
+  const clearPendingDevis = () => {
+    setDataState((prev) => {
+      const filteredDevis = prev.filter((d) => d.status !== Status.PENDING);
+      localStorage.setItem('quoteCheckData', JSON.stringify(filteredDevis));
+      return filteredDevis;
+    });
   };
 
   return (
-    <DataContext.Provider value={{ data, setData }}>
+    <DataContext.Provider value={{ clearPendingDevis, data, updateDevis }}>
       {children}
     </DataContext.Provider>
   );

@@ -6,4 +6,4 @@ export {
   Type,
   useDataContext,
 } from './DataContext';
-export type { ErrorDetails, QuoteChecks, QuoteChecksId } from './DataContext';
+export type { ErrorDetails, QuoteChecksId } from './DataContext';
