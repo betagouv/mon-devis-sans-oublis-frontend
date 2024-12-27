@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {
   Badge,
   BadgeSize,
@@ -25,9 +25,50 @@ import {
 } from '@/context';
 import wording from '@/wording';
 
-export default function Devis() {
+export default function Devis({
+  params: initialParams,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = use(initialParams);
   const { data } = useDataContext();
+
+  const [currentDevis, setCurrentDevis] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchDevis = () => {
+      const devis = data.find((devis) => devis.id === params.id);
+      setCurrentDevis(devis || null);
+      setIsLoading(false);
+    };
+
+    fetchDevis();
+  }, [data, params.id]);
+
+  if (isLoading) {
+    return (
+      <section className='fr-container-fluid fr-py-10w'>
+        <div className='flex flex-col items-center justify-center'>
+          <h1>Chargement du devis...</h1>
+        </div>
+      </section>
+    );
+  }
+
+  if (!currentDevis) {
+    return null;
+  }
+
+  const uploadedFileName = (
+    localStorage.getItem('uploadedFileName') || ''
+  ).substring(0, 20);
+
+  const copyUrlToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setIsUrlCopied(true);
+  };
 
   const commonModalContent = {
     buttonBackText: wording.upload_id.modal.button_back_text,
@@ -44,62 +85,40 @@ export default function Devis() {
     },
   };
 
-  const list = ((data?.error_details as ErrorDetails[]) || []).map((error) => ({
-    id: error.id,
-    category: error.category as Category,
-    type: error.type as Type,
-    code: error.code,
-    title: error.title,
-    provided_value: error.provided_value || null,
-    modalContent: {
-      ...commonModalContent,
-      problem: {
-        ...commonModalContent.problem,
-        description: error.problem || null,
-      },
-      solution: {
-        ...commonModalContent.solution,
-        description: error.solution || null,
-      },
-      isOpen: false,
+  const list = (currentDevis.error_details || []).map(
+    (error: ErrorDetails) => ({
+      id: error.id,
+      category: error.category as Category,
+      type: error.type as Type,
+      code: error.code,
       title: error.title,
-    },
-  }));
+      provided_value: error.provided_value || null,
+      modalContent: {
+        ...commonModalContent,
+        problem: {
+          ...commonModalContent.problem,
+          description: error.problem || null,
+        },
+        solution: {
+          ...commonModalContent.solution,
+          description: error.solution || null,
+        },
+        isOpen: false,
+        title: error.title,
+      },
+    })
+  );
 
-  const uploadedFileName = (
-    localStorage.getItem('uploadedFileName') || ''
-  ).substring(0, 20);
-
-  const copyUrlToClipboard = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setIsUrlCopied(true);
-  };
-
-  useEffect(() => {
-    const handleClipboardChange = (event: ClipboardEvent) => {
-      const clipboardData = event.clipboardData;
-      if (clipboardData) {
-        const text = clipboardData.getData('text');
-        if (text !== window.location.href) {
-          setIsUrlCopied(false);
-        }
-      }
-    };
-
-    document.addEventListener('copy', handleClipboardChange);
-    return () => {
-      document.removeEventListener('copy', handleClipboardChange);
-    };
-  }, []);
-
-  const adminErrors = list.filter((error) => error.category === Category.ADMIN);
+  const adminErrors = list.filter(
+    (error: { category: Category.ADMIN }) => error.category === Category.ADMIN
+  );
   const gestesErrors = list.filter(
-    (error) => error.category === Category.GESTES
+    (error: { category: Category.GESTES }) => error.category === Category.GESTES
   );
 
   return (
     <div className='fr-container-fluid fr-py-10w'>
-      {data?.status === Status.VALID && <Confetti />}
+      {currentDevis?.status === Status.VALID && <Confetti />}
       <section className='fr-container fr-gap-8'>
         <div className='flex flex-col md:flex-row justify-between fr-mb-6w'>
           <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
@@ -124,7 +143,7 @@ export default function Devis() {
               />
             </div>
           </div>
-          {data?.status === Status.INVALID && (
+          {currentDevis?.status === Status.INVALID && (
             <button
               className={`fr-btn ${
                 !isUrlCopied && 'fr-btn--secondary'
@@ -140,29 +159,22 @@ export default function Devis() {
           )}
         </div>
         <div className='fr-col-12'>
-          {data?.status === Status.VALID && (
+          {currentDevis?.status === Status.VALID ? (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ok.description}
-              descriptionOKMore={
-                wording.upload_id.quote_status_card_ok.description_ok_more
-              }
               imageAlt={wording.upload_id.quote_status_card_ok.image_alt}
               imageSrc={wording.upload_id.quote_status_card_ok.image_src}
               title={wording.upload_id.quote_status_card_ok.title}
             />
-          )}
-          {data?.status === Status.INVALID && (
+          ) : (
             <QuoteStatusCard
               description={wording.upload_id.quote_status_card_ko.description}
-              descriptionKOMore={
-                wording.upload_id.quote_status_card_ko.description_ko_more
-              }
               imageAlt={wording.upload_id.quote_status_card_ko.image_alt}
               imageSrc={wording.upload_id.quote_status_card_ko.image_src}
               title={wording.upload_id.quote_status_card_ko.title}
             />
           )}
-          {data?.status === Status.INVALID && (
+          {currentDevis?.status === Status.INVALID && (
             <ul className='fr-raw-list my-8 w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
               {wording.upload_id.block_number.map((block, index) => (
                 <React.Fragment key={block.number}>
@@ -225,7 +237,7 @@ export default function Devis() {
           )}
         </div>
       </section>
-      {data?.status === Status.INVALID && (
+      {currentDevis?.status === Status.INVALID && (
         <section className='fr-container hidden md:block'>
           <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
             {wording.upload_id.subtitle}
@@ -237,7 +249,7 @@ export default function Devis() {
         </section>
       )}
       <section className='fr-container fr-mt-10w hidden md:block'>
-        {data?.status === Status.VALID ? (
+        {currentDevis?.status === Status.VALID ? (
           <QuoteStatusLink
             className='mb-16 mt-8'
             imageAlt={wording.upload_id.quote_status_link_ok.image_alt}

@@ -36,6 +36,9 @@ export type { IconBackgroundProps } from './IconBackground/IconBackground';
 // Link
 export { default as Link, LinkSize, LinkVariant } from './Link/Link';
 export type { LinkProps } from './Link/Link';
+// LoadingDots
+export { default as LoadingDots } from './LoadingDots/LoadingDots';
+export type { LoadingDotsProps } from './LoadingDots/LoadingDots';
 // Modal
 export { default as Modal } from './Modal/Modal';
 export type { IssueResolution, ModalProps } from './Modal/Modal';
