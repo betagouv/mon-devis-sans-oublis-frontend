@@ -51,6 +51,7 @@ export default function Devis() {
     code: error.code,
     title: error.title,
     provided_value: error.provided_value || null,
+    solution: error.solution || null,
     modalContent: {
       ...commonModalContent,
       problem: {

@@ -35,12 +35,15 @@ const QuoteErrorItem = ({
           </p>
         </span>
       </div>
-      <button
-        className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-        onClick={openModal}
-      >
-        {wording.components.quote_error_card.button_see_detail}
-      </button>
+      {item.solution !== null && (
+        <button
+          className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+          onClick={openModal}
+        >
+          {wording.components.quote_error_card.button_see_detail}
+        </button>
+      )}
+      
       {openModalId === item.id.toString() && (
         <Modal
           {...item.modalContent}
