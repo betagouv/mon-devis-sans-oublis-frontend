@@ -19,6 +19,7 @@ import {
 import {
   Category,
   ErrorDetails,
+  QuoteChecksId,
   Status,
   Type,
   useDataContext,
@@ -33,7 +34,7 @@ export default function Devis({
   const params = use(initialParams);
   const { data } = useDataContext();
 
-  const [currentDevis, setCurrentDevis] = useState<any>(null);
+  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
 
@@ -109,11 +110,9 @@ export default function Devis({
     })
   );
 
-  const adminErrors = list.filter(
-    (error: { category: Category.ADMIN }) => error.category === Category.ADMIN
-  );
+  const adminErrors = list.filter((error) => error.category === Category.ADMIN);
   const gestesErrors = list.filter(
-    (error: { category: Category.GESTES }) => error.category === Category.GESTES
+    (error) => error.category === Category.GESTES
   );
 
   return (
