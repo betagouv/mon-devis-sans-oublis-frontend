@@ -114,14 +114,17 @@ export default function Devis() {
                   variant={BadgeVariant.BLUE_DARK}
                 />
               )}
-              <Badge
-                label={(list.length > 1
-                  ? wording.upload_id.badge_correction_plural
-                  : wording.upload_id.badge_correction
-                ).replace('{number}', list.length.toString())}
-                size={BadgeSize.SMALL}
-                variant={BadgeVariant.GREY}
-              />
+              {list.length > 0 && (
+                <Badge
+                  label={(list.length > 1
+                    ? wording.upload_id.badge_correction_plural
+                    : wording.upload_id.badge_correction
+                  ).replace('{number}', list.length.toString())}
+                  size={BadgeSize.SMALL}
+                  variant={BadgeVariant.GREY}
+                />
+              )}
+              
             </div>
           </div>
           {data?.status === Status.INVALID && (
