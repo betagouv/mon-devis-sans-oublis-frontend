@@ -12,11 +12,11 @@
       "title_gestes": "Descriptif technique des gestes",
       "tooltip_admin": {
         "icon": "fr-icon-information-fill",
-        "text": "Les mentions administratives sont communes à tous les postes de travaux. Elles sont obligatoires pour les obtentions d’aides financières."
+        "text": "Les mentions administratives sont les informations générales concernant le devis, l'entreprise, le client et le logement. Elles sont obligatoires pour l'obtention d’aides financières."
       },
       "tooltip_gestes": {
         "icon": "fr-icon-information-fill",
-        "text": "Les gestes correspondent aux normes et au matériel des critères techniques. Certaines informations sont à mentionner obligatoirement pour l’obtention des aides."
+        "text": "Ici, nous vérifions la présence des critères de performance énergétique de l’équipement ou du matériel rendant l’opération éligible ou non aux aides financières."
       },
       "type_missing": {
         "icon": "fr-icon-warning-line",
@@ -56,7 +56,7 @@
     "section_examples": {
       "badges": [
         {
-          "label": "Ma prime renov"
+          "label": "Ma prime renov'"
         },
         {
           "label": "Eco PTZ"
@@ -96,7 +96,7 @@
     },
     "section_steps": {
       "correction": "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme.",
-      "description": "Mon devis sans oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.",
+      "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.",
       "number_blocks": [
         {
           "description": "Téléchargez en un clic votre devis au format pdf sur Mon Devis Sans Oublis en cliquant sur \"Vérifier mon devis\"",
@@ -119,28 +119,28 @@
     "section_who_are_you": {
       "cards": [
         {
-          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "alt": "Artisan qui souhaite gagner du temps",
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "image": "card_artisan.png",
-          "title": "Je suis un artisan",
+          "title": "Je suis un.e artisan",
           "url": "/artisan/televersement"
         },
         {
-          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "alt": "Particulier qui souhaite gagner du temps",
           "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
           "image": "card_individual.png",
-          "title": "Je suis un particulier",
+          "title": "Je suis un.e particulier",
           "url": "/particulier/televersement"
         },
         {
-          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "alt": "Mandataire qui souhaite faire le lien",
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
           "image": "card_agent.png",
           "title": "Je suis un.e mandataire",
           "url": "/mandataire/televersement"
         },
         {
-          "alt": "[À MODIFIER - vide ou texte alternatif de l’image]",
+          "alt": "Conseiller qui souhaite accompagner ses clients",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "image": "card_advisor.png",
           "title": "Je suis un.e conseiller.e",
@@ -155,8 +155,8 @@
     "footer": {
       "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
       "buttons": [
-        { "href": "/", "label": "Mentions légales" },
-        { "href": "/", "label": "Accessibilité : partiellement conforme" }
+        { "href": "/", "label": "Mentions légales / Confidentialité" },
+        { "href": "/", "label": "Accessibilité : non conforme" }
       ],
       "organizationDetails": {
         "beforeLink": "Mon Devis Sans Oublis est un service public conçu par la ",
@@ -169,7 +169,7 @@
           "text": "beta.gouv",
           "url": "https://beta.gouv.fr/"
         },
-        "finalText": ". Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr"
+        "finalText": " de la DINUM. Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr"
       },
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
@@ -253,15 +253,15 @@
     },
     "quote_status_card_ko": {
       "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
-      "description_ko_more": "Nous vous conseillons de le refaire dès maintenant pour éviter les allers-retours avec votre client.",
-      "image_alt": "Quote KO",
+      "description_ko_more": "Nous vous conseillons de le corriger dès maintenant pour éviter les allers-retours lors de l'instruction.",
+      "image_alt": "Devis non conforme",
       "image_src": "/images/quote_status_ko.png",
       "title": "Aïe, ce devis va coincer..."
     },
     "quote_status_card_ok": {
-      "description": "Bravo, votre devis est complet. Il répond aux attentes des différentes aides de rénovation énergétique.",
-      "description_ok_more": "Prochaine étape : partagez votre devis à votre client",
-      "image_alt": "Quote OK",
+      "description": "Bravo, votre devis est complet. Il est conforme aux aides de rénovation énergétique et pourra être instruit sans demande complémentaire.",
+      "description_ok_more": "Prochaine étape : créer votre dossier d'aide pour instruction.",
+      "image_alt": "Devis complet",
       "image_src": "/images/quote_status_ok.png",
       "title": "Il est top ce devis !"
     },
@@ -270,7 +270,7 @@
       "image_src": "/images/quote_link_ko.png",
       "title": "Psst, c’est bon vous avez tout corrigé ?",
       "link_href": "/bienvenue",
-      "link_label": "Vérifier un nouveau devis"
+      "link_label": "Vérifier le devis corrigé"
     },
     "quote_status_link_ok": {
       "image_alt": "Quote ok",
