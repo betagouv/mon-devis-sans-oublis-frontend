@@ -10,6 +10,7 @@ import Modal, { ModalProps } from './Modal';
 
 const defaultProps: ModalProps = {
   buttonBackText: 'Back to corrections',
+  buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
   buttonContactText: 'Contact us',
   correctionHelpful: 'Was this correction helpful?',
   iconAlt: 'Correction details icon',
@@ -39,13 +40,17 @@ describe('Modal Component', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.problem.title)).toBeInTheDocument();
-    expect(
-      screen.getByText(defaultProps.problem.description)
-    ).toBeInTheDocument();
+    if (defaultProps.problem.description) {
+      expect(
+        screen.getByText(defaultProps.problem.description)
+      ).toBeInTheDocument();
+    }
     expect(screen.getByText(defaultProps.solution.title)).toBeInTheDocument();
-    expect(
-      screen.getByText(defaultProps.solution.description)
-    ).toBeInTheDocument();
+    if (defaultProps.solution.description) {
+      expect(
+        screen.getByText(defaultProps.solution.description)
+      ).toBeInTheDocument();
+    }
     expect(screen.getByAltText(defaultProps.iconAlt)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.buttonBackText)).toBeInTheDocument();
     expect(

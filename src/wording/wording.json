@@ -179,7 +179,7 @@
       "beta": "beta",
       "buttons": [
         {
-          "href": "/contact",
+          "href": "mailto:contact@mon-devis-sans-oublis.beta.gouv.fr",
           "icon": "fr-icon-question-line",
           "label": "Nous contacter"
         }
@@ -239,6 +239,7 @@
     "button_copy_url": "Copier le lien de la page",
     "modal": {
       "button_back_text": "Détail de la correction",
+      "button_contact_href": "mailto:contact@mon-devis-sans-oublis.beta.gouv.fr",
       "button_contact_text": "Nous contacter",
       "correction_helpful": "Cette correction vous a-t-elle aidé ?",
       "icon_alt": "Icône de correction",

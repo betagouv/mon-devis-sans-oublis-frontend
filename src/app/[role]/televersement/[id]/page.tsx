@@ -31,6 +31,7 @@ export default function Devis() {
 
   const commonModalContent = {
     buttonBackText: wording.upload_id.modal.button_back_text,
+    buttonContactHref: wording.upload_id.modal.button_contact_href,
     buttonContactText: wording.upload_id.modal.button_contact_text,
     correctionHelpful: wording.upload_id.modal.correction_helpful,
     iconAlt: wording.upload_id.modal.icon_alt,
