@@ -59,7 +59,7 @@ const Accordion = ({ badgeLabel, children, title }: AccordionProps) => {
           onClick={() => setIsOpen(!isOpen)}
           type='button'
         >
-          <div className='flex md:flex-row flex-col md:items-center items-start gap-2 md:gap-4'>
+          <div className='flex md:flex-row flex-col md:items-center items-start gap-2 md:gap-4 px-2'>
             {truncateTitle(title)}
             {badgeLabel && (
               <Badge
