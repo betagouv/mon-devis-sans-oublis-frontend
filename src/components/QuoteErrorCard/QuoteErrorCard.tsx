@@ -50,7 +50,7 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between items-start'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] px-6 py-4 flex justify-between items-start'>
         <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
           <p>
             {list.length > 0 &&

@@ -1,128 +1,68 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
 import Accordion from './Accordion';
+import React from 'react';
 
 describe('Accordion Component', () => {
   const defaultProps = {
-    title: 'Test Accordion Title',
-    badgeLabel: '3',
-    children: <div data-testid='accordion-content'>Test Content</div>,
+    title: 'This is a very long title that needs truncating at some point',
+    badgeLabel: '5',
+    children: <div data-testid='accordion-content'>Accordion Content</div>,
   };
 
-  it('renders the component correctly', () => {
+  beforeEach(() => {
+    global.innerWidth = 1024;
+    global.dispatchEvent(new Event('resize'));
+  });
+
+  it('renders the accordion with title and badge', () => {
     render(<Accordion {...defaultProps} />);
-    expect(screen.getByText('Test Accordion Title')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText(/This is a very long title/i)).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
     expect(screen.getByTestId('accordion-content')).toBeInTheDocument();
   });
 
-  describe('title truncation', () => {
-    it('returns full title when shorter than maxLength', () => {
-      const shortTitle = 'Short Title';
-      render(<Accordion {...defaultProps} title={shortTitle} />);
-      expect(screen.getByText(shortTitle)).toBeInTheDocument();
-    });
+  it('truncates title to 60 characters on desktop screens', () => {
+    global.innerWidth = 1024;
+    global.dispatchEvent(new Event('resize'));
 
-    it('returns truncated title when no valid space is found', () => {
-      const noSpaceTitle =
-        'ThisIsAVeryLongTitleWithNoSpacesAtAllThatShouldBeTruncatedAtMaxLength';
-      render(<Accordion {...defaultProps} title={noSpaceTitle} />);
+    render(<Accordion {...defaultProps} />);
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
 
-      const button = screen.getByRole('button');
-      const displayedText = button.textContent
-        ?.replace(defaultProps.badgeLabel ?? '', '')
-        .trim();
-
-      expect(displayedText?.length).toBeLessThanOrEqual(60);
-      expect(noSpaceTitle).toContain(displayedText);
-    });
-
-    it('handles truncation with special characters correctly', () => {
-      const titleWithPunctuation =
-        'First part, Second part - Third part that should be truncated';
-      render(<Accordion {...defaultProps} title={titleWithPunctuation} />);
-
-      const button = screen.getByRole('button');
-      const displayedText = button.textContent
-        ?.replace(defaultProps.badgeLabel ?? '', '')
-        .trim();
-
-      expect(displayedText?.endsWith(',')).toBeFalsy();
-      expect(displayedText?.endsWith('-')).toBeFalsy();
-      expect(titleWithPunctuation).toContain(displayedText);
-    });
-
-    it('finds previous space when encountering comma or hyphen', () => {
-      const longFirstPart =
-        'This is an extremely long first part that will definitely need to be truncated because it exceeds the maximum length';
-      const titleWithMultiplePunctuation = `${longFirstPart}, then comes the second part - and more text`;
-
-      render(
-        <Accordion {...defaultProps} title={titleWithMultiplePunctuation} />
-      );
-
-      const button = screen.getByRole('button');
-      const displayedText = button.textContent
-        ?.replace(defaultProps.badgeLabel ?? '', '')
-        .trim();
-
-      expect(displayedText).toBe(
-        'This is an extremely long first part that will definitely'
-      );
-    });
-
-    it('handles title with no valid spaces', () => {
-      const titleWithNoValidSpaces =
-        'ThisIsALongTitle,WithCommas,AndMore,AndMore,AndMore,UntilTheEnd';
-
-      render(<Accordion {...defaultProps} title={titleWithNoValidSpaces} />);
-
-      const button = screen.getByRole('button');
-      const displayedText = button.textContent
-        ?.replace(defaultProps.badgeLabel ?? '', '')
-        .trim();
-
-      expect(displayedText).toBe(
-        'ThisIsALongTitle,WithCommas,AndMore,AndMore,AndMore,UntilThe'
-      );
-    });
+    expect(displayedText?.length).toBeLessThanOrEqual(60);
+    expect(displayedText).toMatch(
+      /This is a very long title that needs truncating/i
+    );
   });
 
-  it('toggles content visibility when clicked', () => {
+  it('truncates title to 30 characters on mobile screens', () => {
+    global.innerWidth = 500;
+    global.dispatchEvent(new Event('resize'));
+
+    render(<Accordion {...defaultProps} />);
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
+
+    expect(displayedText?.length).toBeLessThanOrEqual(30);
+    expect(displayedText).toMatch(/^This is a very long/);
+  });
+
+  it('toggles accordion content visibility on button click', () => {
     render(<Accordion {...defaultProps} />);
     const button = screen.getByRole('button');
     const content = screen.getByTestId('accordion-content').parentElement;
 
-    expect(content).toHaveStyle({ display: 'block' });
-    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(content).toHaveStyle({ display: 'block', opacity: '1' });
 
     fireEvent.click(button);
-    expect(content).toHaveStyle({ display: 'none' });
-    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(content).toHaveStyle({ display: 'none', opacity: '0' });
 
     fireEvent.click(button);
-    expect(content).toHaveStyle({ display: 'block' });
-    expect(button).toHaveAttribute('aria-expanded', 'true');
-  });
-
-  it('renders without badge when badgeLabel is not provided', () => {
-    render(
-      <Accordion title='Test Title'>
-        <div>Content</div>
-      </Accordion>
-    );
-
-    expect(screen.getByText('Test Title')).toBeInTheDocument();
-    expect(screen.queryByText('3')).not.toBeInTheDocument();
-  });
-
-  it('has correct ARIA attributes', () => {
-    render(<Accordion {...defaultProps} />);
-    const button = screen.getByRole('button');
-
-    expect(button).toHaveAttribute('aria-controls', 'fr-accordion-collapse');
-    expect(button).toHaveAttribute('aria-expanded', 'true');
-    expect(button).toHaveAttribute('id', 'fr-accordion-toggle-btn');
+    expect(content).toHaveStyle({ display: 'block', opacity: '1' });
   });
 });

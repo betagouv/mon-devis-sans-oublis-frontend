@@ -51,7 +51,12 @@ describe('Confetti Component', () => {
       const delay = confetti.style.animationDelay;
       const duration = confetti.style.animationDuration;
 
-      expect(parseFloat(delay)).toBeGreaterThanOrEqual(0);
+      const parsedDelay = parseFloat(delay);
+      const parsedDuration = parseFloat(duration);
+
+      expect(isNaN(parsedDuration)).toBe(false);
+      expect(isNaN(parsedDelay)).toBe(false);
+      expect(parsedDelay).toBeGreaterThanOrEqual(0);
       expect(parseFloat(delay)).toBeLessThanOrEqual(2);
       expect(parseFloat(duration)).toBeGreaterThanOrEqual(2);
       expect(parseFloat(duration)).toBeLessThanOrEqual(5);
