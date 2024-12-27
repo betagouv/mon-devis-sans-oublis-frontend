@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export interface IssueResolution {
   description: string | null;
@@ -10,6 +11,7 @@ export interface IssueResolution {
 
 export interface ModalProps {
   buttonBackText: string;
+  buttonContactHref: string;
   buttonContactText: string;
   correctionHelpful: string;
   iconAlt: string;
@@ -23,6 +25,7 @@ export interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({
   buttonBackText,
+  buttonContactHref,
   buttonContactText,
   correctionHelpful,
   iconAlt,
@@ -111,9 +114,12 @@ const Modal: React.FC<ModalProps> = ({
                   <button className='fr-btn fr-btn--tertiary fr-icon-thumb-up-line text-[var(--text-title-blue-france)]'></button>
                   <button className='fr-btn fr-btn--tertiary fr-icon-thumb-down-line text-[var(--text-title-blue-france)]'></button>
                 </span>
-                <button className='fr-btn fr-icon-mail-line fr-btn--icon-right fr-btn--tertiary'>
+                <Link
+                  className='fr-btn fr-icon-mail-line fr-btn--icon-right fr-btn--tertiary'
+                  href={buttonContactHref}
+                >
                   {buttonContactText}
-                </button>
+                </Link>
               </span>
             </div>
           </div>

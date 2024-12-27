@@ -34,6 +34,7 @@ describe('QuoteErrorItem Component', () => {
     provided_value: 'value',
     modalContent: {
       buttonBackText: 'Retour',
+      buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
       buttonContactText: 'Contacter',
       correctionHelpful: 'Cette correction a-t-elle été utile ?',
       iconAlt: 'Erreur icône',

@@ -23,6 +23,7 @@ const dataSingleCategory = [
     provided_value: null,
     modalContent: {
       buttonBackText: 'Retour',
+      buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
       buttonContactText: 'Nous contacter',
       code: 'devis_manquant',
       correctionHelpful: 'Cette correction vous a-t-elle aidé ?',
@@ -50,6 +51,7 @@ const dataSingleCategory = [
     provided_value: '',
     modalContent: {
       buttonBackText: 'Retour',
+      buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
       buttonContactText: 'Nous contacter',
       correctionHelpful: 'Cette correction vous a-t-elle aidé ?',
       iconAlt: 'Icône de correction',
@@ -186,6 +188,7 @@ const mapErrorsToQuoteErrorCard = (errors: typeof dataMultipleCategories) => {
     provided_value: error.provided_value || null,
     modalContent: {
       buttonBackText: 'Retour',
+      buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
       buttonContactText: 'Nous contacter',
       code: error.code,
       correctionHelpful: 'Cette correction vous a-t-elle aidé ?',

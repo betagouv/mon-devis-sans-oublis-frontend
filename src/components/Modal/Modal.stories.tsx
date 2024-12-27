@@ -15,6 +15,7 @@ type Story = StoryObj<typeof Modal>;
 export const Default: Story = {
   args: {
     buttonBackText: 'Voir les détails',
+    buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
     buttonContactText: 'Nous contacter',
     correctionHelpful: 'Cette correction vous a-t-elle aidé ?',
     iconAlt: 'Icone de la correction',

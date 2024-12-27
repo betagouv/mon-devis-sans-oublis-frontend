@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+
 import Accordion from './Accordion';
-import React from 'react';
 
 describe('Accordion Component', () => {
   const defaultProps = {
-    title: 'This is a very long title that needs truncating at some point',
     badgeLabel: '5',
     children: <div data-testid='accordion-content'>Accordion Content</div>,
+    title: 'This is a very long title that needs truncating at some point',
   };
 
   beforeEach(() => {

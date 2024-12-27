@@ -24,7 +24,7 @@ const QuoteErrorItem = ({
       : wording.components.quote_error_card.type_wrong.label;
 
   return (
-    <li className='flex p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
+    <li className='flex p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
       <div className='flex-1'>
         <span className='inline-flex flex-wrap items-center gap-4'>
           <p className='text-[var(--text-title-grey)]'>{item.title}</p>
