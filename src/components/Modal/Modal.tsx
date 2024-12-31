@@ -18,6 +18,7 @@ export interface ModalProps {
   iconSrc: string;
   isOpen: boolean;
   onClose?: () => void;
+  onSubmitFeedback?: (comment: string, isHelpful: boolean) => void;
   problem: IssueResolution;
   solution: IssueResolution;
   title: string;
@@ -32,10 +33,13 @@ const Modal: React.FC<ModalProps> = ({
   iconSrc,
   isOpen,
   onClose,
+  onSubmitFeedback,
   problem,
   solution,
   title,
 }) => {
+  const [activeButton, setActiveButton] = useState<boolean | null>(null);
+  const [comment, setComment] = useState<string>('');
   const [shouldRender, setShouldRender] = useState<boolean>(false);
   const [visibleClass, setVisibleClass] = useState<boolean>(false);
 
@@ -49,20 +53,34 @@ const Modal: React.FC<ModalProps> = ({
       setVisibleClass(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
+        setActiveButton(null);
       }, 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
+  const handleFeedbackClick = (isHelpful: boolean) => {
+    setActiveButton(activeButton === isHelpful ? null : isHelpful);
+  };
+
+  const handleSubmit = () => {
+    if (activeButton && onSubmitFeedback) {
+      onSubmitFeedback(comment, activeButton);
+      setActiveButton(null);
+      setComment('');
+    }
+  };
+
   return (
     <>
       {shouldRender && (
         <div
-          className='fixed inset-0 flex items-center justify-end bg-black bg-opacity-50'
+          data-testid='modal-overlay'
+          className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity'
           onClick={onClose}
-          style={{ zIndex: 100 }}
         >
           <div
+            data-testid='modal-content'
             className={`flex flex-col px-8 py-4 bg-[var(--background-default-grey)] h-full max-w-md transform transition-transform duration-300 ease-in-out w-[480px] ${
               visibleClass ? 'translate-x-0' : 'translate-x-full'
             }`}
@@ -111,16 +129,56 @@ const Modal: React.FC<ModalProps> = ({
               </p>
               <span className='flex justify-between'>
                 <span className='flex gap-2'>
-                  <button className='fr-btn fr-btn--tertiary fr-icon-thumb-up-line text-[var(--text-title-blue-france)]'></button>
-                  <button className='fr-btn fr-btn--tertiary fr-icon-thumb-down-line text-[var(--text-title-blue-france)]'></button>
+                  <button
+                    className={`fr-btn fr-btn--tertiary fr-icon-thumb-up-line ${
+                      activeButton === true
+                        ? 'bg-[var(--background-alt-grey)]'
+                        : 'text-[var(--text-title-blue-france)]'
+                    }`}
+                    data-testid='thumbs-up-button'
+                    onClick={() => handleFeedbackClick(true)}
+                  />
+
+                  <button
+                    className={`fr-btn fr-btn--tertiary fr-icon-thumb-down-line ${
+                      activeButton === false
+                        ? 'bg-[var(--background-alt-grey)]'
+                        : 'text-[var(--text-title-blue-france)]'
+                    }`}
+                    data-testid='thumbs-down-button'
+                    onClick={() => handleFeedbackClick(false)}
+                  />
                 </span>
-                <Link
-                  className='fr-btn fr-icon-mail-line fr-btn--icon-right fr-btn--tertiary'
-                  href={buttonContactHref}
-                >
-                  {buttonContactText}
-                </Link>
               </span>
+              {activeButton !== null && (
+                <div
+                  className='fr-input-group mt-4 flex flex-col'
+                  id='input-group-160'
+                >
+                  <label className='fr-label' htmlFor='storybook-input'>
+                    Aidez-nous à améliorer cette correction en nous partageant
+                    votre avis (optionnel) :
+                  </label>
+                  <textarea
+                    aria-describedby='storybook-input-messages'
+                    className='fr-input'
+                    id='storybook-input'
+                    onChange={(e) => setComment(e.target.value)}
+                    value={comment}
+                  />
+                  <div
+                    className='fr-messages-group'
+                    id='storybook-input-messages'
+                    aria-live='polite'
+                  />
+                  <button
+                    className='fr-btn fr-btn--primary self-end mt-4'
+                    onClick={handleSubmit}
+                  >
+                    Envoyer ma réponse
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

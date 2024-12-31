@@ -6,8 +6,17 @@ const nextConfig: NextConfig = {
   async rewrites() {
     const quoteChecks = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS;
     const quoteChecksId = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
+    const quoteChecksIdFeedbacks =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_FEEDBACKS;
+    const quoteChecksIdErrorDetailsIdFeedbacks =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID_FEEDBACKS;
 
-    if (!quoteChecks || !quoteChecksId) {
+    if (
+      !quoteChecks ||
+      !quoteChecksId ||
+      !quoteChecksIdFeedbacks ||
+      !quoteChecksIdErrorDetailsIdFeedbacks
+    ) {
       throw new Error('API URLs are not defined in the environment variables.');
     }
 
@@ -18,7 +27,16 @@ const nextConfig: NextConfig = {
       },
       {
         destination: quoteChecksId,
-        source: '/api/quote_checks/:id',
+        source: '/api/quote_checks/:quote_check_id',
+      },
+      {
+        destination: quoteChecksIdFeedbacks,
+        source: '/api/quote_checks/:quote_check_id/feedbacks',
+      },
+      {
+        destination: quoteChecksIdErrorDetailsIdFeedbacks,
+        source:
+          '/api/quote_checks/:quote_check_id/error_details/:error_detail_id/feedbacks',
       },
     ];
   },

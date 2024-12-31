@@ -6,11 +6,13 @@ import wording from '@/wording';
 const QuoteErrorItem = ({
   closeModal,
   item,
+  onHelpClick,
   openModal,
   openModalId,
 }: {
   closeModal: () => void;
   item: QuoteErrorCardProps['list'][0];
+  onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
   openModal: () => void;
   openModalId: string | null;
 }) => {
@@ -22,6 +24,10 @@ const QuoteErrorItem = ({
     item.type === Type.MISSING
       ? wording.components.quote_error_card.type_missing.label
       : wording.components.quote_error_card.type_wrong.label;
+
+  const handleFeedbackSubmit = (comment: string, isHelpful: boolean) => {
+    onHelpClick(comment, item.id, isHelpful);
+  };
 
   return (
     <li className='flex p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
@@ -46,6 +52,7 @@ const QuoteErrorItem = ({
           {...item.modalContent}
           isOpen={openModalId === item.id.toString()}
           onClose={closeModal}
+          onSubmitFeedback={handleFeedbackSubmit}
         />
       )}
     </li>

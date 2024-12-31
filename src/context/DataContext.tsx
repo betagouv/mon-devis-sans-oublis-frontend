@@ -4,12 +4,13 @@ import React, {
   createContext,
   ReactNode,
   useContext,
-  useState,
   useEffect,
+  useState,
 } from 'react';
 
 export enum Category {
   ADMIN = 'admin',
+  FILE = 'fichier',
   GESTES = 'gestes',
 }
 
@@ -50,6 +51,23 @@ export interface QuoteChecksId {
   errors: string[];
   error_details: ErrorDetails[];
   error_messages: Record<string, string>;
+}
+
+export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface ErrorFeedbacks {
+  id: string;
+  quote_check_id: string;
+  comment: string | null;
+  is_helpful: boolean;
+}
+
+export interface GlobalErrorFeedbacks {
+  id: string;
+  quote_check_id: string;
+  comment: string | null;
+  email: string | null;
+  rating: Rating;
 }
 
 interface DataContextType {
@@ -112,7 +130,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={{ data, updateDevis, clearPendingDevis }}>
+    <DataContext.Provider value={{ clearPendingDevis, data, updateDevis }}>
       {children}
     </DataContext.Provider>
   );

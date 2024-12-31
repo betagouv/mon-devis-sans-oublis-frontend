@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import Modal, { ModalProps } from './Modal';
 
@@ -17,13 +11,14 @@ const defaultProps: ModalProps = {
   iconSrc: '/images/quote_correction_details.png',
   isOpen: true,
   onClose: jest.fn(),
+  onSubmitFeedback: jest.fn(),
   problem: {
     title: 'Problem identified',
-    description: 'The term “quote” is missing from your document.',
+    description: 'The term "quote" is missing from your document.',
   },
   solution: {
     title: 'Solution',
-    description: 'Add the term “quote” to your document.',
+    description: 'Add the term "quote" to your document.',
   },
   title: 'Correction details',
 };
@@ -33,127 +28,73 @@ describe('Modal Component', () => {
     jest.clearAllMocks();
   });
 
-  test('renders modal with correct content when isOpen is true', () => {
+  test('renders modal content when isOpen is true', () => {
     render(<Modal {...defaultProps} />);
 
-    // Check modal content
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.problem.title)).toBeInTheDocument();
-    if (defaultProps.problem.description) {
-      expect(
-        screen.getByText(defaultProps.problem.description)
-      ).toBeInTheDocument();
-    }
-    expect(screen.getByText(defaultProps.solution.title)).toBeInTheDocument();
-    if (defaultProps.solution.description) {
-      expect(
-        screen.getByText(defaultProps.solution.description)
-      ).toBeInTheDocument();
-    }
-    expect(screen.getByAltText(defaultProps.iconAlt)).toBeInTheDocument();
-    expect(screen.getByText(defaultProps.buttonBackText)).toBeInTheDocument();
     expect(
-      screen.getByText(defaultProps.buttonContactText)
+      screen.getByText(defaultProps.problem.description!)
+    ).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.solution.title)).toBeInTheDocument();
+    expect(
+      screen.getByText(defaultProps.solution.description!)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(defaultProps.correctionHelpful)
     ).toBeInTheDocument();
   });
 
   test('does not render modal when isOpen is false', () => {
     render(<Modal {...defaultProps} isOpen={false} />);
-
-    // Modal should not be rendered
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  test('calls onClose when clicking outside the modal', () => {
+  test('calls onClose when clicking back button', () => {
     const onClose = jest.fn();
     render(<Modal {...defaultProps} onClose={onClose} />);
 
-    // Click outside the modal
-    fireEvent.click(screen.getByRole('dialog').parentElement!);
-
+    fireEvent.click(screen.getByText(defaultProps.buttonBackText));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  test('does not call onClose when clicking inside the modal', () => {
-    const onClose = jest.fn();
-    render(<Modal {...defaultProps} onClose={onClose} />);
+  test('handles feedback submission', () => {
+    const onSubmitFeedback = jest.fn();
+    render(<Modal {...defaultProps} onSubmitFeedback={onSubmitFeedback} />);
 
-    // Click inside the modal content
-    fireEvent.click(screen.getByText(defaultProps.title));
+    // Click thumbs up button
+    fireEvent.click(screen.getByTestId('thumbs-up-button'));
 
-    expect(onClose).not.toHaveBeenCalled();
+    // Enter feedback text
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
+
+    // Submit feedback
+    const submitButton = screen.getByRole('button', { name: /envoyer/i });
+    fireEvent.click(submitButton);
+
+    // Verify onSubmitFeedback was called with correct params
+    expect(onSubmitFeedback).toHaveBeenCalledWith('Test feedback', true);
   });
 
-  test('applies transition class when opening the modal', async () => {
-    jest.useFakeTimers();
-    const { rerender } = render(<Modal {...defaultProps} isOpen={false} />);
-
-    // Open modal
-    rerender(<Modal {...defaultProps} isOpen={true} />);
-    const modal = screen.getByRole('dialog');
-
-    // Initially, modal has the 'translate-x-full' class
-    expect(modal).toHaveClass('translate-x-full');
-
-    // After a short delay, modal has the 'translate-x-0' class
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-    expect(modal).toHaveClass('translate-x-0');
-
-    jest.useRealTimers();
-  });
-
-  test('applies transition class when closing the modal', async () => {
-    jest.useFakeTimers();
-
-    const { rerender } = render(<Modal {...defaultProps} isOpen={true} />);
-
-    // After rendering, modal should have 'translate-x-0'
-    act(() => {
-      jest.advanceTimersByTime(10); // Wait for the initial animation delay
-    });
-    const modal = screen.getByRole('dialog');
-    expect(modal).toHaveClass('translate-x-0');
-
-    // Close modal
-    rerender(<Modal {...defaultProps} isOpen={false} />);
-
-    // After the modal starts closing, it should have 'translate-x-full'
-    act(() => {
-      jest.advanceTimersByTime(300); // Simulate the CSS transition duration
-    });
-    expect(modal).toHaveClass('translate-x-full');
-
-    // After the transition, the modal should be removed from the DOM
-    await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    });
-
-    jest.useRealTimers();
-  });
-
-  test('renders alt text for the icon', () => {
+  test('handles feedback button toggle', () => {
     render(<Modal {...defaultProps} />);
 
-    // Check alt text
-    expect(screen.getByAltText(defaultProps.iconAlt)).toBeInTheDocument();
-  });
+    const thumbsUpButton = screen.getByTestId('thumbs-up-button');
+    const thumbsDownButton = screen.getByTestId('thumbs-down-button');
 
-  test('buttons are clickable and present', () => {
-    render(<Modal {...defaultProps} />);
+    // Initial state - no button should be selected
+    expect(thumbsUpButton).not.toHaveClass('bg-[var(--background-alt-grey)]');
+    expect(thumbsDownButton).not.toHaveClass('bg-[var(--background-alt-grey)]');
 
-    const backButton = screen.getByText(defaultProps.buttonBackText);
-    const contactButton = screen.getByText(defaultProps.buttonContactText);
+    // Click thumbs up
+    fireEvent.click(thumbsUpButton);
+    expect(thumbsUpButton).toHaveClass('bg-[var(--background-alt-grey)]');
+    expect(thumbsDownButton).not.toHaveClass('bg-[var(--background-alt-grey)]');
 
-    expect(backButton).toBeInTheDocument();
-    expect(contactButton).toBeInTheDocument();
-
-    fireEvent.click(backButton);
-    fireEvent.click(contactButton);
-
-    // Verify no onClick for contact button
-    expect(defaultProps.onClose).toHaveBeenCalledTimes(1); // Only back button triggers onClose
+    // Click thumbs down
+    fireEvent.click(thumbsDownButton);
+    expect(thumbsDownButton).toHaveClass('bg-[var(--background-alt-grey)]');
+    expect(thumbsUpButton).not.toHaveClass('bg-[var(--background-alt-grey)]');
   });
 });

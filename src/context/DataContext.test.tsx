@@ -1,6 +1,12 @@
 import { render, screen, act } from '@testing-library/react';
-
-import { DataProvider, useDataContext, Status, Profile } from './DataContext';
+import {
+  DataProvider,
+  useDataContext,
+  Status,
+  Profile,
+  Category,
+  Type,
+} from './DataContext';
 
 const TestComponent = () => {
   const { data, updateDevis, clearPendingDevis } = useDataContext();
@@ -15,7 +21,18 @@ const TestComponent = () => {
             profile: Profile.ARTISAN,
             valid: true,
             errors: [],
-            error_details: [],
+            error_details: [
+              {
+                id: '1',
+                category: Category.ADMIN,
+                type: Type.MISSING,
+                code: 'TEST_CODE',
+                title: 'Test Title',
+                problem: 'Test Problem',
+                solution: 'Test Solution',
+                provided_value: null,
+              },
+            ],
             error_messages: {},
           })
         }
@@ -30,7 +47,6 @@ const TestComponent = () => {
 
 describe('DataContext', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     localStorage.clear();
   });
 
@@ -39,10 +55,21 @@ describe('DataContext', () => {
       {
         id: '1',
         status: Status.PENDING,
-        profile: 'artisan',
+        profile: Profile.ARTISAN,
         valid: true,
         errors: [],
-        error_details: [],
+        error_details: [
+          {
+            id: '1',
+            category: Category.ADMIN,
+            type: Type.MISSING,
+            code: 'TEST_CODE',
+            title: 'Test Title',
+            problem: 'Test Problem',
+            solution: 'Test Solution',
+            provided_value: null,
+          },
+        ],
         error_messages: {},
       },
     ];
@@ -70,12 +97,33 @@ describe('DataContext', () => {
       screen.getByText('Update Devis').click();
     });
 
+    const expectedData = {
+      id: '1',
+      status: Status.VALID,
+      profile: Profile.ARTISAN,
+      valid: true,
+      errors: [],
+      error_details: [
+        {
+          id: '1',
+          category: Category.ADMIN,
+          type: Type.MISSING,
+          code: 'TEST_CODE',
+          title: 'Test Title',
+          problem: 'Test Problem',
+          solution: 'Test Solution',
+          provided_value: null,
+        },
+      ],
+      error_messages: {},
+    };
+
     expect(screen.getByTestId('data-display')).toHaveTextContent(
-      '{"id":"1","status":"valid","profile":"artisan","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
+      JSON.stringify([expectedData])
     );
-    expect(localStorage.getItem('quoteCheckData')).toContain(
-      '{"id":"1","status":"valid","profile":"artisan","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
-    );
+    expect(JSON.parse(localStorage.getItem('quoteCheckData') || '[]')).toEqual([
+      expectedData,
+    ]);
   });
 
   test('clears pending devis and updates localStorage', () => {
@@ -83,19 +131,41 @@ describe('DataContext', () => {
       {
         id: '1',
         status: Status.PENDING,
-        profile: 'artisan',
+        profile: Profile.ARTISAN,
         valid: true,
         errors: [],
-        error_details: [],
+        error_details: [
+          {
+            id: '1',
+            category: Category.ADMIN,
+            type: Type.MISSING,
+            code: 'TEST_CODE',
+            title: 'Test Title',
+            problem: 'Test Problem',
+            solution: 'Test Solution',
+            provided_value: null,
+          },
+        ],
         error_messages: {},
       },
       {
         id: '2',
         status: Status.VALID,
-        profile: 'conseiller',
+        profile: Profile.CONSEILLER,
         valid: true,
         errors: [],
-        error_details: [],
+        error_details: [
+          {
+            id: '2',
+            category: Category.GESTES,
+            type: Type.WRONG,
+            code: 'TEST_CODE_2',
+            title: 'Test Title 2',
+            problem: 'Test Problem 2',
+            solution: 'Test Solution 2',
+            provided_value: 'test value',
+          },
+        ],
         error_messages: {},
       },
     ];
@@ -111,21 +181,13 @@ describe('DataContext', () => {
       screen.getByText('Clear Pending Devis').click();
     });
 
+    const expectedData = [mockData[1]]; // Only the VALID status devis should remain
+
     expect(screen.getByTestId('data-display')).toHaveTextContent(
-      JSON.stringify([
-        {
-          id: '2',
-          status: Status.VALID,
-          profile: 'conseiller',
-          valid: true,
-          errors: [],
-          error_details: [],
-          error_messages: {},
-        },
-      ])
+      JSON.stringify(expectedData)
     );
-    expect(localStorage.getItem('quoteCheckData')).toContain(
-      '{"id":"2","status":"valid","profile":"conseiller","valid":true,"errors":[],"error_details":[],"error_messages":{}}'
+    expect(JSON.parse(localStorage.getItem('quoteCheckData') || '[]')).toEqual(
+      expectedData
     );
   });
 
