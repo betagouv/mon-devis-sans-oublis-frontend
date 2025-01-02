@@ -4,6 +4,27 @@
       "see_less": "Voir moins",
       "see_more": "Voir plus"
     },
+    "error_feedbacks_modal": {
+      "back_button_label": "Détails de la correction",
+      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
+      "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis (optionnel) :",
+      "icon_alt": "Icône de correction",
+      "icon_src": "/images/quote_correction_details.png",
+      "problem_title": "Problème identifié",
+      "solution_title": "Solution",
+      "submit_button": "Envoyer"
+    },
+    "global_error_feedbacks_modal": {
+      "back_button_label": "Fermer",
+      "comment_title": " Pouvez-vous nous en dire plus sur ce que vous avez pensé des corrections proposées ?",
+      "contact_title": "Pouvons-nous vous recontacter pour d’éventuelles questions ?",
+      "contact_title_optional": "Champ non obligatoire",
+      "description": "Notre outil est continuellement en train d’apprendre. Vos retours sont précieux pour améliorer ses réponses et vous accompagner au mieux dans la correction de vos devis.",
+      "email_placeholder": "Votre adresse email (ex : jean.dupont@mail.fr)",
+      "rating_title": "Sur une échelle de 0 à 5, notez la qualité des corrections proposées",
+      "submit_button": "Envoyer mes réponses",
+      "title": "Que pensez-vous de ces retours ?"
+    },
     "quote_error_card": {
       "badge_correction": "{number} correction",
       "badge_correction_plural": "{number} corrections",
@@ -26,6 +47,10 @@
         "icon": "fr-icon-edit-circle-line",
         "label": "Information erronée"
       }
+    },
+    "round_checkbox_group": {
+      "insufficient": "Insuffisante",
+      "satisfactory": "Très satisfaisante"
     }
   },
   "homepage": {
@@ -237,20 +262,6 @@
     ],
     "button_copied_url": "Lien copié",
     "button_copy_url": "Copier le lien de la page",
-    "modal": {
-      "button_back_text": "Détail de la correction",
-      "button_contact_href": "mailto:contact@mon-devis-sans-oublis.beta.gouv.fr",
-      "button_contact_text": "Nous contacter",
-      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
-      "icon_alt": "Icône de correction",
-      "icon_src": "/images/quote_correction_details.png",
-      "problem": {
-        "title": "Problème identifié"
-      },
-      "solution": {
-        "title": "Solution"
-      }
-    },
     "quote_status_card_ko": {
       "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
       "description_ko_more": "Nous vous conseillons de le refaire dès maintenant pour éviter les allers-retours avec votre client.",

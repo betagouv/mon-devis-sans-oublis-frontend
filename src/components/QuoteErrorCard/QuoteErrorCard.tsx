@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Accordion from '../Accordion/Accordion';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import { ModalProps } from '../Modal/Modal';
+import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import QuoteErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
 import { Category, Type } from '@/context';
@@ -18,7 +18,7 @@ export interface QuoteErrorCardProps {
     code: string;
     title: string;
     provided_value: string | null;
-    modalContent: ModalProps;
+    modalContent: ErrorFeedbacksModalProps;
   }[];
   onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
 }

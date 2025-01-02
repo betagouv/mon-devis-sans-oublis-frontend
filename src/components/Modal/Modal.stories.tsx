@@ -1,35 +1,44 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import Modal, { ModalPosition } from './Modal';
 
-import Modal from './Modal';
-
-const meta: Meta<typeof Modal> = {
+const meta = {
   title: 'Components/Modal',
   component: Modal,
   tags: ['autodocs'],
-};
+  parameters: {
+    layout: 'fullscreen',
+  },
+  argTypes: {
+    position: {
+      control: 'radio',
+      options: [ModalPosition.CENTER, ModalPosition.RIGHT],
+    },
+    isOpen: {
+      control: 'boolean',
+    },
+    backButtonLabel: {
+      control: 'text',
+    },
+  },
+} satisfies Meta<typeof Modal>;
 
 export default meta;
-
 type Story = StoryObj<typeof Modal>;
 
-export const Default: Story = {
+export const CenterModal: Story = {
   args: {
-    buttonBackText: 'Voir les détails',
-    buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
-    buttonContactText: 'Nous contacter',
-    correctionHelpful: 'Cette correction vous a-t-elle aidé ?',
-    iconAlt: 'Icone de la correction',
-    iconSrc: '/images/quote_correction_details.png',
+    backButtonLabel: 'Fermer',
     isOpen: true,
-    problem: {
-      description:
-        'Nous n’avons pas trouvé le terme “devis”, or les bons de commande et les propositions commerciales ne sont pas acceptées',
-      title: 'Problème identifié',
-    },
-    solution: {
-      description: 'Ajouter le terme “devis” à votre document',
-      title: 'Solution',
-    },
-    title: 'Le terme “devis” doit être indiqué clairement',
+    position: ModalPosition.CENTER,
+    children: <div className='p-4'>Contenu de la modale centrale</div>,
+  },
+};
+
+export const RightModal: Story = {
+  args: {
+    backButtonLabel: 'Retour',
+    isOpen: true,
+    position: ModalPosition.RIGHT,
+    children: <div className='p-4'>Contenu de la modale latérale</div>,
   },
 };

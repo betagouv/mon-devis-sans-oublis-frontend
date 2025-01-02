@@ -4,7 +4,8 @@ import { use, useEffect, useState } from 'react';
 
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
-import { QuoteChecksId, Status, useDataContext } from '@/context';
+import { GlobalErrorFeedbacksModal } from '@/components';
+import { QuoteChecksId, Rating, Status, useDataContext } from '@/context';
 
 export default function Devis({
   params: initialParams,
@@ -15,8 +16,30 @@ export default function Devis({
   const { data } = useDataContext();
 
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isButtonSticky, setIsButtonSticky] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = 0.8; // scroll 80%
+
+      if (scrollPosition >= scrollHeight * threshold) {
+        setIsButtonSticky(false);
+      } else {
+        setIsButtonSticky(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchDevis = () => {
@@ -58,11 +81,11 @@ export default function Devis({
   ) => {
     try {
       const response = await fetch(
-        `/api/quote_checks/${currentDevis.id}/error_details/${errorId}`,
+        `/api/quote_checks/${currentDevis.id}/error_details/${errorId}/feedbacks`,
         {
           method: 'POST',
           headers: {
-            accept: 'application/json',
+            'Content-Type': 'application/json',
             Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
           },
           body: JSON.stringify({
@@ -73,7 +96,50 @@ export default function Devis({
       );
 
       if (!response.ok) {
-        throw new Error('Failed to send feedback');
+        throw new Error('Failed to send feedbacks');
+      }
+    } catch (error) {
+      console.error('Error sending feedbacks:', error);
+      throw error;
+    }
+  };
+
+  const openModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmitFeedback = async (
+    comment: string | undefined,
+    email: string | undefined,
+    rating: Rating
+  ) => {
+    try {
+      const response = await fetch(
+        `/api/quote_checks/${currentDevis.id}/feedbacks`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+          },
+          body: JSON.stringify({
+            comment: comment || '',
+            email: email || '',
+            rating: rating,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(
+          `Failed to send feedback: ${response.status} ${response.statusText}`
+        );
       }
     } catch (error) {
       console.error('Error sending feedback:', error);
@@ -94,6 +160,28 @@ export default function Devis({
           uploadedFileName={uploadedFileName}
         />
       )}
+      <div className='fr-container flex flex-col relative'>
+        <div
+          className={`${
+            isButtonSticky ? 'fixed' : 'absolute'
+          } bottom-40 right-50 self-end z-9`}
+        >
+          <button
+            className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
+            onClick={openModal}
+          >
+            Donner mon avis
+          </button>
+        </div>
+        {isModalOpen && (
+          <GlobalErrorFeedbacksModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onSubmitFeedback={handleSubmitFeedback}
+            rating={0}
+          />
+        )}
+      </div>
     </div>
   );
 }

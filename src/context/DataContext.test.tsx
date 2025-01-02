@@ -1,204 +1,147 @@
-import { render, screen, act } from '@testing-library/react';
+import { act, ReactNode } from 'react';
+import { renderHook } from '@testing-library/react';
+
 import {
   DataProvider,
   useDataContext,
+  QuoteChecksId,
   Status,
   Profile,
   Category,
   Type,
 } from './DataContext';
 
-const TestComponent = () => {
-  const { data, updateDevis, clearPendingDevis } = useDataContext();
+// Mock localStorage
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: jest.fn((key: string) => store[key] || null),
+    setItem: jest.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    clear: jest.fn(() => {
+      store = {};
+    }),
+  };
+})();
 
-  return (
-    <div>
-      <button
-        onClick={() =>
-          updateDevis({
-            id: '1',
-            status: Status.VALID,
-            profile: Profile.ARTISAN,
-            valid: true,
-            errors: [],
-            error_details: [
-              {
-                id: '1',
-                category: Category.ADMIN,
-                type: Type.MISSING,
-                code: 'TEST_CODE',
-                title: 'Test Title',
-                problem: 'Test Problem',
-                solution: 'Test Solution',
-                provided_value: null,
-              },
-            ],
-            error_messages: {},
-          })
-        }
-      >
-        Update Devis
-      </button>
-      <button onClick={clearPendingDevis}>Clear Pending Devis</button>
-      <div data-testid='data-display'>{JSON.stringify(data)}</div>
-    </div>
-  );
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
+
+const mockQuote: QuoteChecksId = {
+  id: '123',
+  status: Status.PENDING,
+  profile: Profile.ARTISAN,
+  valid: false,
+  errors: ['error1'],
+  error_details: [
+    {
+      id: 'error1',
+      category: Category.FILE,
+      type: Type.MISSING,
+      code: 'ERR_001',
+      title: 'Error Title',
+      problem: 'Problem description',
+      solution: 'Solution description',
+      provided_value: null,
+    },
+  ],
+  error_messages: { key: 'message' },
 };
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <DataProvider>{children}</DataProvider>
+);
 
 describe('DataContext', () => {
   beforeEach(() => {
-    localStorage.clear();
+    localStorageMock.clear();
+    jest.clearAllMocks();
   });
 
-  test('loads data from localStorage on mount', () => {
-    const mockData = [
-      {
-        id: '1',
-        status: Status.PENDING,
-        profile: Profile.ARTISAN,
-        valid: true,
-        errors: [],
-        error_details: [
-          {
-            id: '1',
-            category: Category.ADMIN,
-            type: Type.MISSING,
-            code: 'TEST_CODE',
-            title: 'Test Title',
-            problem: 'Test Problem',
-            solution: 'Test Solution',
-            provided_value: null,
-          },
-        ],
-        error_messages: {},
-      },
-    ];
-    localStorage.setItem('quoteCheckData', JSON.stringify(mockData));
-
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
-
-    expect(screen.getByTestId('data-display')).toHaveTextContent(
-      JSON.stringify(mockData)
-    );
+  it('should initialize with empty data', () => {
+    const { result } = renderHook(() => useDataContext(), { wrapper });
+    expect(result.current.data).toEqual([]);
   });
 
-  test('updates devis and saves to localStorage', () => {
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
+  it('should load data from localStorage on mount', () => {
+    const storedData = [mockQuote];
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(storedData));
 
-    act(() => {
-      screen.getByText('Update Devis').click();
+    const { result } = renderHook(() => useDataContext(), { wrapper });
+    expect(result.current.data).toEqual(storedData);
+  });
+
+  it('should handle localStorage parsing error', () => {
+    const consoleSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    localStorageMock.getItem.mockReturnValueOnce('invalid JSON');
+
+    const { result } = renderHook(() => useDataContext(), { wrapper });
+    expect(result.current.data).toEqual([]);
+    expect(consoleSpy).toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
+  });
+
+  it('should update devis correctly', async () => {
+    const { result } = renderHook(() => useDataContext(), { wrapper });
+
+    await act(async () => {
+      result.current.updateDevis(mockQuote);
     });
 
-    const expectedData = {
-      id: '1',
-      status: Status.VALID,
-      profile: Profile.ARTISAN,
-      valid: true,
-      errors: [],
-      error_details: [
-        {
-          id: '1',
-          category: Category.ADMIN,
-          type: Type.MISSING,
-          code: 'TEST_CODE',
-          title: 'Test Title',
-          problem: 'Test Problem',
-          solution: 'Test Solution',
-          provided_value: null,
-        },
-      ],
-      error_messages: {},
-    };
-
-    expect(screen.getByTestId('data-display')).toHaveTextContent(
-      JSON.stringify([expectedData])
+    expect(result.current.data).toEqual([mockQuote]);
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'quoteCheckData',
+      JSON.stringify([mockQuote])
     );
-    expect(JSON.parse(localStorage.getItem('quoteCheckData') || '[]')).toEqual([
-      expectedData,
-    ]);
   });
 
-  test('clears pending devis and updates localStorage', () => {
-    const mockData = [
-      {
-        id: '1',
-        status: Status.PENDING,
-        profile: Profile.ARTISAN,
-        valid: true,
-        errors: [],
-        error_details: [
-          {
-            id: '1',
-            category: Category.ADMIN,
-            type: Type.MISSING,
-            code: 'TEST_CODE',
-            title: 'Test Title',
-            problem: 'Test Problem',
-            solution: 'Test Solution',
-            provided_value: null,
-          },
-        ],
-        error_messages: {},
-      },
-      {
-        id: '2',
-        status: Status.VALID,
-        profile: Profile.CONSEILLER,
-        valid: true,
-        errors: [],
-        error_details: [
-          {
-            id: '2',
-            category: Category.GESTES,
-            type: Type.WRONG,
-            code: 'TEST_CODE_2',
-            title: 'Test Title 2',
-            problem: 'Test Problem 2',
-            solution: 'Test Solution 2',
-            provided_value: 'test value',
-          },
-        ],
-        error_messages: {},
-      },
-    ];
-    localStorage.setItem('quoteCheckData', JSON.stringify(mockData));
+  it('should update existing devis', async () => {
+    const storedData = [mockQuote];
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(storedData));
 
-    render(
-      <DataProvider>
-        <TestComponent />
-      </DataProvider>
-    );
+    const { result } = renderHook(() => useDataContext(), { wrapper });
 
-    act(() => {
-      screen.getByText('Clear Pending Devis').click();
+    const updatedQuote = { ...mockQuote, status: Status.VALID };
+    await act(async () => {
+      result.current.updateDevis(updatedQuote);
     });
 
-    const expectedData = [mockData[1]]; // Only the VALID status devis should remain
-
-    expect(screen.getByTestId('data-display')).toHaveTextContent(
-      JSON.stringify(expectedData)
-    );
-    expect(JSON.parse(localStorage.getItem('quoteCheckData') || '[]')).toEqual(
-      expectedData
-    );
+    expect(result.current.data).toEqual([updatedQuote]);
   });
 
-  test('throws error when useDataContext is used outside of DataProvider', () => {
-    const TestComponentWithoutProvider = () => {
-      useDataContext();
-      return null;
-    };
+  it('should clear pending devis', async () => {
+    const initialData = [
+      mockQuote,
+      { ...mockQuote, id: '456', status: Status.VALID },
+    ];
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(initialData));
 
-    expect(() => render(<TestComponentWithoutProvider />)).toThrow(
-      'useDataContext must be used within a DataProvider'
-    );
+    const { result } = renderHook(() => useDataContext(), { wrapper });
+
+    await act(async () => {
+      result.current.clearPendingDevis();
+    });
+
+    const expectedData = initialData.filter((d) => d.status !== Status.PENDING);
+    expect(result.current.data).toEqual(expectedData);
   });
+
+  it('should throw error when used outside provider', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    expect(() => {
+      renderHook(() => useDataContext());
+    }).toThrow('useDataContext must be used within a DataProvider');
+
+    consoleError.mockRestore();
+  });
+
+  // Remove the server-side rendering test since we're using jsdom environment
 });

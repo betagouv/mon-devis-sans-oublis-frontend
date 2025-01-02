@@ -37,21 +37,6 @@ const InvalidQuote = ({
   uploadedFileName,
 }: InvalidQuoteProps) => {
   const errorDetails = (errors: ErrorDetails[]) => {
-    const commonModalContent = {
-      buttonBackText: wording.upload_id.modal.button_back_text,
-      buttonContactHref: wording.upload_id.modal.button_contact_href,
-      buttonContactText: wording.upload_id.modal.button_contact_text,
-      correctionHelpful: wording.upload_id.modal.correction_helpful,
-      iconAlt: wording.upload_id.modal.icon_alt,
-      iconSrc: wording.upload_id.modal.icon_src,
-      problem: {
-        title: wording.upload_id.modal.problem.title,
-      },
-      solution: {
-        title: wording.upload_id.modal.solution.title,
-      },
-    };
-
     return errors.map((error) => ({
       id: error.id,
       category: error.category,
@@ -60,15 +45,8 @@ const InvalidQuote = ({
       title: error.title,
       provided_value: error.provided_value || null,
       modalContent: {
-        ...commonModalContent,
-        problem: {
-          ...commonModalContent.problem,
-          description: error.problem || null,
-        },
-        solution: {
-          ...commonModalContent.solution,
-          description: error.solution || null,
-        },
+        problem: error.problem || null,
+        solution: error.solution || null,
         isOpen: false,
         title: error.title,
       },

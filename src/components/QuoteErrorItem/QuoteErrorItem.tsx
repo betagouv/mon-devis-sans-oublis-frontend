@@ -1,7 +1,15 @@
-import Modal from '../Modal/Modal';
+import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import { QuoteErrorCardProps } from '../QuoteErrorCard/QuoteErrorCard';
 import { Type } from '@/context';
 import wording from '@/wording';
+
+export type QuoteErrorItemProps = {
+  closeModal: () => void;
+  item: QuoteErrorCardProps['list'][0];
+  onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
+  openModal: (id: string) => void;
+  openModalId: string | null;
+};
 
 const QuoteErrorItem = ({
   closeModal,
@@ -9,13 +17,7 @@ const QuoteErrorItem = ({
   onHelpClick,
   openModal,
   openModalId,
-}: {
-  closeModal: () => void;
-  item: QuoteErrorCardProps['list'][0];
-  onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
-  openModal: () => void;
-  openModalId: string | null;
-}) => {
+}: QuoteErrorItemProps) => {
   const icon =
     item.type === Type.MISSING
       ? wording.components.quote_error_card.type_missing.icon
@@ -43,12 +45,12 @@ const QuoteErrorItem = ({
       </div>
       <button
         className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-        onClick={openModal}
+        onClick={() => openModal(item.id)}
       >
         {wording.components.quote_error_card.button_see_detail}
       </button>
       {openModalId === item.id.toString() && (
-        <Modal
+        <ErrorFeedbacksModal
           {...item.modalContent}
           isOpen={openModalId === item.id.toString()}
           onClose={closeModal}
