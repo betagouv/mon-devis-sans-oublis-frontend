@@ -1,106 +1,142 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
-import { ModalProps } from '../Modal/Modal';
+import { render, screen, fireEvent } from '@testing-library/react';
 import QuoteErrorItem from './QuoteErrorItem';
-import { Category, Type } from '@/context';
+import { Type, Category } from '@/context';
+import wording from '@/wording';
+import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 
-// Mock Modal
-const MockModal = ({ isOpen, onClose, title }: ModalProps) => {
-  if (!isOpen) return null;
-  return (
-    <div data-testid='modal'>
-      <p>{title}</p>
-      <button onClick={onClose}>Close</button>
-    </div>
-  );
-};
-
-MockModal.displayName = 'MockModal';
-
-jest.mock('../Modal/Modal', () => {
-  const MockModalComponent = (props: ModalProps) => <MockModal {...props} />;
-  MockModalComponent.displayName = 'MockModalComponent';
-  return MockModalComponent;
+// Mock des composants modaux
+jest.mock('../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal', () => {
+  return function MockErrorFeedbacksModal(props: ErrorFeedbacksModalProps) {
+    return (
+      <div data-testid='error-feedbacks-modal'>
+        <button
+          data-testid='thumbs-up-button'
+          onClick={() => props.onSubmitFeedback?.('Test comment', true)}
+        >
+          Helpful
+        </button>
+        <button
+          data-testid='thumbs-down-button'
+          onClick={() => props.onSubmitFeedback?.('Another comment', false)}
+        >
+          Not Helpful
+        </button>
+      </div>
+    );
+  };
 });
 
-describe('QuoteErrorItem Component', () => {
-  const mockItem = {
-    id: '1',
-    category: Category.ADMIN,
+jest.mock(
+  '../Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal',
+  () => {
+    return function MockGlobalErrorFeedbacksModal() {
+      return null;
+    };
+  }
+);
+
+const mockOnHelpClick = jest.fn();
+const mockCloseModal = jest.fn();
+const mockOpenModal = jest.fn();
+
+const defaultProps = {
+  closeModal: mockCloseModal,
+  openModal: mockOpenModal,
+  onHelpClick: mockOnHelpClick,
+  openModalId: null,
+  item: {
+    id: '123',
+    category: Category.FILE,
     type: Type.MISSING,
-    code: 'code',
-    title: 'Document manquant',
-    provided_value: 'value',
+    code: 'ERROR_001',
+    title: 'Test Error',
+    provided_value: null,
     modalContent: {
-      buttonBackText: 'Retour',
-      buttonContactHref: 'mailto:contact@mon-devis-sans-oublis.beta.gouv.fr',
-      buttonContactText: 'Contacter',
-      correctionHelpful: 'Cette correction a-t-elle été utile ?',
-      iconAlt: 'Erreur icône',
-      iconSrc: '/error-icon.svg',
+      problem: 'Test problem',
+      solution: 'Test solution',
+      provided_value: null,
+      title: 'Test Error',
       isOpen: false,
-      problem: { title: 'Problème', description: 'Description du problème' },
-      solution: {
-        title: 'Solution',
-        description: 'Description de la solution',
-      },
-      title: 'Document manquant',
+      onClose: () => {},
+      onSubmitFeedback: () => {},
     },
-  };
+  },
+};
 
-  const defaultProps = {
-    closeModal: jest.fn(),
-    item: mockItem,
-    openModal: jest.fn(),
-    openModalId: null as string | null,
-  };
+describe('QuoteErrorItem', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-  it('renders correctly with all props', () => {
+  it('sets correct icon and label for MISSING type', () => {
     render(<QuoteErrorItem {...defaultProps} />);
 
-    expect(screen.getByText('Document manquant')).toBeInTheDocument();
-    expect(screen.getByText('Voir le détail')).toBeInTheDocument();
-    expect(screen.getByText('Information manquante')).toBeInTheDocument();
+    const tag = screen.getByText(
+      wording.components.quote_error_card.type_missing.label
+    );
+    expect(tag).toHaveClass(
+      'fr-tag',
+      'fr-tag--sm',
+      wording.components.quote_error_card.type_missing.icon,
+      'fr-tag--icon-left'
+    );
   });
 
-  it('opens and closes modal correctly', () => {
-    const { rerender } = render(<QuoteErrorItem {...defaultProps} />);
+  it('sets correct icon and label for WRONG type', () => {
+    render(
+      <QuoteErrorItem
+        {...defaultProps}
+        item={{
+          ...defaultProps.item,
+          type: Type.WRONG,
+        }}
+      />
+    );
 
-    const viewDetailButton = screen.getByText('Voir le détail');
-    fireEvent.click(viewDetailButton);
-    expect(defaultProps.openModal).toHaveBeenCalled();
-
-    rerender(<QuoteErrorItem {...defaultProps} openModalId='1' />);
-    const modal = screen.getByTestId('modal');
-    expect(modal).toBeInTheDocument();
-    expect(within(modal).getByText('Document manquant')).toBeInTheDocument();
-
-    const closeButton = within(modal).getByText('Close');
-    fireEvent.click(closeButton);
-    expect(defaultProps.closeModal).toHaveBeenCalled();
+    const tag = screen.getByText(
+      wording.components.quote_error_card.type_wrong.label
+    );
+    expect(tag).toHaveClass(
+      'fr-tag',
+      'fr-tag--sm',
+      wording.components.quote_error_card.type_wrong.icon,
+      'fr-tag--icon-left'
+    );
   });
 
-  it('displays correct text based on type', () => {
-    render(<QuoteErrorItem {...defaultProps} />);
-    expect(screen.getByText('Information manquante')).toBeInTheDocument();
+  it('handles feedback submission through ErrorFeedbacksModal', () => {
+    render(
+      <QuoteErrorItem
+        {...defaultProps}
+        openModalId={defaultProps.item.id.toString()}
+      />
+    );
 
-    const wrongTypeItem = {
-      ...mockItem,
-      type: Type.WRONG,
-    };
-    render(<QuoteErrorItem {...defaultProps} item={wrongTypeItem} />);
-    expect(screen.getByText('Information erronée')).toBeInTheDocument();
+    const thumbsUpButton = screen.getByTestId('thumbs-up-button');
+    fireEvent.click(thumbsUpButton);
+
+    expect(mockOnHelpClick).toHaveBeenCalledWith(
+      'Test comment',
+      defaultProps.item.id,
+      true
+    );
   });
 
-  it('handles long titles correctly', () => {
-    const longTitleItem = {
-      ...mockItem,
-      title:
-        'This is a very long title that should be displayed properly in the component',
-    };
+  it('handles feedback submission with different parameters', () => {
+    render(
+      <QuoteErrorItem
+        {...defaultProps}
+        openModalId={defaultProps.item.id.toString()}
+      />
+    );
 
-    render(<QuoteErrorItem {...defaultProps} item={longTitleItem} />);
-    expect(screen.getByText(longTitleItem.title)).toBeInTheDocument();
+    const thumbsDownButton = screen.getByTestId('thumbs-down-button');
+    fireEvent.click(thumbsDownButton);
+
+    expect(mockOnHelpClick).toHaveBeenCalledWith(
+      'Another comment',
+      defaultProps.item.id,
+      false
+    );
   });
 });

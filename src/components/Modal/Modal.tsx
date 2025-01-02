@@ -1,40 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 
-export interface IssueResolution {
-  description: string | null;
-  title: string;
+export enum ModalPosition {
+  CENTER = 'center',
+  RIGHT = 'right',
 }
 
 export interface ModalProps {
-  buttonBackText: string;
-  buttonContactHref: string;
-  buttonContactText: string;
-  correctionHelpful: string;
-  iconAlt: string;
-  iconSrc: string;
+  backButtonLabel: string;
+  children: React.ReactNode;
+  className?: string;
   isOpen: boolean;
   onClose?: () => void;
-  problem: IssueResolution;
-  solution: IssueResolution;
-  title: string;
+  position: ModalPosition;
 }
 
 const Modal: React.FC<ModalProps> = ({
-  buttonBackText,
-  buttonContactHref,
-  buttonContactText,
-  correctionHelpful,
-  iconAlt,
-  iconSrc,
+  backButtonLabel,
+  children,
+  className,
   isOpen,
   onClose,
-  problem,
-  solution,
-  title,
+  position,
 }) => {
   const [shouldRender, setShouldRender] = useState<boolean>(false);
   const [visibleClass, setVisibleClass] = useState<boolean>(false);
@@ -55,77 +43,68 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen]);
 
   return (
-    <>
-      {shouldRender && (
+    shouldRender && (
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-10 ${
+          position === ModalPosition.CENTER
+            ? 'flex items-center justify-center'
+            : 'flex items-center justify-end'
+        } ${className}`}
+        data-testid='modal-overlay'
+        onClick={onClose}
+        style={{ zIndex: 100 }}
+      >
         <div
-          className='fixed inset-0 flex items-center justify-end bg-black bg-opacity-50'
-          onClick={onClose}
-          style={{ zIndex: 100 }}
+          className={`flex flex-col px-8 py-4 bg-[var(--background-default-grey)] transform transition-transform duration-300 ease-in-out ${
+            position === ModalPosition.CENTER
+              ? 'w-[792px] h-[624px]'
+              : 'w-[480px]'
+          } 
+              ${
+                position === ModalPosition.CENTER
+                  ? `rounded-lg ${
+                      visibleClass
+                        ? 'scale-100 opacity-100'
+                        : 'scale-95 opacity-0'
+                    }`
+                  : `h-full ${
+                      visibleClass ? 'translate-x-0' : 'translate-x-full'
+                    }`
+              }`}
+          data-testid='modal-content'
+          onClick={(e) => e.stopPropagation()}
+          role='dialog'
         >
           <div
-            className={`flex flex-col px-8 py-4 bg-[var(--background-default-grey)] h-full max-w-md transform transition-transform duration-300 ease-in-out w-[480px] ${
-              visibleClass ? 'translate-x-0' : 'translate-x-full'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-            role='dialog'
+            className={
+              position === ModalPosition.CENTER
+                ? 'flex justify-end fr-mb-4w'
+                : 'flex justify-start'
+            }
           >
-            <div>
-              <button
-                className='fr-link fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6 text-[var(--border-plain-grey)]'
-                onClick={onClose}
+            <button
+              className={`fr-link ${
+                position === ModalPosition.RIGHT
+                  ? 'fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6 text-[var(--border-plain-grey)]'
+                  : 'fr-link--sm fr-link--icon-right fr-icon-close-line mt-2'
+              }`}
+              onClick={onClose}
+            >
+              <span
+                className={`${
+                  position === ModalPosition.RIGHT
+                    ? 'text-[20px] ml-2.5 font-bold text-[var(--text-disabled-grey)]'
+                    : 'font-[500]'
+                }`}
               >
-                <span className='text-[20px] ml-2.5 font-bold text-[var(--text-disabled-grey)]'>
-                  {buttonBackText}
-                </span>
-              </button>
-            </div>
-            <div className='flex-grow'>
-              <Image
-                alt={iconAlt}
-                className='mt-10'
-                height={64}
-                src={iconSrc}
-                width={64}
-              />
-              <h4 className='mb-8'>{title}</h4>
-              {problem.description && (
-                <>
-                  <p className='fr-mb-1w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
-                    {problem.title}
-                  </p>
-                  <p>{problem.description}</p>
-                </>
-              )}
-              {solution.description && (
-                <>
-                  <p className='fr-mb-1w fr-mt-3w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
-                    {solution.title}
-                  </p>
-                  <p>{solution.description}</p>
-                </>
-              )}
-            </div>
-            <div className='mb-8'>
-              <p className='font-bold fr-mb-1w text-[var(--text-title-grey)]'>
-                {correctionHelpful}
-              </p>
-              <span className='flex justify-between'>
-                <span className='flex gap-2'>
-                  <button className='fr-btn fr-btn--tertiary fr-icon-thumb-up-line text-[var(--text-title-blue-france)]'></button>
-                  <button className='fr-btn fr-btn--tertiary fr-icon-thumb-down-line text-[var(--text-title-blue-france)]'></button>
-                </span>
-                <Link
-                  className='fr-btn fr-icon-mail-line fr-btn--icon-right fr-btn--tertiary'
-                  href={buttonContactHref}
-                >
-                  {buttonContactText}
-                </Link>
+                {backButtonLabel}
               </span>
-            </div>
+            </button>
           </div>
+          {children}
         </div>
-      )}
-    </>
+      </div>
+    )
   );
 };
 

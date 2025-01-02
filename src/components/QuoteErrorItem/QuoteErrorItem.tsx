@@ -1,19 +1,23 @@
-import Modal from '../Modal/Modal';
+import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import { QuoteErrorCardProps } from '../QuoteErrorCard/QuoteErrorCard';
 import { Type } from '@/context';
 import wording from '@/wording';
 
+export type QuoteErrorItemProps = {
+  closeModal: () => void;
+  item: QuoteErrorCardProps['list'][0];
+  onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
+  openModal: (id: string) => void;
+  openModalId: string | null;
+};
+
 const QuoteErrorItem = ({
   closeModal,
   item,
+  onHelpClick,
   openModal,
   openModalId,
-}: {
-  closeModal: () => void;
-  item: QuoteErrorCardProps['list'][0];
-  openModal: () => void;
-  openModalId: string | null;
-}) => {
+}: QuoteErrorItemProps) => {
   const icon =
     item.type === Type.MISSING
       ? wording.components.quote_error_card.type_missing.icon
@@ -22,6 +26,10 @@ const QuoteErrorItem = ({
     item.type === Type.MISSING
       ? wording.components.quote_error_card.type_missing.label
       : wording.components.quote_error_card.type_wrong.label;
+
+  const handleFeedbackSubmit = (comment: string, isHelpful: boolean) => {
+    onHelpClick(comment, item.id, isHelpful);
+  };
 
   return (
     <li className='flex p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
@@ -35,17 +43,20 @@ const QuoteErrorItem = ({
           </p>
         </span>
       </div>
+      {/* {item.modalContent.solution !== null && ( */}
       <button
         className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-        onClick={openModal}
+        onClick={() => openModal(item.id)}
       >
         {wording.components.quote_error_card.button_see_detail}
       </button>
+      {/* )} */}
       {openModalId === item.id.toString() && (
-        <Modal
+        <ErrorFeedbacksModal
           {...item.modalContent}
           isOpen={openModalId === item.id.toString()}
           onClose={closeModal}
+          onSubmitFeedback={handleFeedbackSubmit}
         />
       )}
     </li>

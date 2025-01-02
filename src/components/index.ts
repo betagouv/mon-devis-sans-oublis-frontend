@@ -40,13 +40,20 @@ export type { LinkProps } from './Link/Link';
 export { default as LoadingDots } from './LoadingDots/LoadingDots';
 export type { LoadingDotsProps } from './LoadingDots/LoadingDots';
 // Modal
-export { default as Modal } from './Modal/Modal';
-export type { IssueResolution, ModalProps } from './Modal/Modal';
+export { default as Modal, ModalPosition } from './Modal/Modal';
+export type { ModalProps } from './Modal/Modal';
+// Modal - ErrorFeedbacksModal
+export { default as ErrorFeedbacksModal } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+// Modal - GlobalErrorFeedbacksModal
+export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
+export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 // QuoteErrorCard
 export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
 export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
 // QuoteErrorItem
 export { default as QuoteErrorItem } from './QuoteErrorItem/QuoteErrorItem';
+export type { QuoteErrorItemProps } from './QuoteErrorItem/QuoteErrorItem';
 // QuoteStatusCard
 export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
 export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
@@ -62,6 +69,12 @@ export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
 // RoleCardImage
 export { default as RoleCardImage } from './RoleCardImage/RoleCardImage';
 export type { RoleCardImageProps } from './RoleCardImage/RoleCardImage';
+// RoundCheckboxGroup
+export { default as RoundCheckboxGroup } from './RoundCheckboxGroup/RoundCheckboxGroup';
+export type {
+  CheckboxOption,
+  RoundCheckboxGroupProps,
+} from './RoundCheckboxGroup/RoundCheckboxGroup';
 // Select
 export { default as Select } from './Select/Select';
 export type { SelectProps } from './Select/Select';

@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 import Accordion from '../Accordion/Accordion';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import { ModalProps } from '../Modal/Modal';
-import ErrorItem from '../QuoteErrorItem/QuoteErrorItem';
+import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+import QuoteErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
 import { Category, Type } from '@/context';
 import wording from '@/wording';
@@ -18,11 +18,12 @@ export interface QuoteErrorCardProps {
     code: string;
     title: string;
     provided_value: string | null;
-    modalContent: ModalProps;
+    modalContent: ErrorFeedbacksModalProps;
   }[];
+  onHelpClick: (comment: string, errorId: string, isHelpful: boolean) => void;
 }
 
-const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
+const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
   const openModal = (id: string) => {
@@ -87,10 +88,11 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
       <ul className='fr-raw-list'>
         {/* without provided_value */}
         {groupedProvidedValue.noValue?.map((item) => (
-          <ErrorItem
+          <QuoteErrorItem
             closeModal={closeModal}
             item={item}
             key={item.id}
+            onHelpClick={onHelpClick}
             openModal={() => openModal(item.id)}
             openModalId={openModalId}
           />
@@ -108,10 +110,11 @@ const QuoteErrorCard = ({ list }: QuoteErrorCardProps) => {
               title={value}
             >
               {items.map((item) => (
-                <ErrorItem
+                <QuoteErrorItem
                   closeModal={closeModal}
                   item={item}
                   key={item.id}
+                  onHelpClick={onHelpClick}
                   openModal={() => openModal(item.id)}
                   openModalId={openModalId}
                 />

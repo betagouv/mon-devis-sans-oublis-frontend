@@ -64,11 +64,11 @@ export default function Televersement({
 
         const response = await fetch('/api/quote_checks', {
           method: 'POST',
-          body: formData,
           headers: {
             accept: 'application/json',
             Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
           },
+          body: formData,
         });
 
         if (!response.ok) {
@@ -110,9 +110,9 @@ export default function Televersement({
           retryCount += 1;
         }
 
-        if (!detailedData || detailedData.status === 'pending') {
-          throw new Error('The analysis took too long.');
-        }
+        // if (!detailedData || detailedData.status === 'pending') {
+        //   throw new Error('The analysis took too long.');
+        // }
 
         // Redirect to the details page after successful processing
         router.push(`/${params.role}/televersement/${detailedData.id}`);
