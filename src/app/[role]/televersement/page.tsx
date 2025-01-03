@@ -150,7 +150,7 @@ export default function Televersement({
               description={wording.upload.section_upload.alert.description}
               moreDescription={wording.upload.section_upload.alert.more_info}
             />
-            <h2>Votre projet</h2>
+            {/*<h2>Votre projet</h2>
             <Select
               label={wording.upload.section_upload.select.label}
               onChange={handleSelectChange}
@@ -159,7 +159,7 @@ export default function Televersement({
                 { value: '2', label: 'Option 2' },
               ]}
               selectedValue={selectedOption}
-            />
+            />*/}
             <div className='fr-mt-8w flex justify-center'>
               <ul className='fr-btns-group fr-btns-group--inline-sm'>
                 <li>

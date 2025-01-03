@@ -81,7 +81,7 @@
     "section_examples": {
       "badges": [
         {
-          "label": "Ma prime renov"
+          "label": "Ma prime renov'"
         },
         {
           "label": "Eco PTZ"
@@ -92,8 +92,8 @@
       ],
       "cards": [
         {
-          "image": "isolation.png",
-          "title": "Isolation"
+          "image": "isolation_ITI.png",
+          "title": "Isolation par l'intérieur"
         },
         {
           "image": "menuiserie.png",
@@ -104,16 +104,16 @@
           "title": "Eau chaude sanitaire"
         },
         {
-          "image": "checker.png",
-          "title": "Système de chauffage"
+          "image": "poele_granule.png",
+          "title": "Poêle à granulés"
         },
         {
-          "image": "ventilation.png",
-          "title": "Ventilation"
+          "image": "pac.png",
+          "title": "Pompe à chaleur"
         },
         {
-          "image": "systeme_regulation.png",
-          "title": "Système de régulation"
+          "image": "isolation_ITE.png",
+          "title": "Isolation par l'extérieur"
         }
       ],
       "subtitle": "Exemple de gestes de rénovation énergétique",

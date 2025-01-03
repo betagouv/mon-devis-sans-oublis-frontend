@@ -36,21 +36,21 @@ const QuoteErrorItem = ({
       <div className='flex-1'>
         <span className='inline-flex flex-wrap items-center gap-4'>
           <p className='text-[var(--text-title-grey)]'>{item.title}</p>
-          <p
+          {/*<p
             className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left !bg-[var(--background-contrast-warning)] !text-xs`}
           >
             {label}
-          </p>
+          </p>*/}
         </span>
       </div>
-      {/* {item.modalContent.solution !== null && ( */}
+      {item.modalContent.solution !== null && (
       <button
         className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
         onClick={() => openModal(item.id)}
       >
         {wording.components.quote_error_card.button_see_detail}
       </button>
-      {/* )} */}
+      )}
       {openModalId === item.id.toString() && (
         <ErrorFeedbacksModal
           {...item.modalContent}
