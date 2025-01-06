@@ -1,14 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import { usePathname, useSearchParams } from 'next/navigation';
-
 import Matomo from './Matomo';
 
-// Define the type for the global _mtm variable
+// Define the type for the Matomo push arguments
+interface MatomoPushArgs {
+  'mtm.startTime'?: number;
+  event: string;
+  PageTitle?: string;
+  PageUrl?: string;
+  PageOrigin?: string;
+}
+
 declare global {
   interface Window {
-    _mtm?: {
-      push: (args: any) => void;
-    };
+    _mtm?: MatomoPushArgs[]; // Specify that _mtm is an array of MatomoPushArgs
   }
 }
 
@@ -56,7 +61,8 @@ describe('Matomo Component', () => {
 
     // Spy on the global _mtm array
     const pushSpy = jest.fn();
-    window._mtm = { push: pushSpy };
+    window._mtm = []; // Initialize as array
+    window._mtm.push = pushSpy; // Add push method
 
     // Render the Matomo component
     render(<Matomo />);
@@ -132,13 +138,12 @@ describe('Matomo Component', () => {
       mockScript,
       expect.any(Object)
     );
+
     // Check if mtm.Start event was pushed
-    expect(window._mtm).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          event: 'mtm.Start',
-        }),
-      ])
+    expect(window._mtm?.[0]).toEqual(
+      expect.objectContaining({
+        event: 'mtm.Start',
+      })
     );
   });
 });

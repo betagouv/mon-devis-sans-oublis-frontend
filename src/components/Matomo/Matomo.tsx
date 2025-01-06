@@ -9,7 +9,9 @@ function MatomoContent() {
 
   const trackPageView = useCallback(() => {
     // @ts-expect-error - Matomo types are not available, _mtm is a global variable
-    const _mtm = (window._mtm = window._mtm || []);
+    const _mtm = (window._mtm = window._mtm || []) as Array<
+      Record<string, unknown>
+    >;
     _mtm.push({
       'mtm.startTime': new Date().getTime(),
       event: 'mtm.PageView',
@@ -26,7 +28,9 @@ function MatomoContent() {
     }
 
     // @ts-expect-error - Matomo types are not available, _mtm is a global variable
-    const _mtm = (window._mtm = window._mtm || []);
+    const _mtm = (window._mtm = window._mtm || []) as Array<
+      Record<string, unknown>
+    >;
     _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
     const d = document;
     const g = d.createElement('script');
