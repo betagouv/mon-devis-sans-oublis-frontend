@@ -51,6 +51,7 @@ export interface QuoteChecksId {
   errors: string[];
   error_details: ErrorDetails[];
   error_messages: Record<string, string>;
+  uploadedFileName: string;
 }
 
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;

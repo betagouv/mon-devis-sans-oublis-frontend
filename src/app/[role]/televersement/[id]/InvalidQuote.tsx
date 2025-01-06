@@ -36,29 +36,30 @@ const InvalidQuote = ({
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) => {
-  const errorDetails = (errors: ErrorDetails[]) => {
-    return errors.map((error) => ({
-      id: error.id,
-      category: error.category,
-      type: error.type,
-      code: error.code,
-      title: error.title,
-      provided_value: error.provided_value || null,
-      modalContent: {
-        problem: error.problem || null,
-        solution: error.solution || null,
-        isOpen: false,
+  const errorDetails = (
+    errors: ErrorDetails[] | null = [],
+    category: Category
+  ) => {
+    return (errors || [])
+      .filter((error) => error.category === category)
+      .map((error) => ({
+        id: error.id,
+        category: error.category,
+        type: error.type,
+        code: error.code,
         title: error.title,
-      },
-    }));
+        provided_value: error.provided_value || null,
+        modalContent: {
+          problem: error.problem || null,
+          solution: error.solution || null,
+          isOpen: false,
+          title: error.title,
+        },
+      }));
   };
 
-  const adminErrors = errorDetails(
-    list.filter((error) => error.category === Category.ADMIN)
-  );
-  const gestesErrors = errorDetails(
-    list.filter((error) => error.category === Category.GESTES)
-  );
+  const adminErrors = errorDetails(list, Category.ADMIN);
+  const gestesErrors = errorDetails(list, Category.GESTES);
 
   return (
     <>
