@@ -39,6 +39,8 @@ export type { LinkProps } from './Link/Link';
 // LoadingDots
 export { default as LoadingDots } from './LoadingDots/LoadingDots';
 export type { LoadingDotsProps } from './LoadingDots/LoadingDots';
+// Matomo
+export { default as Matomo } from './Matomo/Matomo';
 // Modal
 export { default as Modal, ModalPosition } from './Modal/Modal';
 export type { ModalProps } from './Modal/Modal';
