@@ -1,10 +1,9 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
-import { GlobalErrorFeedbacksModal } from '@/components';
+import { GlobalErrorFeedbacksModal, LoadingDots } from '@/components';
 import { QuoteChecksId, Rating, Status, useDataContext } from '@/context';
 
 export default function Devis({
@@ -13,11 +12,12 @@ export default function Devis({
   params: Promise<{ id: string }>;
 }) {
   const params = use(initialParams);
-  const { data } = useDataContext();
+  const { data, updateDevis } = useDataContext();
 
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
   const [isButtonSticky, setIsButtonSticky] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isErrorDetailsLoading, setIsErrorDetailsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
 
@@ -42,32 +42,54 @@ export default function Devis({
   }, []);
 
   useEffect(() => {
-    const fetchDevis = () => {
+    const fetchDevis = async () => {
       const devis = data.find((devis) => devis.id === params.id);
-      setCurrentDevis(devis || null);
+
+      if (!devis) {
+        setCurrentDevis(null);
+        setIsLoading(false);
+        return;
+      }
+
+      setCurrentDevis(devis);
       setIsLoading(false);
+
+      if (!devis.error_details || devis.error_details.length === 0) {
+        let retryCount = 0;
+        const maxRetries = 10;
+        let detailedData = devis;
+
+        while (detailedData.error_details === null && retryCount < maxRetries) {
+          const response = await fetch(`/api/quote_checks/${devis.id}`, {
+            headers: {
+              accept: 'application/json',
+              Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+            },
+          });
+          detailedData = await response.json();
+
+          if (detailedData.error_details !== null) {
+            updateDevis({
+              ...detailedData,
+              uploadedFileName: devis.uploadedFileName,
+            });
+            setCurrentDevis({
+              ...detailedData,
+              uploadedFileName: devis.uploadedFileName,
+            });
+            break;
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          retryCount++;
+        }
+      }
+
+      setIsErrorDetailsLoading(false);
     };
 
     fetchDevis();
-  }, [data, params.id]);
-
-  if (isLoading) {
-    return (
-      <section className='fr-container-fluid fr-py-10w'>
-        <div className='flex flex-col items-center justify-center'>
-          <h1>Chargement du devis...</h1>
-        </div>
-      </section>
-    );
-  }
-
-  if (!currentDevis) {
-    return null;
-  }
-
-  const uploadedFileName = (
-    localStorage.getItem('uploadedFileName') || ''
-  ).substring(0, 20);
+  }, [data, params.id, updateDevis]);
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -81,17 +103,14 @@ export default function Devis({
   ) => {
     try {
       const response = await fetch(
-        `/api/quote_checks/${currentDevis.id}/error_details/${errorId}/feedbacks`,
+        `/api/quote_checks/${params.id}/error_details/${errorId}/feedbacks`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
           },
-          body: JSON.stringify({
-            comment: comment,
-            is_helpful: isHelpful,
-          }),
+          body: JSON.stringify({ comment, is_helpful: isHelpful }),
         }
       );
 
@@ -100,7 +119,6 @@ export default function Devis({
       }
     } catch (error) {
       console.error('Error sending feedbacks:', error);
-      throw error;
     }
   };
 
@@ -118,21 +136,18 @@ export default function Devis({
     rating: Rating
   ) => {
     try {
-      const response = await fetch(
-        `/api/quote_checks/${currentDevis.id}/feedbacks`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
-          },
-          body: JSON.stringify({
-            comment: comment || '',
-            email: email || '',
-            rating: rating,
-          }),
-        }
-      );
+      const response = await fetch(`/api/quote_checks/${params.id}/feedbacks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+        },
+        body: JSON.stringify({
+          comment: comment || '',
+          email: email || '',
+          rating: rating,
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -147,17 +162,19 @@ export default function Devis({
     }
   };
 
-  return (
+  console.log('Devis', currentDevis);
+
+  return !isLoading && currentDevis && !isErrorDetailsLoading ? (
     <div className='fr-container-fluid fr-py-10w'>
       {currentDevis.status === Status.VALID ? (
-        <ValidQuote uploadedFileName={uploadedFileName} />
+        <ValidQuote uploadedFileName={currentDevis.uploadedFileName} />
       ) : (
         <InvalidQuote
           isUrlCopied={isUrlCopied}
-          list={currentDevis.error_details}
+          list={currentDevis.error_details || []}
           onCopyUrl={copyUrlToClipboard}
           onHelpClick={handleHelpClick}
-          uploadedFileName={uploadedFileName}
+          uploadedFileName={currentDevis.uploadedFileName}
         />
       )}
       <div className='fr-container flex flex-col relative'>
@@ -183,5 +200,9 @@ export default function Devis({
         )}
       </div>
     </div>
+  ) : (
+    <section className='fr-container-fluid fr-py-10w h-[600px] flex items-center justify-center'>
+      <LoadingDots title='Chargement du devis' />
+    </section>
   );
 }

@@ -132,7 +132,7 @@ export default function Televersement({
   );
 
   return isLoading ? (
-    <section className='fr-container h-screen flex flex-col items-center justify-center'>
+    <section className='fr-container-fluid fr-py-10w h-[600px] flex flex-col items-center justify-center'>
       <LoadingDots title='Analyse en cours' />
       <p>Votre devis est en cours de traitement.</p>
     </section>
