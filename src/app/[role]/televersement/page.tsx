@@ -8,7 +8,7 @@ import {
   Link,
   LinkVariant,
   LoadingDots,
-  Select,
+  // Select,
   Upload,
 } from '@/components';
 import { Status, useDataContext } from '@/context';
@@ -28,7 +28,7 @@ export default function Televersement({
   const [fileUploadedError, setFileUploadedError] = useState<string | null>(
     null
   );
-  const [selectedOption, setSelectedOption] = useState<string>('');
+  // const [selectedOption, setSelectedOption] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFileUpload = useCallback(
@@ -42,9 +42,9 @@ export default function Televersement({
     [params.role]
   );
 
-  const handleSelectChange = (value: string) => {
-    setSelectedOption(value);
-  };
+  // const handleSelectChange = (value: string) => {
+  //   setSelectedOption(value);
+  // };
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {

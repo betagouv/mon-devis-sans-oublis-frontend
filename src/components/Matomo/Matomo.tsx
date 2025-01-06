@@ -1,18 +1,14 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Matomo() {
-  if (process.env.NODE_ENV !== 'production') {
-    return null;
-  }
-
+function MatomoContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const trackPageView = useCallback(() => {
-    // @ts-ignore
+    // @ts-expect-error - Matomo types are not available, _mtm is a global variable
     const _mtm = (window._mtm = window._mtm || []);
     _mtm.push({
       'mtm.startTime': new Date().getTime(),
@@ -29,12 +25,12 @@ export default function Matomo() {
       return;
     }
 
-    // @ts-ignore
-    var _mtm = (window._mtm = window._mtm || []);
+    // @ts-expect-error - Matomo types are not available, _mtm is a global variable
+    const _mtm = (window._mtm = window._mtm || []);
     _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
-    var d = document,
-      g = d.createElement('script'),
-      s = d.getElementsByTagName('script')[0];
+    const d = document;
+    const g = d.createElement('script');
+    const s = d.getElementsByTagName('script')[0];
     g.async = true;
     g.src = process.env.NEXT_PUBLIC_MATOMO_URL;
     s.parentNode?.insertBefore(g, s);
@@ -44,5 +40,19 @@ export default function Matomo() {
     trackPageView();
   }, [pathname, searchParams, trackPageView]);
 
+  if (process.env.NODE_ENV !== 'production') {
+    return null;
+  }
+
   return null;
+}
+
+// MatomoContent is wrapped in Suspense because useSearchParams() may suspend while
+// the route segment is loading on the server. This prevents client-side rendering bailout.
+export default function Matomo() {
+  return (
+    <Suspense fallback={null}>
+      <MatomoContent />
+    </Suspense>
+  );
 }
