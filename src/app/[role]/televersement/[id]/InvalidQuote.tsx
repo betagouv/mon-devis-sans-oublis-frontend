@@ -22,9 +22,9 @@ interface InvalidQuoteProps {
   list: ErrorDetails[];
   onCopyUrl: () => void;
   onHelpClick: (
-    comment: string,
+    comment: string | null,
     errorId: string,
-    isHelpful: boolean
+    isHelpful: boolean | null
   ) => Promise<void>;
   uploadedFileName: string;
 }
