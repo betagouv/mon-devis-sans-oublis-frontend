@@ -162,8 +162,6 @@ export default function Devis({
     }
   };
 
-  console.log('Devis', currentDevis);
-
   return !isLoading && currentDevis && !isErrorDetailsLoading ? (
     <div className='fr-container-fluid fr-py-10w'>
       {currentDevis.status === Status.VALID ? (
