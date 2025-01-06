@@ -8,8 +8,7 @@ export {
 } from './DataContext';
 export type {
   ErrorDetails,
-  ErrorFeedbacks,
-  GlobalErrorFeedbacks,
+  Feedbacks,
   QuoteChecksId,
   Rating,
 } from './DataContext';

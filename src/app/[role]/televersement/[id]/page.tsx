@@ -20,6 +20,8 @@ export default function Devis({
   const [isErrorDetailsLoading, setIsErrorDetailsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
+  const [showThankYouMessage, setShowThankYouMessage] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,9 +99,9 @@ export default function Devis({
   };
 
   const handleHelpClick = async (
-    comment: string,
+    comment: string | null,
     errorId: string,
-    isHelpful: boolean
+    isHelpful: boolean | null
   ) => {
     try {
       const response = await fetch(
@@ -131,9 +133,9 @@ export default function Devis({
   };
 
   const handleSubmitFeedback = async (
-    comment: string | undefined,
-    email: string | undefined,
-    rating: Rating
+    comment: string | null,
+    email: string | null,
+    rating: Rating | null
   ) => {
     try {
       const response = await fetch(`/api/quote_checks/${params.id}/feedbacks`, {
@@ -143,8 +145,8 @@ export default function Devis({
           Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
         },
         body: JSON.stringify({
-          comment: comment || '',
-          email: email || '',
+          comment: comment,
+          email: email,
           rating: rating,
         }),
       });
@@ -156,6 +158,12 @@ export default function Devis({
           `Failed to send feedback: ${response.status} ${response.statusText}`
         );
       }
+
+      setShowThankYouMessage(true);
+      setTimeout(() => {
+        setShowThankYouMessage(false);
+        closeModal();
+      }, 3000);
     } catch (error) {
       console.error('Error sending feedback:', error);
       throw error;
@@ -193,7 +201,7 @@ export default function Devis({
             isOpen={isModalOpen}
             onClose={closeModal}
             onSubmitFeedback={handleSubmitFeedback}
-            rating={0}
+            showThankYouMessage={showThankYouMessage}
           />
         )}
       </div>
