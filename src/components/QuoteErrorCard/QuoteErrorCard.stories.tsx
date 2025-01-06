@@ -15,9 +15,9 @@ export default meta;
 type Story = StoryObj<typeof QuoteErrorCard>;
 
 const mockOnHelpClick = (
-  comment: string,
+  comment: string | null,
   errorId: string,
-  isHelpful: boolean
+  isHelpful: boolean | null
 ) => {
   console.log('Help clicked:', { comment, errorId, isHelpful });
 };
