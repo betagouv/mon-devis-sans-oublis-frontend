@@ -36,8 +36,6 @@ export default function Televersement({
       setFile(uploadedFile);
       setFileUploadedError(null);
       setProfile(params.role);
-
-      localStorage.setItem('uploadedFileName', uploadedFile.name);
     },
     [params.role]
   );
@@ -82,7 +80,11 @@ export default function Televersement({
         }
 
         // Immediately add the quote as PENDING
-        updateDevis({ ...data, status: Status.PENDING });
+        updateDevis({
+          ...data,
+          status: Status.PENDING,
+          uploadedFileName: file.name,
+        });
 
         let detailedData;
         let retryCount = 0;
@@ -101,7 +103,10 @@ export default function Televersement({
 
           if (detailedData.status !== 'pending') {
             // If the quote is no longer pending, update and break
-            updateDevis(detailedData);
+            updateDevis({
+              ...detailedData,
+              uploadedFileName: file.name,
+            });
             break;
           }
 
