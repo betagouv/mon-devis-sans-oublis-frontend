@@ -11,21 +11,10 @@ export default function Notice() {
             <span className='fr-notice__title'>
               {wording.components.notice.title}
             </span>
-            <span>{wording.components.notice.description}</span>
+            <span className='ml-2'>
+              {wording.components.notice.description}
+            </span>
           </span>
-          <button
-            onClick={() => {
-              const notice = document.querySelector('.fr-notice');
-              if (notice) {
-                notice.parentNode?.removeChild(notice);
-              }
-            }}
-            title={wording.components.notice.button_close}
-            type='button'
-            className='fr-btn--close fr-btn'
-          >
-            {wording.components.notice.button_close}
-          </button>
         </div>
       </div>
     </div>
