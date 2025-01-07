@@ -7,7 +7,6 @@ import {
   Alert,
   Link,
   LinkVariant,
-  LoadingDots,
   // Select,
   Upload,
 } from '@/components';
@@ -28,7 +27,6 @@ export default function Televersement({
     null
   );
   // const [selectedOption, setSelectedOption] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFileUpload = useCallback(
     (uploadedFile: File) => {
@@ -57,8 +55,6 @@ export default function Televersement({
       formData.append('profile', profile as Profile);
 
       try {
-        setIsLoading(true);
-
         const response = await fetch('/api/quote_checks', {
           method: 'POST',
           headers: {
@@ -78,34 +74,23 @@ export default function Televersement({
           throw new Error("The API didn't return an ID.");
         }
 
-        // Redirect to the details page after successful upload
         router.push(`/${params.profile}/televersement/${data.id}`);
       } catch (error) {
         console.error('Error during upload:', error);
         setFileUploadedError('An error occurred. Please try again.');
-      } finally {
-        setIsLoading(false);
       }
     },
     [file, profile, router, params.profile]
   );
 
-  return isLoading ? (
-    <section className='fr-container-fluid fr-py-10w h-[600px] flex flex-col items-center justify-center'>
-      <LoadingDots title='Analyse en cours' />
-      <p>Votre devis est en cours de traitement.</p>
-    </section>
-  ) : (
+  return (
     <section className='fr-container-fluid fr-py-10w'>
       <div className='fr-container'>
         <div className='fr-grid-row fr-grid-row--center'>
           <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
             <h1>{wording.upload.section_upload.title}</h1>
             <Upload
-              description={wording.upload.section_upload.upload.description}
-              errorMessage={wording.upload.section_upload.upload.error_message}
-              label='Ajouter des fichiers'
-              maxFileSize={1 * 1024 * 1024}
+              maxFileSize={50}
               onFileUpload={handleFileUpload}
               setError={setFileUploadedError}
             />

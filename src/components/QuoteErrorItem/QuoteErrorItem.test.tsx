@@ -11,13 +11,13 @@ jest.mock('../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal', () => {
       <div data-testid='error-feedbacks-modal'>
         <button
           data-testid='thumbs-up-button'
-          onClick={() => props.onSubmitFeedback?.('Test comment', true)}
+          onClick={() => props.onSubmitFeedback?.('Test comment')}
         >
           Helpful
         </button>
         <button
           data-testid='thumbs-down-button'
-          onClick={() => props.onSubmitFeedback?.('Another comment', false)}
+          onClick={() => props.onSubmitFeedback?.('Another comment')}
         >
           Not Helpful
         </button>
@@ -117,8 +117,7 @@ describe('QuoteErrorItem', () => {
 
     expect(mockOnHelpClick).toHaveBeenCalledWith(
       'Test comment',
-      defaultProps.item.id,
-      true
+      defaultProps.item.id
     );
   });
 
@@ -135,8 +134,7 @@ describe('QuoteErrorItem', () => {
 
     expect(mockOnHelpClick).toHaveBeenCalledWith(
       'Another comment',
-      defaultProps.item.id,
-      false
+      defaultProps.item.id
     );
   });
 });

@@ -50,6 +50,8 @@ export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/Error
 // Modal - GlobalErrorFeedbacksModal
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
+// Notice
+export { default as Notice } from './Notice/Notice';
 // QuoteErrorCard
 export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
 export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';

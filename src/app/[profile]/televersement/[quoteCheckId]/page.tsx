@@ -113,8 +113,7 @@ export default function Devis({
 
   const handleHelpClick = async (
     comment: string | null,
-    errorDetailsId: string,
-    isHelpful: boolean | null
+    errorDetailsId: string
   ) => {
     try {
       const response = await fetch(
@@ -125,7 +124,7 @@ export default function Devis({
             'Content-Type': 'application/json',
             Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
           },
-          body: JSON.stringify({ comment, is_helpful: isHelpful }),
+          body: JSON.stringify({ comment }),
         }
       );
 
@@ -223,8 +222,9 @@ export default function Devis({
       </div>
     </div>
   ) : (
-    <section className='fr-container-fluid fr-py-10w h-[600px] flex items-center justify-center'>
-      <LoadingDots title='Chargement du devis' />
+    <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
+      <LoadingDots title='Analyse en cours' />
+      <p>Votre devis est en cours de traitement.</p>
     </section>
   );
 }

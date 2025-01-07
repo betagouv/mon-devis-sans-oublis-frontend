@@ -1,5 +1,4 @@
 import Image from 'next/image';
-
 import Link, { LinkSize } from '../Link/Link';
 
 export enum QuoteStatusVariant {
@@ -44,7 +43,12 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
       />
       <div className='flex flex-col'>
         <h6 className='mb-4'>{title}</h6>
-        <Link href={linkHref} label={linkLabel} size={LinkSize.SMALL} />
+        <Link
+          href={linkHref}
+          label={linkLabel}
+          legacyBehavior
+          size={LinkSize.SMALL}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 
-import { Footer, FooterProps, Header, HeaderProps, Matomo } from '@/components';
+import {
+  Footer,
+  FooterProps,
+  Header,
+  HeaderProps,
+  Matomo,
+  Notice,
+} from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { initDsfr } from '@/utils/dsfr';
@@ -62,6 +69,7 @@ export default function RootLayout({
       <body className='flex flex-col min-h-screen'>
         <Matomo />
         <Header {...headerData} />
+        <Notice />
         <main className='flex-1'>{children}</main>
         <Footer {...footerData} />
       </body>

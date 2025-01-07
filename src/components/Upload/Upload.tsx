@@ -2,19 +2,15 @@
 
 import { useState } from 'react';
 
+import wording from '@/wording';
+
 export interface UploadProps {
-  description: string;
-  errorMessage: string;
-  label: string;
   maxFileSize: number;
   onFileUpload: (file: File) => void;
   setError: (error: string | null) => void;
 }
 
 const Upload: React.FC<UploadProps> = ({
-  description,
-  errorMessage,
-  label,
   maxFileSize,
   onFileUpload,
   setError,
@@ -27,8 +23,18 @@ const Upload: React.FC<UploadProps> = ({
     if (files && files.length > 0) {
       const file = files[0];
 
-      if (file.size > maxFileSize) {
-        const error = errorMessage;
+      if (file.size > maxFileSize * 1024 * 1024) {
+        const error = wording.components.upload.error_file_size.replace(
+          '{maxFileSize}',
+          maxFileSize.toString()
+        );
+        setLocalError(error);
+        setError(error);
+        return;
+      }
+
+      if (file.type !== 'application/pdf') {
+        const error = wording.components.upload.error_file_type;
         setLocalError(error);
         setError(error);
         return;
@@ -43,8 +49,13 @@ const Upload: React.FC<UploadProps> = ({
   return (
     <div className='fr-upload-group border-blue rounded-lg p-4'>
       <label className='fr-label' htmlFor='file-upload'>
-        {label}
-        <span className='fr-hint-text'>{description}</span>
+        {wording.components.upload.label}
+        <span className='fr-hint-text'>
+          {wording.components.upload.description.replace(
+            '{maxFileSize}',
+            maxFileSize.toString()
+          )}
+        </span>
       </label>
       <input
         className='fr-upload'

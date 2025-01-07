@@ -12,6 +12,10 @@ h2 {
   z-index: 99;
 }
 
+.fr-btn--sm[target='_blank']::after {
+  display: none;
+}
+
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);

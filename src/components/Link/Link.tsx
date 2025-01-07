@@ -16,6 +16,7 @@ export interface LinkProps {
   href: string;
   icon?: string;
   label: string;
+  legacyBehavior?: boolean;
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   size?: LinkSize;
   variant?: LinkVariant;
@@ -25,6 +26,7 @@ const Link: React.FC<LinkProps> = ({
   href,
   icon,
   label,
+  legacyBehavior = false,
   onSubmit,
   size = LinkSize.MEDIUM,
   variant = LinkVariant.PRIMARY,
@@ -59,8 +61,15 @@ const Link: React.FC<LinkProps> = ({
       className={classNames}
       href={variant === LinkVariant.DISABLED ? '' : href}
       onClick={handleClick}
+      legacyBehavior={legacyBehavior}
     >
-      <span className={textClassNames}>{label}</span>
+      {legacyBehavior ? (
+        <a className={classNames} rel='noopener noreferrer' target='_blank'>
+          {label}
+        </a>
+      ) : (
+        <span className={textClassNames}>{label}</span>
+      )}
     </NextLink>
   );
 };

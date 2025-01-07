@@ -5,9 +5,8 @@
       "see_more": "Voir plus"
     },
     "error_feedbacks_modal": {
-      "back_button_label": "Détails de la correction",
-      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
-      "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis (optionnel) :",
+      "back_button_label": "Détail de la correction",
+      "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis :",
       "icon_alt": "Icône de correction",
       "icon_src": "/images/quote_correction_details.png",
       "problem_title": "Problème identifié",
@@ -24,6 +23,10 @@
       "rating_title": "Sur une échelle de 0 à 5, notez la qualité des corrections proposées",
       "submit_button": "Envoyer mes réponses",
       "title": "Que pensez-vous de ces retours ?"
+    },
+    "notice": {
+      "description": "Notre modèle est en cours de construction, vos retours sont précieux pour nous aider à le co-construire",
+      "title": "Outil en cours de fiabilisation"
     },
     "quote_error_card": {
       "badge_correction": "{number} correction",
@@ -51,6 +54,12 @@
     "round_checkbox_group": {
       "insufficient": "Insuffisante",
       "satisfactory": "Très satisfaisante"
+    },
+    "upload": {
+      "description": "Taille maximale : {maxFileSize}Mo. Format supporté : pdf. Un seul fichier possible.",
+      "error_file_size": "Le fichier dépasse la taille maximale de {maxFileSize}Mo.",
+      "error_file_type": "Le fichier doit être au format PDF.",
+      "label": "Ajouter des fichiers"
     }
   },
   "homepage": {
@@ -236,11 +245,7 @@
         "label": "Geste(s) techniques concernés par le devis"
       },
       "subtitle": "Votre projet",
-      "title": "Vérifier votre devis",
-      "upload": {
-        "description": "Taille maximale : 50Mo. Format supporté : pdf. Un seul fichier possible.",
-        "error_message": "Le fichier dépasse la taille maximale de 50Mo."
-      }
+      "title": "Vérifier votre devis"
     }
   },
   "upload_id": {

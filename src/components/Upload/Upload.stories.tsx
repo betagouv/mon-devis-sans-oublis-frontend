@@ -13,8 +13,6 @@ type Story = StoryObj<typeof Upload>;
 
 export const Default: Story = {
   args: {
-    label: 'Ajouter des fichiers',
-    description:
-      'Taille maximale : 50Mo. Format supporté : pdf. Un seul fichier possible.',
+    maxFileSize: 5,
   },
 };
