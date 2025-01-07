@@ -82,10 +82,6 @@ export default function Devis({
             );
 
             const retryData = await retryResponse.json();
-            console.log(
-              `Tentative ${retryCount + 1} - Statut : ${retryData.status}`
-            );
-
             if (retryData.status !== Status.PENDING) {
               setCurrentDevis(retryData);
               clearInterval(intervalId!);
