@@ -72,17 +72,17 @@
       "icon_blocks": [
         {
           "description": "Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis",
-          "icon": "fr-icon-file-download-line",
+          "icon": "fr-icon-shake-hands-fill",
           "title": "Explications claires"
         },
         {
           "description": "Corrigez facilement vos devis grâce au guide restitué après l’analyse",
-          "icon": "fr-icon-time-line",
+          "icon": "fr-icon-timer-fill",
           "title": "Gain de temps"
         },
         {
           "description": "Moins d'allers-retours avec les instructeurs d'aides à la rénovation énergétique et des délais raccourcis",
-          "icon": "fr-icon-calendar-event-line",
+          "icon": "fr-icon-flashlight-fill",
           "title": "Instruction accélérée"
         }
       ]

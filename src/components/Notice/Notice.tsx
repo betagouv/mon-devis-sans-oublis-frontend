@@ -11,7 +11,7 @@ export default function Notice() {
             <span className='fr-notice__title'>
               {wording.components.notice.title}
             </span>
-            <span className='ml-2'>
+            <span className='ml-0 md:ml-2 text-sm md:text-base'>
               {wording.components.notice.description}
             </span>
           </span>

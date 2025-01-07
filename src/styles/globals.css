@@ -59,6 +59,12 @@ h2 {
   -webkit-mask-image: url('../../public/svg/business/customer-service-fill.svg');
 }
 
+.fr-icon-shake-hands-fill::after,
+.fr-icon-shake-hands-fill::before {
+  mask-image: url('../../public/svg/business/shake-hands-fill.svg');
+  -webkit-mask-image: url('../../public/svg/business/shake-hands-fill.svg');
+}
+
 /* Design */
 .fr-icon-compasses-2-fill::after,
 .fr-icon-compasses-2-fill::before {
