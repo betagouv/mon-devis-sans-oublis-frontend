@@ -44,8 +44,6 @@ export default function Devis({
   useEffect(() => {
     const fetchDevis = async () => {
       try {
-        console.log('Fetching quote:', params.quoteCheckId);
-
         const response = await fetch(
           `/api/quote_checks/${params.quoteCheckId}`,
           {
@@ -61,8 +59,6 @@ export default function Devis({
         }
 
         const data = await response.json();
-        console.log('API response:', data);
-
         if (data.status === Status.PENDING) {
           let retryCount = 0;
           const maxRetries = 10;
@@ -81,8 +77,6 @@ export default function Devis({
             );
 
             const retryData = await retryResponse.json();
-            console.log('Retry API response:', retryData);
-
             if (retryData.status !== Status.PENDING) {
               setCurrentDevis(retryData);
               break;
