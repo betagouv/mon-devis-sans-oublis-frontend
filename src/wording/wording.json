@@ -50,6 +50,12 @@
     "round_checkbox_group": {
       "insufficient": "Insuffisante",
       "satisfactory": "Très satisfaisante"
+    },
+    "upload": {
+      "description": "Taille maximale : {maxFileSize}Mo. Format supporté : pdf. Un seul fichier possible.",
+      "error_file_size": "Le fichier dépasse la taille maximale de {maxFileSize}Mo.",
+      "error_file_type": "Le fichier doit être au format PDF.",
+      "label": "Ajouter des fichiers"
     }
   },
   "homepage": {
@@ -235,11 +241,7 @@
         "label": "Geste(s) techniques concernés par le devis"
       },
       "subtitle": "Votre projet",
-      "title": "Vérifier votre devis",
-      "upload": {
-        "description": "Taille maximale : 50Mo. Format supporté : pdf. Un seul fichier possible.",
-        "error_message": "Le fichier dépasse la taille maximale de 50Mo."
-      }
+      "title": "Vérifier votre devis"
     }
   },
   "upload_id": {

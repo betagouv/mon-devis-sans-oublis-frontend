@@ -96,10 +96,7 @@ export default function Televersement({
           <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
             <h1>{wording.upload.section_upload.title}</h1>
             <Upload
-              description={wording.upload.section_upload.upload.description}
-              errorMessage={wording.upload.section_upload.upload.error_message}
-              label='Ajouter des fichiers'
-              maxFileSize={1 * 1024 * 1024}
+              maxFileSize={50}
               onFileUpload={handleFileUpload}
               setError={setFileUploadedError}
             />
