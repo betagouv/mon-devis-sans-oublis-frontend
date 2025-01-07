@@ -7,7 +7,6 @@ import {
   Alert,
   Link,
   LinkVariant,
-  LoadingDots,
   // Select,
   Upload,
 } from '@/components';
@@ -28,7 +27,6 @@ export default function Televersement({
     null
   );
   // const [selectedOption, setSelectedOption] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFileUpload = useCallback(
     (uploadedFile: File) => {
@@ -57,8 +55,6 @@ export default function Televersement({
       formData.append('profile', profile as Profile);
 
       try {
-        setIsLoading(true);
-
         const response = await fetch('/api/quote_checks', {
           method: 'POST',
           headers: {
@@ -82,8 +78,6 @@ export default function Televersement({
       } catch (error) {
         console.error('Error during upload:', error);
         setFileUploadedError('An error occurred. Please try again.');
-      } finally {
-        setIsLoading(false);
       }
     },
     [file, profile, router, params.profile]

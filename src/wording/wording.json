@@ -24,6 +24,11 @@
       "submit_button": "Envoyer mes réponses",
       "title": "Que pensez-vous de ces retours ?"
     },
+    "notice": {
+      "button_close": "Masquer le message",
+      "description": "Notre modèle est en cours de construction, vos retours sont précieux pour nous aider à le co-construire",
+      "title": "Outil en cours de fiabilisation"
+    },
     "quote_error_card": {
       "badge_correction": "{number} correction",
       "badge_correction_plural": "{number} corrections",
