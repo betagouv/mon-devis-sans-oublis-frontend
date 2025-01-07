@@ -42,10 +42,14 @@ export default function Devis({
   }, []);
 
   useEffect(() => {
-    const fetchDevis = async () => {
-      try {
-        console.log('Fetching quote:', params.quoteCheckId);
+    let intervalId: NodeJS.Timeout | null = null;
+    let retryCount = 0;
+    const maxRetries = 20;
 
+    const fetchDevis = async () => {
+      setIsLoading(true);
+
+      try {
         const response = await fetch(
           `/api/quote_checks/${params.quoteCheckId}`,
           {
@@ -56,19 +60,16 @@ export default function Devis({
           }
         );
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch quote');
-        }
-
         const data = await response.json();
-        console.log('API response:', data);
+        setCurrentDevis(data);
 
         if (data.status === Status.PENDING) {
-          let retryCount = 0;
-          const maxRetries = 10;
-
-          while (retryCount < maxRetries) {
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+          intervalId = setInterval(async () => {
+            if (retryCount >= maxRetries) {
+              clearInterval(intervalId!);
+              setIsLoading(false);
+              return;
+            }
 
             const retryResponse = await fetch(
               `/api/quote_checks/${params.quoteCheckId}`,
@@ -81,27 +82,28 @@ export default function Devis({
             );
 
             const retryData = await retryResponse.json();
-            console.log('Retry API response:', retryData);
-
             if (retryData.status !== Status.PENDING) {
               setCurrentDevis(retryData);
-              break;
+              clearInterval(intervalId!);
+              setIsLoading(false);
             }
-
             retryCount++;
-          }
+          }, 5000);
         } else {
-          setCurrentDevis(data);
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error('Error fetching quote:', error);
+        console.error('Erreur lors de la récupération du devis :', error);
         setCurrentDevis(null);
-      } finally {
         setIsLoading(false);
       }
     };
 
     fetchDevis();
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [params.quoteCheckId]);
 
   const copyUrlToClipboard = () => {
