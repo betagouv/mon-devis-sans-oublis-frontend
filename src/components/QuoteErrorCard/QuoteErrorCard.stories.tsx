@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import QuoteErrorCard from './QuoteErrorCard';
-import { Category, Type } from '@/context';
+import { Category, Type } from '@/types';
 
 const meta = {
   title: 'Components/QuoteErrorCard',
@@ -16,10 +16,10 @@ type Story = StoryObj<typeof QuoteErrorCard>;
 
 const mockOnHelpClick = (
   comment: string | null,
-  errorId: string,
+  errorDetailsId: string,
   isHelpful: boolean | null
 ) => {
-  console.log('Help clicked:', { comment, errorId, isHelpful });
+  console.log('Help clicked:', { comment, errorDetailsId, isHelpful });
 };
 
 export const Default: Story = {

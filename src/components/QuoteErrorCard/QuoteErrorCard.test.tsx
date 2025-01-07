@@ -4,7 +4,7 @@ import { AccordionProps } from '../Accordion/Accordion';
 import QuoteErrorCard from './QuoteErrorCard';
 import { QuoteErrorItemProps } from '../QuoteErrorItem/QuoteErrorItem';
 import { TooltipProps } from '../Tooltip/Tooltip';
-import { Category, Type } from '@/context';
+import { Category, Type } from '@/types';
 import wording from '@/wording';
 
 // Mock des composants enfants

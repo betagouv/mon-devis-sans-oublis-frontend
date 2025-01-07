@@ -7,7 +7,7 @@ import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import QuoteErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
-import { Category, Type } from '@/context';
+import { Category, Type } from '@/types';
 import wording from '@/wording';
 
 export interface QuoteErrorCardProps {
@@ -22,7 +22,7 @@ export interface QuoteErrorCardProps {
   }[];
   onHelpClick: (
     comment: string | null,
-    errorId: string,
+    errorDetailsId: string,
     isHelpful: boolean | null
   ) => void;
 }
