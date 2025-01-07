@@ -8,7 +8,7 @@ export type QuoteErrorItemProps = {
   item: QuoteErrorCardProps['list'][0];
   onHelpClick: (
     comment: string | null,
-    errorId: string,
+    errorDetailsId: string,
     isHelpful: boolean | null
   ) => void;
   openModal: (id: string) => void;

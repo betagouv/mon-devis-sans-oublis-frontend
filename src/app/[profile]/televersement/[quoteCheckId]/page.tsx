@@ -4,20 +4,18 @@ import { use, useEffect, useState } from 'react';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { GlobalErrorFeedbacksModal, LoadingDots } from '@/components';
-import { QuoteChecksId, Rating, Status, useDataContext } from '@/context';
+import { QuoteChecksId, Rating, Status } from '@/types';
 
 export default function Devis({
   params: initialParams,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ quoteCheckId: string }>;
 }) {
   const params = use(initialParams);
-  const { data, updateDevis } = useDataContext();
 
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
   const [isButtonSticky, setIsButtonSticky] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isErrorDetailsLoading, setIsErrorDetailsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
   const [showThankYouMessage, setShowThankYouMessage] =
@@ -45,53 +43,66 @@ export default function Devis({
 
   useEffect(() => {
     const fetchDevis = async () => {
-      const devis = data.find((devis) => devis.id === params.id);
+      try {
+        console.log('Fetching quote:', params.quoteCheckId);
 
-      if (!devis) {
-        setCurrentDevis(null);
-        setIsLoading(false);
-        return;
-      }
-
-      setCurrentDevis(devis);
-      setIsLoading(false);
-
-      if (!devis.error_details || devis.error_details.length === 0) {
-        let retryCount = 0;
-        const maxRetries = 10;
-        let detailedData = devis;
-
-        while (detailedData.error_details === null && retryCount < maxRetries) {
-          const response = await fetch(`/api/quote_checks/${devis.id}`, {
+        const response = await fetch(
+          `/api/quote_checks/${params.quoteCheckId}`,
+          {
             headers: {
               accept: 'application/json',
               Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
             },
-          });
-          detailedData = await response.json();
-
-          if (detailedData.error_details !== null) {
-            updateDevis({
-              ...detailedData,
-              uploadedFileName: devis.uploadedFileName,
-            });
-            setCurrentDevis({
-              ...detailedData,
-              uploadedFileName: devis.uploadedFileName,
-            });
-            break;
           }
+        );
 
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          retryCount++;
+        if (!response.ok) {
+          throw new Error('Failed to fetch quote');
         }
-      }
 
-      setIsErrorDetailsLoading(false);
+        const data = await response.json();
+        console.log('API response:', data);
+
+        if (data.status === Status.PENDING) {
+          let retryCount = 0;
+          const maxRetries = 10;
+
+          while (retryCount < maxRetries) {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            const retryResponse = await fetch(
+              `/api/quote_checks/${params.quoteCheckId}`,
+              {
+                headers: {
+                  accept: 'application/json',
+                  Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+                },
+              }
+            );
+
+            const retryData = await retryResponse.json();
+            console.log('Retry API response:', retryData);
+
+            if (retryData.status !== Status.PENDING) {
+              setCurrentDevis(retryData);
+              break;
+            }
+
+            retryCount++;
+          }
+        } else {
+          setCurrentDevis(data);
+        }
+      } catch (error) {
+        console.error('Error fetching quote:', error);
+        setCurrentDevis(null);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchDevis();
-  }, [data, params.id, updateDevis]);
+  }, [params.quoteCheckId]);
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -100,12 +111,12 @@ export default function Devis({
 
   const handleHelpClick = async (
     comment: string | null,
-    errorId: string,
+    errorDetailsId: string,
     isHelpful: boolean | null
   ) => {
     try {
       const response = await fetch(
-        `/api/quote_checks/${params.id}/error_details/${errorId}/feedbacks`,
+        `/api/quote_checks/${params.quoteCheckId}/error_details/${errorDetailsId}/feedbacks`,
         {
           method: 'POST',
           headers: {
@@ -138,18 +149,21 @@ export default function Devis({
     rating: Rating | null
   ) => {
     try {
-      const response = await fetch(`/api/quote_checks/${params.id}/feedbacks`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
-        },
-        body: JSON.stringify({
-          comment: comment,
-          email: email,
-          rating: rating,
-        }),
-      });
+      const response = await fetch(
+        `/api/quote_checks/${params.quoteCheckId}/feedbacks`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
+          },
+          body: JSON.stringify({
+            comment: comment,
+            email: email,
+            rating: rating,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -170,17 +184,17 @@ export default function Devis({
     }
   };
 
-  return !isLoading && currentDevis && !isErrorDetailsLoading ? (
+  return !isLoading && currentDevis ? (
     <div className='fr-container-fluid fr-py-10w'>
       {currentDevis.status === Status.VALID ? (
-        <ValidQuote uploadedFileName={currentDevis.uploadedFileName} />
+        <ValidQuote uploadedFileName={currentDevis.filename} />
       ) : (
         <InvalidQuote
           isUrlCopied={isUrlCopied}
           list={currentDevis.error_details || []}
           onCopyUrl={copyUrlToClipboard}
           onHelpClick={handleHelpClick}
-          uploadedFileName={currentDevis.uploadedFileName}
+          uploadedFileName={currentDevis.filename}
         />
       )}
       <div className='fr-container flex flex-col relative'>

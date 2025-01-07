@@ -14,7 +14,7 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { Category, ErrorDetails } from '@/context';
+import { Category, ErrorDetails } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
@@ -23,7 +23,7 @@ interface InvalidQuoteProps {
   onCopyUrl: () => void;
   onHelpClick: (
     comment: string | null,
-    errorId: string,
+    errorDetailsId: string,
     isHelpful: boolean | null
   ) => Promise<void>;
   uploadedFileName: string;

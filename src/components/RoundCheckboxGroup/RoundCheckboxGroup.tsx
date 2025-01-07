@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Rating } from '@/context';
+import { Rating } from '@/types';
 import wording from '@/wording';
 
 export interface CheckboxOption {

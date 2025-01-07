@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 import { RoundCheckboxGroup } from '@/components';
-import { Rating } from '@/context';
+import { Rating } from '@/types';
 import wording from '@/wording';
 
 export interface GlobalErrorFeedbacksModalProps {

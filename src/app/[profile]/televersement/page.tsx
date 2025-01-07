@@ -11,20 +11,19 @@ import {
   // Select,
   Upload,
 } from '@/components';
-import { Status, useDataContext } from '@/context';
+import { Profile } from '@/types';
 import wording from '@/wording';
 
 export default function Televersement({
   params: initialParams,
 }: {
-  params: Promise<{ role: string }>;
+  params: Promise<{ profile: string }>;
 }) {
   const params = use(initialParams);
-  const { updateDevis } = useDataContext();
   const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
-  const [profile, setProfile] = useState<string>('');
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [fileUploadedError, setFileUploadedError] = useState<string | null>(
     null
   );
@@ -35,9 +34,9 @@ export default function Televersement({
     (uploadedFile: File) => {
       setFile(uploadedFile);
       setFileUploadedError(null);
-      setProfile(params.role);
+      setProfile(params.profile as Profile);
     },
-    [params.role]
+    [params.profile]
   );
 
   // const handleSelectChange = (value: string) => {
@@ -55,7 +54,7 @@ export default function Televersement({
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('profile', profile);
+      formData.append('profile', profile as Profile);
 
       try {
         setIsLoading(true);
@@ -79,56 +78,16 @@ export default function Televersement({
           throw new Error("The API didn't return an ID.");
         }
 
-        // Immediately add the quote as PENDING
-        updateDevis({
-          ...data,
-          status: Status.PENDING,
-          uploadedFileName: file.name,
-        });
-
-        let detailedData;
-        let retryCount = 0;
-        const maxRetries = 10;
-
-        // Retry loop to fetch quote details
-        while (retryCount < maxRetries) {
-          const detailsResponse = await fetch(`/api/quote_checks/${data.id}`, {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
-            },
-          });
-
-          detailedData = await detailsResponse.json();
-
-          if (detailedData.status !== 'pending') {
-            // If the quote is no longer pending, update and break
-            updateDevis({
-              ...detailedData,
-              uploadedFileName: file.name,
-            });
-            break;
-          }
-
-          // Wait for 2 seconds before retrying
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          retryCount += 1;
-        }
-
-        // if (!detailedData || detailedData.status === 'pending') {
-        //   throw new Error('The analysis took too long.');
-        // }
-
-        // Redirect to the details page after successful processing
-        router.push(`/${params.role}/televersement/${detailedData.id}`);
+        // Redirect to the details page after successful upload
+        router.push(`/${params.profile}/televersement/${data.id}`);
       } catch (error) {
         console.error('Error during upload:', error);
         setFileUploadedError('An error occurred. Please try again.');
       } finally {
-        setIsLoading(false); // Stop the loader after the process
+        setIsLoading(false);
       }
     },
-    [file, profile, updateDevis, router, params.role]
+    [file, profile, router, params.profile]
   );
 
   return isLoading ? (

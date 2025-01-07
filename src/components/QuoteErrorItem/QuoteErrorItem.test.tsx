@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import QuoteErrorItem from './QuoteErrorItem';
-import { Type, Category } from '@/context';
+import { Type, Category } from '@/types';
 // import wording from '@/wording';
 import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 
