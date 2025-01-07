@@ -23,8 +23,7 @@ interface InvalidQuoteProps {
   onCopyUrl: () => void;
   onHelpClick: (
     comment: string | null,
-    errorDetailsId: string,
-    isHelpful: boolean | null
+    errorDetailsId: string
   ) => Promise<void>;
   uploadedFileName: string;
 }
@@ -64,28 +63,11 @@ const InvalidQuote = ({
   return (
     <>
       <section className='fr-container fr-gap-8'>
-        <div className='flex flex-col md:flex-row justify-between fr-mb-6w'>
+        <div className='flex flex-col md:flex-row justify-between fr-mb-2w'>
           <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
             <h1 className='mb-0 text-center md:text-left'>
               {wording.upload_id.title}
             </h1>
-            <div className='flex flex-wrap gap-4 justify-center'>
-              {uploadedFileName && (
-                <Badge
-                  label={uploadedFileName}
-                  size={BadgeSize.SMALL}
-                  variant={BadgeVariant.BLUE_DARK}
-                />
-              )}
-              <Badge
-                label={(list.length > 1
-                  ? wording.upload_id.badge_correction_plural
-                  : wording.upload_id.badge_correction
-                ).replace('{number}', list.length.toString())}
-                size={BadgeSize.SMALL}
-                variant={BadgeVariant.GREY}
-              />
-            </div>
           </div>
           <button
             className={`fr-btn ${
@@ -99,6 +81,23 @@ const InvalidQuote = ({
               : wording.upload_id.button_copy_url}
             {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
           </button>
+        </div>
+        <div className='flex flex-wrap gap-4 fr-mb-6w justify-center md:justify-start'>
+          {uploadedFileName && (
+            <Badge
+              label={uploadedFileName}
+              size={BadgeSize.SMALL}
+              variant={BadgeVariant.BLUE_DARK}
+            />
+          )}
+          <Badge
+            label={(list.length > 1
+              ? wording.upload_id.badge_correction_plural
+              : wording.upload_id.badge_correction
+            ).replace('{number}', list.length.toString())}
+            size={BadgeSize.SMALL}
+            variant={BadgeVariant.GREY}
+          />
         </div>
         <div className='fr-col-12'>
           <QuoteStatusCard
@@ -133,6 +132,7 @@ const InvalidQuote = ({
                                 wording.upload_id.quote_status_link_ko
                                   .link_label
                               }
+                              legacyBehavior
                               size={LinkSize.SMALL}
                               variant={LinkVariant.SECONDARY}
                             ></Link>

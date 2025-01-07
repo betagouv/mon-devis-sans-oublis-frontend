@@ -5,6 +5,5 @@ export interface Feedbacks {
   quote_check_id: string;
   comment: string | null;
   email: string | null;
-  is_helpful: boolean | null;
   rating: Rating | null;
 }

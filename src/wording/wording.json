@@ -5,9 +5,8 @@
       "see_more": "Voir plus"
     },
     "error_feedbacks_modal": {
-      "back_button_label": "Détails de la correction",
-      "correction_helpful": "Cette correction vous a-t-elle aidé ?",
-      "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis (optionnel) :",
+      "back_button_label": "Détail de la correction",
+      "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis :",
       "icon_alt": "Icône de correction",
       "icon_src": "/images/quote_correction_details.png",
       "problem_title": "Problème identifié",

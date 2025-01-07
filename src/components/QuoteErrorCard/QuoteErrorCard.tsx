@@ -20,11 +20,7 @@ export interface QuoteErrorCardProps {
     provided_value: string | null;
     modalContent: ErrorFeedbacksModalProps;
   }[];
-  onHelpClick: (
-    comment: string | null,
-    errorDetailsId: string,
-    isHelpful: boolean | null
-  ) => void;
+  onHelpClick: (comment: string | null, errorDetailsId: string) => void;
 }
 
 const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {

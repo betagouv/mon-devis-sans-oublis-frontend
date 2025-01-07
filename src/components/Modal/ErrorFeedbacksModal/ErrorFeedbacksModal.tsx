@@ -14,10 +14,7 @@ export enum ModalPosition {
 export interface ErrorFeedbacksModalProps {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback?: (
-    comment: string | null,
-    isHelpful: boolean | null
-  ) => void;
+  onSubmitFeedback?: (comment: string | null) => void;
   problem: string | null;
   solution: string | null;
   title: string;
@@ -31,17 +28,12 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   solution,
   title,
 }) => {
-  const [activeButton, setActiveButton] = useState<boolean | null>(null);
   const [comment, setComment] = useState<string | null>(null);
   const [showThankYouMessage, setShowThankYouMessage] = useState(false);
 
-  const handleFeedbackClick = (isHelpful: boolean | null) => {
-    setActiveButton(activeButton === isHelpful ? null : isHelpful);
-  };
-
   const handleSubmit = () => {
-    if (activeButton !== null && onSubmitFeedback) {
-      onSubmitFeedback(comment, activeButton);
+    if (onSubmitFeedback) {
+      onSubmitFeedback(comment);
       setShowThankYouMessage(true);
     }
   };
@@ -87,64 +79,36 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
             <p>Merci pour votre retour !</p>
           </div>
         ) : (
-          <>
-            <p className='font-bold fr-mb-1w text-[var(--text-title-grey)]'>
-              {wording.components.error_feedbacks_modal.correction_helpful}
-            </p>
-            <span className='flex justify-between'>
-              <span className='flex gap-2'>
-                <button
-                  className={`fr-btn fr-btn--tertiary fr-icon-thumb-up-line ${
-                    activeButton === true
-                      ? 'bg-[var(--background-alt-grey)]'
-                      : 'text-[var(--text-title-blue-france)]'
-                  }`}
-                  data-testid='thumbs-up-button'
-                  onClick={() => handleFeedbackClick(true)}
-                />
-                <button
-                  className={`fr-btn fr-btn--tertiary fr-icon-thumb-down-line ${
-                    activeButton === false
-                      ? 'bg-[var(--background-alt-grey)]'
-                      : 'text-[var(--text-title-blue-france)]'
-                  }`}
-                  data-testid='thumbs-down-button'
-                  onClick={() => handleFeedbackClick(false)}
-                />
-              </span>
-            </span>
-            {activeButton !== null && (
-              <div
-                className='fr-input-group mt-4 flex flex-col'
-                id='input-group-160'
-              >
-                <label className='fr-label' htmlFor='storybook-input'>
-                  {
-                    wording.components.error_feedbacks_modal
-                      .correction_helpful_optional
-                  }
-                </label>
-                <textarea
-                  aria-describedby='storybook-input-messages'
-                  className='fr-input'
-                  id='storybook-input'
-                  onChange={(e) => setComment(e.target.value)}
-                  value={comment || ''}
-                />
-                <div
-                  className='fr-messages-group'
-                  id='storybook-input-messages'
-                  aria-live='polite'
-                />
-                <button
-                  className='fr-btn fr-btn--primary self-end mt-4'
-                  onClick={handleSubmit}
-                >
-                  {wording.components.error_feedbacks_modal.submit_button}
-                </button>
-              </div>
-            )}
-          </>
+          <div className='fr-input-group mt-4 flex flex-col border-grey p-6 rounded-lg'>
+            <label
+              className='text-[var(--text-default-grey)] font-bold mb-2'
+              htmlFor='textarea-input'
+            >
+              {
+                wording.components.error_feedbacks_modal
+                  .correction_helpful_optional
+              }
+            </label>
+            <textarea
+              aria-describedby='textarea-input-messages'
+              className='fr-input'
+              id='textarea-input'
+              onChange={(e) => setComment(e.target.value)}
+              placeholder='Les corrections du devis sont...'
+              value={comment || ''}
+            />
+            <div
+              className='fr-messages-group'
+              id='textarea-input-messages'
+              aria-live='polite'
+            />
+            <button
+              className='fr-btn fr-btn--primary self-end mt-4'
+              onClick={handleSubmit}
+            >
+              {wording.components.error_feedbacks_modal.submit_button}
+            </button>
+          </div>
         )}
       </div>
     </Modal>

@@ -78,7 +78,6 @@ export default function Televersement({
           throw new Error("The API didn't return an ID.");
         }
 
-        // Redirect to the details page after successful upload
         router.push(`/${params.profile}/televersement/${data.id}`);
       } catch (error) {
         console.error('Error during upload:', error);
@@ -90,12 +89,7 @@ export default function Televersement({
     [file, profile, router, params.profile]
   );
 
-  return isLoading ? (
-    <section className='fr-container-fluid fr-py-10w h-[600px] flex flex-col items-center justify-center'>
-      <LoadingDots title='Analyse en cours' />
-      <p>Votre devis est en cours de traitement.</p>
-    </section>
-  ) : (
+  return (
     <section className='fr-container-fluid fr-py-10w'>
       <div className='fr-container'>
         <div className='fr-grid-row fr-grid-row--center'>

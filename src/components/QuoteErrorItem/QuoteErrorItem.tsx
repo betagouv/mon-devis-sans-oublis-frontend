@@ -6,11 +6,7 @@ import wording from '@/wording';
 export type QuoteErrorItemProps = {
   closeModal: () => void;
   item: QuoteErrorCardProps['list'][0];
-  onHelpClick: (
-    comment: string | null,
-    errorDetailsId: string,
-    isHelpful: boolean | null
-  ) => void;
+  onHelpClick: (comment: string | null, errorDetailsId: string) => void;
   openModal: (id: string) => void;
   openModalId: string | null;
 };
@@ -31,11 +27,8 @@ const QuoteErrorItem = ({
   //     ? wording.components.quote_error_card.type_missing.label
   //     : wording.components.quote_error_card.type_wrong.label;
 
-  const handleFeedbackSubmit = (
-    comment: string | null,
-    isHelpful: boolean | null
-  ) => {
-    onHelpClick(comment, item.id, isHelpful);
+  const handleFeedbackSubmit = (comment: string | null) => {
+    onHelpClick(comment, item.id);
   };
 
   return (
