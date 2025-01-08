@@ -25,9 +25,9 @@ export default function Devis({
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = 0.8; // scroll 80%
+      const stickyThreshold = scrollHeight * 0.88; // scroll 88%
 
-      if (scrollPosition >= scrollHeight * threshold) {
+      if (scrollPosition >= stickyThreshold) {
         setIsButtonSticky(false);
       } else {
         setIsButtonSticky(true);
@@ -201,8 +201,10 @@ export default function Devis({
       <div className='fr-container flex flex-col relative'>
         <div
           className={`${
-            isButtonSticky ? 'fixed' : 'absolute'
-          } bottom-40 right-50 self-end z-9`}
+            isButtonSticky
+              ? 'fixed bottom-14 right-50'
+              : 'absolute bottom-40 right-50'
+          } self-end z-15`}
         >
           <button
             className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'

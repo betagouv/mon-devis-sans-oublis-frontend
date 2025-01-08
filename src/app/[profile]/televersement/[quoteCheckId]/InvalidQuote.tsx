@@ -74,10 +74,7 @@ const InvalidQuote = ({
             </h1>
           </div>
           <button
-            className={`fr-btn ${
-              !isUrlCopied && 'fr-btn--secondary'
-            } md:block hidden shrink-0 self-start fr-ml-1w`}
-            disabled={isUrlCopied}
+            className='fr-btn fr-btn--secondary md:block hidden shrink-0 self-start fr-ml-1w'
             onClick={onCopyUrl}
           >
             {isUrlCopied
