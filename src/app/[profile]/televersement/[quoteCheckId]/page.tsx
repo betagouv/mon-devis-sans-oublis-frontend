@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
-import { GlobalErrorFeedbacksModal, LoadingDots } from '@/components';
+import { GlobalErrorFeedbacksModal, LoadingDots, Toast } from '@/components';
 import { QuoteChecksId, Rating, Status } from '@/types';
 
 export default function Devis({
@@ -18,8 +18,7 @@ export default function Devis({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
-  const [showThankYouMessage, setShowThankYouMessage] =
-    useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -174,11 +173,8 @@ export default function Devis({
         );
       }
 
-      setShowThankYouMessage(true);
-      setTimeout(() => {
-        setShowThankYouMessage(false);
-        closeModal();
-      }, 3000);
+      setIsModalOpen(false);
+      setShowToast(true);
     } catch (error) {
       console.error('Error sending feedback:', error);
       throw error;
@@ -213,12 +209,18 @@ export default function Devis({
             Donner mon avis
           </button>
         </div>
+        {showToast && (
+          <Toast
+            message='Votre avis a bien été envoyé !'
+            duration={4000}
+            onClose={() => setShowToast(false)}
+          />
+        )}
         {isModalOpen && (
           <GlobalErrorFeedbacksModal
             isOpen={isModalOpen}
             onClose={closeModal}
             onSubmitFeedback={handleSubmitFeedback}
-            showThankYouMessage={showThankYouMessage}
           />
         )}
       </div>

@@ -74,43 +74,37 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
         )}
       </div>
       <div className='mb-8'>
-        {showThankYouMessage ? (
-          <div className='fr-alert fr-alert--success fr-mb-3w'>
-            <p>Merci pour votre retour !</p>
-          </div>
-        ) : (
-          <div className='fr-input-group mt-4 flex flex-col border-grey p-6 rounded-lg'>
-            <label
-              className='text-[var(--text-default-grey)] font-bold mb-2'
-              htmlFor='textarea-input'
-            >
-              {
-                wording.components.error_feedbacks_modal
-                  .correction_helpful_optional
-              }
-            </label>
-            <textarea
-              aria-describedby='textarea-input-messages'
-              className='fr-input'
-              id='textarea-input'
-              onChange={(e) => setComment(e.target.value)}
-              placeholder='Les corrections du devis sont...'
-              value={comment || ''}
-            />
-            <div
-              className='fr-messages-group'
-              id='textarea-input-messages'
-              aria-live='polite'
-            />
-            <button
-              className='fr-btn fr-btn--primary self-end mt-4'
-              disabled={comment === null}
-              onClick={handleSubmit}
-            >
-              {wording.components.error_feedbacks_modal.submit_button}
-            </button>
-          </div>
-        )}
+        <div className='fr-input-group mt-4 flex flex-col border-grey p-6 rounded-lg'>
+          <label
+            className='text-[var(--text-default-grey)] font-bold mb-2'
+            htmlFor='textarea-input'
+          >
+            {
+              wording.components.error_feedbacks_modal
+                .correction_helpful_optional
+            }
+          </label>
+          <textarea
+            aria-describedby='textarea-input-messages'
+            className='fr-input'
+            id='textarea-input'
+            onChange={(e) => setComment(e.target.value)}
+            placeholder='Les corrections du devis sont...'
+            value={comment || ''}
+          />
+          <div
+            className='fr-messages-group'
+            id='textarea-input-messages'
+            aria-live='polite'
+          />
+          <button
+            className='fr-btn fr-btn--primary self-end mt-4'
+            disabled={comment === null}
+            onClick={handleSubmit}
+          >
+            {wording.components.error_feedbacks_modal.submit_button}
+          </button>
+        </div>
       </div>
     </Modal>
   );

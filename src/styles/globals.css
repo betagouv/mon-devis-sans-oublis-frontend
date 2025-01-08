@@ -8,8 +8,12 @@ h2 {
 }
 
 /* DSFR */
-.fr-header {
+.fr-alert {
   z-index: 99;
+}
+
+.fr-header {
+  z-index: 98;
 }
 
 .fr-btn--sm[target='_blank']::after {

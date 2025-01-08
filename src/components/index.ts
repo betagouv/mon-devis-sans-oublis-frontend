@@ -85,6 +85,9 @@ export type { SelectProps } from './Select/Select';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';
+// Toast
+export { default as Toast } from './Toast/Toast';
+export type { ToastProps } from './Toast/Toast';
 // Tooltip
 export { default as Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip';
