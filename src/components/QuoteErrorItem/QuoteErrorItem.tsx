@@ -1,7 +1,12 @@
+'use client';
+
+import { useState } from 'react';
+
 import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import { QuoteErrorCardProps } from '../QuoteErrorCard/QuoteErrorCard';
 // import { Type } from '@/context';
 import wording from '@/wording';
+import Toast from '../Toast/Toast';
 
 export type QuoteErrorItemProps = {
   closeModal: () => void;
@@ -27,8 +32,16 @@ const QuoteErrorItem = ({
   //     ? wording.components.quote_error_card.type_missing.label
   //     : wording.components.quote_error_card.type_wrong.label;
 
+  const [showToast, setShowToast] = useState<boolean>(false);
+
   const handleFeedbackSubmit = (comment: string | null) => {
-    onHelpClick(comment, item.id);
+    try {
+      onHelpClick(comment, item.id);
+      closeModal();
+      setShowToast(true);
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
   };
 
   return (
@@ -57,6 +70,13 @@ const QuoteErrorItem = ({
           isOpen={openModalId === item.id.toString()}
           onClose={closeModal}
           onSubmitFeedback={handleFeedbackSubmit}
+        />
+      )}
+      {showToast && (
+        <Toast
+          duration={4000}
+          message='Merci pour votre retour !'
+          onClose={() => setShowToast(false)}
         />
       )}
     </li>

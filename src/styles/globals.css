@@ -8,12 +8,20 @@ h2 {
 }
 
 /* DSFR */
-.fr-header {
+.fr-accordion {
+  z-index: 10;
+}
+
+.fr-alert {
   z-index: 99;
 }
 
 .fr-btn--sm[target='_blank']::after {
   display: none;
+}
+
+.fr-header {
+  z-index: 98;
 }
 
 /* Since corePlugins: { preflight: false }, borders are not applied by default */

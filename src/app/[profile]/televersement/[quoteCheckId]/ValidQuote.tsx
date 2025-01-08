@@ -1,3 +1,5 @@
+import { usePathname } from 'next/navigation';
+
 import {
   Badge,
   BadgeSize,
@@ -14,6 +16,9 @@ interface ValidQuoteProps {
 }
 
 const ValidQuote = ({ uploadedFileName }: ValidQuoteProps) => {
+  const pathname = usePathname();
+  const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
+
   return (
     <>
       <Confetti />
@@ -46,7 +51,7 @@ const ValidQuote = ({ uploadedFileName }: ValidQuoteProps) => {
           className='mb-16 mt-8'
           imageAlt={wording.upload_id.quote_status_link_ok.image_alt}
           imageSrc={wording.upload_id.quote_status_link_ok.image_src}
-          linkHref={wording.upload_id.quote_status_link_ok.link_href}
+          linkHref={goBackToUpload}
           linkLabel={wording.upload_id.quote_status_link_ok.link_label}
           title={wording.upload_id.quote_status_link_ok.title}
           variant={QuoteStatusVariant.SECONDARY}

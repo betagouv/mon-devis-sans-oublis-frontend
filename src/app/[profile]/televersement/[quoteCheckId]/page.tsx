@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
-import { GlobalErrorFeedbacksModal, LoadingDots } from '@/components';
+import { GlobalErrorFeedbacksModal, LoadingDots, Toast } from '@/components';
 import { QuoteChecksId, Rating, Status } from '@/types';
 
 export default function Devis({
@@ -18,16 +18,15 @@ export default function Devis({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
-  const [showThankYouMessage, setShowThankYouMessage] =
-    useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = 0.8; // scroll 80%
+      const stickyThreshold = scrollHeight * 0.88; // scroll 88%
 
-      if (scrollPosition >= scrollHeight * threshold) {
+      if (scrollPosition >= stickyThreshold) {
         setIsButtonSticky(false);
       } else {
         setIsButtonSticky(true);
@@ -174,11 +173,8 @@ export default function Devis({
         );
       }
 
-      setShowThankYouMessage(true);
-      setTimeout(() => {
-        setShowThankYouMessage(false);
-        closeModal();
-      }, 3000);
+      setIsModalOpen(false);
+      setShowToast(true);
     } catch (error) {
       console.error('Error sending feedback:', error);
       throw error;
@@ -201,8 +197,10 @@ export default function Devis({
       <div className='fr-container flex flex-col relative'>
         <div
           className={`${
-            isButtonSticky ? 'fixed' : 'absolute'
-          } bottom-40 right-50 self-end z-9`}
+            isButtonSticky
+              ? 'fixed bottom-14 right-50'
+              : 'absolute bottom-40 right-50'
+          } self-end z-20`}
         >
           <button
             className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
@@ -211,12 +209,18 @@ export default function Devis({
             Donner mon avis
           </button>
         </div>
+        {showToast && (
+          <Toast
+            duration={4000}
+            message='Merci pour votre retour !'
+            onClose={() => setShowToast(false)}
+          />
+        )}
         {isModalOpen && (
           <GlobalErrorFeedbacksModal
             isOpen={isModalOpen}
             onClose={closeModal}
             onSubmitFeedback={handleSubmitFeedback}
-            showThankYouMessage={showThankYouMessage}
           />
         )}
       </div>
@@ -224,7 +228,10 @@ export default function Devis({
   ) : (
     <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
       <LoadingDots title='Analyse en cours' />
-      <p>Votre devis est en cours de traitement.</p>
+      <p>
+        Votre devis est en cours de traitement, cela peut prendre plusieurs
+        secondes.
+      </p>
     </section>
   );
 }

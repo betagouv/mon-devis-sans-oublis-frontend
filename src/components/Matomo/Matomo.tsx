@@ -27,9 +27,11 @@ const MatomoContent = () => {
 
   useEffect(() => {
     if (!pathname) return;
+
     const url = decodeURIComponent(
       pathname + (searchParamsString ? '?' + searchParamsString : '')
     );
+
     push(['setCustomUrl', url]);
     push(['trackPageView']);
   }, [pathname, searchParamsString]);

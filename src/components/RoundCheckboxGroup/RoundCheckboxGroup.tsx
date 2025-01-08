@@ -36,12 +36,11 @@ const RoundCheckboxGroup: React.FC<RoundCheckboxGroupProps> = ({
             onChange={() => handleSelect(option.value)}
             type='checkbox'
           />
-          <span
-            className={`h-6 w-6 rounded-full border-blue flex items-center justify-center transition-all ${
-              selected === option.value &&
-              'bg-[var(--background-contrast-grey-hover)]'
-            }`}
-          ></span>
+          <span className='h-6 w-6 rounded-full border-blue flex items-center justify-center transition-all'>
+            {selected === option.value && (
+              <div className='bg-[var(--background-action-high-blue-france)] h-3 w-3 rounded-full' />
+            )}
+          </span>
         </label>
       ))}
       <span>{wording.components.round_checkbox_group.satisfactory}</span>

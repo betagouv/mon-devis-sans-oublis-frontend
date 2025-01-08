@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 import {
   Badge,
@@ -35,6 +36,9 @@ const InvalidQuote = ({
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) => {
+  const pathname = usePathname();
+  const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
+
   const errorDetails = (
     errors: ErrorDetails[] | null = [],
     category: Category
@@ -70,10 +74,7 @@ const InvalidQuote = ({
             </h1>
           </div>
           <button
-            className={`fr-btn ${
-              !isUrlCopied && 'fr-btn--secondary'
-            } md:block hidden shrink-0 self-start fr-ml-1w`}
-            disabled={isUrlCopied}
+            className='fr-btn fr-btn--secondary md:block hidden shrink-0 self-start fr-ml-1w'
             onClick={onCopyUrl}
           >
             {isUrlCopied
@@ -125,9 +126,7 @@ const InvalidQuote = ({
                         {index === 2 && (
                           <span className='block fr-mt-2w md:hidden'>
                             <Link
-                              href={
-                                wording.upload_id.quote_status_link_ko.link_href
-                              }
+                              href={goBackToUpload}
                               label={
                                 wording.upload_id.quote_status_link_ko
                                   .link_label
@@ -191,7 +190,7 @@ const InvalidQuote = ({
           className='mb-16 mt-8'
           imageAlt={wording.upload_id.quote_status_link_ko.image_alt}
           imageSrc={wording.upload_id.quote_status_link_ko.image_src}
-          linkHref={wording.upload_id.quote_status_link_ko.link_href}
+          linkHref={goBackToUpload}
           linkLabel={wording.upload_id.quote_status_link_ko.link_label}
           title={wording.upload_id.quote_status_link_ko.title}
           variant={QuoteStatusVariant.PRIMARY}
