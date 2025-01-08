@@ -16,12 +16,12 @@ h2 {
   z-index: 99;
 }
 
-.fr-header {
-  z-index: 98;
-}
-
 .fr-btn--sm[target='_blank']::after {
   display: none;
+}
+
+.fr-header {
+  z-index: 98;
 }
 
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
