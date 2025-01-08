@@ -74,8 +74,8 @@ const QuoteErrorItem = ({
       )}
       {showToast && (
         <Toast
-          message='Votre avis a bien été envoyé !'
           duration={4000}
+          message='Merci pour votre retour !'
           onClose={() => setShowToast(false)}
         />
       )}

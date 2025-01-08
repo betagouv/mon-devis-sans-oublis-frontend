@@ -200,7 +200,7 @@ export default function Devis({
             isButtonSticky
               ? 'fixed bottom-14 right-50'
               : 'absolute bottom-40 right-50'
-          } self-end z-15`}
+          } self-end z-20`}
         >
           <button
             className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
@@ -211,8 +211,8 @@ export default function Devis({
         </div>
         {showToast && (
           <Toast
-            message='Votre avis a bien été envoyé !'
             duration={4000}
+            message='Merci pour votre retour !'
             onClose={() => setShowToast(false)}
           />
         )}
