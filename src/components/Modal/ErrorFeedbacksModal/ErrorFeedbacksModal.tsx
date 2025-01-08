@@ -29,12 +29,10 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   title,
 }) => {
   const [comment, setComment] = useState<string | null>(null);
-  const [showThankYouMessage, setShowThankYouMessage] = useState(false);
 
   const handleSubmit = () => {
     if (onSubmitFeedback) {
       onSubmitFeedback(comment);
-      setShowThankYouMessage(true);
     }
   };
 
