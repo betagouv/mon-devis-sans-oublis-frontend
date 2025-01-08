@@ -9,7 +9,7 @@ export interface ToastProps {
 }
 
 const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setVisible(true);
