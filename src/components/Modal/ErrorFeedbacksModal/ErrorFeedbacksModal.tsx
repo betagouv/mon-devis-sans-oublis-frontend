@@ -104,6 +104,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
             />
             <button
               className='fr-btn fr-btn--primary self-end mt-4'
+              disabled={comment === null}
               onClick={handleSubmit}
             >
               {wording.components.error_feedbacks_modal.submit_button}

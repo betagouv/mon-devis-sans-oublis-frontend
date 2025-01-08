@@ -38,6 +38,8 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
     onSubmitFeedback(comment, email, rating);
   };
 
+  console.log(comment, rating);
+
   return (
     <Modal
       backButtonLabel={
@@ -125,6 +127,7 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
           <button
             className='fr-btn fr-btn--primary fr-mt-3w self-end'
             onClick={handleSubmit}
+            disabled={comment === null || rating === null}
           >
             {wording.components.global_error_feedbacks_modal.submit_button}
           </button>

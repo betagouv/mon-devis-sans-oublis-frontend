@@ -224,7 +224,10 @@ export default function Devis({
   ) : (
     <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
       <LoadingDots title='Analyse en cours' />
-      <p>Votre devis est en cours de traitement.</p>
+      <p>
+        Votre devis est en cours de traitement, cela peut prendre plusieurs
+        secondes.
+      </p>
     </section>
   );
 }
