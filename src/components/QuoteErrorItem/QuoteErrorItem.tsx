@@ -32,7 +32,7 @@ const QuoteErrorItem = ({
   //     ? wording.components.quote_error_card.type_missing.label
   //     : wording.components.quote_error_card.type_wrong.label;
 
-  const [showToast, setShowToast] = useState(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   const handleFeedbackSubmit = (comment: string | null) => {
     try {
