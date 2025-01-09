@@ -24,7 +24,7 @@ export default function Notice({
 }: NoticeProps) {
   return (
     <div
-      className={`fr-notice ${type ? `fr-notice--${type}` : className}  ${
+      className={`fr-notice ${type ? `fr-notice--${type}` : className} ${
         buttonClose && 'py-3'
       }`}
     >
@@ -38,15 +38,15 @@ export default function Notice({
           </span>
           {buttonClose && (
             <button
+              className='fr-btn--close fr-btn'
               onClick={(event) => {
                 const notice = (event.target as HTMLElement).closest(
                   '.fr-notice'
                 );
                 notice?.parentNode?.removeChild(notice);
               }}
-              title='Masquer le message'
+              title={wording.components.notice.button_close}
               type='button'
-              className='fr-btn--close fr-btn'
             >
               {wording.components.notice.button_close}
             </button>
