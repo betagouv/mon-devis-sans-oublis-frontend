@@ -25,13 +25,23 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   position,
 }) => {
+  const [mounted, setMounted] = useState(false);
+  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
   const [shouldRender, setShouldRender] = useState<boolean>(false);
   const [visibleClass, setVisibleClass] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
+    const element = document.createElement('div');
+    element.setAttribute('id', 'modal-root');
+    document.body.appendChild(element);
+    setPortalElement(element);
+
+    return () => {
+      if (element && document.body.contains(element)) {
+        document.body.removeChild(element);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -112,8 +122,9 @@ const Modal: React.FC<ModalProps> = ({
     </div>
   );
 
-  if (!mounted) return null;
-  return createPortal(modalContent, document.body);
+  if (!mounted || !portalElement) return null;
+
+  return createPortal(modalContent, portalElement);
 };
 
 export default Modal;
