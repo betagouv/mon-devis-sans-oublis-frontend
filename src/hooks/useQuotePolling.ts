@@ -44,7 +44,7 @@ export const useQuotePolling = (quoteCheckId: string) => {
         } else {
           setIsLoading(false);
         }
-      } catch (error) {
+      } catch {
         setCurrentDevis(null);
         setIsLoading(false);
       }
