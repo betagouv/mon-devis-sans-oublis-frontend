@@ -1,4 +1,4 @@
-import { Rating } from '@/types';
+import { Profile, Rating } from '@/types';
 
 const API_CONFIG = {
   headers: {
@@ -54,5 +54,30 @@ export const quoteService = {
       );
     }
     return response.json();
+  },
+
+  async uploadQuote(file: File, profile: Profile) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('profile', profile);
+
+    const response = await fetch('/api/quote_checks', {
+      method: 'POST',
+      headers: {
+        ...API_CONFIG.headers,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Error while creating the quote.');
+    }
+
+    const data = await response.json();
+    if (!data.id) {
+      throw new Error("The API didn't return an ID.");
+    }
+
+    return data;
   },
 };

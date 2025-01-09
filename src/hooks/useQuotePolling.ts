@@ -8,33 +8,43 @@ import { QuoteChecksId, Status } from '@/types';
 export const useQuotePolling = (quoteCheckId: string) => {
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [shouldRedirectToUpload, setShouldRedirectToUpload] =
+    useState<boolean>(false);
 
   useEffect(() => {
+    if (shouldRedirectToUpload) {
+      setIsLoading(false);
+      return;
+    }
+
     let intervalId: NodeJS.Timeout | undefined = undefined;
+    let isPollingActive = true;
     let retryCount = 0;
     const maxRetries = 20;
 
     const pollQuote = async () => {
+      if (!isPollingActive) return;
+
       try {
         const data = await quoteService.getQuote(quoteCheckId);
         setCurrentDevis(data);
 
-        if (data.status === Status.PENDING && retryCount < maxRetries) {
-          intervalId = setInterval(async () => {
-            retryCount++;
-            const retryData = await quoteService.getQuote(quoteCheckId);
+        const isInvalidStatus = data.status === Status.INVALID;
+        const hasFileError = data.error_details?.[0]?.category === 'file';
 
-            if (retryData.status !== Status.PENDING) {
-              setCurrentDevis(retryData);
-              if (intervalId) clearInterval(intervalId);
-              setIsLoading(false);
-            }
-          }, 5000);
+        if (isInvalidStatus && hasFileError) {
+          setShouldRedirectToUpload(true);
+          setIsLoading(false);
+          return;
+        }
+
+        if (data.status === Status.PENDING && retryCount < maxRetries) {
+          retryCount++;
+          intervalId = setTimeout(pollQuote, 5000);
         } else {
           setIsLoading(false);
         }
       } catch (error) {
-        console.error('Erreur lors de la récupération du devis :', error);
         setCurrentDevis(null);
         setIsLoading(false);
       }
@@ -43,11 +53,12 @@ export const useQuotePolling = (quoteCheckId: string) => {
     pollQuote();
 
     return () => {
+      isPollingActive = false;
       if (intervalId) {
-        clearInterval(intervalId);
+        clearTimeout(intervalId);
       }
     };
-  }, [quoteCheckId]);
+  }, [quoteCheckId, shouldRedirectToUpload]);
 
-  return { currentDevis, isLoading };
+  return { currentDevis, isLoading, shouldRedirectToUpload };
 };

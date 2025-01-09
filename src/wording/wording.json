@@ -25,8 +25,7 @@
       "title": "Que pensez-vous de ces retours ?"
     },
     "notice": {
-      "description": "Notre modèle est en cours de construction, vos retours sont précieux pour nous aider à le co-construire",
-      "title": "Outil en cours de fiabilisation"
+      "button_close": "Masquer le message"
     },
     "quote_error_card": {
       "badge_correction": "{number} correction",
@@ -221,6 +220,10 @@
       "organizationDetails": "Vérifiez vos devis de rénovation énergétique",
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
+    },
+    "notice": {
+      "description": "Notre modèle est en cours de construction, vos retours sont précieux pour nous aider à le co-construire.",
+      "title": "Outil en cours de fiabilisation"
     }
   },
   "pending_page": {
@@ -228,6 +231,12 @@
     "title": "Chargement"
   },
   "upload": {
+    "error": {
+      "notice": {
+        "description": "Veuillez fournir un fichier PDF authentique, non converti à partir d'images ou d'autres formats.",
+        "title": "Format du fichier non valide"
+      }
+    },
     "section_upload": {
       "alert": {
         "description": "Les devis soumis restent strictement confidentiels.",

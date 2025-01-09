@@ -1,3 +1,4 @@
+import React from 'react';
 import { default as NextLink } from 'next/link';
 
 export enum LinkSize {
@@ -17,6 +18,7 @@ export interface LinkProps {
   icon?: string;
   label: string;
   legacyBehavior?: boolean;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   size?: LinkSize;
   variant?: LinkVariant;
@@ -27,15 +29,25 @@ const Link: React.FC<LinkProps> = ({
   icon,
   label,
   legacyBehavior = false,
+  onClick,
   onSubmit,
   size = LinkSize.MEDIUM,
   variant = LinkVariant.PRIMARY,
 }) => {
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (variant === LinkVariant.DISABLED) {
+      event.preventDefault();
+      return;
+    }
+
     if (onSubmit) {
       event.preventDefault();
-      const formEvent = new Event('submit', { bubbles: true });
-      onSubmit(formEvent as unknown as React.FormEvent<HTMLFormElement>);
+      onSubmit(event as unknown as React.FormEvent<HTMLFormElement>);
+    }
+
+    if (onClick) {
+      event.preventDefault();
+      onClick(event);
     }
   };
 
