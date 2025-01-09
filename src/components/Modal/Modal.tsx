@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     shouldRender && (
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-10 ${
+        className={`fixed inset-0 bg-black bg-opacity-50 z-100 ${
           position === ModalPosition.CENTER
             ? 'flex items-center justify-center'
             : 'flex items-center justify-end'
