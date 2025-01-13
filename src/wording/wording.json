@@ -233,7 +233,7 @@
   "upload": {
     "error": {
       "notice": {
-        "description": "Veuillez fournir un fichier PDF non converti à partir d'images ou d'autres formats.",
+        "description": "Ce format n'est pas supporté, merci d'utiliser des fichiers PDF non convertis à partir d'images ou d'autres formats.",
         "title": "Format du fichier non valide"
       }
     },
