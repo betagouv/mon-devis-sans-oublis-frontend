@@ -15,6 +15,13 @@ export const quoteService = {
     return response.json();
   },
 
+  async getQuoteMetadata() {
+    const response = await fetch('/api/quote_checks/metadata', {
+      headers: API_CONFIG.headers,
+    });
+    return response.json();
+  },
+
   async sendErrorFeedback(
     comment: string | null,
     errorDetailsId: string,
@@ -53,6 +60,25 @@ export const quoteService = {
         `Failed to send feedback: ${response.status} ${response.statusText}`
       );
     }
+    return response.json();
+  },
+
+  async sendQuoteMetadata(metadata: { aides: string[]; gestes: string[] }) {
+    const response = await fetch(`/api/quote_checks/metadata`, {
+      method: 'POST',
+      headers: {
+        ...API_CONFIG.headers,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(metadata),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to send quote metadata: ${response.status} ${response.statusText}`
+      );
+    }
+
     return response.json();
   },
 
