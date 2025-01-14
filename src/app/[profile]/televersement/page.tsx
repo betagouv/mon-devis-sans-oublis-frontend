@@ -85,12 +85,12 @@ export default function Televersement({
     try {
       const data = await quoteService.uploadQuote(file, profile as Profile);
 
-      if (selectedAides.length > 0 || selectedGestes.length > 0) {
-        await quoteService.sendQuoteMetadata({
-          aides: selectedAides,
-          gestes: selectedGestes,
-        });
-      }
+      // if (selectedAides.length > 0 || selectedGestes.length > 0) {
+      //   await quoteService.sendQuoteMetadata({
+      //     aides: selectedAides,
+      //     gestes: selectedGestes,
+      //   });
+      // }
 
       router.push(`/${params.profile}/televersement/${data.id}`);
     } catch (error) {
@@ -164,11 +164,10 @@ export default function Televersement({
                   </li>
                   <li
                     className={
-                      !file ||
-                      fileUploadedError ||
-                      !selectedAides.length ||
-                      !selectedGestes.length
-                        ? 'cursor-not-allowed'
+                      !file || fileUploadedError
+                        ? // || !selectedAides.length ||
+                          // !selectedGestes.length
+                          'cursor-not-allowed'
                         : undefined
                     }
                   >
@@ -179,11 +178,10 @@ export default function Televersement({
                       }
                       onSubmit={handleSubmit}
                       variant={
-                        file &&
-                        !fileUploadedError &&
-                        selectedAides.length > 0 &&
-                        selectedGestes.length > 0
-                          ? LinkVariant.PRIMARY
+                        file && !fileUploadedError
+                          ? // && selectedAides.length > 0 &&
+                            // selectedGestes.length > 0
+                            LinkVariant.PRIMARY
                           : LinkVariant.DISABLED
                       }
                     />
