@@ -63,29 +63,15 @@ export const quoteService = {
     return response.json();
   },
 
-  async sendQuoteMetadata(metadata: { aides: string[]; gestes: string[] }) {
-    const response = await fetch(`/api/quote_checks/metadata`, {
-      method: 'POST',
-      headers: {
-        ...API_CONFIG.headers,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(metadata),
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to send quote metadata: ${response.status} ${response.statusText}`
-      );
-    }
-
-    return response.json();
-  },
-
-  async uploadQuote(file: File, profile: Profile) {
+  async uploadQuote(
+    file: File,
+    metadata: { aides: string[]; gestes: string[] },
+    profile: Profile
+  ) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('profile', profile);
+    formData.append('metadata', JSON.stringify(metadata));
 
     const response = await fetch('/api/quote_checks', {
       method: 'POST',

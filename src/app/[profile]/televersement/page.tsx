@@ -83,14 +83,11 @@ export default function Televersement({
     }
 
     try {
-      const data = await quoteService.uploadQuote(file, profile as Profile);
-
-      // if (selectedAides.length > 0 || selectedGestes.length > 0) {
-      //   await quoteService.sendQuoteMetadata({
-      //     aides: selectedAides,
-      //     gestes: selectedGestes,
-      //   });
-      // }
+      const data = await quoteService.uploadQuote(
+        file as File,
+        { aides: selectedAides, gestes: selectedGestes },
+        profile as Profile
+      );
 
       router.push(`/${params.profile}/televersement/${data.id}`);
     } catch (error) {

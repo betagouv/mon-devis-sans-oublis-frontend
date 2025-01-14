@@ -84,7 +84,7 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
     ? `${localSelectedValues.length} ${
         localSelectedValues.length > 1 ? 'sélections' : 'sélection'
       }`
-    : 'Sélectionner';
+    : 'Sélectionner une ou plusieurs options';
 
   return (
     <div className='fr-select-group relative' ref={containerRef}>
@@ -94,7 +94,7 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       <button
         aria-expanded={isOpen}
         aria-haspopup='listbox'
-        className='fr-select'
+        className='fr-select text-left'
         id='multiselect'
         onClick={() => setIsOpen(!isOpen)}
         type='button'
@@ -103,7 +103,7 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       </button>
       {isOpen && (
         <div
-          className='fr-select-checkbox border-shadow p-4 h-[190px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'
+          className='fr-select-checkbox border-shadow p-4 h-[250px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'
           role='listbox'
         >
           {!isGroupedOptions(options) ? (
