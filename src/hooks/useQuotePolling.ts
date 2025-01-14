@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { quoteService } from '@/lib/api';
-import { QuoteChecksId, Status } from '@/types';
+import { Category, QuoteChecksId, Status } from '@/types';
 
 export const useQuotePolling = (quoteCheckId: string) => {
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
@@ -30,7 +30,8 @@ export const useQuotePolling = (quoteCheckId: string) => {
         setCurrentDevis(data);
 
         const isInvalidStatus = data.status === Status.INVALID;
-        const hasFileError = data.error_details?.[0]?.category === 'file';
+        const hasFileError =
+          data.error_details?.[0]?.category === Category.FILE;
 
         if (isInvalidStatus && hasFileError) {
           setShouldRedirectToUpload(true);

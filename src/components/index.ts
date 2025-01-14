@@ -19,6 +19,9 @@ export type { BlockNumberProps } from './BlockNumber/BlockNumber';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
+// CheckboxGroup
+export { default as CheckboxGroup } from './CheckboxGroup/CheckboxGroup';
+export type { CheckboxGroupProps } from './CheckboxGroup/CheckboxGroup';
 // Confetti
 export { default as Confetti } from './Confetti/Confetti';
 // Footer
@@ -50,6 +53,9 @@ export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/Error
 // Modal - GlobalErrorFeedbacksModal
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
+// MultiSelectCheckbox
+export { default as MultiSelectCheckbox } from './MultiSelectCheckbox/MultiSelectCheckbox';
+export type { MultiSelectCheckboxProps } from './MultiSelectCheckbox/MultiSelectCheckbox';
 // Notice
 export { default as Notice, NoticeType } from './Notice/Notice';
 export type { NoticeProps } from './Notice/Notice';
@@ -80,9 +86,6 @@ export type {
   CheckboxOption,
   RoundCheckboxGroupProps,
 } from './RoundCheckboxGroup/RoundCheckboxGroup';
-// Select
-export { default as Select } from './Select/Select';
-export type { SelectProps } from './Select/Select';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';

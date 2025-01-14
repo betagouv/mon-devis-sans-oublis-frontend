@@ -7,14 +7,24 @@ import {
   Alert,
   Link,
   LinkVariant,
+  MultiSelectCheckbox,
   Notice,
   NoticeType,
-  // Select,
   Upload,
 } from '@/components';
 import { quoteService } from '@/lib/api';
 import { Profile } from '@/types';
 import wording from '@/wording';
+
+interface GestesGroup {
+  group: string;
+  values: string[];
+}
+
+interface Metadata {
+  aides: string[];
+  gestes: GestesGroup[];
+}
 
 export default function Televersement({
   params: initialParams,
@@ -30,7 +40,10 @@ export default function Televersement({
   const [fileUploadedError, setFileUploadedError] = useState<string | null>(
     null
   );
-  // const [selectedOption, setSelectedOption] = useState<string>('');
+
+  const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [selectedAides, setSelectedAides] = useState<string[]>([]);
+  const [selectedGestes, setSelectedGestes] = useState<string[]>([]);
 
   const handleFileUpload = useCallback(
     (uploadedFile: File) => {
@@ -40,10 +53,26 @@ export default function Televersement({
     },
     [params.profile]
   );
+  const handleAidesChange = (values: string[]) => {
+    setSelectedAides(values);
+  };
 
-  // const handleSelectChange = (value: string) => {
-  //   setSelectedOption(value);
-  // };
+  const handleGestesChange = (values: string[]) => {
+    setSelectedGestes(values);
+  };
+
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      try {
+        const data = await quoteService.getQuoteMetadata();
+        setMetadata(data);
+      } catch (error) {
+        console.error('Error fetching metadata:', error);
+      }
+    };
+
+    fetchMetadata();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,6 +84,14 @@ export default function Televersement({
 
     try {
       const data = await quoteService.uploadQuote(file, profile as Profile);
+
+      if (selectedAides.length > 0 || selectedGestes.length > 0) {
+        await quoteService.sendQuoteMetadata({
+          aides: selectedAides,
+          gestes: selectedGestes,
+        });
+      }
+
       router.push(`/${params.profile}/televersement/${data.id}`);
     } catch (error) {
       console.error('Error during upload:', error);
@@ -95,16 +132,27 @@ export default function Televersement({
                 description={wording.upload.section_upload.alert.description}
                 moreDescription={wording.upload.section_upload.alert.more_info}
               />
-              {/*<h2>Votre projet</h2>
-         <Select
-           label={wording.upload.section_upload.select.label}
-           onChange={handleSelectChange}
-           options={[
-             { value: '1', label: 'Option 1' },
-             { value: '2', label: 'Option 2' },
-           ]}
-           selectedValue={selectedOption}
-         />*/}
+              <h2>Votre projet</h2>
+              {metadata && metadata.gestes && (
+                <MultiSelectCheckbox
+                  label='Geste(s) technique(s) concerné(s) par le devis'
+                  options={metadata.gestes.flatMap((group: GestesGroup) =>
+                    group.values.map((value) => ({
+                      id: value,
+                      label: value,
+                      group: group.group,
+                    }))
+                  )}
+                  onChange={handleGestesChange}
+                />
+              )}
+              {metadata && metadata.aides && (
+                <MultiSelectCheckbox
+                  label='Aide(s) visée(s) avec le devis'
+                  options={metadata.aides}
+                  onChange={handleAidesChange}
+                />
+              )}
               <div className='fr-mt-8w flex justify-center'>
                 <ul className='fr-btns-group fr-btns-group--inline-sm'>
                   <li>
@@ -116,8 +164,10 @@ export default function Televersement({
                   </li>
                   <li
                     className={
-                      // !fileUploaded || fileUploadedError || !selectedOption
-                      !file || fileUploadedError
+                      !file ||
+                      fileUploadedError ||
+                      !selectedAides.length ||
+                      !selectedGestes.length
                         ? 'cursor-not-allowed'
                         : undefined
                     }
@@ -129,8 +179,10 @@ export default function Televersement({
                       }
                       onSubmit={handleSubmit}
                       variant={
-                        // file && !fileUploadedError && selectedOption
-                        file && !fileUploadedError
+                        file &&
+                        !fileUploadedError &&
+                        selectedAides.length > 0 &&
+                        selectedGestes.length > 0
                           ? LinkVariant.PRIMARY
                           : LinkVariant.DISABLED
                       }
