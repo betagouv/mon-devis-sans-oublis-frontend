@@ -188,8 +188,11 @@
     "footer": {
       "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
       "buttons": [
-        { "href": "/", "label": "Mentions légales / Confidentialité" },
-        { "href": "/", "label": "Accessibilité : non conforme" }
+        {
+          "href": "/mentions-legales",
+          "label": "Mentions légales / Confidentialité"
+        },
+        { "href": "/accessibilite", "label": "Accessibilité : non conforme" }
       ],
       "organizationDetails": {
         "beforeLink": "Mon Devis Sans Oublis est un service public conçu par la ",
