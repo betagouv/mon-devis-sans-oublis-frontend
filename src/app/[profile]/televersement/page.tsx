@@ -133,6 +133,8 @@ export default function Televersement({
               {metadata && metadata.gestes && (
                 <MultiSelectCheckbox
                   label='Geste(s) technique(s) concerné(s) par le devis'
+                  onChange={handleGestesChange}
+                  optionnal={true}
                   options={metadata.gestes.flatMap((group: GestesGroup) =>
                     group.values.map((value) => ({
                       id: value,
@@ -140,14 +142,14 @@ export default function Televersement({
                       group: group.group,
                     }))
                   )}
-                  onChange={handleGestesChange}
                 />
               )}
               {metadata && metadata.aides && (
                 <MultiSelectCheckbox
                   label='Aide(s) visée(s) avec le devis'
-                  options={metadata.aides}
                   onChange={handleAidesChange}
+                  optionnal={true}
+                  options={metadata.aides}
                 />
               )}
               <div className='fr-mt-8w flex justify-center'>
@@ -161,10 +163,7 @@ export default function Televersement({
                   </li>
                   <li
                     className={
-                      !file ||
-                      fileUploadedError ||
-                      !selectedAides.length ||
-                      !selectedGestes.length
+                      !file || fileUploadedError
                         ? 'cursor-not-allowed'
                         : undefined
                     }
@@ -176,10 +175,7 @@ export default function Televersement({
                       }
                       onSubmit={handleSubmit}
                       variant={
-                        file &&
-                        !fileUploadedError &&
-                        selectedAides.length > 0 &&
-                        selectedGestes.length > 0
+                        file && !fileUploadedError
                           ? LinkVariant.PRIMARY
                           : LinkVariant.DISABLED
                       }

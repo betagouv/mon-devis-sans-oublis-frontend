@@ -18,7 +18,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   return (
     <fieldset
       aria-labelledby='checkboxes-legend checkboxes-messages'
-      className='fr-fieldset w-full'
+      className='fr-fieldset w-full mb-1'
       id='checkboxes'
     >
       {legend && (
@@ -32,7 +32,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
       {options.map((option, index) => (
         <div
           key={option.id}
-          className={`fr-fieldset__element ml-3 ${
+          className={`fr-fieldset__element ml-2 ${
             index !== options.length - 1 ? 'border-bottom-grey pb-3' : ''
           }`}
         >
