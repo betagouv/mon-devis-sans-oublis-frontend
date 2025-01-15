@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 
 import CheckboxGroup from '../CheckboxGroup/CheckboxGroup';
 
-type Option = {
+export type Option = {
   id: string;
   label: string;
   group: string;

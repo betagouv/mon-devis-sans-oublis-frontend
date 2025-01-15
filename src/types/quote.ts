@@ -24,6 +24,7 @@ export enum Type {
 
 export interface ErrorDetails {
   id: string;
+  geste_id: string;
   category: Category;
   type: Type;
   code: string;

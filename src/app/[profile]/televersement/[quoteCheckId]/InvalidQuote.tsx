@@ -47,6 +47,7 @@ const InvalidQuote = ({
       .filter((error) => error.category === category)
       .map((error) => ({
         id: error.id,
+        geste_id: error.geste_id,
         category: error.category,
         type: error.type,
         code: error.code,

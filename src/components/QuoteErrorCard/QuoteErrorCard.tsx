@@ -47,6 +47,25 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
     };
   }, {} as Record<string, typeof list>);
 
+  // const groupedProvidedValue = uniqueList.reduce((acc, item) => {
+  //   if (item.provided_value === null) {
+  //     return {
+  //       ...acc,
+  //       noValue: [...(acc.noValue || []), item],
+  //     };
+  //   }
+  //   const key = item.provided_value;
+
+  //   const updatedGroup = [...(acc[key] || []), item].sort((a, b) =>
+  //     a.geste_id.localeCompare(b.geste_id)
+  //   );
+
+  //   return {
+  //     ...acc,
+  //     [key]: updatedGroup,
+  //   };
+  // }, {} as Record<string, typeof list>);
+
   const isCategoryAdmin = list[0].category === Category.ADMIN;
 
   return (
