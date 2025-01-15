@@ -20,6 +20,10 @@ h2 {
   display: none;
 }
 
+.fr-checkbox-group {
+  user-select: none;
+}
+
 .fr-header {
   z-index: 98;
 }

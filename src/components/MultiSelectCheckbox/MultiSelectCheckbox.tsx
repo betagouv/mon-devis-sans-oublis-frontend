@@ -13,6 +13,7 @@ type Option = {
 export interface MultiSelectCheckboxProps {
   label: string;
   onChange: (values: string[]) => void;
+  optionnal?: boolean;
   options: string[] | Option[];
   selectedValues?: string[];
 }
@@ -20,6 +21,7 @@ export interface MultiSelectCheckboxProps {
 export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   label,
   onChange,
+  optionnal,
   options,
   selectedValues = [],
 }) => {
@@ -80,17 +82,28 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       }, {} as { [key: string]: { id: string; label: string; checked: boolean }[] })
     : {};
 
+  const getDisplayLabel = (id: string): string => {
+    if (isGroupedOptions(options)) {
+      const option = options.find((opt) => opt.id === id);
+      return option?.label || id;
+    }
+    return id;
+  };
+
   const displayValue = localSelectedValues.length
-    ? `${localSelectedValues.length} ${
-        localSelectedValues.length > 1 ? 'sélections' : 'sélection'
+    ? `${
+        localSelectedValues.length > 1
+          ? `${localSelectedValues.length} sélections`
+          : getDisplayLabel(localSelectedValues[0])
       }`
     : 'Sélectionner une ou plusieurs options';
 
   return (
-    <div className='fr-select-group relative' ref={containerRef}>
+    <div className='fr-select-group relative fr-mb-4w' ref={containerRef}>
       <label className='fr-label' htmlFor='multiselect'>
         {label}
       </label>
+      {optionnal && <div className='fr-hint-text my-2'>Optionnel</div>}
       <button
         aria-expanded={isOpen}
         aria-haspopup='listbox'
@@ -102,27 +115,28 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         {displayValue}
       </button>
       {isOpen && (
-        <div
-          className='fr-select-checkbox border-shadow p-4 h-[250px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'
-          role='listbox'
-        >
+        <>
           {!isGroupedOptions(options) ? (
-            <CheckboxGroup
-              onChange={handleCheckboxChange}
-              options={simpleOptions}
-            />
+            <div className='fr-select-checkbox border-shadow pt-5 pb-2 pl-2 h-[180px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
+              <CheckboxGroup
+                onChange={handleCheckboxChange}
+                options={simpleOptions}
+              />
+            </div>
           ) : (
-            Object.entries(groupedOptions).map(([group, groupOptions]) => (
-              <div key={group} className='fr-fieldset'>
-                <legend className='fr-fieldset__legend'>{group}</legend>
-                <CheckboxGroup
-                  onChange={handleCheckboxChange}
-                  options={groupOptions}
-                />
-              </div>
-            ))
+            <div className='fr-select-checkbox border-shadow p-4 pb-0 h-[300px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
+              {Object.entries(groupedOptions).map(([group, groupOptions]) => (
+                <div key={group} className='fr-fieldset'>
+                  <legend className='fr-fieldset__legend'>{group}</legend>
+                  <CheckboxGroup
+                    onChange={handleCheckboxChange}
+                    options={groupOptions}
+                  />
+                </div>
+              ))}
+            </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
