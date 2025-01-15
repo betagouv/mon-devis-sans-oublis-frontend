@@ -10,7 +10,7 @@ import {
 } from '@/components';
 import { marianne, spectral } from '@/styles/fonts';
 import '@/styles/globals.css';
-import { initDsfr } from '@/utils/dsfr';
+import { initDsfr } from '@/utils';
 import wording from '@/wording';
 
 // DSFR initialization

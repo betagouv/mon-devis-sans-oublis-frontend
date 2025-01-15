@@ -1,4 +1,11 @@
 {
+  "accessibilty": {
+    "first_paragraph": "L'interface <strong>Mon Devis Sans Oublis</strong> respecte au mieux les principes d'accessibilité de base du Web : balises HTML sémantiques, textes et icônes contrastés, hierarchie des titres des pages, accessibilité des formulaires, conception pour mobile d'abord, textes alternatifs pour les images, etc.",
+    "second_paragraph": "Cependant, le site est récent, en phase de développement, il n'a donc pas encore été audité pour tester son respect des exigences du <a href='https://accessibilite.numerique.gouv.fr/'>référentiel public d'accessibilité RGAA</a>, d'où la mention \"non conforme\" dans le pied de page.",
+    "third_paragraph": " Nous n'avons pas non plus testé le site avec des utilisateurs dans une optique d'accessibilité.",
+    "fourth_paragraph": "Le code du site, incluant le <a href='https://github.com/betagouv/mon-devis-sans-oublis-backend'>backend</a> et le <a href='https://github.com/betagouv/mon-devis-sans-oublis-frontend'>frontend</a>, est entièrement public, n'hésitez pas à nous faire des retours.",
+    "title": "Accessibilité"
+  },
   "components": {
     "alert": {
       "see_less": "Voir moins",
@@ -228,6 +235,34 @@
       "description": "Notre modèle est en cours de construction, vos retours sont précieux pour nous aider à le co-construire.",
       "title": "Outil en cours de fiabilisation"
     }
+  },
+  "legal_notice": {
+    "access_data": "Qui va avoir accès à ces données ?",
+    "access_data_description": "• Les membres de l’équipe de Mon Devis Sans Oublis pour une amélioration continue et le support utilisateur.",
+    "access_data_description_2": "• Les personnes avec qui vous partagez votre lien de correction. Le contenus du Devis n’est pas partagé mais uniquement les corrections à apporter, le nom de fichier ainsi que l’intitulé des gestes.",
+    "editor": "Éditeur du site",
+    "editor_address": "Tour Séquoia",
+    "editor_address_2": "1 place Carpeaux, 92800 Puteaux, France",
+    "editor_description": "Ministère de la Transition écologique (MTE)",
+    "editor_description_2": "Direction générale de l’Aménagement, du Logement et de la Nature (DGALN)",
+    "hosting_provider": "Prestataire d’hébergement",
+    "hosting_provider_description": "Notre serveur est géré par la société française <a href='https://scalingo.com/'>Scalingo</a> et est physiquement localisé en France. Voici la <a href='https://annuaire-entreprises.data.gouv.fr/entreprise/scalingo-808665483'>fiche entreprise</a> de Scalingo.",
+    "processing_quote": "Traitement des devis",
+    "processing_quote_description": "Lorsque vous soumettez un devis sur Mon Devis Sans Oublis, voici ce qui se passe :",
+    "processing_quote_description_step_1": "1. <strong>Réception et anonymisation</strong> : Le devis est reçu par notre serveur. Nous récupérons le texte associé et l’anonymisons depuis nos propres serveurs.",
+    "processing_quote_description_step_2": "2. <strong>Analyse</strong> : Ensuite, nous utilisons les services de la société française <a href='https://mistral.ai/'>Mistral.ai</a> pour analyser les données anonymisées, identifier les gestes de travaux et les informations contenues dans le devis.",
+    "processing_quote_description_step_3": "3. <strong>Conservation temporaire</strong> : Nous conservons votre devis et vos corrections pendant 6 mois. Cela vous permet de corriger votre devis et d'y revenir ultérieurement si nécessaire. Cela nous permet également d’améliorer notre outil et sa fiabilité.",
+    "processing_quote_description_step_4": "4. <strong>Confidentialité</strong> : Aucune donnée privée n’est partagée avec des tiers. Les données sont utilisées uniquement pour l’analyse du devis et la production de corrections.",
+    "publication_director": "Directeur de publication",
+    "publication_director_description": "Monsieur Philippe MAZENC, directeur général de la DGALN",
+    "share_corrections": "Partage des corrections",
+    "share_corrections_description": "Les corrections sont privées et non indexées par les moteurs de recherche. Vous pouvez partager le lien avec un tiers, mais cette action relève de votre responsabilité.",
+    "statistics": "Suivi et statistiques",
+    "statistics_description": "Nous utilisons le traceur libre Matomo, via l'instance hébergée par les services de l'État sur stats.beta.gouv.fr. Ce suivi ne nécessite pas de bannière de consentement RGPD (dite \"cookies\").",
+    "terms_of_use": "Conditions générales d’utilisation",
+    "terms_of_use_description": "<strong>Mon Devis Sans Oublis</strong> est un service numérique de la Direction générale de l’aménagement, du logement et de la nature (DGALN).",
+    "terms_of_use_description_2": "Mon Devis Sans Oublis est un service numérique permettant de pré-contrôler un devis de rénovation énergétique pour s’assurer qu’il contient toutes les informations nécessaires à son instruction.",
+    "title": "Mentions légales et Confidentialité"
   },
   "pending_page": {
     "description": "L'analyse de votre devis est en cours.",
