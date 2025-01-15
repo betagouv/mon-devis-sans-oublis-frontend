@@ -1,5 +1,5 @@
 {
-  "accessibilty": {
+  "accessibility": {
     "first_paragraph": "L'interface <strong>Mon Devis Sans Oublis</strong> respecte au mieux les principes d'accessibilité de base du Web : balises HTML sémantiques, textes et icônes contrastés, hierarchie des titres des pages, accessibilité des formulaires, conception pour mobile d'abord, textes alternatifs pour les images, etc.",
     "second_paragraph": "Cependant, le site est récent, en phase de développement, il n'a donc pas encore été audité pour tester son respect des exigences du <a href='https://accessibilite.numerique.gouv.fr/'>référentiel public d'accessibilité RGAA</a>, d'où la mention \"non conforme\" dans le pied de page.",
     "third_paragraph": " Nous n'avons pas non plus testé le site avec des utilisateurs dans une optique d'accessibilité.",
