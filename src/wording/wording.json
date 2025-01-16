@@ -107,28 +107,28 @@
       ],
       "cards": [
         {
-          "image": "isolation_ITI.png",
-          "title": "Isolation par l'intérieur"
+          "image": "/images/isolation_exterieur.png",
+          "title": "Isolation par l'extérieur"
         },
         {
-          "image": "menuiserie.png",
-          "title": "Menuiserie"
-        },
-        {
-          "image": "eau_chaude_sanitaire.png",
-          "title": "Eau chaude sanitaire"
-        },
-        {
-          "image": "poele_granule.png",
-          "title": "Poêle à granulés"
-        },
-        {
-          "image": "pac.png",
+          "image": "/images/pompe_a_chaleur.png",
           "title": "Pompe à chaleur"
         },
         {
-          "image": "isolation_ITE.png",
-          "title": "Isolation par l'extérieur"
+          "image": "/images/vmc.png",
+          "title": "VMC"
+        },
+        {
+          "image": "/images/isolation_interieur.png",
+          "title": "Isolation par l'intérieur"
+        },
+        {
+          "image": "/images/menuiserie.png",
+          "title": "Menuiserie"
+        },
+        {
+          "image": "/images/eau_chaude_sanitaire.png",
+          "title": "Eau chaude sanitaire"
         }
       ],
       "subtitle": "Exemple de gestes de rénovation énergétique",

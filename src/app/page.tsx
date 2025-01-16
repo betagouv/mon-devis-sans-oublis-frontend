@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 import {
   Badge,
   BadgeVariant,
   BlockIcon,
   BlockNumber,
-  CardImage,
+  Card,
   Link,
   Tile,
 } from '@/components';
@@ -40,13 +41,21 @@ export default function Home() {
               {wording.homepage.section_examples.subtitle}
             </h2>
             <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-              <ul className='fr-raw-list fr-grid-row flex-nowrap !justify-start w-max lg:flex-wrap lg:!justify-center lg:w-full'>
+              <ul className='fr-raw-list fr-grid-row flex-nowrap gap-6 !justify-start w-max lg:flex-wrap lg:!justify-center lg:w-full'>
                 {wording.homepage.section_examples.cards.map((card, index) => (
                   <li
-                    className='flex-none w-[160px] whitespace-normal'
+                    className='flex-none w-[147px] whitespace-normal flex flex-col items-center'
                     key={index}
                   >
-                    <CardImage image={card.image} title={card.title} />
+                    <Image
+                      alt={card.title}
+                      height={132}
+                      src={card.image}
+                      width={147}
+                    />
+                    <p className='fr-text--xs fr-mt-1w text-center'>
+                      {card.title}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -122,6 +131,75 @@ export default function Home() {
         </div>
       </section>
       <section className='fr-container-fluid fr-py-10w bg-[var(--background-default-grey-hover)]'>
+        <div className='fr-container'>
+          <div className='fr-grid-row fr-grid-row--gutters flex flex-wrap'>
+            <div className='fr-col-12 fr-col-md-6 flex'>
+              <Card
+                image='/images/ministere_transition_ecologique.png'
+                title='Qui sommes-nous ?'
+              >
+                <p className='text-[var(--text-mention-grey)]'>
+                  Mon Devis Sans Oublis est un service public gratuit qui
+                  vérifie en quelques secondes la conformité des devis aux
+                  attendus réglementaires des aides à la rénovation énergétique.
+                  <br />
+                  <br />
+                  Nous sommes un service public lancé par le Ministère de la
+                  Transition Ecologique et la Direction du Numérique (DINUM)
+                  sous la forme d'une start-up d'Etat. Elle est en phase
+                  d'expérimentation avant un déploiement massif. N'hésitez pas à
+                  nous faire part de vos retours et suggestions d'améliorations.
+                </p>
+              </Card>
+            </div>
+            <div className='fr-col-12 fr-col-md-6 flex'>
+              <Card title='Quelles sont nos missions ?'>
+                <div className='[&_p]:m-0'>
+                  <div className='flex flex-row gap-2 mt-8'>
+                    <span className='fr-icon-map-pin-2-line text-[var(--background-action-high-blue-france)] mt-1' />
+                    <div className='flex flex-col'>
+                      <p className='font-bold text-[var(--text-title-grey)]'>
+                        Fluidifier l’instructions des aides
+                      </p>
+                      <p className='text-[var(--text-mention-grey)]'>
+                        Création d’un modèle d’analyse automatique qui compare
+                        les devis de rénovation énergétique avec les exigences
+                        des demandes d’aides.
+                      </p>
+                    </div>
+                  </div>
+                  <div className='flex flex-row gap-2 mt-8'>
+                    <span className='fr-icon-timer-line text-[var(--background-action-high-blue-france)] mt-1' />
+                    <div className='flex flex-col'>
+                      <p className='font-bold text-[var(--text-title-grey)]'>
+                        Réduire les délais d’instruction d’aide
+                      </p>
+                      <p className='text-[var(--text-mention-grey)]'>
+                        Réduction du nombre d’allers-retours avec les
+                        instructeurs d’aides avec un pré-contrôle gratuit et
+                        instantané.
+                      </p>
+                    </div>
+                  </div>
+                  <div className='flex flex-row gap-2 mt-8'>
+                    <span className='fr-icon-heart-line text-[var(--background-action-high-blue-france)] mt-1' />
+                    <div className='flex flex-col'>
+                      <p className='font-bold text-[var(--text-title-grey)]'>
+                        Améliorer la satisfaction des usagers
+                      </p>
+                      <p className='text-[var(--text-mention-grey)]'>
+                        Conception d’une interface simple qui accompagne les
+                        usagers dans la lecture et la correction des devis.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
           <h2>{wording.homepage.section_who_are_you.title}</h2>
           <p className='fr-text--lead text-center'>

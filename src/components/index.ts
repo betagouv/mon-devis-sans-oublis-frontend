@@ -16,6 +16,9 @@ export {
   BlockNumberSize,
 } from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
+// Card
+export { default as Card } from './Card/Card';
+export type { CardProps } from './Card/Card';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
