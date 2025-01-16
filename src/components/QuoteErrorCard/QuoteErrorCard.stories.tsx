@@ -23,6 +23,7 @@ export const Default: Story = {
     list: [
       {
         id: '1',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_001',
@@ -47,6 +48,7 @@ export const WithGroupedErrors: Story = {
     list: [
       {
         id: '1',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_001',
@@ -64,6 +66,7 @@ export const WithGroupedErrors: Story = {
       },
       {
         id: '2',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_002',
@@ -80,6 +83,7 @@ export const WithGroupedErrors: Story = {
       },
       {
         id: '3',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_003',
@@ -105,6 +109,7 @@ export const AdminCategory: Story = {
     list: [
       {
         id: '1',
+        geste_id: '1',
         category: Category.ADMIN,
         type: Type.MISSING,
         code: 'ERROR_001',
@@ -129,6 +134,7 @@ export const MultipleGroups: Story = {
     list: [
       {
         id: '1',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_001',
@@ -145,6 +151,7 @@ export const MultipleGroups: Story = {
       },
       {
         id: '2',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_002',
@@ -161,6 +168,7 @@ export const MultipleGroups: Story = {
       },
       {
         id: '3',
+        geste_id: '1',
         category: Category.GESTES,
         type: Type.MISSING,
         code: 'ERROR_003',

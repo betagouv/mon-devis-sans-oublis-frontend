@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import GlobalErrorFeedbacksModal from './GlobalErrorFeedbacksModal';
-import wording from '@/wording';
 
 describe('GlobalErrorFeedbacksModal', () => {
   const defaultProps = {

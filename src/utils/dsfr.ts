@@ -8,6 +8,10 @@ import '@gouvfr/dsfr/dist/utility/icons/icons-communication/icons-communication.
 // fr-icon-questionnaire-fill
 import '@gouvfr/dsfr/dist/utility/icons/icons-document/icons-document.min.css';
 // fr-icon-file-download-line
+import '@gouvfr/dsfr/dist/utility/icons/icons-health/icons-health.min.css';
+// fr-icon-heart-line
+import '@gouvfr/dsfr/dist/utility/icons/icons-map/icons-map.min.css';
+// fr-icon-map-pin-2-line
 import '@gouvfr/dsfr/dist/utility/icons/icons-media/icons-media.min.css';
 // fr-icon-headphone-fill
 import '@gouvfr/dsfr/dist/utility/icons/icons-others/icons-others.min.css';

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import CardImage from './CardImage';
 
 const meta = {
@@ -9,71 +8,31 @@ const meta = {
 } satisfies Meta<typeof CardImage>;
 
 export default meta;
-type Story = StoryObj<typeof CardImage>;
+type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const PreControl: Story = {
   args: {
-    image: 'checker.png',
-    title: 'Artisan',
+    title: 'Pré-contrôler en un clic les devis de rénovation énergétique',
+    description:
+      'Identifiez les mentions manquantes aux attendus réglementaires des aides.',
+    image: '/images/quote_control.png',
   },
 };
 
-export const WithLongTitle: Story = {
+export const GetHelp: Story = {
   args: {
-    image: 'checker.png',
-    title: 'A longer title that might wrap to multiple lines',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Example with a longer title to show text wrapping behavior.',
-      },
-    },
+    title: 'Obtenez vos aides de rénovation plus rapidement',
+    description:
+      'Accélérez l’instruction des aides de rénovation énergétique en évitant les allers-retours avec les instructeurs grâce à des devis conformes.',
+    image: '/images/get_help.png',
   },
 };
 
-export const CardImageGrid: Story = {
-  decorators: [
-    () => {
-      const cardImageData = [
-        {
-          image: 'checker.png',
-          title: 'Isolation',
-        },
-        {
-          image: 'checker.png',
-          title: 'Menuiserie',
-        },
-        {
-          image: 'checker.png',
-          title: 'Eau chaude sanitarire',
-        },
-        {
-          image: 'checker.png',
-          title: 'Système de chauffage',
-        },
-        {
-          image: 'checker.png',
-          title: 'Ventilation',
-        },
-        {
-          image: 'checker.png',
-          title: 'Système de régulation',
-        },
-      ];
-      return (
-        <div className='fr-grid-row fr-grid-row--center'>
-          <div className='scroll-container'>
-            <ul className='fr-grid-row fr-grid-row--gutters fr-raw-list'>
-              {cardImageData.map((cardImage, index) => (
-                <li className='fr-col-4 fr-col-md-2' key={index}>
-                  <CardImage image={cardImage.image} title={cardImage.title} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      );
-    },
-  ],
+export const ChangeQuote: Story = {
+  args: {
+    title: 'Recevez un pas à pas des modifications à apporter au devis',
+    description:
+      'Appliquez les corrections pour un devis sans oublis, prêt pour les demandes d’aides.',
+    image: '/images/change_quote.png',
+  },
 };

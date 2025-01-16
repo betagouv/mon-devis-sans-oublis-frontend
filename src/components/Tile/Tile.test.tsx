@@ -2,69 +2,62 @@ import { render, screen } from '@testing-library/react';
 
 import Tile from './Tile';
 
-describe('Tile', () => {
-  const defaultProps = {
+describe('Tile Component', () => {
+  const mockProps = {
     description: 'Test description',
-    href: '/test-link',
+    href: 'https://test.com',
     title: 'Test title',
   };
 
-  it('renders correctly with all props', () => {
-    render(<Tile {...defaultProps} />);
+  it('renders without image', () => {
+    render(<Tile {...mockProps} />);
 
-    // Check if title is rendered with correct link
-    const titleLink = screen.getByRole('link', { name: defaultProps.title });
-    expect(titleLink).toBeInTheDocument();
-    expect(titleLink).toHaveAttribute('href', defaultProps.href);
+    const titleLink = screen.getByRole('link', { name: mockProps.title });
+    expect(titleLink).toHaveAttribute('href', mockProps.href);
 
-    // Check if description is rendered
-    expect(screen.getByText(defaultProps.description)).toBeInTheDocument();
-  });
+    expect(screen.getByText(mockProps.description)).toBeInTheDocument();
 
-  it('renders with different props values', () => {
-    const newProps = {
-      description: 'Another description',
-      href: '/another-link',
-      title: 'Another title',
-    };
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
 
-    render(<Tile {...newProps} />);
-
-    expect(screen.getByText(newProps.title)).toBeInTheDocument();
-    expect(screen.getByText(newProps.description)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: newProps.title })).toHaveAttribute(
-      'href',
-      newProps.href
+    const contentDiv = screen.getByText(mockProps.description).parentElement;
+    expect(contentDiv).toHaveClass('!items-start');
+    expect(screen.getByText(mockProps.title).parentElement).toHaveClass(
+      '!text-left'
     );
   });
 
-  it('maintains correct HTML structure', () => {
-    render(<Tile {...defaultProps} />);
-
-    // Check if elements are nested correctly
-    const container = screen
-      .getByRole('link', { name: defaultProps.title })
-      .closest('div');
-    const title = screen.getByRole('heading');
-    const description = screen.getByText(defaultProps.description);
-
-    expect(container).toBeInTheDocument();
-    expect(title).toBeInTheDocument();
-    expect(description).toBeInTheDocument();
-  });
-
-  it('handles long text content appropriately', () => {
-    const longProps = {
-      description:
-        'A very long description that spans multiple lines and tests how the component handles lengthy content.',
-      href: '/test',
-      title:
-        'A very long title that should still be rendered properly within the component',
+  it('renders with image', () => {
+    const propsWithImage = {
+      ...mockProps,
+      image: '/test-image.jpg',
     };
 
-    render(<Tile {...longProps} />);
+    render(<Tile {...propsWithImage} />);
 
-    expect(screen.getByText(longProps.title)).toBeInTheDocument();
-    expect(screen.getByText(longProps.description)).toBeInTheDocument();
+    const image = screen.getByRole('img');
+    expect(image).toHaveAttribute('src');
+    expect(image).toHaveAttribute('alt', propsWithImage.title);
+    expect(image).toHaveAttribute('width', '80');
+    expect(image).toHaveAttribute('height', '80');
+
+    const contentDiv = screen.getByText(
+      propsWithImage.description
+    ).parentElement;
+    expect(contentDiv).toHaveClass('!items-center');
+    expect(screen.getByText(propsWithImage.title).parentElement).toHaveClass(
+      '!text-center'
+    );
+  });
+
+  it('applies correct text color to title link when image is present', () => {
+    const propsWithImage = {
+      ...mockProps,
+      image: '/test-image.jpg',
+    };
+
+    render(<Tile {...propsWithImage} />);
+
+    const titleLink = screen.getByRole('link', { name: propsWithImage.title });
+    expect(titleLink).toHaveClass('!text-[var(--text-title-grey)]');
   });
 });

@@ -16,6 +16,9 @@ export {
   BlockNumberSize,
 } from './BlockNumber/BlockNumber';
 export type { BlockNumberProps } from './BlockNumber/BlockNumber';
+// Card
+export { default as Card } from './Card/Card';
+export type { CardProps } from './Card/Card';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
@@ -77,9 +80,6 @@ export type { QuoteStatusLinkProps } from './QuoteStatusLink/QuoteStatusLink';
 // RoleCardIcon
 export { default as RoleCardIcon } from './RoleCardIcon/RoleCardIcon';
 export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
-// RoleCardImage
-export { default as RoleCardImage } from './RoleCardImage/RoleCardImage';
-export type { RoleCardImageProps } from './RoleCardImage/RoleCardImage';
 // RoundCheckboxGroup
 export { default as RoundCheckboxGroup } from './RoundCheckboxGroup/RoundCheckboxGroup';
 export type {
