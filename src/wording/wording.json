@@ -161,28 +161,28 @@
         {
           "alt": "Artisan qui souhaite gagner du temps",
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
-          "image": "card_artisan.png",
+          "image": "/images/card_artisan.png",
           "title": "Je suis un artisan",
           "url": "/artisan/televersement"
         },
         {
           "alt": "Particulier qui souhaite gagner du temps",
-          "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
-          "image": "card_individual.png",
+          "description": "Je souhaite effectuer une demande d’aide de rénovation énergétique sans encombre",
+          "image": "/images/card_individual.png",
           "title": "Je suis un particulier",
           "url": "/particulier/televersement"
         },
         {
           "alt": "Mandataire qui souhaite faire le lien",
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "image": "card_agent.png",
+          "image": "/images/card_agent.png",
           "title": "Je suis un.e mandataire",
           "url": "/mandataire/televersement"
         },
         {
           "alt": "Conseiller qui souhaite accompagner ses clients",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
-          "image": "card_advisor.png",
+          "image": "/images/card_advisor.png",
           "title": "Je suis un.e conseiller.e",
           "url": "/conseiller/televersement"
         }
@@ -353,7 +353,7 @@
           "title": "Je suis un artisan"
         },
         {
-          "description": "Je souhaite vérifier mes devis et gagner du temps dans les démarches",
+          "description": "Je souhaite effectuer une demande d’aide de rénovation énergétique sans encombre",
           "href": "/particulier/televersement",
           "icon": "fr-icon-home-4-fill",
           "title": "Je suis un particulier"

@@ -9,7 +9,6 @@ import {
   BlockNumber,
   CardImage,
   Link,
-  RoleCardImage,
   Tile,
 } from '@/components';
 import wording from '@/wording';
@@ -139,13 +138,11 @@ export default function Home() {
                   />
                 </div>
                 <div className='hidden md:flex w-full'>
-                  <RoleCardImage
-                    alt={card.alt}
+                  <Tile
                     description={card.description}
+                    href={card.url}
                     image={card.image}
-                    key={index}
                     title={card.title}
-                    url={card.url}
                   />
                 </div>
               </li>

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
+
 import Modal, { ModalPosition } from './Modal';
 
 describe('Modal', () => {
@@ -164,7 +165,7 @@ describe('Modal', () => {
   });
 
   it('works without optional onClose prop', () => {
-    const { onClose, ...propsWithoutOnClose } = defaultProps;
+    const { ...propsWithoutOnClose } = defaultProps;
     render(<Modal {...propsWithoutOnClose} />);
 
     act(() => {

@@ -28,6 +28,12 @@ h2 {
   z-index: 98;
 }
 
+.fr-tile__title a::after {
+  color: var(--background-action-high-blue-france);
+  height: 24px;
+  width: 24px;
+}
+
 /* Since corePlugins: { preflight: false }, borders are not applied by default */
 .border-blue {
   border: 1px solid var(--background-action-high-blue-france);
@@ -94,4 +100,11 @@ h2 {
 .fr-icon-tools-fill::before {
   mask-image: url('../../public/svg/design/tools-fill.svg');
   -webkit-mask-image: url('../../public/svg/design/tools-fill.svg');
+}
+
+@media (max-width: 767px) {
+  .fr-tile__title a::after {
+    height: 16px;
+    width: 16px;
+  }
 }
