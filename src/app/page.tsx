@@ -123,8 +123,8 @@ export default function Home() {
                     <span className='font-bold mr-1.5'>
                       Déposez votre devis
                     </span>
-                    afin qu'il soit analysé par notre outil qui vérifie que tous
-                    les attendus réglementaires soient bien présents.
+                    afin qu&apos;il soit analysé par notre outil qui vérifie que
+                    tous les attendus réglementaires soient bien présents.
                   </span>
                 }
               />
@@ -136,7 +136,8 @@ export default function Home() {
                     <span className='font-bold mr-1.5'>
                       Découvrez instantanément les suggestions de corrections
                     </span>
-                    adaptées aux demandes d’aides de rénovation énergétique.
+                    adaptées aux demandes d&apos;aides de rénovation
+                    énergétique.
                   </span>
                 }
               />
