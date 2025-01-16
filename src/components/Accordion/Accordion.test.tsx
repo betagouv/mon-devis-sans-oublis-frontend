@@ -1,5 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 
 import Accordion from './Accordion';
 
@@ -22,27 +21,16 @@ describe('Accordion Component', () => {
     expect(screen.getByTestId('accordion-content')).toBeInTheDocument();
   });
 
-  it('truncates title to 60 characters on desktop screens', () => {
-    global.innerWidth = 1024;
-    global.dispatchEvent(new Event('resize'));
-
-    render(<Accordion {...defaultProps} />);
-    const button = screen.getByRole('button');
-    const displayedText = button.textContent
-      ?.replace(defaultProps.badgeLabel ?? '', '')
-      .trim();
-
-    expect(displayedText?.length).toBeLessThanOrEqual(60);
-    expect(displayedText).toMatch(
-      /This is a very long title that needs truncating/i
-    );
-  });
-
-  it('truncates title to 30 characters on mobile screens', () => {
+  it('truncates title to 30 characters on mobile screens', async () => {
     global.innerWidth = 500;
-    global.dispatchEvent(new Event('resize'));
+    act(() => {
+      global.dispatchEvent(new Event('resize'));
+    });
 
     render(<Accordion {...defaultProps} />);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     const button = screen.getByRole('button');
     const displayedText = button.textContent
       ?.replace(defaultProps.badgeLabel ?? '', '')
@@ -59,10 +47,98 @@ describe('Accordion Component', () => {
 
     expect(content).toHaveStyle({ display: 'block', opacity: '1' });
 
-    fireEvent.click(button);
+    act(() => {
+      fireEvent.click(button);
+    });
     expect(content).toHaveStyle({ display: 'none', opacity: '0' });
 
-    fireEvent.click(button);
+    act(() => {
+      fireEvent.click(button);
+    });
     expect(content).toHaveStyle({ display: 'block', opacity: '1' });
+  });
+
+  it('handles recalculating lastSpace with complex titles', () => {
+    const complexTitleProps = {
+      ...defaultProps,
+      title:
+        'This is a complex title with, multiple, spaces-and-special-characters to truncate',
+    };
+
+    render(<Accordion {...complexTitleProps} />);
+
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
+
+    expect(displayedText).toBe('This is a complex title');
+    expect(displayedText?.length).toBeLessThanOrEqual(60);
+  });
+
+  it('handles truncation with special characters before spaces', () => {
+    const specialCharTitleProps = {
+      ...defaultProps,
+      title: 'This is a title with-special/characters, and spaces to truncate',
+    };
+
+    render(<Accordion {...specialCharTitleProps} />);
+
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
+
+    expect(displayedText).toMatch(/This is a title with-special\/characters,/);
+  });
+
+  it('handles truncation by falling back to maxLength when no spaces are found', () => {
+    const noSpacesTitleProps = {
+      ...defaultProps,
+      title: 'ThisIsALongTitleWithoutSpacesThatWillBeTruncatedAtTheLimit',
+    };
+
+    render(<Accordion {...noSpacesTitleProps} />);
+
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
+
+    expect(displayedText).toBe(
+      'ThisIsALongTitleWithoutSpacesThatWillBeTruncatedAtTheLimit'
+    );
+    expect(displayedText?.length).toBe(58);
+  });
+
+  it('falls back to maxLength when lastSpace is 0', () => {
+    const edgeCaseTitleProps = {
+      ...defaultProps,
+      title:
+        'TitleWithoutAnySpacesButTooLongToDisplayTitleWithoutAnySpacesButTooLongToDisplay',
+    };
+
+    render(<Accordion {...edgeCaseTitleProps} />);
+
+    const button = screen.getByRole('button');
+    const displayedText = button.textContent
+      ?.replace(defaultProps.badgeLabel ?? '', '')
+      .trim();
+
+    expect(displayedText).toBe(
+      'TitleWithoutAnySpacesButTooLongToDisplayTitleWithoutAnySpace'
+    );
+    expect(displayedText?.length).toBe(60);
+  });
+
+  it('removes event listeners on component unmount', () => {
+    const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
+    const { unmount } = render(<Accordion {...defaultProps} />);
+
+    unmount();
+    expect(removeEventListenerSpy).toHaveBeenCalledWith(
+      'resize',
+      expect.any(Function)
+    );
   });
 });

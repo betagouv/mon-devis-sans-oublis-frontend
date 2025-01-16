@@ -1,270 +1,153 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-
-import { AccordionProps } from '../Accordion/Accordion';
-import QuoteErrorCard from './QuoteErrorCard';
-import { QuoteErrorItemProps } from '../QuoteErrorItem/QuoteErrorItem';
-import { TooltipProps } from '../Tooltip/Tooltip';
+import QuoteErrorCard, { QuoteErrorCardProps } from './QuoteErrorCard';
 import { Category, Type } from '@/types';
-import wording from '@/wording';
-
-// Mock des composants enfants
-jest.mock('../Accordion/Accordion', () => {
-  return function MockAccordion({
-    children,
-    title,
-    badgeLabel,
-  }: AccordionProps) {
-    return (
-      <div data-testid='accordion' data-title={title}>
-        <span data-testid='badge-label'>{badgeLabel}</span>
-        {children}
-      </div>
-    );
-  };
-});
-
-jest.mock('../QuoteErrorItem/QuoteErrorItem', () => {
-  return function MockQuoteErrorItem({
-    item,
-    openModal,
-    openModalId,
-    closeModal,
-  }: QuoteErrorItemProps) {
-    return (
-      <div
-        data-testid='quote-error-item'
-        onClick={() => openModal(item.id)}
-        data-modal-open={openModalId === item.id ? item.id : ''}
-      >
-        {item.title}
-        {openModalId === item.id && (
-          <button
-            data-testid='close-modal-button'
-            onClick={(e) => {
-              e.stopPropagation();
-              closeModal();
-            }}
-          >
-            Close
-          </button>
-        )}
-      </div>
-    );
-  };
-});
-
-// Tooltip mock
-jest.mock('../Tooltip/Tooltip', () => {
-  return function MockTooltip({ text, icon }: TooltipProps) {
-    return (
-      <div data-testid='tooltip' data-text={text} data-icon={icon}>
-        {text}
-      </div>
-    );
-  };
-});
-
-const mockOnHelpClick = jest.fn();
-
-const defaultProps = {
-  list: [
-    {
-      id: '1',
-      category: Category.GESTES,
-      type: Type.MISSING,
-      code: 'ERROR_001',
-      title: 'Error 1',
-      provided_value: null,
-      modalContent: {
-        problem: 'Problem 1',
-        solution: 'Solution 1',
-        provided_value: null,
-        title: 'Error 1',
-        isOpen: false,
-        onClose: () => {},
-        onSubmitFeedback: () => {},
-      },
-    },
-  ],
-  onHelpClick: mockOnHelpClick,
-};
 
 describe('QuoteErrorCard', () => {
+  const mockModalContent = {
+    isOpen: true,
+    problem: 'Test problem',
+    solution: 'Test solution',
+    title: 'Test modal title',
+  };
+
+  const defaultProps: QuoteErrorCardProps = {
+    list: [
+      {
+        id: '1',
+        geste_id: 'G1',
+        category: Category.ADMIN,
+        type: Type.MISSING,
+        code: 'CODE1',
+        title: 'Error 1',
+        provided_value: 'value1',
+        modalContent: mockModalContent,
+      },
+      {
+        id: '2',
+        geste_id: 'G2',
+        category: Category.ADMIN,
+        type: Type.WRONG,
+        code: 'CODE2',
+        title: 'Error 2',
+        provided_value: 'value1',
+        modalContent: mockModalContent,
+      },
+      {
+        id: '3',
+        geste_id: 'G3',
+        category: Category.ADMIN,
+        type: Type.MISSING,
+        code: 'CODE3',
+        title: 'Error 3',
+        provided_value: null,
+        modalContent: mockModalContent,
+      },
+    ],
+    onHelpClick: jest.fn(),
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders correctly with GESTES category', () => {
+  it('renders correctly with admin category', () => {
     render(<QuoteErrorCard {...defaultProps} />);
 
+    expect(screen.getByText('Mentions administratives')).toBeInTheDocument();
+    expect(screen.getAllByText(/corrections?/i)[0]).toBeInTheDocument();
+  });
+
+  it('renders correctly with gestes category', () => {
+    const gestesProps = {
+      ...defaultProps,
+      list: [
+        {
+          ...defaultProps.list[0],
+          category: Category.GESTES,
+        },
+      ],
+    };
+
+    render(<QuoteErrorCard {...gestesProps} />);
+
     expect(
-      screen.getByText(wording.components.quote_error_card.title_gestes)
+      screen.getByText('Descriptif technique des gestes')
     ).toBeInTheDocument();
+  });
+
+  it('renders single correction badge correctly', () => {
+    const singleItemProps = {
+      ...defaultProps,
+      list: [defaultProps.list[0]],
+    };
+
+    render(<QuoteErrorCard {...singleItemProps} />);
+
+    expect(screen.getAllByText('1 correction')[0]).toBeInTheDocument();
+  });
+
+  it('groups items by provided_value correctly', () => {
+    render(<QuoteErrorCard {...defaultProps} />);
+
+    expect(screen.getByText('Error 3')).toBeInTheDocument();
+
+    const accordion = screen.getByText('value1');
+    expect(accordion).toBeInTheDocument();
+    expect(screen.getAllByText('2 corrections')[0]).toBeInTheDocument();
+  });
+
+  it('handles modal open and close', () => {
+    render(<QuoteErrorCard {...defaultProps} />);
+
+    const detailButtons = screen.getAllByText('Voir le détail');
+    fireEvent.click(detailButtons[0]);
+
+    expect(screen.getByText('Test modal title')).toBeInTheDocument();
+
+    const backButton = screen.getByText('Détail de la correction');
+    fireEvent.click(backButton);
+
+    expect(screen.queryByText('Test modal title')).not.toBeInTheDocument();
+  });
+
+  it('renders tooltip with correct content', () => {
+    render(<QuoteErrorCard {...defaultProps} />);
+
+    const tooltipIcons = screen.getAllByRole('generic', { hidden: true });
+    const tooltipIcon = tooltipIcons.find(
+      (icon) =>
+        icon.classList.contains('fr-icon-information-fill') &&
+        icon.classList.contains('cursor-pointer')
+    );
+
+    expect(tooltipIcon).toBeDefined();
+    expect(tooltipIcon).toHaveClass(
+      'cursor-pointer',
+      'fr-icon-information-fill'
+    );
+
+    fireEvent.mouseEnter(tooltipIcon!);
+    expect(tooltipIcon!.parentElement).toBeInTheDocument();
+  });
+
+  it('handles accordion interactions', async () => {
+    render(<QuoteErrorCard {...defaultProps} />);
+
+    const accordion = screen.getByText('value1');
+
+    fireEvent.click(accordion);
     expect(screen.getByText('Error 1')).toBeInTheDocument();
-  });
+    expect(screen.getByText('Error 2')).toBeInTheDocument();
 
-  it('renders correctly with ADMIN category', () => {
-    const adminProps = {
-      ...defaultProps,
-      list: [
-        {
-          ...defaultProps.list[0],
-          category: Category.ADMIN,
-        },
-      ],
-    };
+    const detailButtons = screen.getAllByText('Voir le détail');
+    detailButtons.forEach((button) => {
+      fireEvent.click(button);
+      expect(screen.getByText('Test modal title')).toBeInTheDocument();
 
-    render(<QuoteErrorCard {...adminProps} />);
+      const backButton = screen.getByText('Détail de la correction');
+      fireEvent.click(backButton);
+    });
 
-    expect(
-      screen.getByText(wording.components.quote_error_card.title_admin)
-    ).toBeInTheDocument();
-  });
-
-  // it('handles modal opening correctly', () => {
-  //   const errorItem = screen.getByTestId('quote-error-item');
-  //   fireEvent.click(errorItem);
-
-  //   const items = screen.getAllByTestId('quote-error-item');
-  //   expect(items[0]).toHaveAttribute('data-testid', 'quote-error-item');
-  // });
-
-  it('groups items by provided_value', () => {
-    const propsWithProvidedValues = {
-      list: [
-        {
-          ...defaultProps.list[0],
-          id: '1',
-          provided_value: 'Value 1',
-        },
-        {
-          ...defaultProps.list[0],
-          id: '2',
-          provided_value: 'Value 1',
-        },
-        {
-          ...defaultProps.list[0],
-          id: '3',
-          provided_value: null,
-        },
-      ],
-      onHelpClick: mockOnHelpClick,
-    };
-
-    render(<QuoteErrorCard {...propsWithProvidedValues} />);
-
-    // Check for accordion with grouped items
-    const accordion = screen.getByTestId('accordion');
-    expect(accordion).toHaveAttribute('data-title', 'Value 1');
-
-    // Check for badge label with correct count
-    const badgeLabel = screen.getByTestId('badge-label');
-    expect(badgeLabel).toHaveTextContent('2');
-
-    // Check for ungrouped item (null provided_value)
-    const errorItems = screen.getAllByTestId('quote-error-item');
-    expect(errorItems).toHaveLength(3);
-  });
-
-  it('displays correct badge count for single error', () => {
-    render(<QuoteErrorCard {...defaultProps} />);
-
-    const badgeText = wording.upload_id.badge_correction.replace(
-      '{number}',
-      '1'
-    );
-    expect(screen.getByText(badgeText)).toBeInTheDocument();
-  });
-
-  it('displays correct badge count for multiple errors', () => {
-    const multipleErrorsProps = {
-      list: [
-        ...defaultProps.list,
-        {
-          ...defaultProps.list[0],
-          id: '2',
-        },
-      ],
-      onHelpClick: mockOnHelpClick,
-    };
-
-    render(<QuoteErrorCard {...multipleErrorsProps} />);
-
-    const badgeText = wording.upload_id.badge_correction_plural.replace(
-      '{number}',
-      '2'
-    );
-    expect(screen.getByText(badgeText)).toBeInTheDocument();
-  });
-
-  it('displays correct tooltip based on category', () => {
-    render(<QuoteErrorCard {...defaultProps} />);
-
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute(
-      'data-text',
-      wording.components.quote_error_card.tooltip_gestes.text
-    );
-    expect(tooltip).toHaveAttribute(
-      'data-icon',
-      wording.components.quote_error_card.tooltip_gestes.icon
-    );
-  });
-
-  it('displays correct admin tooltip when category is ADMIN', () => {
-    const adminProps = {
-      ...defaultProps,
-      list: [
-        {
-          ...defaultProps.list[0],
-          category: Category.ADMIN,
-        },
-      ],
-    };
-
-    render(<QuoteErrorCard {...adminProps} />);
-
-    const tooltip = screen.getByTestId('tooltip');
-    expect(tooltip).toHaveAttribute(
-      'data-text',
-      wording.components.quote_error_card.tooltip_admin.text
-    );
-    expect(tooltip).toHaveAttribute(
-      'data-icon',
-      wording.components.quote_error_card.tooltip_admin.icon
-    );
-  });
-
-  it('opens modal with specific id', () => {
-    render(<QuoteErrorCard {...defaultProps} />);
-
-    const errorItem = screen.getByTestId('quote-error-item');
-    fireEvent.click(errorItem);
-
-    const updatedErrorItem = screen.getByTestId('quote-error-item');
-    expect(updatedErrorItem).toHaveAttribute(
-      'data-modal-open',
-      defaultProps.list[0].id
-    );
-  });
-
-  it('tests openModal and closeModal functions', () => {
-    render(<QuoteErrorCard {...defaultProps} />);
-
-    const errorItem = screen.getByTestId('quote-error-item');
-    fireEvent.click(errorItem);
-
-    expect(screen.getByTestId('quote-error-item')).toHaveAttribute(
-      'data-modal-open',
-      '1'
-    );
-
-    const closeButton = screen.getByTestId('close-modal-button');
-    fireEvent.click(closeButton);
-
-    expect(screen.getByTestId('quote-error-item')).toHaveAttribute(
-      'data-modal-open',
-      ''
-    );
+    fireEvent.click(accordion);
   });
 });

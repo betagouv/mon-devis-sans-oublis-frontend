@@ -1,90 +1,137 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import Link, { LinkSize, LinkVariant } from './Link';
 
-describe('Link Component', () => {
-  const defaultProps = {
-    href: '/test',
-    label: 'Test Link',
-  };
+describe('Link', () => {
+  const mockOnClick = jest.fn();
+  const mockOnSubmit = jest.fn();
 
-  it('renders the component with default props', () => {
-    render(<Link {...defaultProps} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement.closest('a')).toHaveAttribute('href', '/test');
-    expect(linkElement.closest('a')).toHaveClass('fr-btn fr-btn--primary');
+  beforeEach(() => {
+    mockOnClick.mockClear();
+    mockOnSubmit.mockClear();
   });
 
-  it('applies the correct class for LARGE size', () => {
-    render(<Link {...defaultProps} size={LinkSize.LARGE} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement.closest('a')).toHaveClass('fr-btn--lg');
+  it('renders with default props', () => {
+    render(<Link href='/test' label='Test Link' />);
+    const link = screen.getByText('Test Link');
+    expect(link).toBeInTheDocument();
+    expect(link.closest('a')).toHaveClass('fr-btn', 'fr-btn--primary');
   });
 
-  it('applies the correct class for SMALL size', () => {
-    render(<Link {...defaultProps} size={LinkSize.SMALL} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement.closest('a')).toHaveClass('fr-btn--sm');
-  });
-
-  it('applies the correct class for the SECONDARY variant', () => {
-    render(<Link {...defaultProps} variant={LinkVariant.SECONDARY} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement.closest('a')).toHaveClass('fr-btn--secondary');
-  });
-
-  it('applies the disabled styles and prevents navigation', () => {
-    render(<Link {...defaultProps} variant={LinkVariant.DISABLED} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement.closest('a')).toHaveClass(
-      'fr-btn fr-btn--disabled !bg-[var(--background-disabled-grey)] !text-[var(--text-disabled-grey)] !cursor-not-allowed'
+  it('renders with different sizes', () => {
+    const { rerender } = render(
+      <Link href='/test' label='Test Link' size={LinkSize.LARGE} />
     );
-    expect(linkElement.closest('a')).toHaveAttribute('href', '');
+    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
+      'fr-btn--lg'
+    );
+
+    rerender(<Link href='/test' label='Test Link' size={LinkSize.SMALL} />);
+    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
+      'fr-btn--sm'
+    );
   });
 
-  it('calls the onSubmit handler when clicked', () => {
-    const mockOnSubmit = jest.fn();
-    render(<Link {...defaultProps} onSubmit={mockOnSubmit} />);
-    const linkElement = screen.getByText(/Test Link/i);
+  it('renders with different variants', () => {
+    const { rerender } = render(
+      <Link href='/test' label='Test Link' variant={LinkVariant.SECONDARY} />
+    );
+    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
+      'fr-btn--secondary'
+    );
 
-    fireEvent.click(linkElement.closest('a')!);
+    rerender(
+      <Link href='/test' label='Test Link' variant={LinkVariant.DISABLED} />
+    );
+    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
+      '!bg-[var(--background-disabled-grey)]',
+      '!text-[var(--text-disabled-grey)]',
+      '!cursor-not-allowed'
+    );
+  });
+
+  it('handles click events', () => {
+    render(<Link href='/test' label='Test Link' onClick={mockOnClick} />);
+    screen.getByText('Test Link').click();
+    expect(mockOnClick).toHaveBeenCalled();
+  });
+
+  it('handles submit events', () => {
+    render(<Link href='/test' label='Test Link' onSubmit={mockOnSubmit} />);
+    screen.getByText('Test Link').click();
     expect(mockOnSubmit).toHaveBeenCalled();
   });
 
-  it('renders with an icon when provided', () => {
-    render(<Link {...defaultProps} icon='fr-icon-example' />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    expect(linkElement.closest('a')).toHaveClass(
-      'fr-btn--icon-right fr-icon-example'
+  it('prevents default on disabled variant', () => {
+    const onClick = jest.fn();
+    render(
+      <Link
+        href='/test'
+        label='Test Link'
+        variant={LinkVariant.DISABLED}
+        onClick={onClick}
+      />
     );
+
+    const link = screen.getByText('Test Link').closest('a');
+    const mockEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    link?.dispatchEvent(mockEvent);
+    expect(mockEvent.defaultPrevented).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
   });
 
-  it('does not call onSubmit if not provided', () => {
-    render(<Link {...defaultProps} />);
-    const linkElement = screen.getByText(/Test Link/i);
-
-    fireEvent.click(linkElement.closest('a')!);
-    // No error means no unexpected call was made
+  it('renders with icon', () => {
+    render(<Link href='/test' label='Test Link' icon='fr-icon-test' />);
+    const link = screen.getByText('Test Link').closest('a');
+    expect(link).toHaveClass('fr-btn--icon-right', 'fr-icon-test');
   });
 
-  it('applies the correct text size class for SMALL size', () => {
-    render(<Link {...defaultProps} size={LinkSize.SMALL} />);
-    const textElement = screen.getByText(/Test Link/i);
-
-    expect(textElement).toHaveClass('fr-text--sm');
+  it('handles legacy behavior', () => {
+    render(<Link href='/test' label='Test Link' legacyBehavior />);
+    const link = screen.getByText('Test Link');
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
-  it('applies the correct text size class for default or LARGE size', () => {
-    render(<Link {...defaultProps} size={LinkSize.LARGE} />);
-    const textElement = screen.getByText(/Test Link/i);
+  it('applies correct text size classes', () => {
+    const { rerender } = render(<Link href='/test' label='Test Link' />);
+    expect(screen.getByText('Test Link')).toHaveClass('fr-text--lg');
 
-    expect(textElement).toHaveClass('fr-text--lg');
+    rerender(<Link href='/test' label='Test Link' size={LinkSize.SMALL} />);
+    expect(screen.getByText('Test Link')).toHaveClass('fr-text--sm');
+  });
+
+  it('handles both onClick and onSubmit', () => {
+    render(
+      <Link
+        href='/test'
+        label='Test Link'
+        onClick={mockOnClick}
+        onSubmit={mockOnSubmit}
+      />
+    );
+
+    screen.getByText('Test Link').click();
+    expect(mockOnSubmit).toHaveBeenCalled();
+    expect(mockOnClick).toHaveBeenCalled();
+  });
+
+  it('sets empty href when disabled', () => {
+    render(
+      <Link href='/test' label='Test Link' variant={LinkVariant.DISABLED} />
+    );
+    const link = screen.getByText('Test Link').closest('a');
+    expect(link).toHaveAttribute('href', '');
+  });
+
+  it('preserves href when not disabled', () => {
+    render(<Link href='/test' label='Test Link' />);
+    const link = screen.getByText('Test Link').closest('a');
+    expect(link).toHaveAttribute('href', '/test');
   });
 });
