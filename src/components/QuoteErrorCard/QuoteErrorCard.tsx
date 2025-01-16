@@ -13,6 +13,7 @@ import wording from '@/wording';
 export interface QuoteErrorCardProps {
   list: {
     id: string;
+    geste_id: string;
     category: Category;
     type: Type;
     code: string;
