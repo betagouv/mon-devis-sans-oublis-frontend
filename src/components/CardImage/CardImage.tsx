@@ -23,7 +23,7 @@ const CardImage: React.FC<CardImageProps> = ({ description, image, title }) => {
         />
       </div>
       <div
-        className='p-8 border-grey rounded-b-lg'
+        className='p-8 pb-0 border-grey rounded-b-lg'
         style={{ borderTop: 'none' }}
       >
         <h5>{title}</h5>

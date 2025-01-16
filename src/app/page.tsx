@@ -118,16 +118,39 @@ export default function Home() {
             <div className='flex flex-col'>
               <BlockNumber
                 number={1}
-                title='Déposez votre devis afin qu’il soit analysé par notre outil qui vérifie que tous les attendus réglementaires soient bien présents.'
+                title={
+                  <span>
+                    <span className='font-bold mr-1.5'>
+                      Déposez votre devis
+                    </span>
+                    afin qu'il soit analysé par notre outil qui vérifie que tous
+                    les attendus réglementaires soient bien présents.
+                  </span>
+                }
               />
               <BlockNumber
                 className='my-2'
                 number={2}
-                title='Découvrez instantanément les suggestions de corrections adaptées aux demandes d’aides de rénovation énergétique.'
+                title={
+                  <span>
+                    <span className='font-bold mr-1.5'>
+                      Découvrez instantanément les suggestions de corrections
+                    </span>
+                    adaptées aux demandes d’aides de rénovation énergétique.
+                  </span>
+                }
               />
               <BlockNumber
                 number={3}
-                title='Informez les parties prenantes (par ex: artisans, mandataires) et partagez vos corrections personnalisées.'
+                title={
+                  <span>
+                    Informez les parties prenantes (par ex: artisans,
+                    mandataires) et
+                    <span className='font-bold ml-1.5'>
+                      partagez vos corrections personnalisées.
+                    </span>
+                  </span>
+                }
               />
               <p className='bg-[var(--background-alt-blue-france)] p-4'>
                 <span className='fr-icon-restart-line mr-1 ml-0 text-[var(--text-title-blue-france)]' />
