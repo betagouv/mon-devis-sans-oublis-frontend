@@ -11,9 +11,12 @@ import {
   Link,
   Tile,
 } from '@/components';
+import { useIsDesktop } from '@/hooks';
 import wording from '@/wording';
 
 export default function Home() {
+  const isDesktop = useIsDesktop();
+
   return (
     <div className='[&_h2]:text-center'>
       <section className='fr-container-fluid fr-py-10w'>
@@ -130,21 +133,17 @@ export default function Home() {
                 className='fr-col-12 fr-col-md-6 fr-col-lg-3 flex'
                 key={index}
               >
-                <div className='block md:hidden w-full'>
-                  <Tile
-                    description={card.description}
-                    href={card.url}
-                    title={card.title}
-                  />
-                </div>
-                <div className='hidden md:flex w-full'>
-                  <Tile
-                    description={card.description}
-                    href={card.url}
-                    image={card.image}
-                    title={card.title}
-                  />
-                </div>
+                <Tile
+                  className={
+                    isDesktop
+                      ? 'hidden md:flex w-full'
+                      : 'block md:hidden w-full'
+                  }
+                  description={card.description}
+                  href={card.url}
+                  image={isDesktop ? card.image : undefined}
+                  title={card.title}
+                />
               </li>
             ))}
           </ul>

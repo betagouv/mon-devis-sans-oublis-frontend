@@ -1,16 +1,23 @@
 import Image from 'next/image';
 
 export interface TileProps {
+  className?: string;
   description: string;
   href: string;
   image?: string;
   title: string;
 }
 
-const Tile: React.FC<TileProps> = ({ description, href, image, title }) => {
+const Tile: React.FC<TileProps> = ({
+  className,
+  description,
+  href,
+  image,
+  title,
+}) => {
   return (
     <div
-      className='fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link'
+      className={`fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link ${className}`}
       id='tile-6661'
     >
       <div className='fr-tile__body'>
