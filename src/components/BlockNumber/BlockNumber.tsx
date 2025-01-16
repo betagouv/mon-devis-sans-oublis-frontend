@@ -28,10 +28,12 @@ const BlockNumber: React.FC<BlockNumberProps> = ({
           <h5 className='fr-mb-1w fr-mt-1w md:fr-mb-0 md:fr-mt-0'>{title}</h5>
         </div>
       ) : (
-        <>
-          <h3 className='fr-display--sm fr-m-0'>{number}</h3>
-          <h5 className='fr-mb-1w'>{title}</h5>
-        </>
+        <div className='flex flex-row gap-4'>
+          <h5 className='text-[40px] text-[var(--text-title-blue-france)]'>
+            {`${number}.`}
+          </h5>
+          <p style={{ marginTop: '-8px' }}>{title}</p>
+        </div>
       )}
 
       {description && <p className='hidden md:block'>{description}</p>}

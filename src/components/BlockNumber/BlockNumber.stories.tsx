@@ -13,10 +13,9 @@ type Story = StoryObj<typeof BlockNumber>;
 
 export const Default: Story = {
   args: {
-    description:
-      'Téléchargez en un clic votre devis au format pdf sur Mon Devis Sans Oublis en cliquant sur "Vérifier mon devis"',
     number: 1,
-    title: 'Envoyez votre devis',
+    title:
+      'Déposez votre devis afin qu’il soit analysé par notre outil qui vérifie que tous les attendus réglementaires soient bien présents.',
   },
 };
 

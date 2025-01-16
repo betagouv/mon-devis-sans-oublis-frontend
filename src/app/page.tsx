@@ -6,9 +6,9 @@ import Image from 'next/image';
 import {
   Badge,
   BadgeVariant,
-  BlockIcon,
   BlockNumber,
   Card,
+  CardImage,
   Link,
   Tile,
 } from '@/components';
@@ -20,24 +20,66 @@ export default function Home() {
 
   return (
     <div className='[&_h2]:text-center'>
+      <section className='fr-container-fluid fr-py-10w bg-[var(--background-default-grey-hover)]'>
+        <div className='fr-container'>
+          <div className='flex flex-col md:flex-row md:justify-between'>
+            <div className='fr-col-12 fr-col-md-5'>
+              <h1>{wording.homepage.section_examples.title}</h1>
+              <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4'>
+                {wording.homepage.section_examples.badges.map(
+                  (badge, index) => (
+                    <li key={index}>
+                      <Badge
+                        label={badge.label}
+                        variant={BadgeVariant.BLUE_LIGHT}
+                      />
+                    </li>
+                  )
+                )}
+              </ul>
+              <Link {...wording.homepage.check_quote_button} />
+            </div>
+            <div className='mt-10 md:mt-0 flex justify-center'>
+              <Image
+                alt='Mon Devis Sans Oublis'
+                className='w-auto h-[220px] md:h-[300px] lg:h-[376px] object-contain'
+                height={376}
+                sizes='100vw'
+                src='/images/homepage.png'
+                width={0}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <div className='fr-col-12 fr-col-lg-5'>
-            <h1>{wording.homepage.section_examples.title}</h1>
-            <ul className='fr-raw-list fr-badges-group fr-mb-3w flex flex-wrap gap-4'>
-              {wording.homepage.section_examples.badges.map((badge, index) => (
-                <li key={index}>
-                  <Badge
-                    label={badge.label}
-                    variant={BadgeVariant.BLUE_LIGHT}
-                  />
-                </li>
-              ))}
-            </ul>
-            <Link {...wording.homepage.check_quote_button} />
+          <h2>A quoi sert Mon Devis Sans Oublis ?</h2>
+          <div className='fr-grid-row fr-grid-row--gutters flex flex-col md:flex-row'>
+            <div className='fr-col-12 fr-col-md-4 flex-1'>
+              <CardImage
+                description='Identifiez les mentions manquantes aux attendus réglementaires des aides.'
+                image='/images/quote_control.png'
+                title='Pré-contrôler en un clic les devis de rénovation énergétique'
+              />
+            </div>
+            <div className='fr-col-12 fr-col-md-4 flex-1'>
+              <CardImage
+                description='Accélérez l’instruction des aides de rénovation énergétique en évitant les allers-retours avec les instructeurs grâce à des devis conformes.'
+                image='/images/get_help.png'
+                title='Obtenez vos aides de rénovation plus rapidement'
+              />
+            </div>
+            <div className='fr-col-12 fr-col-md-4 flex-1'>
+              <CardImage
+                description='Conception d’une interface simple qui accompagne les usagers dans la lecture et la correction des devis.'
+                image='/images/change_quote.png'
+                title='Améliorez la satisfaction des usagers'
+              />
+            </div>
           </div>
           <div className='fr-grid-row fr-grid-row--center'>
-            <h2 className='fr-mt-12w'>
+            <h2 className='fr-mt-8w'>
               {wording.homepage.section_examples.subtitle}
             </h2>
             <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
@@ -61,72 +103,42 @@ export default function Home() {
               </ul>
             </div>
           </div>
-        </div>
-      </section>
-      <section className='fr-container-fluid fr-py-10w bg-[var(--background-default-grey-hover)]'>
-        <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--center'>
-            <h2>{wording.homepage.section_steps.title}</h2>
-            <p className='fr-text--lead text-center'>
-              {wording.homepage.section_steps.description}
-            </p>
-          </div>
-          <div className='fr-grid-row fr-grid-row--gutters fr-mx-1w w-full flex justify-between'>
-            {wording.homepage.section_steps.number_blocks.map(
-              (block, index) => (
-                <React.Fragment key={index}>
-                  <BlockNumber
-                    className='fr-col-12 fr-col-md-3 text-center md:text-left'
-                    description={block.description}
-                    number={block.number}
-                    title={block.title}
-                  />
-                  {index <
-                    wording.homepage.section_steps.number_blocks.length - 1 && (
-                    <div className='text-[var(--background-action-high-blue-france)] flex justify-center items-center h-full w-full md:w-auto fr-my-3w md:fr-my-0 md:self-center'>
-                      <span
-                        aria-hidden='true'
-                        className='fr-icon-arrow-down-s-line md:!hidden'
-                      />
-                      <span
-                        aria-hidden='true'
-                        className='hidden md:!block fr-icon-arrow-right-s-line'
-                      />
-                    </div>
-                  )}
-                </React.Fragment>
-              )
-            )}
-          </div>
-          <p className='fr-mb-4w fr-mt-2w fr-text--lead text-center'>
-            <span
-              aria-hidden='true'
-              className='fr-icon-recycle-fill text-[var(--background-action-high-blue-france)] fr-mr-1w'
+          <h2 className='fr-mt-6w fr-mb-5w'>
+            {wording.homepage.section_steps.title}
+          </h2>
+          <div className='flex flex-col md:flex-row gap-10'>
+            <Image
+              alt='Mon Devis Sans Oublis'
+              className='w-auto lg:h-[420px] md:h-[380px] h-[224px] object-contain'
+              height={420}
+              sizes='100vw'
+              src='/images/three_steps.png'
+              width={0}
             />
-            {wording.homepage.section_steps.correction}
-          </p>
-          <div className='fr-grid-row fr-grid-row--center'>
-            <Link {...wording.homepage.check_quote_button} />
-          </div>
-        </div>
-      </section>
-      <section className='fr-container-fluid fr-py-10w'>
-        <div className='fr-container'>
-          <ul className='fr-raw-list fr-grid-row fr-grid-row--gutters fr-grid-row--center'>
-            {wording.homepage.section_icon_block.icon_blocks.map(
-              (block, index) => (
-                <li className='fr-col-12 fr-col-md-4' key={index}>
-                  <BlockIcon
-                    description={block.description}
-                    icon={block.icon}
-                    title={block.title}
-                  />
-                </li>
-              )
-            )}
-          </ul>
-          <div className='fr-grid-row fr-grid-row--center fr-mt-3w'>
-            <Link {...wording.homepage.check_quote_button} />
+            <div className='flex flex-col'>
+              <BlockNumber
+                number={1}
+                title='Déposez votre devis afin qu’il soit analysé par notre outil qui vérifie que tous les attendus réglementaires soient bien présents.'
+              />
+              <BlockNumber
+                className='my-2'
+                number={2}
+                title='Découvrez instantanément les suggestions de corrections adaptées aux demandes d’aides de rénovation énergétique.'
+              />
+              <BlockNumber
+                number={3}
+                title='Informez les parties prenantes (par ex: artisans, mandataires) et partagez vos corrections personnalisées.'
+              />
+              <p className='bg-[var(--background-alt-blue-france)] p-4'>
+                <span className='fr-icon-restart-line mr-1 ml-0 text-[var(--text-title-blue-france)]' />
+                {
+                  "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme."
+                }
+              </p>
+              <div className='flex items-end md:mt-auto mt-6 justify-center md:justify-start'>
+                <Link {...wording.homepage.check_quote_button} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -144,11 +156,9 @@ export default function Home() {
                   attendus réglementaires des aides à la rénovation énergétique.
                   <br />
                   <br />
-                  Nous sommes un service public lancé par le Ministère de la
-                  Transition Ecologique et la Direction du Numérique (DINUM)
-                  sous la forme d'une start-up d'Etat. Elle est en phase
-                  d'expérimentation avant un déploiement massif. N'hésitez pas à
-                  nous faire part de vos retours et suggestions d'améliorations.
+                  {
+                    "Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations."
+                  }
                 </p>
               </Card>
             </div>

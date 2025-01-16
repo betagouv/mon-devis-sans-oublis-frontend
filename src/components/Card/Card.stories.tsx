@@ -19,11 +19,9 @@ export const WhoAreWe: Story = {
         des aides à la rénovation énergétique.
         <br />
         <br />
-        Nous sommes un service public lancé par le Ministère de la Transition
-        Ecologique et la Direction du Numérique (DINUM) sous la forme d'une
-        start-up d'Etat. Elle est en phase d'expérimentation avant un
-        déploiement massif. N'hésitez pas à nous faire part de vos retours et
-        suggestions d'améliorations.
+        {
+          "Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations."
+        }
       </p>
     ),
     image: '/images/ministere_transition_ecologique.png',

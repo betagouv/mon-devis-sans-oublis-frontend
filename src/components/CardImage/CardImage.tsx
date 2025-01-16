@@ -8,14 +8,14 @@ export interface CardImageProps {
 
 const CardImage: React.FC<CardImageProps> = ({ description, image, title }) => {
   return (
-    <>
+    <div className='h-full'>
       <div
-        className='h-[216px] bg-[#FCFCFD] border-grey rounded-t-lg flex justify-center items-center'
+        className='h-[216px] bg-[#FCFCFD] border-grey rounded-t-lg flex justify-center items-center overflow-hidden'
         style={{ borderBottom: 'none' }}
       >
         <Image
           alt={title}
-          className='w-auto h-[180px] object-contain'
+          className='w-auto h-[180px] max-w-full object-contain'
           height={180}
           sizes='100vw'
           src={image}
@@ -29,7 +29,7 @@ const CardImage: React.FC<CardImageProps> = ({ description, image, title }) => {
         <h5>{title}</h5>
         <p className='fr-text--sm'>{description}</p>
       </div>
-    </>
+    </div>
   );
 };
 
