@@ -4,70 +4,66 @@ import { useState } from 'react';
 
 import Accordion from '../Accordion/Accordion';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import { ErrorFeedbacksModalProps } from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import QuoteErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
-import { Category, Type } from '@/types';
+import { Category, EnrichedErrorDetails, Type } from '@/types';
 import wording from '@/wording';
 
 export interface QuoteErrorCardProps {
-  list: {
-    id: string;
-    geste_id: string;
-    category: Category;
-    type: Type;
-    code: string;
-    title: string;
-    provided_value: string | null;
-    modalContent: ErrorFeedbacksModalProps;
-  }[];
+  list: EnrichedErrorDetails[];
   onHelpClick: (comment: string | null, errorDetailsId: string) => void;
 }
 
 const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
-  const openModal = (id: string) => {
-    setOpenModalId(id);
+  const openModal = (id: string) => setOpenModalId(id);
+  const closeModal = () => setOpenModalId(null);
+
+  const groupByProvidedValueAndGesteId = (list: EnrichedErrorDetails[]) => {
+    return list.reduce((acc, item) => {
+      let key: string;
+
+      if (item.category === Category.GESTES) {
+        // Group by provided_value and geste_id for GESTES
+        key = `${item.provided_value || 'Aucune valeur'}|${item.geste_id}`;
+      } else {
+        // Group by provided_value for ADMIN
+        key = `${item.provided_value || 'noValue'}`;
+      }
+
+      if (!acc[key]) {
+        acc[key] = new Set();
+      }
+
+      acc[key].add(item.title); // Avoid duplicates
+      return acc;
+    }, {} as Record<string, Set<string>>);
   };
 
-  const closeModal = () => {
-    setOpenModalId(null);
-  };
+  const transformGroupedData = (groupedData: Record<string, Set<string>>) => {
+    return Object.entries(groupedData).map(([key, titles]) => {
+      const [providedValue, gesteId] = key.includes('|')
+        ? key.split('|')
+        : [key, null];
 
-  const groupedProvidedValue = list.reduce((acc, item) => {
-    if (item.provided_value === null) {
       return {
-        ...acc,
-        noValue: [...(acc.noValue || []), item],
+        title: providedValue === 'noValue' ? null : providedValue,
+        gesteId,
+        items: Array.from(titles).map((title, index) => ({
+          title,
+          gesteId,
+          providedValue: providedValue === 'noValue' ? null : providedValue,
+          id: `${gesteId || 'admin'}-${index}`, // Unique ID for each item
+        })),
       };
-    }
-    return {
-      ...acc,
-      [item.provided_value]: [...(acc[item.provided_value] || []), item],
-    };
-  }, {} as Record<string, typeof list>);
+    });
+  };
 
-  // const groupedProvidedValue = uniqueList.reduce((acc, item) => {
-  //   if (item.provided_value === null) {
-  //     return {
-  //       ...acc,
-  //       noValue: [...(acc.noValue || []), item],
-  //     };
-  //   }
-  //   const key = item.provided_value;
+  const groupedData = groupByProvidedValueAndGesteId(list); // Group data
+  const transformedData = transformGroupedData(groupedData); // Transform data
 
-  //   const updatedGroup = [...(acc[key] || []), item].sort((a, b) =>
-  //     a.geste_id.localeCompare(b.geste_id)
-  //   );
-
-  //   return {
-  //     ...acc,
-  //     [key]: updatedGroup,
-  //   };
-  // }, {} as Record<string, typeof list>);
-
-  const isCategoryAdmin = list[0].category === Category.ADMIN;
+  const isCategoryAdmin = list[0]?.category === Category.ADMIN;
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
@@ -107,32 +103,70 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
       </div>
       <ul className='fr-raw-list'>
         {/* without provided_value */}
-        {groupedProvidedValue.noValue?.map((item) => (
-          <QuoteErrorItem
-            closeModal={closeModal}
-            item={item}
-            key={item.id}
-            onHelpClick={onHelpClick}
-            openModal={() => openModal(item.id)}
-            openModalId={openModalId}
-          />
-        ))}
+        {transformedData
+          .filter((group) => group.title === null)
+          .flatMap((group) =>
+            group.items.map((item) => (
+              <QuoteErrorItem
+                closeModal={closeModal}
+                item={{
+                  id: item.id,
+                  title: item.title,
+                  geste_id: item.gesteId || '',
+                  provided_value: item.providedValue,
+                  category: isCategoryAdmin ? Category.ADMIN : Category.GESTES,
+                  type: Type.MISSING,
+                  code: 'default-code',
+                  problem: null,
+                  solution: null,
+                  modalContent: {
+                    problem: null,
+                    solution: null,
+                    isOpen: false,
+                    title: item.title,
+                  },
+                }}
+                key={item.id}
+                onHelpClick={onHelpClick}
+                openModal={() => openModal(item.id)}
+                openModalId={openModalId}
+              />
+            ))
+          )}
         {/* with provided_value */}
-        {Object.entries(groupedProvidedValue).map(([value, items]) => {
-          if (value === 'noValue') return null;
-          return (
+        {transformedData
+          .filter((group) => group.title !== null)
+          .map((group) => (
             <Accordion
-              badgeLabel={`${(items.length > 1
+              badgeLabel={`${(group.items.length > 1
                 ? wording.upload_id.badge_correction_plural
                 : wording.upload_id.badge_correction
-              ).replace('{number}', items.length.toString())}`}
-              key={value}
-              title={value}
+              ).replace('{number}', group.items.length.toString())}`}
+              key={group.title}
+              title={group.title || ''}
             >
-              {items.map((item) => (
+              {group.items.map((item) => (
                 <QuoteErrorItem
                   closeModal={closeModal}
-                  item={item}
+                  item={{
+                    id: item.id,
+                    title: item.title,
+                    geste_id: item.gesteId || '',
+                    provided_value: item.providedValue,
+                    category: isCategoryAdmin
+                      ? Category.ADMIN
+                      : Category.GESTES,
+                    type: Type.MISSING,
+                    code: 'default-code',
+                    problem: null,
+                    solution: null,
+                    modalContent: {
+                      problem: null,
+                      solution: null,
+                      isOpen: false,
+                      title: item.title,
+                    },
+                  }}
                   key={item.id}
                   onHelpClick={onHelpClick}
                   openModal={() => openModal(item.id)}
@@ -140,8 +174,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                 />
               ))}
             </Accordion>
-          );
-        })}
+          ))}
       </ul>
     </div>
   );
