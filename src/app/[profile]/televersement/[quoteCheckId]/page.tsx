@@ -7,6 +7,7 @@ import ValidQuote from './ValidQuote';
 import { GlobalErrorFeedbacksModal, LoadingDots, Toast } from '@/components';
 import { useQuotePolling, useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
+import { FILE_ERROR } from '@/page-sections';
 import { Rating, Status } from '@/types';
 
 export default function Devis({
@@ -74,7 +75,7 @@ export default function Devis({
 
   useEffect(() => {
     if (shouldRedirectToUpload) {
-      window.location.href = `/${params.profile}/televersement?error=file_error`;
+      window.location.href = `/${params.profile}/televersement?error=${FILE_ERROR}`;
     }
   }, [shouldRedirectToUpload, params.profile]);
 

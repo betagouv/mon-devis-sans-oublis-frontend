@@ -50,11 +50,11 @@ export default function ExplanationCards() {
         </h2>
         <div className='flex flex-col md:flex-row gap-10'>
           <Image
-            alt='Mon Devis Sans Oublis'
+            alt={wording.homepage.explanation_cards.image.alt}
             className='w-auto lg:h-[420px] md:h-[380px] h-[224px] object-contain'
             height={420}
             sizes='100vw'
-            src='/images/three_steps.png'
+            src={wording.homepage.explanation_cards.image.src}
             width={0}
           />
           <div className='flex flex-col'>

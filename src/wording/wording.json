@@ -129,6 +129,10 @@
         }
       ],
       "correction": "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme.",
+      "image": {
+        "alt": "Mon Devis Sans Oublis en 3 étages",
+        "src": "/images/three_steps.png"
+      },
       "image_cards": [
         {
           "description": "Identifiez les mentions manquantes aux attendus réglementaires des aides.",
@@ -301,25 +305,22 @@
         "title": "Format du fichier non valide"
       }
     },
-    "section_upload": {
-      "alert": {
-        "description": "Les devis soumis restent strictement confidentiels.",
-        "more_info": "Les devis sont conservés de manière sécurisée pendant une durée de six mois afin de vous permettre l'accès aux corrections si nécessaire, après quoi ils sont automatiquement supprimés de nos systèmes."
-      },
-      "link_back": {
-        "href": "/bienvenue",
-        "label": "Retour"
-      },
-      "link_check_quote": {
-        "href": "",
-        "label": "Vérifiez le devis"
-      },
-      "select": {
-        "label": "Geste(s) techniques concernés par le devis"
-      },
-      "subtitle": "Votre projet",
-      "title": "Vérifier votre devis"
-    }
+    "alert": {
+      "description": "Les devis soumis restent strictement confidentiels.",
+      "more_info": "Les devis sont conservés de manière sécurisée pendant une durée de six mois afin de vous permettre l'accès aux corrections si nécessaire, après quoi ils sont automatiquement supprimés de nos systèmes."
+    },
+    "link_back": {
+      "href": "/bienvenue",
+      "label": "Retour"
+    },
+    "link_check_quote": {
+      "href": "",
+      "label": "Vérifiez le devis"
+    },
+    "select_aides": "Aide(s) visée(s) avec le devis",
+    "select_gestes": "Geste(s) technique(s) concerné(s) par le devis",
+    "subtitle": "Votre projet",
+    "title": "Vérifier votre devis"
   },
   "upload_id": {
     "badge_correction": "{number} correction",

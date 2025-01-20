@@ -16,10 +16,26 @@ export const quoteService = {
   },
 
   async getQuoteMetadata() {
-    const response = await fetch('/api/quote_checks/metadata', {
-      headers: API_CONFIG.headers,
-    });
-    return response.json();
+    const metadataUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA;
+
+    if (!metadataUrl) {
+      throw new Error('NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA is not defined.');
+    }
+
+    try {
+      const response = await fetch(metadataUrl, {
+        headers: API_CONFIG.headers,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch metadata: ${response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching metadata:', error);
+      throw error;
+    }
   },
 
   async sendErrorFeedback(

@@ -1,5 +1,3 @@
-'use client';
-
 import { RoleCardIcon, Tile } from '@/components';
 import wording from '@/wording';
 
