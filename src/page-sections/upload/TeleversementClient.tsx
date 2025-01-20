@@ -29,6 +29,7 @@ export default function TeleversementClient({
   const searchParams = useSearchParams();
 
   const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const [fileUploadedError, setFileUploadedError] = useState<string | null>(
     null
   );
@@ -37,7 +38,7 @@ export default function TeleversementClient({
 
   const handleFileUpload = useCallback((uploadedFile: File) => {
     setFile(uploadedFile);
-    setFileUploadedError(null);
+    setFileError(null);
   }, []);
 
   const handleAidesChange = (values: string[]) => {
@@ -52,7 +53,7 @@ export default function TeleversementClient({
     event.preventDefault();
 
     if (!file) {
-      setFileUploadedError('Please upload a file.');
+      setFileError('Please upload a file.');
       return;
     }
 
@@ -80,18 +81,18 @@ export default function TeleversementClient({
 
   return (
     <>
-      {/* {fileUploadedError && (
+      {fileUploadedError && (
         <Notice
           buttonClose={true}
           description={fileUploadedError}
           title={wording.upload.error.notice.title}
           type={NoticeType.ALERT}
         />
-      )} */}
+      )}
       <Upload
         maxFileSize={50}
         onFileUpload={handleFileUpload}
-        setError={setFileUploadedError}
+        setError={setFileError}
       />
       <Alert
         className='fr-mb-8w fr-mt-4w'
@@ -136,7 +137,7 @@ export default function TeleversementClient({
               label={wording.upload.link_check_quote.label}
               onSubmit={handleSubmit}
               variant={
-                file && !fileUploadedError
+                file && !fileError && !fileUploadedError
                   ? LinkVariant.PRIMARY
                   : LinkVariant.DISABLED
               }

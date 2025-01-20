@@ -1,5 +1,3 @@
-'use client';
-
 import wording from '@/wording';
 
 export enum NoticeType {

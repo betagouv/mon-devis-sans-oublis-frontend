@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 import { GlobalErrorFeedbacksModal, LoadingDots, Toast } from '@/components';
 import { useQuotePolling, useScrollPosition } from '@/hooks';
+import { quoteService } from '@/lib/api';
 import { FILE_ERROR } from '@/page-sections';
 import { Status, Rating, QuoteChecksId } from '@/types';
-import { quoteService } from '@/lib/api';
-import ValidQuote from './ValidQuote';
 import InvalidQuote from './InvalidQuote';
+import ValidQuote from './ValidQuote';
 
 interface DevisClientProps {
   currentDevis: QuoteChecksId | null;
@@ -22,8 +21,6 @@ export default function QuoteResultClient({
   profile,
   quoteCheckId,
 }: DevisClientProps) {
-  const router = useRouter();
-
   const { isLoading, shouldRedirectToUpload } = useQuotePolling(quoteCheckId);
   const isButtonSticky = useScrollPosition();
 

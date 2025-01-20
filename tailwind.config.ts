@@ -14,9 +14,6 @@ export default {
       animation: {
         'confetti-fall': 'confettiFall linear forwards',
       },
-      backgroundColor: {
-        'grey-hover': '#f6f6f6',
-      },
       keyframes: {
         confettiFall: {
           '0%': { transform: 'translateY(-100%) rotate(0deg)' },
