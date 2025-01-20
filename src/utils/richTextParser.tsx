@@ -1,9 +1,9 @@
 type RichTextParserFunction = (keyTranslation: string) => React.ReactNode;
 
 const richTextParser: RichTextParserFunction = (keyTranslation) => {
-  const regex = /<strong>(.*?)<\/strong>|<a href='(.*?)'>(.*?)<\/a>/g;
+  const regex = /<strong>(.*?)<\/strong>|<a href='(.*?)'>(.*?)<\/a>|<\/br>/g;
 
-  const parts = [];
+  const parts: React.ReactNode[] = [];
   let lastIndex = 0;
 
   keyTranslation.replace(regex, (match, boldText, aHref, aText, offset) => {
@@ -27,6 +27,11 @@ const richTextParser: RichTextParserFunction = (keyTranslation) => {
           {aText}
         </a>
       );
+    }
+
+    // </br>
+    if (match === '</br>') {
+      parts.push(<br key={offset} />);
     }
 
     lastIndex = offset + match.length;

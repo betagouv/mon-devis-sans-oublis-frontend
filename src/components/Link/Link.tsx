@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { default as NextLink } from 'next/link';
 
 export enum LinkSize {
