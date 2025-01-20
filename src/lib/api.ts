@@ -148,8 +148,6 @@ export const quoteService = {
       throw new Error('NEXT_PUBLIC_API_QUOTE_CHECKS is not defined.');
     }
 
-    console.log(uploadUrl);
-
     try {
       const formData = new FormData();
       formData.append('file', file);
