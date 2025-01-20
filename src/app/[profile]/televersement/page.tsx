@@ -5,7 +5,7 @@ import { TeleversementClient } from '@/page-sections';
 import { Metadata } from '@/types';
 import wording from '@/wording';
 
-export default function Televersement({
+export default function Upload({
   params: initialParams,
 }: {
   params: Promise<{ profile: string }>;
@@ -29,7 +29,7 @@ export default function Televersement({
         <div className='fr-container'>
           <div className='fr-grid-row fr-grid-row--center'>
             <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
-              <h1>{wording.upload.title_1}</h1>
+              <h1>{wording.upload.title}</h1>
               <TeleversementClient
                 metadata={metadata}
                 profile={params.profile}

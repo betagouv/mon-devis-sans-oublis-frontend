@@ -3,50 +3,6 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@gouvfr/dsfr'],
-  async rewrites() {
-    const quoteChecks = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS;
-    const quoteChecksId = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
-    const quoteChecksIdFeedbacks =
-      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_FEEDBACKS;
-    const quoteChecksIdErrorDetailsIdFeedbacks =
-      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID_FEEDBACKS;
-    const quoteChecksMetadata =
-      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA;
-
-    if (
-      !quoteChecks ||
-      !quoteChecksId ||
-      !quoteChecksIdFeedbacks ||
-      !quoteChecksIdErrorDetailsIdFeedbacks ||
-      !quoteChecksMetadata
-    ) {
-      throw new Error('API URLs are not defined in the environment variables.');
-    }
-
-    return [
-      {
-        destination: quoteChecks,
-        source: '/api/quote_checks',
-      },
-      {
-        destination: quoteChecksId,
-        source: '/api/quote_checks/:quote_check_id',
-      },
-      {
-        destination: quoteChecksIdFeedbacks,
-        source: '/api/quote_checks/:quote_check_id/feedbacks',
-      },
-      {
-        destination: quoteChecksIdErrorDetailsIdFeedbacks,
-        source:
-          '/api/quote_checks/:quote_check_id/error_details/:error_detail_id/feedbacks',
-      },
-      {
-        destination: quoteChecksMetadata,
-        source: '/api/quote_checks/metadata',
-      },
-    ];
-  },
 };
 
 export default withSentryConfig(nextConfig, {

@@ -44,7 +44,6 @@ export default function RootLayout({
           content='width=device-width, initial-scale=1, shrink-to-fit=no'
           name='viewport'
         />
-
         <meta content='#000091' name='theme-color' />
         <link
           href='/dsfr/favicon/apple-touch-icon.png'

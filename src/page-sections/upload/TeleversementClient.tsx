@@ -80,14 +80,14 @@ export default function TeleversementClient({
 
   return (
     <>
-      {fileUploadedError && (
+      {/* {fileUploadedError && (
         <Notice
           buttonClose={true}
           description={fileUploadedError}
           title={wording.upload.error.notice.title}
           type={NoticeType.ALERT}
         />
-      )}
+      )} */}
       <Upload
         maxFileSize={50}
         onFileUpload={handleFileUpload}
