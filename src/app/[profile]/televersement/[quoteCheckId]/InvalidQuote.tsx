@@ -15,12 +15,12 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { Category, ErrorDetails } from '@/types';
+import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
   isUrlCopied: boolean;
-  list: ErrorDetails[];
+  list: EnrichedErrorDetails[];
   onCopyUrl: () => void;
   onHelpClick: (
     comment: string | null,
@@ -40,7 +40,7 @@ const InvalidQuote = ({
   const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
 
   const errorDetails = (
-    errors: ErrorDetails[] | null = [],
+    errors: EnrichedErrorDetails[] | null = [],
     category: Category
   ) => {
     return (errors || [])
@@ -52,6 +52,8 @@ const InvalidQuote = ({
         type: error.type,
         code: error.code,
         title: error.title,
+        problem: error.problem || null,
+        solution: error.solution || null,
         provided_value: error.provided_value || null,
         modalContent: {
           problem: error.problem || null,
