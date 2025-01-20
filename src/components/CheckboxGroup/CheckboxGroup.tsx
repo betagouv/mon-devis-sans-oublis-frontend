@@ -59,6 +59,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
       <div
         aria-live='assertive'
         className='fr-messages-group'
+        data-testid='checkboxes-messages-assertive'
         id='checkboxes-messages'
       />
     </fieldset>
