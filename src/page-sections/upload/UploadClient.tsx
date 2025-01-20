@@ -18,7 +18,7 @@ import wording from '@/wording';
 
 export const FILE_ERROR = 'file_error';
 
-export default function TeleversementClient({
+export default function UploadClient({
   metadata,
   profile,
 }: {

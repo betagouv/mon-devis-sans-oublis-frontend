@@ -1,7 +1,7 @@
 import { use } from 'react';
 
 import { quoteService } from '@/lib/api';
-import { QuoteResultClient } from '@/page-sections';
+import { ResultClient } from '@/page-sections';
 
 export default function Result({
   params: initialParams,
@@ -22,12 +22,10 @@ export default function Result({
   const currentDevis = use(fetchCurrentDevis());
 
   return (
-    <div>
-      <QuoteResultClient
-        currentDevis={currentDevis}
-        profile={params.profile}
-        quoteCheckId={params.quoteCheckId}
-      />
-    </div>
+    <ResultClient
+      currentDevis={currentDevis}
+      profile={params.profile}
+      quoteCheckId={params.quoteCheckId}
+    />
   );
 }

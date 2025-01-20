@@ -16,7 +16,7 @@ interface DevisClientProps {
   quoteCheckId: string;
 }
 
-export default function QuoteResultClient({
+export default function ResultClient({
   currentDevis,
   profile,
   quoteCheckId,

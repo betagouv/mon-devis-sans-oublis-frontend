@@ -1,7 +1,7 @@
 import { use } from 'react';
 
 import { quoteService } from '@/lib/api';
-import { TeleversementClient } from '@/page-sections';
+import { UploadClient } from '@/page-sections';
 import { Metadata } from '@/types';
 import wording from '@/wording';
 
@@ -24,20 +24,15 @@ export default function Upload({
   const metadata = use(fetchMetadata());
 
   return (
-    <>
-      <section className='fr-container-fluid fr-py-10w'>
-        <div className='fr-container'>
-          <div className='fr-grid-row fr-grid-row--center'>
-            <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
-              <h1>{wording.upload.title}</h1>
-              <TeleversementClient
-                metadata={metadata}
-                profile={params.profile}
-              />
-            </div>
+    <section className='fr-container-fluid fr-py-10w'>
+      <div className='fr-container'>
+        <div className='fr-grid-row fr-grid-row--center'>
+          <div className='fr-col-12 fr-col-md-10 fr-col-lg-8'>
+            <h1>{wording.upload.title}</h1>
+            <UploadClient metadata={metadata} profile={params.profile} />
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
