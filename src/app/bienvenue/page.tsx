@@ -1,4 +1,4 @@
-import { RoleCardIcon, Tile } from '@/components';
+import { CardLinkProfile, Tile } from '@/components';
 import wording from '@/wording';
 
 export default function Bienvenue() {
@@ -22,7 +22,7 @@ export default function Bienvenue() {
                     />
                   </div>
                   <div className='hidden md:block'>
-                    <RoleCardIcon
+                    <CardLinkProfile
                       description={card.description}
                       href={card.href}
                       icon={card.icon}

@@ -20,6 +20,9 @@
       "solution_title": "Solution",
       "submit_button": "Envoyer"
     },
+    "footer": {
+      "bottom_copy_line": "Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de ce site sont proposés sous <a href='https://github.com/etalab/licence-ouverte/blob/master/LO.md' rel='noopener noreferrer' target='_blank'>licence etalab-2.0</a>"
+    },
     "global_error_feedbacks_modal": {
       "back_button_label": "Fermer",
       "comment_title": " Pouvez-vous nous en dire plus sur ce que vous avez pensé des corrections proposées ?",
@@ -91,7 +94,7 @@
         "title": "Quelles sont nos missions ?"
       },
       "who_are_we": {
-        "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.</br></br>Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations.",
+        "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.<br><br>Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations.",
         "image": "/images/ministere_transition_ecologique.png",
         "title": "Qui sommes-nous ?"
       }
@@ -223,7 +226,7 @@
   },
   "layout": {
     "footer": {
-      "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
+      "affiliatedMinistry": "Ministère<br>de la transition<br>écologique",
       "buttons": [
         {
           "href": "/mentions-legales",
@@ -231,24 +234,12 @@
         },
         { "href": "/accessibilite", "label": "Accessibilité : non conforme" }
       ],
-      "organizationDetails": {
-        "beforeLink": "Mon Devis Sans Oublis est un service public conçu par la ",
-        "link": {
-          "text": "Direction générale de l'aménagement, du logement et de la nature (DGALN)",
-          "url": "https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0"
-        },
-        "afterLink": " en partenariat avec le programme ",
-        "betaGouv": {
-          "text": "beta.gouv",
-          "url": "https://beta.gouv.fr/"
-        },
-        "finalText": " de la DINUM. Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr"
-      },
+      "organizationDescription": "Mon Devis Sans Oublis est un service public conçu par la <a href='https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0' rel='noopener noreferrer' target='_blank'>Direction générale de l'aménagement, du logement et de la nature (DGALN)</a> en partenariat avec le programme <a href='https://beta.gouv.fr/' rel='noopener noreferrer' target='_blank'>beta.gouv</a> de la <a href='https://www.numerique.gouv.fr/' rel='noopener noreferrer' target='_blank'>DINUM</a>. Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr",
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
     },
     "header": {
-      "affiliatedMinistry": ["Ministère", "de la transition", "écologique"],
+      "affiliatedMinistry": "Ministère<br>de la transition<br>écologique",
       "beta": "beta",
       "buttons": [
         {
@@ -257,7 +248,7 @@
           "label": "Nous contacter"
         }
       ],
-      "organizationDetails": "Vérifiez vos devis de rénovation énergétique",
+      "organizationDescription": "Vérifiez vos devis de rénovation énergétique",
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
     },

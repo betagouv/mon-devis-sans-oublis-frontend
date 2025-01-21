@@ -82,7 +82,7 @@ describe('QuoteErrorItem', () => {
   it('closes toast after duration', () => {
     jest.useFakeTimers();
 
-    const { rerender } = render(
+    const {} = render(
       <QuoteErrorItem
         {...defaultProps}
         openModalId={defaultProps.item.id.toString()}
@@ -196,7 +196,7 @@ describe('QuoteErrorItem', () => {
   it('closes toast after duration', () => {
     jest.useFakeTimers();
 
-    const { rerender } = render(
+    const {} = render(
       <QuoteErrorItem
         {...defaultProps}
         openModalId={defaultProps.item.id.toString()}

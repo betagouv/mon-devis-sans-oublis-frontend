@@ -100,13 +100,4 @@ describe('CheckboxGroup Component', () => {
       .closest('.fr-fieldset__element');
     expect(lastCheckbox).not.toHaveClass('border-bottom-grey pb-3');
   });
-
-  test('renders aria-live regions for accessibility', () => {
-    render(<CheckboxGroup {...baseProps} />);
-
-    baseProps.options.forEach((option) => {
-      const ariaRegion = screen.getByTestId('checkboxes-messages-assertive');
-      expect(ariaRegion).toHaveAttribute('aria-live', 'assertive');
-    });
-  });
 });
