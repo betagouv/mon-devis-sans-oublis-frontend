@@ -1,6 +1,6 @@
 export enum Category {
   ADMIN = 'admin',
-  FILE = 'fichier',
+  FILE = 'file',
   GESTES = 'gestes',
 }
 
@@ -34,13 +34,19 @@ export interface ErrorDetails {
   provided_value: string | null;
 }
 
-export interface EnrichedErrorDetails extends ErrorDetails {
-  modalContent: {
-    problem: string | null;
-    solution: string | null;
-    isOpen: boolean;
-    title: string;
-  };
+export interface Gestes {
+  id: string;
+  intitule: string;
+}
+
+export interface GestesGroup {
+  group: string;
+  values: string[];
+}
+
+export interface Metadata {
+  aides: string[];
+  gestes: GestesGroup[];
 }
 
 export interface QuoteChecksId {
@@ -48,11 +54,22 @@ export interface QuoteChecksId {
   parent_id: string;
   status: Status;
   filename: string;
+  metadata: Metadata;
   profile: Profile;
   valid: boolean;
+  gestes: Gestes[];
   errors: string[];
   error_details: ErrorDetails[];
   error_messages: Record<string, string>;
+}
+
+export interface EnrichedErrorDetails extends ErrorDetails {
+  modalContent: {
+    problem: string | null;
+    solution: string | null;
+    isOpen: boolean;
+    title: string;
+  };
 }
 
 export interface QuoteChecksIdEnrichedErrorDetails {

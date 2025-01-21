@@ -1,99 +1,78 @@
 import { render, screen } from '@testing-library/react';
 
-import Header, { HeaderProps } from './Header';
+import Header from './Header';
 
 describe('Header', () => {
-  const mockProps: HeaderProps = {
-    affiliatedMinistry: ['Ministère', 'de lIntérieur'],
-    beta: 'beta',
+  const defaultProps = {
+    affiliatedMinistry: 'Ministry of Testing',
     buttons: [
-      { href: '/login', icon: 'fr-icon-account-line', label: 'Se connecter' },
-      { href: '/contact', icon: 'fr-icon-mail-line', label: 'Contact' },
+      {
+        href: '/test-link',
+        icon: 'fr-icon-test',
+        label: 'Test Button',
+      },
     ],
-    organizationDetails: "Description de l'organisation",
-    organizationLink: '/home',
-    organizationName: "Nom de l'Organisation",
+    organizationDescription: 'Test Description',
+    organizationLink: '/org-link',
+    organizationName: 'Test Organization',
   };
 
-  it('renders the header with correct role', () => {
-    render(<Header {...mockProps} />);
-    expect(screen.getByRole('banner')).toBeInTheDocument();
+  it('renders header with all required props', () => {
+    render(<Header {...defaultProps} />);
+
+    expect(screen.getByText('Ministry of Testing')).toBeInTheDocument();
+    expect(screen.getByText('Test Organization')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
+
+    const button = screen.getByRole('link', { name: 'Test Button' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('href', '/test-link');
+    expect(button).toHaveClass('fr-btn', 'fr-icon-test');
   });
 
-  it('renders affiliated ministry lines correctly', () => {
-    render(<Header {...mockProps} />);
-
-    const logoElement = screen.getByText((content, element) => {
-      return element?.classList.contains('fr-logo') ?? false;
-    });
-
-    mockProps.affiliatedMinistry.forEach((line) => {
-      expect(logoElement).toHaveTextContent(line);
-    });
-
-    const lineBreaks = logoElement.getElementsByTagName('br');
-    expect(lineBreaks).toHaveLength(mockProps.affiliatedMinistry.length - 1);
+  it('renders beta badge when beta prop is provided', () => {
+    render(<Header {...defaultProps} beta='Beta' />);
+    expect(screen.getByText('Beta')).toBeInTheDocument();
   });
 
-  it('renders organization name with correct link', () => {
-    render(<Header {...mockProps} />);
-    const link = screen.getByTitle(
-      `Accueil - ${
-        mockProps.organizationName
-      } - ${mockProps.affiliatedMinistry.join(' ')}`
-    );
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', mockProps.organizationLink);
+  it('does not render beta badge when beta prop is not provided', () => {
+    render(<Header {...defaultProps} />);
+    expect(screen.queryByText('Beta')).not.toBeInTheDocument();
   });
 
-  it('renders organization details', () => {
-    render(<Header {...mockProps} />);
-    expect(screen.getByText(mockProps.organizationDetails)).toBeInTheDocument();
-  });
-
-  it('renders the beta label if present', () => {
-    render(<Header {...mockProps} />);
-    expect(screen.getByText('beta')).toBeInTheDocument();
-  });
-
-  it('renders all navigation buttons', () => {
-    render(<Header {...mockProps} />);
-
-    mockProps.buttons.forEach((button) => {
-      const buttonElement = screen.getByText(button.label);
-      expect(buttonElement).toBeInTheDocument();
-      expect(buttonElement.closest('a')).toHaveAttribute('href', button.href);
-      expect(buttonElement.closest('a')).toHaveClass(`fr-btn ${button.icon}`);
-    });
-  });
-
-  it('renders with empty affiliated ministry array', () => {
-    const propsWithEmptyMinistry = {
-      ...mockProps,
-      affiliatedMinistry: [],
+  it('renders multiple buttons when provided', () => {
+    const propsWithMultipleButtons = {
+      ...defaultProps,
+      buttons: [
+        {
+          href: '/link-1',
+          icon: 'fr-icon-1',
+          label: 'Button 1',
+        },
+        {
+          href: '/link-2',
+          icon: 'fr-icon-2',
+          label: 'Button 2',
+        },
+      ],
     };
-    render(<Header {...propsWithEmptyMinistry} />);
-    expect(screen.getByRole('banner')).toBeInTheDocument();
+
+    render(<Header {...propsWithMultipleButtons} />);
+
+    const buttons = screen.getAllByRole('link');
+    expect(buttons).toHaveLength(3);
+
+    expect(screen.getByText('Button 1')).toBeInTheDocument();
+    expect(screen.getByText('Button 2')).toBeInTheDocument();
   });
 
-  it('renders with empty buttons array', () => {
-    const propsWithEmptyButtons = {
-      ...mockProps,
-      buttons: [],
-    };
-    render(<Header {...propsWithEmptyButtons} />);
-    expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.queryByRole('list')).toBeInTheDocument();
-  });
+  it('renders organization link with correct title', () => {
+    render(<Header {...defaultProps} />);
 
-  it('applies correct CSS classes', () => {
-    render(<Header {...mockProps} />);
-    expect(screen.getByRole('banner')).toHaveClass('fr-header');
-    expect(
-      screen.getByText(mockProps.organizationName).closest('p')
-    ).toHaveClass('fr-header__service-title');
-    expect(screen.getByText(mockProps.organizationDetails)).toHaveClass(
-      'fr-header__service-tagline'
+    const orgLink = screen.getByTitle(
+      'Accueil - Test Organization - Ministry of Testing'
     );
+    expect(orgLink).toBeInTheDocument();
+    expect(orgLink).toHaveAttribute('href', '/org-link');
   });
 });

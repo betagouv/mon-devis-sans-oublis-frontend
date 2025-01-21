@@ -1,24 +1,12 @@
-import React from 'react';
 import Link from 'next/link';
 
-interface OrganizationDetails {
-  beforeLink: string;
-  link: {
-    text: string;
-    url: string;
-  };
-  afterLink: string;
-  betaGouv: {
-    text: string;
-    url: string;
-  };
-  finalText: string;
-}
+import { richTextParser } from '@/utils';
+import wording from '@/wording';
 
 export interface FooterProps {
-  affiliatedMinistry: string[];
+  affiliatedMinistry: string;
   buttons: { href: string; label: string }[];
-  organizationDetails: OrganizationDetails;
+  organizationDescription: string;
   organizationLink: string;
   organizationName: string;
 }
@@ -26,12 +14,10 @@ export interface FooterProps {
 const Footer: React.FC<FooterProps> = ({
   affiliatedMinistry,
   buttons,
-  organizationDetails,
+  organizationDescription,
   organizationLink,
   organizationName,
 }) => {
-  const plainString = affiliatedMinistry.join(' ');
-
   return (
     <footer className='fr-footer' role='contentinfo' id='footer-7361'>
       <div className='fr-container'>
@@ -39,37 +25,14 @@ const Footer: React.FC<FooterProps> = ({
           <div className='fr-footer__brand fr-enlarge-link'>
             <Link
               href={organizationLink}
-              title={`Accueil - ${organizationName} - ${plainString}`}
+              title={`Accueil - ${organizationName} - ${affiliatedMinistry}`}
             >
-              <p className='fr-logo'>
-                {affiliatedMinistry.map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    {index < affiliatedMinistry.length - 1 && <br />}
-                  </React.Fragment>
-                ))}
-              </p>
+              <p className='fr-logo'>{richTextParser(affiliatedMinistry)}</p>
             </Link>
           </div>
           <div className='fr-footer__content'>
             <div className='fr-footer__content-desc [&_a]:after:content-none'>
-              {organizationDetails.beforeLink}
-              <Link
-                href={organizationDetails.link.url}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {organizationDetails.link.text}
-              </Link>
-              {organizationDetails.afterLink}
-              <Link
-                href={organizationDetails.betaGouv.url}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {organizationDetails.betaGouv.text}
-              </Link>
-              {organizationDetails.finalText}
+              {richTextParser(organizationDescription)}
             </div>
           </div>
         </div>
@@ -84,18 +47,7 @@ const Footer: React.FC<FooterProps> = ({
             ))}
           </ul>
           <div className='fr-footer__bottom-copy'>
-            <p>
-              Sauf mention explicite de propriété intellectuelle détenue par des
-              tiers, les contenus de ce site sont proposés sous{' '}
-              <Link
-                href='https://github.com/etalab/licence-ouverte/blob/master/LO.md'
-                rel='noopener external'
-                target='_blank'
-                title='Licence etalab - nouvelle fenêtre'
-              >
-                licence etalab-2.0
-              </Link>
-            </p>
+            <p>{richTextParser(wording.components.footer.bottom_copy_line)}</p>
           </div>
         </div>
       </div>

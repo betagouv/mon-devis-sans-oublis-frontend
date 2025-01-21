@@ -7,9 +7,6 @@ export type { AlertProps } from './Alert/Alert';
 // Badge
 export { default as Badge, BadgeVariant, BadgeSize } from './Badge/Badge';
 export type { BadgeProps } from './Badge/Badge';
-// BlockIcon
-export { default as BlockIcon } from './BlockIcon/BlockIcon';
-export type { BlockIconProps } from './BlockIcon/BlockIcon';
 // BlockNumber
 export {
   default as BlockNumber,
@@ -22,6 +19,9 @@ export type { CardProps } from './Card/Card';
 // CardImage
 export { default as CardImage } from './CardImage/CardImage';
 export type { CardImageProps } from './CardImage/CardImage';
+// CardLinkProfile
+export { default as CardLinkProfile } from './CardLinkProfile/CardLinkProfile';
+export type { CardLinkProfileProps } from './CardLinkProfile/CardLinkProfile';
 // CheckboxGroup
 export { default as CheckboxGroup } from './CheckboxGroup/CheckboxGroup';
 export type { CheckboxGroupProps } from './CheckboxGroup/CheckboxGroup';
@@ -77,9 +77,6 @@ export {
   QuoteStatusVariant,
 } from './QuoteStatusLink/QuoteStatusLink';
 export type { QuoteStatusLinkProps } from './QuoteStatusLink/QuoteStatusLink';
-// RoleCardIcon
-export { default as RoleCardIcon } from './RoleCardIcon/RoleCardIcon';
-export type { RoleCardIconProps } from './RoleCardIcon/RoleCardIcon';
 // RoundCheckboxGroup
 export { default as RoundCheckboxGroup } from './RoundCheckboxGroup/RoundCheckboxGroup';
 export type {

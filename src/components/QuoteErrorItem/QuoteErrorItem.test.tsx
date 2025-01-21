@@ -1,7 +1,8 @@
+import { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import QuoteErrorItem, { QuoteErrorItemProps } from './QuoteErrorItem';
 import { Category, Type } from '@/types';
+import QuoteErrorItem, { QuoteErrorItemProps } from './QuoteErrorItem';
 
 describe('QuoteErrorItem', () => {
   const mockModalContent = {
@@ -59,7 +60,10 @@ describe('QuoteErrorItem', () => {
     render(<QuoteErrorItem {...defaultProps} />);
 
     const detailButton = screen.getByRole('button');
-    fireEvent.click(detailButton);
+
+    act(() => {
+      fireEvent.click(detailButton);
+    });
 
     expect(defaultProps.openModal).toHaveBeenCalledWith(defaultProps.item.id);
   });
@@ -75,8 +79,10 @@ describe('QuoteErrorItem', () => {
     expect(screen.getByText('Test modal title')).toBeInTheDocument();
   });
 
-  it('handles feedback submission correctly', () => {
-    render(
+  it('closes toast after duration', () => {
+    jest.useFakeTimers();
+
+    const {} = render(
       <QuoteErrorItem
         {...defaultProps}
         openModalId={defaultProps.item.id.toString()}
@@ -88,6 +94,52 @@ describe('QuoteErrorItem', () => {
 
     const submitButton = screen.getByRole('button', { name: /envoyer/i });
     fireEvent.click(submitButton);
+
+    expect(screen.getByText('Merci pour votre retour !')).toBeInTheDocument();
+
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
+
+    expect(
+      screen.queryByText('Merci pour votre retour !')
+    ).not.toBeInTheDocument();
+
+    jest.useRealTimers();
+  });
+
+  it('opens modal when detail button is clicked', () => {
+    render(<QuoteErrorItem {...defaultProps} />);
+
+    const detailButton = screen.getByRole('button');
+
+    act(() => {
+      fireEvent.click(detailButton);
+    });
+
+    expect(defaultProps.openModal).toHaveBeenCalledWith(defaultProps.item.id);
+  });
+
+  it('handles feedback submission correctly', async () => {
+    render(
+      <QuoteErrorItem
+        {...defaultProps}
+        openModalId={defaultProps.item.id.toString()}
+      />
+    );
+
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
+
+    const submitButton = screen.getByRole('button', { name: /envoyer/i });
+
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
 
     expect(defaultProps.onHelpClick).toHaveBeenCalledWith(
       'Test feedback',
@@ -144,7 +196,7 @@ describe('QuoteErrorItem', () => {
   it('closes toast after duration', () => {
     jest.useFakeTimers();
 
-    const { rerender } = render(
+    const {} = render(
       <QuoteErrorItem
         {...defaultProps}
         openModalId={defaultProps.item.id.toString()}
@@ -159,15 +211,13 @@ describe('QuoteErrorItem', () => {
 
     expect(screen.getByText('Merci pour votre retour !')).toBeInTheDocument();
 
-    jest.advanceTimersByTime(4000);
-    jest.runAllTimers();
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
 
-    rerender(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
+    act(() => {
+      jest.advanceTimersByTime(4000);
+    });
 
     expect(
       screen.queryByText('Merci pour votre retour !')

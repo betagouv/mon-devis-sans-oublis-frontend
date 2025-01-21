@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 export function useIsDesktop(breakpoint = 768) {
-  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
     const handleResize = () => {

@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Header>;
 
 export const Default: Story = {
   args: {
-    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
+    affiliatedMinistry: 'Ministère<br>de la transition<br>écologique',
     beta: 'beta',
     buttons: [
       {
@@ -25,8 +25,8 @@ export const Default: Story = {
         label: 'Nous contacter',
       },
     ],
-    organizationDetails: 'Vérifiez vos devis de rénovation énergétique',
-    organizationLink: 'https://example.com',
+    organizationDescription: 'Vérifiez vos devis de rénovation énergétique',
+    organizationLink: '/',
     organizationName: 'Mon Devis Sans Oublis',
   },
 };

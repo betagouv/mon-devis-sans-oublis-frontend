@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import RoleCardIcon from './RoleCardIcon';
+
+import CardLinkProfile from './CardLinkProfile';
 
 const meta = {
-  title: 'Components/RoleCardIcon',
-  component: RoleCardIcon,
+  title: 'Components/CardLinkProfile',
+  component: CardLinkProfile,
   tags: ['autodocs'],
-} satisfies Meta<typeof RoleCardIcon>;
+} satisfies Meta<typeof CardLinkProfile>;
 
 export default meta;
-type Story = StoryObj<typeof RoleCardIcon>;
+type Story = StoryObj<typeof CardLinkProfile>;
 
 export const Artisan: Story = {
   args: {

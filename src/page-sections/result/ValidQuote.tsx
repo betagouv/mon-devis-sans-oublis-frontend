@@ -15,7 +15,7 @@ interface ValidQuoteProps {
   uploadedFileName: string;
 }
 
-const ValidQuote = ({ uploadedFileName }: ValidQuoteProps) => {
+export default function ValidQuote({ uploadedFileName }: ValidQuoteProps) {
   const pathname = usePathname();
   const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
 
@@ -59,6 +59,4 @@ const ValidQuote = ({ uploadedFileName }: ValidQuoteProps) => {
       </section>
     </>
   );
-};
-
-export default ValidQuote;
+}

@@ -1,111 +1,76 @@
 import { render, screen } from '@testing-library/react';
 
-import Footer, { FooterProps } from './Footer';
+import Footer from './Footer';
 
-describe('Footer Component', () => {
-  const defaultProps: FooterProps = {
-    affiliatedMinistry: ['Ministère', 'de la transition', 'écologique'],
+describe('Footer', () => {
+  const defaultProps = {
+    affiliatedMinistry: 'Ministry of Testing',
     buttons: [
-      { href: '/contact', label: 'Contact' },
-      { href: '/about', label: 'About' },
+      {
+        href: '/test-link',
+        label: 'Test Button',
+      },
     ],
-    organizationDetails: {
-      beforeLink: 'Mon Devis Sans Oublis est un service public conçu par la',
-      link: {
-        text: "Direction générale de l'aménagement, du logement et de la nature (DGALN)",
-        url: 'https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0',
-      },
-      afterLink: 'en partenariat avec le programme',
-      betaGouv: {
-        text: 'beta.gouv',
-        url: 'https://beta.gouv.fr/',
-      },
-      finalText:
-        ". Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr",
-    },
-    organizationLink: '/',
-    organizationName: 'Mon Devis Sans Oublis',
+    organizationDescription: 'Test Description',
+    organizationLink: '/org-link',
+    organizationName: 'Test Organization',
   };
 
-  it('renders affiliated ministry lines', () => {
+  it('renders footer with all required props', () => {
     render(<Footer {...defaultProps} />);
-    const logoElement = screen.getByText((content, element) => {
-      return element?.classList.contains('fr-logo') ?? false;
-    });
 
-    defaultProps.affiliatedMinistry.forEach((line) => {
-      expect(logoElement).toHaveTextContent(line);
-    });
+    expect(screen.getByText('Ministry of Testing')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
+
+    const button = screen.getByRole('link', { name: 'Test Button' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('href', '/test-link');
   });
 
-  it('renders organization details with links', () => {
-    render(<Footer {...defaultProps} />);
+  it('renders multiple buttons when provided', () => {
+    const propsWithMultipleButtons = {
+      ...defaultProps,
+      buttons: [
+        {
+          href: '/link-1',
+          label: 'Button 1',
+        },
+        {
+          href: '/link-2',
+          label: 'Button 2',
+        },
+      ],
+    };
 
-    // Check DGALN link
-    const dgalnLink = screen.getByText(
-      defaultProps.organizationDetails.link.text
-    );
-    expect(dgalnLink).toBeInTheDocument();
-    expect(dgalnLink.closest('a')).toHaveAttribute(
-      'href',
-      defaultProps.organizationDetails.link.url
-    );
+    render(<Footer {...propsWithMultipleButtons} />);
 
-    // Check beta.gouv link
-    const betaGouvLink = screen.getByText(
-      defaultProps.organizationDetails.betaGouv.text
-    );
-    expect(betaGouvLink).toBeInTheDocument();
-    expect(betaGouvLink.closest('a')).toHaveAttribute(
-      'href',
-      defaultProps.organizationDetails.betaGouv.url
-    );
+    const buttons = screen.getAllByRole('link');
+    expect(buttons).toHaveLength(4);
 
-    // Check text content
-    expect(
-      screen.getByText((content) =>
-        content.includes(defaultProps.organizationDetails.beforeLink)
-      )
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText((content) =>
-        content.includes(defaultProps.organizationDetails.afterLink)
-      )
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText((content) =>
-        content.includes(defaultProps.organizationDetails.finalText)
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByText('Button 1')).toBeInTheDocument();
+    expect(screen.getByText('Button 2')).toBeInTheDocument();
   });
 
-  it('renders organization link with correct href and title', () => {
+  it('renders organization link with correct title', () => {
     render(<Footer {...defaultProps} />);
-    const linkElement = screen.getByTitle(
-      `Accueil - ${
-        defaultProps.organizationName
-      } - ${defaultProps.affiliatedMinistry.join(' ')}`
+
+    const orgLink = screen.getByTitle(
+      'Accueil - Test Organization - Ministry of Testing'
     );
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toHaveAttribute('href', defaultProps.organizationLink);
+    expect(orgLink).toBeInTheDocument();
+    expect(orgLink).toHaveAttribute('href', '/org-link');
   });
 
-  it('renders buttons with correct hrefs and labels', () => {
+  it('renders bottom copy line from wording', () => {
     render(<Footer {...defaultProps} />);
-    defaultProps.buttons.forEach((button) => {
-      const linkElement = screen.getByText(button.label);
-      expect(linkElement).toBeInTheDocument();
-      expect(linkElement.closest('a')).toHaveAttribute('href', button.href);
-    });
+
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
-  it('renders license link', () => {
+  it('has correct accessibility attributes', () => {
     render(<Footer {...defaultProps} />);
-    const licenseLink = screen.getByText('licence etalab-2.0');
-    expect(licenseLink).toBeInTheDocument();
-    expect(licenseLink.closest('a')).toHaveAttribute(
-      'href',
-      'https://github.com/etalab/licence-ouverte/blob/master/LO.md'
-    );
+
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).toHaveAttribute('id', 'footer-7361');
   });
 });

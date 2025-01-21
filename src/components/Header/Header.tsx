@@ -1,13 +1,13 @@
-import React from 'react';
 import Link from 'next/link';
 
 import Badge, { BadgeVariant } from '../Badge/Badge';
+import { richTextParser } from '@/utils';
 
 export interface HeaderProps {
-  affiliatedMinistry: string[];
+  affiliatedMinistry: string;
   beta?: string;
   buttons: { href: string; icon: string; label: string }[];
-  organizationDetails: string;
+  organizationDescription: string;
   organizationLink: string;
   organizationName: string;
 }
@@ -16,12 +16,10 @@ const Header: React.FC<HeaderProps> = ({
   affiliatedMinistry,
   beta,
   buttons,
-  organizationDetails,
+  organizationDescription,
   organizationLink,
   organizationName,
 }) => {
-  const plainString = affiliatedMinistry.join(' ');
-
   return (
     <header className='fr-header' role='banner'>
       <div className='fr-header__body'>
@@ -31,12 +29,7 @@ const Header: React.FC<HeaderProps> = ({
               <div className='fr-header__brand-top'>
                 <div className='fr-header__logo'>
                   <p className='fr-logo'>
-                    {affiliatedMinistry.map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        {index < affiliatedMinistry.length - 1 && <br />}
-                      </React.Fragment>
-                    ))}
+                    {richTextParser(affiliatedMinistry)}
                   </p>
                 </div>
               </div>
@@ -45,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({
                   <Link
                     className='items-center'
                     href={organizationLink}
-                    title={`Accueil - ${organizationName} - ${plainString}`}
+                    title={`Accueil - ${organizationName} - ${affiliatedMinistry}`}
                   >
                     <span className='flex flex-row'>
                       <p className='fr-header__service-title mr-4'>
@@ -56,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
                       )}
                     </span>
                     <p className='fr-header__service-tagline'>
-                      {organizationDetails}
+                      {organizationDescription}
                     </p>
                   </Link>
                 </div>

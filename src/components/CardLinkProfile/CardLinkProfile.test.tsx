@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
+import CardLinkProfile from './CardLinkProfile';
 import { IconBackgroundVariant } from '../IconBackground/IconBackground';
-import RoleCardIcon from './RoleCardIcon';
 
 // Mock the IconBackground component
 jest.mock('../IconBackground/IconBackground', () => {
@@ -33,7 +33,7 @@ beforeAll(() => {
   );
 });
 
-describe('RoleCardIcon', () => {
+describe('CardLinkProfile', () => {
   const defaultProps = {
     href: '/test-link',
     icon: 'test-icon',
@@ -42,7 +42,7 @@ describe('RoleCardIcon', () => {
   };
 
   test('renders correctly with title, description, and icon', () => {
-    render(<RoleCardIcon {...defaultProps} />);
+    render(<CardLinkProfile {...defaultProps} />);
 
     const link = screen.getByRole('link', { name: /test title/i });
     expect(link).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('RoleCardIcon', () => {
   });
 
   test('applies hover and click styles correctly', () => {
-    render(<RoleCardIcon {...defaultProps} />);
+    render(<CardLinkProfile {...defaultProps} />);
 
     const link = screen.getByRole('link', { name: /test title/i });
 

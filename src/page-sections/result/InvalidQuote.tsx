@@ -29,13 +29,13 @@ interface InvalidQuoteProps {
   uploadedFileName: string;
 }
 
-const InvalidQuote = ({
+export default function InvalidQuote({
   isUrlCopied,
   list,
   onCopyUrl,
   onHelpClick,
   uploadedFileName,
-}: InvalidQuoteProps) => {
+}: InvalidQuoteProps) {
   const pathname = usePathname();
   const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
 
@@ -201,6 +201,4 @@ const InvalidQuote = ({
       </section>
     </>
   );
-};
-
-export default InvalidQuote;
+}

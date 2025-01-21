@@ -6,14 +6,14 @@ import IconBackground, {
   IconBackgroundVariant,
 } from '../IconBackground/IconBackground';
 
-export interface RoleCardIconProps {
+export interface CardLinkProfileProps {
   href: string;
   icon: string;
   title: string;
   description: string;
 }
 
-const RoleCardIcon: React.FC<RoleCardIconProps> = ({
+const CardLinkProfile: React.FC<CardLinkProfileProps> = ({
   href,
   icon,
   title,
@@ -60,4 +60,4 @@ const RoleCardIcon: React.FC<RoleCardIconProps> = ({
   );
 };
 
-export default RoleCardIcon;
+export default CardLinkProfile;
