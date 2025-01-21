@@ -23,7 +23,7 @@ export default function Notice({
   return (
     <div
       className={`fr-notice ${type ? `fr-notice--${type}` : className} ${
-        buttonClose && 'py-3'
+        buttonClose && 'fr-py-1w'
       }`}
     >
       <div className='fr-container'>

@@ -1,6 +1,6 @@
 export enum Category {
   ADMIN = 'admin',
-  FILE = 'fichier',
+  FILE = 'file',
   GESTES = 'gestes',
 }
 
