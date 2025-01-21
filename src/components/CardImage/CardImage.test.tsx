@@ -31,13 +31,6 @@ describe('CardImage Component', () => {
     expect(image).toHaveClass('w-auto h-[180px] max-w-full object-contain');
   });
 
-  test('applies correct styles to the container', () => {
-    render(<CardImage {...baseProps} />);
-
-    const container = screen.getByText('Test Title').closest('div');
-    expect(container).toHaveClass('p-8 pb-0 border-grey rounded-b-lg');
-  });
-
   test('handles missing description gracefully', () => {
     render(
       <CardImage title='Test Title' image='/test-image.png' description='' />

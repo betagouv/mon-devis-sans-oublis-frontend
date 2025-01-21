@@ -5,13 +5,18 @@ import { useEffect, useState } from 'react';
 import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
 import { useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import { QuoteChecksId, Status, Rating, Category } from '@/types';
+import {
+  Status,
+  Rating,
+  Category,
+  QuoteChecksIdEnrichedErrorDetails,
+} from '@/types';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 
 interface ResultClientProps {
-  currentDevis: QuoteChecksId | null;
+  currentDevis: QuoteChecksIdEnrichedErrorDetails | null;
   profile: string;
   quoteCheckId: string;
 }
@@ -23,9 +28,8 @@ export default function ResultClient({
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
 
-  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
-    initialDevis
-  );
+  const [currentDevis, setCurrentDevis] =
+    useState<QuoteChecksIdEnrichedErrorDetails | null>(initialDevis);
   const [isLoading, setIsLoading] = useState<boolean>(
     !initialDevis || initialDevis.status === Status.PENDING
   );
