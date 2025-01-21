@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 
 import { quoteService } from '@/lib/api';
-import { Category, QuoteChecksId, Status } from '@/types';
+import { Category, QuoteChecksIdEnrichedErrorDetails, Status } from '@/types';
 
 export const useQuotePolling = (quoteCheckId: string) => {
-  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
+  const [currentDevis, setCurrentDevis] =
+    useState<QuoteChecksIdEnrichedErrorDetails | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);

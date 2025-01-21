@@ -62,3 +62,24 @@ export interface QuoteChecksId {
   error_details: ErrorDetails[];
   error_messages: Record<string, string>;
 }
+
+export interface EnrichedErrorDetails extends ErrorDetails {
+  modalContent: {
+    problem: string | null;
+    solution: string | null;
+    isOpen: boolean;
+    title: string;
+  };
+}
+
+export interface QuoteChecksIdEnrichedErrorDetails {
+  id: string;
+  parent_id: string;
+  status: Status;
+  filename: string;
+  profile: Profile;
+  valid: boolean;
+  errors: string[];
+  error_details: EnrichedErrorDetails[];
+  error_messages: Record<string, string>;
+}
