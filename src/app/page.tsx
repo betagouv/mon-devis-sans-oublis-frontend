@@ -54,10 +54,10 @@ export default function Home() {
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
           <h2>{wording.homepage.explanation_cards.title_1}</h2>
-          <div className='fr-grid-row fr-grid-row--gutters flex flex-col md:flex-row'>
+          <div className='fr-grid-row fr-grid-row--gutters flex flex-col md:flex-row items-stretch'>
             {wording.homepage.explanation_cards.image_cards.map(
               (card, index) => (
-                <div className='fr-col-12 fr-col-md-4 flex-1' key={index}>
+                <div className='fr-col-12 fr-col-md-4 flex' key={index}>
                   <CardImage
                     description={card.description}
                     image={card.image}
