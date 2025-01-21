@@ -69,42 +69,39 @@
     }
   },
   "homepage": {
+    "about_us": {
+      "our_missions": {
+        "missions": [
+          {
+            "description": "Création d’un modèle d’analyse automatique qui compare les devis de rénovation énergétique avec les exigences des demandes d’aides.",
+            "icon": "fr-icon-map-pin-2-line",
+            "title": "Fluidifier l’instructions des aides"
+          },
+          {
+            "description": "Réduction du nombre d’allers-retours avec les instructeurs d’aides avec un pré-contrôle gratuit et instantané.",
+            "icon": "fr-icon-timer-line",
+            "title": "Réduire les délais d’instruction d’aide"
+          },
+          {
+            "description": "Conception d’une interface simple qui accompagne les usagers dans la lecture et la correction des devis.",
+            "icon": "fr-icon-heart-line",
+            "title": "Améliorer la satisfaction des usagers"
+          }
+        ],
+        "title": "Quelles sont nos missions ?"
+      },
+      "who_are_we": {
+        "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.<br><br>Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations.",
+        "image": "/images/ministere_transition_ecologique.png",
+        "title": "Qui sommes-nous ?"
+      }
+    },
     "check_quote_button": {
       "href": "/bienvenue",
       "icon": "fr-icon-arrow-right-line",
       "label": "Vérifier mon devis"
     },
-    "section_icon_block": {
-      "icon_blocks": [
-        {
-          "description": "Artisans ou particuliers, profitez d’une aide personnalisée à la modification de vos devis",
-          "icon": "fr-icon-shake-hands-fill",
-          "title": "Explications claires"
-        },
-        {
-          "description": "Corrigez facilement vos devis grâce au guide restitué après l’analyse",
-          "icon": "fr-icon-timer-fill",
-          "title": "Gain de temps"
-        },
-        {
-          "description": "Moins d'allers-retours avec les instructeurs d'aides à la rénovation énergétique et des délais raccourcis",
-          "icon": "fr-icon-flashlight-fill",
-          "title": "Instruction accélérée"
-        }
-      ]
-    },
-    "section_examples": {
-      "badges": [
-        {
-          "label": "Ma prime renov'"
-        },
-        {
-          "label": "Eco PTZ"
-        },
-        {
-          "label": "Aides CEE"
-        }
-      ],
+    "explanation_cards": {
       "cards": [
         {
           "image": "/images/isolation_exterieur.png",
@@ -131,30 +128,63 @@
           "title": "Eau chaude sanitaire"
         }
       ],
-      "subtitle": "Exemple de gestes de rénovation énergétique",
-      "title": "Je souhaite contrôler un devis avant une demande d’aide de rénovation énergétique"
-    },
-    "section_steps": {
       "correction": "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme.",
-      "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.",
-      "number_blocks": [
+      "image": {
+        "alt": "Mon Devis Sans Oublis en 3 étages",
+        "src": "/images/three_steps.png"
+      },
+      "image_cards": [
         {
-          "description": "Téléchargez en un clic votre devis au format pdf sur Mon Devis Sans Oublis en cliquant sur \"Vérifier mon devis\"",
-          "number": 1,
-          "title": "Envoyez votre devis"
+          "description": "Identifiez les mentions manquantes aux attendus réglementaires des aides.",
+          "image": "/images/quote_control.png",
+          "title": "Pré-contrôlez en un clic les devis de rénovation énergétique"
         },
         {
-          "description": "Mon Devis Sans Oublis analyse automatiquement votre devis et identifie les mentions manquantes aux attendus réglementaires des aides à la rénovation énergétique",
-          "number": 2,
-          "title": "Découvrez les suggestions de correction"
+          "description": "Accélérez l’instruction des aides de rénovation énergétique en évitant les allers-retours avec les instructeurs grâce à des devis conformes.",
+          "image": "/images/get_help.png",
+          "title": "Obtenez vos aides de rénovation plus rapidement"
         },
         {
-          "description": "En un clic partagez les corrections à apporter aux personnes qui vous accompagnent (artisans, mandataires, conseillers, etc.)",
-          "number": 3,
-          "title": "Partagez votre guide personnalisé"
+          "description": "Appliquez les corrections pour un devis sans oublis, prêt pour les demandes d’aides.",
+          "image": "/images/change_quote.png",
+          "title": "Recevez un pas à pas des modifications à apporter au devis"
         }
       ],
-      "title": "Une démarche simplifiée en 3 étapes !"
+      "number_blocks": [
+        {
+          "number": 1,
+          "title": "<strong>Déposez votre devis</strong> afin qu'il soit analysé par notre outil qui vérifie que tous les attendus réglementaires soient bien présents."
+        },
+        {
+          "number": 2,
+          "title": "<strong>Découvrez instantanément les suggestions de corrections</strong> adaptées aux demandes d'aides de rénovation énergétique."
+        },
+        {
+          "number": 3,
+          "title": "Informez les parties prenantes (par ex: artisans, mandataires) et <strong>partagez vos corrections personnalisées</strong>."
+        }
+      ],
+      "title_1": "A quoi sert Mon Devis Sans Oublis ?",
+      "title_2": "Exemple de gestes de rénovation énergétique",
+      "title_3": "Une démarche simplifiée en 3 étapes !"
+    },
+    "hero_section": {
+      "badges": [
+        {
+          "label": "Ma prime renov'"
+        },
+        {
+          "label": "Eco PTZ"
+        },
+        {
+          "label": "Aides CEE"
+        }
+      ],
+      "image": {
+        "alt": "Mon Devis Sans Oublis",
+        "src": "/images/homepage.png"
+      },
+      "title": "Je souhaite contrôler un devis avant une demande d’aide de rénovation énergétique"
     },
     "section_who_are_you": {
       "cards": [
@@ -162,7 +192,7 @@
           "alt": "Artisan qui souhaite gagner du temps",
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "image": "/images/card_artisan.png",
-          "title": "Je suis un artisan",
+          "title": "Je suis un.e artisan.e",
           "url": "/artisan/televersement"
         },
         {
@@ -187,7 +217,7 @@
           "url": "/conseiller/televersement"
         }
       ],
-      "description": "Simplifier les démarches administratives, les échanges d'informations et la validation de vos projets",
+      "description": "L’outil s’adresse à plusieurs usagers, dites-nous en plus sur vous et vos besoins",
       "title": "Qui êtes-vous ?"
     }
   },
@@ -350,7 +380,7 @@
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "href": "/artisan/televersement",
           "icon": "fr-icon-tools-fill",
-          "title": "Je suis un artisan"
+          "title": "Je suis un.e artisan.e"
         },
         {
           "description": "Je souhaite effectuer une demande d’aide de rénovation énergétique sans encombre",
