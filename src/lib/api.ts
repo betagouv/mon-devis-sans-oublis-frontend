@@ -30,7 +30,6 @@ export const quoteService = {
 
       return await response.json();
     } catch (error) {
-      console.error('Error fetching quote:', error);
       throw error;
     }
   },

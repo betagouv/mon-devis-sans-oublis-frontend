@@ -38,7 +38,6 @@ export default function ResultClient({
   // Polling logic to update `currentDevis` if status is PENDING
   useEffect(() => {
     if (shouldRedirectToUpload) {
-      console.log('Should redirect is true, but first useEffect is stopping');
       setIsLoading(false);
       return; // Stop polling if redirection is needed or status is final
     }
@@ -81,7 +80,7 @@ export default function ResultClient({
           setIsLoading(false);
           isPollingActive = false;
         }
-      } catch (error) {
+      } catch {
         setIsLoading(false);
         isPollingActive = false;
       }
@@ -157,6 +156,15 @@ export default function ResultClient({
         <p>
           Impossible de récupérer les données. Veuillez réessayer plus tard.
         </p>
+      </section>
+    );
+  }
+
+  if (shouldRedirectToUpload) {
+    return (
+      <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
+        <LoadingDots title='Redirection en cours...' />
+        <p>Vous allez être redirigé, veuillez patienter.</p>
       </section>
     );
   }
