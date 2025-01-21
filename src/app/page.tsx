@@ -53,7 +53,12 @@ export default function Home() {
       </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <h2>{wording.homepage.explanation_cards.title_1}</h2>
+          <h2
+            className='fr-mb-4w'
+            style={{ fontFamily: 'var(--font-spectral)' }}
+          >
+            {wording.homepage.explanation_cards.title_1}
+          </h2>
           <div className='fr-grid-row fr-grid-row--gutters flex flex-col md:flex-row items-stretch'>
             {wording.homepage.explanation_cards.image_cards.map(
               (card, index) => (
@@ -67,8 +72,11 @@ export default function Home() {
               )
             )}
           </div>
-          <div className='fr-grid-row fr-grid-row--center'>
-            <h2 className='fr-mt-8w'>
+          <div className='fr-grid-row fr-grid-row--center fr-mt-10w fr-mb-7w'>
+            <h2
+              className='fr-mb-4w'
+              style={{ fontFamily: 'var(--font-spectral)' }}
+            >
               {wording.homepage.explanation_cards.title_2}
             </h2>
             <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
@@ -92,7 +100,10 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <h2 className='fr-mt-6w fr-mb-5w'>
+          <h2
+            className='fr-mb-6w'
+            style={{ fontFamily: 'var(--font-spectral)' }}
+          >
             {wording.homepage.explanation_cards.title_3}
           </h2>
           <div className='flex flex-col md:flex-row gap-10'>
@@ -169,7 +180,9 @@ export default function Home() {
       </section>
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <h2>{wording.homepage.section_who_are_you.title}</h2>
+          <h2 style={{ fontFamily: 'var(--font-spectral)' }}>
+            {wording.homepage.section_who_are_you.title}
+          </h2>
           <p className='fr-text--lead text-center'>
             {wording.homepage.section_who_are_you.description}
           </p>
