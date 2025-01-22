@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useIsDesktop } from '@/hooks';
+
 export enum ModalPosition {
   CENTER = 'center',
   RIGHT = 'right',
@@ -29,6 +31,8 @@ const Modal: React.FC<ModalProps> = ({
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
   const [shouldRender, setShouldRender] = useState<boolean>(false);
   const [visibleClass, setVisibleClass] = useState<boolean>(false);
+
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     setMounted(true);
@@ -74,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
         className={`flex flex-col px-8 py-4 bg-[var(--background-default-grey)] transform transition-transform duration-300 ease-in-out ${
           position === ModalPosition.CENTER
             ? 'w-[792px] h-[624px]'
-            : 'w-[480px]'
+            : `${isDesktop ? 'w-[480px]' : 'w-full'}`
         } 
             ${
               position === ModalPosition.CENTER

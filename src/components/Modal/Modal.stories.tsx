@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import type { Meta } from '@storybook/react';
+
 import Modal, { ModalPosition } from './Modal';
 
 const meta = {
@@ -23,22 +25,42 @@ const meta = {
 } satisfies Meta<typeof Modal>;
 
 export default meta;
-type Story = StoryObj<typeof Modal>;
 
-export const CenterModal: Story = {
-  args: {
-    backButtonLabel: 'Fermer',
-    isOpen: true,
-    position: ModalPosition.CENTER,
-    children: <div className='p-4'>Contenu de la modale centrale</div>,
-  },
-};
+export const ToggleableModals: React.FC = () => {
+  const [openModal, setOpenModal] = useState<null | 'center' | 'right'>(null);
 
-export const RightModal: Story = {
-  args: {
-    backButtonLabel: 'Retour',
-    isOpen: true,
-    position: ModalPosition.RIGHT,
-    children: <div className='p-4'>Contenu de la modale latérale</div>,
-  },
+  return (
+    <div>
+      <div className='flex gap-4'>
+        <button
+          onClick={() => setOpenModal('center')}
+          className='fr-btn fr-btn--primary'
+        >
+          Modal Center
+        </button>
+        <button
+          onClick={() => setOpenModal('right')}
+          className='fr-btn fr-btn--primary'
+        >
+          Right Modal
+        </button>
+      </div>
+      <Modal
+        backButtonLabel='Fermer'
+        isOpen={openModal === 'center'}
+        position={ModalPosition.CENTER}
+        onClose={() => setOpenModal(null)}
+      >
+        <div className='p-4'>Content</div>
+      </Modal>
+      <Modal
+        backButtonLabel='Retour'
+        isOpen={openModal === 'right'}
+        position={ModalPosition.RIGHT}
+        onClose={() => setOpenModal(null)}
+      >
+        <div className='p-4'>Content</div>
+      </Modal>
+    </div>
+  );
 };

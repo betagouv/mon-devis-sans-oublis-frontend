@@ -13,6 +13,7 @@ export default function WhoAreYou() {
           {wording.homepage.section_who_are_you.cards.map((card, index) => (
             <li className='fr-col-12 fr-col-md-6 fr-col-lg-3 flex' key={index}>
               <Tile
+                className='w-full'
                 description={card.description}
                 image={card.image}
                 href={card.url}
