@@ -232,7 +232,8 @@
           "href": "/mentions-legales",
           "label": "Mentions légales / Confidentialité"
         },
-        { "href": "/accessibilite", "label": "Accessibilité : non conforme" }
+        { "href": "/accessibilite", "label": "Accessibilité : non conforme" },
+        { "href": "/statistiques", "label": "Statistiques" }
       ],
       "organizationDescription": "Mon Devis Sans Oublis est un service public conçu par la <a href='https://www.ecologie.gouv.fr/direction-generale-lamenagement-du-logement-et-nature-dgaln-0' rel='noopener noreferrer' target='_blank'>Direction générale de l'aménagement, du logement et de la nature (DGALN)</a> en partenariat avec le programme <a href='https://beta.gouv.fr/' rel='noopener noreferrer' target='_blank'>beta.gouv</a> de la <a href='https://www.numerique.gouv.fr/' rel='noopener noreferrer' target='_blank'>DINUM</a>. Mon Devis Sans Oublis est en phase d'expérimentation, n'hésitez pas à nous faire part de vos retours par mail à contact@mon-devis-sans-oublis.beta.gouv.fr",
       "organizationLink": "/",
@@ -281,6 +282,24 @@
   "pending_page": {
     "description": "L'analyse de votre devis est en cours.",
     "title": "Chargement"
+  },
+  "statistics": {
+    "cost_label": "prix d'un devis analysé",
+    "cost_sublabel": "par Mon Devis Sans Oublis",
+    "cost_tag": "en moyenne",
+    "errors_label": "erreurs détectées",
+    "errors_sublabel": "par devis",
+    "errors_tag": "en moyenne",
+    "processing_time_label": "temps de traitement",
+    "processing_time_sublabel": "en moyenne",
+    "processing_time_tag": "un devis",
+    "quotes_label": "devis analysés",
+    "quotes_sublabel": "par Mon Devis Sans Oublis",
+    "title": "Statistiques",
+    "title_processing": "Traitement des devis",
+    "title_usage": "Usages",
+    "visitors_label": "visiteurs",
+    "visitors_sublabel": "sur Mon Devis Sans Oublis"
   },
   "upload": {
     "error": {
