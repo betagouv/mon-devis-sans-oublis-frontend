@@ -30,7 +30,7 @@ export default function Statistics() {
 
   const processingTimeInMilliseconds =
     statistics.average_quote_check_processing_time;
-  const processingTimeInSeconds = (processingTimeInMilliseconds / 1000).toFixed(
+  const processingTimeInSeconds = (processingTimeInMilliseconds / 100).toFixed(
     2
   );
 
