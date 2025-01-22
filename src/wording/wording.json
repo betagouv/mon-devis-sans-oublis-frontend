@@ -284,22 +284,20 @@
     "title": "Chargement"
   },
   "statistics": {
-    "cost_label": "prix d'un devis analysé",
-    "cost_sublabel": "par Mon Devis Sans Oublis",
+    "cost_label": "prix d'analyse",
+    "cost_sublabel": "d'un devis",
     "cost_tag": "en moyenne",
     "errors_label": "erreurs détectées",
     "errors_sublabel": "par devis",
     "errors_tag": "en moyenne",
-    "processing_time_label": "pour analyser",
-    "processing_time_sublabel": "un devis",
+    "processing_time_label": "temps d'analyse",
+    "processing_time_sublabel": "d'un devis",
     "processing_time_tag": "en moyenne",
     "quotes_label": "devis analysés",
-    "quotes_sublabel": "par Mon Devis Sans Oublis",
     "title": "Statistiques",
     "title_processing": "Traitement des devis",
     "title_usage": "Usages",
-    "visitors_label": "visiteurs",
-    "visitors_sublabel": "sur Mon Devis Sans Oublis"
+    "visitors_label": "visiteurs uniques"
   },
   "upload": {
     "error": {

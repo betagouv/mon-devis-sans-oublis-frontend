@@ -28,22 +28,20 @@ export default function Statistics() {
     );
   }
 
-  const processingTimeInMilliseconds =
+  const processingTimeInCentiSeconds =
     statistics.average_quote_check_processing_time;
-  const processingTimeInSeconds = (processingTimeInMilliseconds / 100).toFixed(
-    2
+  const processingTimeInSeconds = (processingTimeInCentiSeconds / 100).toFixed(
+    0
   );
 
   const usageStats = [
     {
       value: statistics.unique_visitors_count,
       label: wording.statistics.visitors_label,
-      subLabel: wording.statistics.visitors_sublabel,
     },
     {
       value: statistics.quote_checks_count,
       label: wording.statistics.quotes_label,
-      subLabel: wording.statistics.quotes_sublabel,
     },
     {
       value: statistics.average_quote_check_errors_count,
@@ -76,7 +74,7 @@ export default function Statistics() {
   }: {
     value: string;
     label: string;
-    subLabel: string;
+    subLabel?: string;
     tag?: string;
   }) => (
     <div className='border-top-grey border-left-grey border-right-grey border-bottom-grey-large p-8 w-full h-full flex flex-col items-center'>
