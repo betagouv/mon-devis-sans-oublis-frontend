@@ -4,11 +4,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { init, push } from '@socialgouv/matomo-next';
 
-import { useIsDesktop } from '@/hooks';
-
 const MatomoContent = () => {
   const [initialised, setInitialised] = useState<boolean>(false);
-  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (
@@ -35,12 +32,9 @@ const MatomoContent = () => {
       pathname + (searchParamsString ? '?' + searchParamsString : '')
     );
 
-    const deviceType = isDesktop ? 'desktop' : 'mobile';
-
     push(['setCustomUrl', url]);
-    push(['setCustomVariable', 1, 'DeviceType', deviceType, 'visit']);
     push(['trackPageView']);
-  }, [pathname, searchParamsString, isDesktop]);
+  }, [pathname, searchParamsString]);
 
   if (process.env.NODE_ENV !== 'production') {
     return null;
