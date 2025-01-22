@@ -45,7 +45,7 @@ const QuoteErrorItem = ({
   };
 
   return (
-    <li className='flex p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
+    <li className='flex flex-col md:flex-row p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
       <div className='flex-1'>
         <span className='inline-flex flex-wrap items-center gap-4'>
           <p className='text-[var(--text-title-grey)]'>{item.title}</p>
@@ -58,7 +58,7 @@ const QuoteErrorItem = ({
       </div>
       {item.modalContent.solution !== null && (
         <button
-          className='hidden md:block fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+          className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
           onClick={() => openModal(item.id)}
         >
           {wording.components.quote_error_card.button_see_detail}
