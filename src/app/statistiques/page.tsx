@@ -15,6 +15,19 @@ export default function Statistics() {
 
   const statistics = use(fetchStatistics());
 
+  if (!statistics) {
+    return (
+      <section className='fr-container-fluid fr-py-10w'>
+        <div className='fr-container'>
+          <h1 className='fr-mb-6w !text-[var(--text-title-grey)]'>
+            {wording.statistics.title}
+          </h1>
+          <p>Une erreur est survenue lors du chargement des statistiques.</p>
+        </div>
+      </section>
+    );
+  }
+
   const processingTimeInMilliseconds =
     statistics.average_quote_check_processing_time;
   const processingTimeInSeconds = (processingTimeInMilliseconds / 1000).toFixed(
@@ -90,7 +103,7 @@ export default function Statistics() {
             </div>
           ))}
         </div>
-        <h2 className='fr-mb-3w !text-[var(--text-title-grey)]'>
+        <h2 className='fr-mb-3w fr-mt-8w !text-[var(--text-title-grey)]'>
           {wording.statistics.title_processing}
         </h2>
         <div className='fr-grid-row fr-grid-row--gutters'>
