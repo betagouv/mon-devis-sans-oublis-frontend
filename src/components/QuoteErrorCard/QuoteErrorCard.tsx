@@ -41,7 +41,10 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
     }, {} as Record<string, Set<string>>);
   };
 
-  const transformGroupedData = (groupedData: Record<string, Set<string>>) => {
+  const transformGroupedData = (
+    groupedData: Record<string, Set<string>>,
+    originalList: EnrichedErrorDetails[]
+  ) => {
     return Object.entries(groupedData).map(([key, titles]) => {
       const [providedValue, gesteId] = key.includes('|')
         ? key.split('|')
@@ -50,18 +53,28 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
       return {
         title: providedValue === 'noValue' ? null : providedValue,
         gesteId,
-        items: Array.from(titles).map((title, index) => ({
-          title,
-          gesteId,
-          providedValue: providedValue === 'noValue' ? null : providedValue,
-          id: `${gesteId || 'admin'}-${index}`, // Unique ID for each item
-        })),
+        items: Array.from(titles).map((title, index) => {
+          const matchingItem = originalList.find(
+            (item) => item.title === title && item.geste_id === gesteId
+          );
+
+          return {
+            title,
+            gesteId,
+            providedValue: providedValue === 'noValue' ? null : providedValue,
+            id: `${gesteId || 'admin'}-${index}`, // Unique ID for each item
+            code: matchingItem?.code || null,
+            type: matchingItem?.type,
+            problem: matchingItem?.modalContent.problem || null,
+            solution: matchingItem?.modalContent.solution || null,
+          };
+        }),
       };
     });
   };
 
-  const groupedData = groupByProvidedValueAndGesteId(list); // Group data
-  const transformedData = transformGroupedData(groupedData); // Transform data
+  const groupedData = groupByProvidedValueAndGesteId(list);
+  const transformedData = transformGroupedData(groupedData, list);
 
   const isCategoryAdmin = list[0]?.category === Category.ADMIN;
 
@@ -115,13 +128,13 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                   geste_id: item.gesteId || '',
                   provided_value: item.providedValue,
                   category: isCategoryAdmin ? Category.ADMIN : Category.GESTES,
-                  type: Type.MISSING,
-                  code: 'default-code',
-                  problem: null,
-                  solution: null,
+                  type: Type.MISSING || Type.WRONG,
+                  code: item.code || '',
+                  problem: item.problem || '',
+                  solution: item.solution || '',
                   modalContent: {
-                    problem: null,
-                    solution: null,
+                    problem: item.problem,
+                    solution: item.solution,
                     isOpen: false,
                     title: item.title,
                   },
@@ -149,20 +162,20 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                 <QuoteErrorItem
                   closeModal={closeModal}
                   item={{
-                    id: item.id,
-                    title: item.title,
-                    geste_id: item.gesteId || '',
-                    provided_value: item.providedValue,
                     category: isCategoryAdmin
                       ? Category.ADMIN
                       : Category.GESTES,
-                    type: Type.MISSING,
-                    code: 'default-code',
-                    problem: null,
-                    solution: null,
+                    code: item.code || '',
+                    geste_id: item.gesteId || '',
+                    id: item.id,
+                    provided_value: item.providedValue,
+                    title: item.title,
+                    type: Type.MISSING || Type.WRONG,
+                    problem: item.problem || '',
+                    solution: item.solution || '',
                     modalContent: {
-                      problem: null,
-                      solution: null,
+                      problem: item.problem,
+                      solution: item.solution,
                       isOpen: false,
                       title: item.title,
                     },

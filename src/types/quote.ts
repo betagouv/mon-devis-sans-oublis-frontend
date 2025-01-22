@@ -34,6 +34,24 @@ export interface ErrorDetails {
   provided_value: string | null;
 }
 
+export interface EnrichedErrorDetails {
+  id: string;
+  geste_id: string;
+  category: Category;
+  type: Type;
+  code: string;
+  title: string;
+  problem: string | null;
+  solution: string | null;
+  provided_value: string | null;
+  modalContent: {
+    problem: string | null;
+    solution: string | null;
+    isOpen: boolean;
+    title: string;
+  };
+}
+
 export interface Gestes {
   id: string;
   intitule: string;
@@ -61,15 +79,6 @@ export interface QuoteChecksId {
   errors: string[];
   error_details: ErrorDetails[];
   error_messages: Record<string, string>;
-}
-
-export interface EnrichedErrorDetails extends ErrorDetails {
-  modalContent: {
-    problem: string | null;
-    solution: string | null;
-    isOpen: boolean;
-    title: string;
-  };
 }
 
 export interface QuoteChecksIdEnrichedErrorDetails {
