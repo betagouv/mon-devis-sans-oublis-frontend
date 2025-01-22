@@ -43,6 +43,22 @@ h2 {
   border-bottom: 1px solid var(--border-default-grey);
 }
 
+.border-bottom-grey-large {
+  border-bottom: 4px solid var(--border-contrast-grey);
+}
+
+.border-left-grey {
+  border-left: 1px solid var(--border-default-grey);
+}
+
+.border-right-grey {
+  border-right: 1px solid var(--border-default-grey);
+}
+
+.border-top-grey {
+  border-top: 1px solid var(--border-default-grey);
+}
+
 .border-grey {
   border: 1px solid var(--border-disabled-grey);
 }
