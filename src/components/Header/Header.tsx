@@ -6,7 +6,7 @@ import { richTextParser } from '@/utils';
 export interface HeaderProps {
   affiliatedMinistry: string;
   beta?: string;
-  buttons: { href: string; icon: string; label: string }[];
+  buttons?: { href: string; icon: string; label: string }[];
   organizationDescription: string;
   organizationLink: string;
   organizationName: string;
@@ -55,22 +55,24 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             </div>
-            <div className='fr-header__tools'>
-              <div className='fr-header__tools-links'>
-                <ul className='fr-btns-group'>
-                  {buttons.map((button, index) => (
-                    <li key={index}>
-                      <Link
-                        className={`fr-btn ${button.icon}`}
-                        href={button.href}
-                      >
-                        {button.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            {buttons && (
+              <div className='fr-header__tools'>
+                <div className='fr-header__tools-links'>
+                  <ul className='fr-btns-group'>
+                    {buttons.map((button, index) => (
+                      <li key={index}>
+                        <Link
+                          className={`fr-btn ${button.icon}`}
+                          href={button.href}
+                        >
+                          {button.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

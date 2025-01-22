@@ -241,13 +241,6 @@
     "header": {
       "affiliatedMinistry": "Ministère<br>de la transition<br>écologique",
       "beta": "beta",
-      "buttons": [
-        {
-          "href": "mailto:contact@mon-devis-sans-oublis.beta.gouv.fr",
-          "icon": "fr-icon-question-line",
-          "label": "Nous contacter"
-        }
-      ],
       "organizationDescription": "Vérifiez vos devis de rénovation énergétique",
       "organizationLink": "/",
       "organizationName": "Mon Devis Sans Oublis"
