@@ -179,3 +179,30 @@ export const quoteService = {
     }
   },
 };
+
+export const statService = {
+  async getStats() {
+    const statsUrl = process.env.NEXT_PUBLIC_API_STATS;
+
+    if (!statsUrl) {
+      throw new Error('NEXT_PUBLIC_API_STATS is not defined.');
+    }
+
+    try {
+      const response = await fetch(statsUrl, {
+        headers: API_CONFIG.headers,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch stats: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      throw error;
+    }
+  },
+};
