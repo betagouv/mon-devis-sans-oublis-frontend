@@ -46,20 +46,16 @@ const QuoteErrorItem = ({
     }
   };
 
-  const onClickMobileSolution = () => {
-    if (item.modalContent.solution == null) {
-      undefined;
-    } else {
-      if (!isDesktop) {
-        openModal(item.id);
-      }
-    }
-  };
-
   const isSolutionAndIsDesktop =
     item.modalContent.solution !== null && isDesktop;
   const isSolutionAndIsMobile =
     item.modalContent.solution !== null && !isDesktop;
+
+  const onClickMobileSolution = () => {
+    if (isSolutionAndIsMobile) {
+      openModal(item.id);
+    }
+  };
 
   return (
     <li
