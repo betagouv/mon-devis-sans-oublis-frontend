@@ -284,14 +284,11 @@
     "title": "Chargement"
   },
   "statistics": {
-    "cost_label": "prix d'analyse",
-    "cost_sublabel": "d'un devis",
+    "cost_label": "prix d'analyse d'un devis",
     "cost_tag": "en moyenne",
-    "errors_label": "erreurs détectées",
-    "errors_sublabel": "par devis",
+    "errors_label": "erreurs détectées par devis",
     "errors_tag": "en moyenne",
-    "processing_time_label": "temps d'analyse",
-    "processing_time_sublabel": "d'un devis",
+    "processing_time_label": "temps d'analyse d'un devis",
     "processing_time_tag": "en moyenne",
     "quotes_label": "devis analysés",
     "title": "Statistiques",

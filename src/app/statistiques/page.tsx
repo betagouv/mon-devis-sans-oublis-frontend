@@ -46,7 +46,6 @@ export default function Statistics() {
     {
       value: statistics.average_quote_check_errors_count,
       label: wording.statistics.errors_label,
-      subLabel: wording.statistics.errors_sublabel,
       tag: wording.statistics.errors_tag,
     },
   ];
@@ -55,13 +54,11 @@ export default function Statistics() {
     {
       value: `${processingTimeInSeconds} secondes`,
       label: wording.statistics.processing_time_label,
-      subLabel: wording.statistics.processing_time_sublabel,
       tag: wording.statistics.processing_time_tag,
     },
     {
       value: `${statistics.average_quote_check_cost} €`,
       label: wording.statistics.cost_label,
-      subLabel: wording.statistics.cost_sublabel,
       tag: wording.statistics.cost_tag,
     },
   ];
@@ -69,18 +66,15 @@ export default function Statistics() {
   const StatCard = ({
     value,
     label,
-    subLabel,
     tag,
   }: {
     value: string;
     label: string;
-    subLabel?: string;
     tag?: string;
   }) => (
     <div className='border-top-grey border-left-grey border-right-grey border-bottom-grey-large p-8 w-full h-full flex flex-col items-center'>
-      <h3>{value}</h3>
-      <p className='fr-mb-1w'>{label}</p>
-      <p>{subLabel}</p>
+      <h3 className='text-center'>{value}</h3>
+      <p className='text-center'>{label}</p>
       {tag && <p className='text-xs uppercase text-[#666666]'>{tag}</p>}
     </div>
   );
