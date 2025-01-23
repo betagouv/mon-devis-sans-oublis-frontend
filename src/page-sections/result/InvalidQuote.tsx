@@ -15,7 +15,6 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
-import { useIsDesktop } from '@/hooks';
 import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
@@ -39,8 +38,6 @@ export default function InvalidQuote({
 }: InvalidQuoteProps) {
   const pathname = usePathname();
   const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
-
-  const isDesktop = useIsDesktop();
 
   const errorDetails = (
     errors: EnrichedErrorDetails[] | null = [],
@@ -70,20 +67,6 @@ export default function InvalidQuote({
   const adminErrors = errorDetails(list, Category.ADMIN);
   const gestesErrors = errorDetails(list, Category.GESTES);
 
-  const buttonShareAnalyzis = (
-    <button
-      className={`fr-btn fr-btn--secondary shrink-0 ${
-        isDesktop ? 'fr-ml-1w' : 'fr-mb-6w'
-      }`}
-      onClick={onCopyUrl}
-    >
-      {isUrlCopied
-        ? wording.upload_id.button_copied_url
-        : wording.upload_id.button_copy_url}
-      {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-    </button>
-  );
-
   return (
     <>
       <section className='fr-container fr-gap-8'>
@@ -93,7 +76,15 @@ export default function InvalidQuote({
               {wording.upload_id.title}
             </h1>
           </div>
-          {isDesktop && buttonShareAnalyzis}
+          <button
+            className='fr-btn fr-btn--secondary shrink-0 self-start fr-ml-1w !hidden md:!block'
+            onClick={onCopyUrl}
+          >
+            {isUrlCopied
+              ? wording.upload_id.button_copied_url
+              : wording.upload_id.button_copy_url}
+            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
+          </button>
         </div>
         <div className='flex flex-col items-center md:items-start'>
           <div className='flex flex-wrap gap-4 fr-mb-3w justify-center md:justify-start'>
@@ -113,7 +104,15 @@ export default function InvalidQuote({
               variant={BadgeVariant.GREY}
             />
           </div>
-          {!isDesktop && buttonShareAnalyzis}
+          <button
+            className='fr-btn fr-btn--secondary shrink-0 fr-mb-6w !block md:!hidden'
+            onClick={onCopyUrl}
+          >
+            {isUrlCopied
+              ? wording.upload_id.button_copied_url
+              : wording.upload_id.button_copy_url}
+            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
+          </button>
         </div>
         <div className='fr-col-12'>
           <QuoteStatusCard
