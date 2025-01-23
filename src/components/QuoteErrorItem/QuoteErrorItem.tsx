@@ -5,6 +5,7 @@ import { useState } from 'react';
 import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import { QuoteErrorCardProps } from '../QuoteErrorCard/QuoteErrorCard';
 // import { Type } from '@/context';
+import { useIsDesktop } from '@/hooks';
 import wording from '@/wording';
 import Toast from '../Toast/Toast';
 
@@ -33,6 +34,7 @@ const QuoteErrorItem = ({
   //     : wording.components.quote_error_card.type_wrong.label;
 
   const [showToast, setShowToast] = useState<boolean>(false);
+  const isDesktop = useIsDesktop();
 
   const handleFeedbackSubmit = (comment: string | null) => {
     try {
@@ -44,9 +46,26 @@ const QuoteErrorItem = ({
     }
   };
 
+  const isSolutionAndIsDesktop =
+    item.modalContent.solution !== null && isDesktop;
+  const isSolutionAndIsMobile =
+    item.modalContent.solution !== null && !isDesktop;
+
+  const onClickMobileSolution = () => {
+    if (isSolutionAndIsMobile) {
+      openModal(item.id);
+    }
+  };
+
   return (
-    <li className='flex flex-col md:flex-row p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'>
-      <div className='flex-1'>
+    <li
+      className='flex flex-row p-4 md:p-6 border-bottom-grey last:border-b-0 items-start gap-4 md:items-center'
+      onClick={onClickMobileSolution}
+      style={{
+        cursor: isSolutionAndIsMobile ? 'pointer' : 'default',
+      }}
+    >
+      <div className='flex-1 flex flex-row justify-between gap-4 items-center'>
         <span className='inline-flex flex-wrap items-center gap-4'>
           <p className='text-[var(--text-title-grey)]'>{item.title}</p>
           {/*<p
@@ -55,8 +74,11 @@ const QuoteErrorItem = ({
             {label}
           </p>*/}
         </span>
+        {isSolutionAndIsMobile && (
+          <span className='fr-icon-arrow-right-s-line fr-icon--sm' />
+        )}
       </div>
-      {item.modalContent.solution !== null && (
+      {isSolutionAndIsDesktop && (
         <button
           className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
           onClick={() => openModal(item.id)}
