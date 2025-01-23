@@ -155,7 +155,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                 ? wording.upload_id.badge_correction_plural
                 : wording.upload_id.badge_correction
               ).replace('{number}', group.items.length.toString())}`}
-              key={group.title}
+              key={`${group.title}-${group.gesteId}`}
               title={group.title || ''}
             >
               {group.items.map((item) => (
