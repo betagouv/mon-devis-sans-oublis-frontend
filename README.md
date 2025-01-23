@@ -1,13 +1,29 @@
 # Mon Devis Sans Oublis - Frontend
 
+## Configuration de l'environnement
+
+### Variables d'environnement requises
+
+Avant de lancer l'application, créez un fichier `.env` à la racine du projet avec les variables d'environnement suivantes :
+
+```bash copy
+- NEXT_PUBLIC_API_AUTH
+- NEXT_PUBLIC_API_QUOTE_CHECKS
+- NEXT_PUBLIC_API_QUOTE_CHECKS_ID
+- NEXT_PUBLIC_API_QUOTE_CHECKS_ID_FEEDBACKS
+- NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID_FEEDBACKS
+- NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA
+- NEXT_PUBLIC_API_STATS
+- NEXT_PUBLIC_SENTRY_DSN
+- NEXT_PUBLIC_SENTRY_ORG
+- NEXT_PUBLIC_SENTRY_PROJECT
+- NEXT_PUBLIC_SENTRY_URL
+- NODE_ENV
+```
+
 ## Prise en main
 
 Vous pouvez exécuter ce projet de deux manières : directement avec Node.js ou en utilisant Docker.
-
-Renseignez les variables pour communiquer avec l'API backend et construire l'application ("builder") :
-
-- `NEXT_PUBLIC_API_PROFILES`
-- `NEXT_PUBLIC_API_QUOTE_CHECKS`
 
 ### Option 1: Exécution avec Node.js
 
