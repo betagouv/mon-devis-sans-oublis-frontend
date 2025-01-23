@@ -15,6 +15,7 @@ import {
   QuoteStatusLink,
   QuoteStatusVariant,
 } from '@/components';
+import { useIsDesktop } from '@/hooks';
 import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
@@ -38,6 +39,8 @@ export default function InvalidQuote({
 }: InvalidQuoteProps) {
   const pathname = usePathname();
   const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
+
+  const isDesktop = useIsDesktop();
 
   const errorDetails = (
     errors: EnrichedErrorDetails[] | null = [],
@@ -67,6 +70,20 @@ export default function InvalidQuote({
   const adminErrors = errorDetails(list, Category.ADMIN);
   const gestesErrors = errorDetails(list, Category.GESTES);
 
+  const buttonShareAnalyzis = (
+    <button
+      className={`fr-btn fr-btn--secondary shrink-0 ${
+        isDesktop ? 'fr-ml-1w' : 'fr-mb-6w'
+      }`}
+      onClick={onCopyUrl}
+    >
+      {isUrlCopied
+        ? wording.upload_id.button_copied_url
+        : wording.upload_id.button_copy_url}
+      {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
+    </button>
+  );
+
   return (
     <>
       <section className='fr-container fr-gap-8'>
@@ -76,32 +93,27 @@ export default function InvalidQuote({
               {wording.upload_id.title}
             </h1>
           </div>
-          <button
-            className='fr-btn fr-btn--secondary md:block hidden shrink-0 self-start fr-ml-1w'
-            onClick={onCopyUrl}
-          >
-            {isUrlCopied
-              ? wording.upload_id.button_copied_url
-              : wording.upload_id.button_copy_url}
-            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-          </button>
+          {isDesktop && buttonShareAnalyzis}
         </div>
-        <div className='flex flex-wrap gap-4 fr-mb-6w justify-center md:justify-start'>
-          {uploadedFileName && (
+        <div className='flex flex-col items-center md:items-start'>
+          <div className='flex flex-wrap gap-4 fr-mb-3w justify-center md:justify-start'>
+            {uploadedFileName && (
+              <Badge
+                label={uploadedFileName}
+                size={BadgeSize.SMALL}
+                variant={BadgeVariant.BLUE_DARK}
+              />
+            )}
             <Badge
-              label={uploadedFileName}
+              label={(list.length > 1
+                ? wording.upload_id.badge_correction_plural
+                : wording.upload_id.badge_correction
+              ).replace('{number}', list.length.toString())}
               size={BadgeSize.SMALL}
-              variant={BadgeVariant.BLUE_DARK}
+              variant={BadgeVariant.GREY}
             />
-          )}
-          <Badge
-            label={(list.length > 1
-              ? wording.upload_id.badge_correction_plural
-              : wording.upload_id.badge_correction
-            ).replace('{number}', list.length.toString())}
-            size={BadgeSize.SMALL}
-            variant={BadgeVariant.GREY}
-          />
+          </div>
+          {!isDesktop && buttonShareAnalyzis}
         </div>
         <div className='fr-col-12'>
           <QuoteStatusCard
