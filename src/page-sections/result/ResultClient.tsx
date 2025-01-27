@@ -125,9 +125,9 @@ export default function ResultClient({
   };
 
   const handleSubmitFeedback = async (
-    comment: string | null,
+    comment: string,
     email: string | null,
-    rating: Rating | null
+    rating: Rating
   ) => {
     try {
       await quoteService.sendGlobalFeedback(quoteCheckId, {

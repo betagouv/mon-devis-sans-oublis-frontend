@@ -12,7 +12,7 @@ import Toast from '../Toast/Toast';
 export type QuoteErrorItemProps = {
   closeModal: () => void;
   item: QuoteErrorCardProps['list'][0];
-  onHelpClick: (comment: string | null, errorDetailsId: string) => void;
+  onHelpClick: (comment: string, errorDetailsId: string) => void;
   openModal: (id: string) => void;
   openModalId: string | null;
 };
@@ -36,7 +36,7 @@ const QuoteErrorItem = ({
   const [showToast, setShowToast] = useState<boolean>(false);
   const isDesktop = useIsDesktop();
 
-  const handleFeedbackSubmit = (comment: string | null) => {
+  const handleFeedbackSubmit = (comment: string) => {
     try {
       onHelpClick(comment, item.id);
       closeModal();
