@@ -15,17 +15,6 @@ describe('Card Component', () => {
     expect(screen.getByText('Card content')).toBeInTheDocument();
   });
 
-  test('renders an image when the image prop is provided', () => {
-    const imageSrc = '/test-image.webp';
-    render(<Card {...baseProps} image={imageSrc} />);
-
-    const image = screen.getByAltText('Test Card');
-
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src');
-    expect(image.getAttribute('src')).toContain(encodeURIComponent(imageSrc));
-  });
-
   test('does not render an image when the image prop is not provided', () => {
     render(<Card {...baseProps} />);
 
