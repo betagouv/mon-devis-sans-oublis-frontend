@@ -37,7 +37,7 @@ describe('QuoteStatusCard component', () => {
     descriptionKOMore: 'This is an additional KO description',
     descriptionOKMore: 'This is an additional OK description',
     imageAlt: 'Test Image Alt Text',
-    imageSrc: '/test-image.png',
+    imageSrc: '/test-image.webp',
     title: 'Test Title',
   };
 
@@ -90,12 +90,12 @@ describe('QuoteStatusCard component', () => {
 
     // Check image attributes
     expect(images[0]).toHaveAttribute('data-alt', 'Test Image Alt Text');
-    expect(images[0]).toHaveAttribute('data-src', '/test-image.png');
+    expect(images[0]).toHaveAttribute('data-src', '/test-image.webp');
     expect(images[0]).toHaveAttribute('data-width', '299');
     expect(images[0]).toHaveAttribute('data-height', '140');
 
     expect(images[1]).toHaveAttribute('data-alt', 'Test Image Alt Text');
-    expect(images[1]).toHaveAttribute('data-src', '/test-image.png');
+    expect(images[1]).toHaveAttribute('data-src', '/test-image.webp');
     expect(images[1]).toHaveAttribute('data-width', '299');
     expect(images[1]).toHaveAttribute('data-height', '160');
   });

@@ -23,7 +23,7 @@ jest.mock('next/image', () => ({
 describe('QuoteStatusLink Component', () => {
   const defaultProps = {
     imageAlt: 'Sample Image',
-    imageSrc: '/sample-image.png',
+    imageSrc: '/sample-image.webp',
     linkHref: '/sample-link',
     linkLabel: 'Sample Link',
     title: 'Sample Title',
@@ -36,7 +36,7 @@ describe('QuoteStatusLink Component', () => {
     // Check the image
     const image = screen.getByAltText('Sample Image');
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', '/sample-image.png');
+    expect(image).toHaveAttribute('src', '/sample-image.webp');
 
     // Check the title
     const titleElement = screen.getByText('Sample Title');

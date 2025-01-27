@@ -8,10 +8,10 @@ import {
   Matomo,
   Notice,
 } from '@/components';
-import { marianne, spectral } from '@/styles/fonts';
-import '@/styles/globals.css';
 import { initDsfr } from '@/utils';
 import wording from '@/wording';
+import { marianne, spectral } from '../styles/fonts';
+import '../styles/globals.css';
 
 // DSFR initialization
 initDsfr();

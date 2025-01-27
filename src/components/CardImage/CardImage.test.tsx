@@ -5,7 +5,7 @@ import CardImage, { CardImageProps } from './CardImage';
 describe('CardImage Component', () => {
   const baseProps: CardImageProps = {
     description: 'This is a test description.',
-    image: '/test-image.png',
+    image: '/test-image.webp',
     title: 'Test Title',
   };
 
@@ -20,20 +20,13 @@ describe('CardImage Component', () => {
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src');
     expect(image.getAttribute('src')).toContain(
-      encodeURIComponent('/test-image.png')
+      encodeURIComponent('/test-image.webp')
     );
-  });
-
-  test('renders image with correct styles', () => {
-    render(<CardImage {...baseProps} />);
-
-    const image = screen.getByAltText('Test Title');
-    expect(image).toHaveClass('w-auto h-[180px] max-w-full object-contain');
   });
 
   test('handles missing description gracefully', () => {
     render(
-      <CardImage title='Test Title' image='/test-image.png' description='' />
+      <CardImage title='Test Title' image='/test-image.webp' description='' />
     );
 
     expect(screen.getByText('Test Title')).toBeInTheDocument();

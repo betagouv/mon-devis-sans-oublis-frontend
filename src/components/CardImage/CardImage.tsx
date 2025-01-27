@@ -16,7 +16,7 @@ const CardImage: React.FC<CardImageProps> = ({ description, image, title }) => {
         <Image
           alt={title}
           className='w-auto h-[180px] max-w-full object-contain'
-          height={180}
+          height={0}
           sizes='100vw'
           src={image}
           width={0}

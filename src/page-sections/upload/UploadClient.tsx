@@ -79,6 +79,14 @@ export default function UploadClient({
     }
   }, [router, profile, searchParams]);
 
+  useEffect(() => {
+    if (fileUploadedError) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 0);
+    }
+  }, [fileUploadedError]);
+
   return (
     <>
       {fileUploadedError && (
@@ -140,7 +148,7 @@ export default function UploadClient({
                 label={wording.upload.link_check_quote.label}
                 onSubmit={handleSubmit}
                 variant={
-                  file && !fileError && !fileUploadedError
+                  file && !fileError
                     ? LinkVariant.PRIMARY
                     : LinkVariant.DISABLED
                 }

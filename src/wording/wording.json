@@ -15,7 +15,7 @@
       "back_button_label": "Détail de la correction",
       "correction_helpful_optional": " Aidez-nous à améliorer cette correction en nous partageant votre avis :",
       "icon_alt": "Icône de correction",
-      "icon_src": "/images/quote_correction_details.png",
+      "icon_src": "/images/quotation_results/quotation_correction_details.webp",
       "problem_title": "Problème identifié",
       "solution_title": "Solution",
       "submit_button": "Envoyer"
@@ -95,7 +95,7 @@
       },
       "who_are_we": {
         "description": "Mon Devis Sans Oublis est un service public gratuit qui vérifie en quelques secondes la conformité des devis aux attendus réglementaires des aides à la rénovation énergétique.<br><br>Nous sommes un service public lancé par le Ministère de la Transition Ecologique et la Direction du Numérique (DINUM) sous la forme d'une start-up d'Etat. Elle est en phase d'expérimentation avant un déploiement massif. N'hésitez pas à nous faire part de vos retours et suggestions d'améliorations.",
-        "image": "/images/ministere_transition_ecologique.png",
+        "image": "/images/ministere_transition_ecologique.webp",
         "title": "Qui sommes-nous ?"
       }
     },
@@ -107,49 +107,49 @@
     "explanation_cards": {
       "cards": [
         {
-          "image": "/images/isolation_exterieur.png",
+          "image": "/images/examples_energy_retrofit_actions/isolation_exterieur.webp",
           "title": "Isolation par l'extérieur"
         },
         {
-          "image": "/images/pompe_a_chaleur.png",
+          "image": "/images/examples_energy_retrofit_actions/pompe_a_chaleur.webp",
           "title": "Pompe à chaleur"
         },
         {
-          "image": "/images/vmc.png",
+          "image": "/images/examples_energy_retrofit_actions/vmc.webp",
           "title": "VMC"
         },
         {
-          "image": "/images/isolation_interieur.png",
+          "image": "/images/examples_energy_retrofit_actions/isolation_interieur.webp",
           "title": "Isolation par l'intérieur"
         },
         {
-          "image": "/images/menuiserie.png",
+          "image": "/images/examples_energy_retrofit_actions/menuiserie.webp",
           "title": "Menuiserie"
         },
         {
-          "image": "/images/eau_chaude_sanitaire.png",
+          "image": "/images/examples_energy_retrofit_actions/eau_chaude_sanitaire.webp",
           "title": "Eau chaude sanitaire"
         }
       ],
       "correction": "Une fois corrigé, soumettez à nouveau votre devis jusqu'à ce qu'il soit conforme.",
       "image": {
         "alt": "Mon Devis Sans Oublis en 3 étages",
-        "src": "/images/three_steps.png"
+        "src": "/images/steps_analyze_quote/three_steps.webp"
       },
       "image_cards": [
         {
           "description": "Identifiez les mentions manquantes aux attendus réglementaires des aides.",
-          "image": "/images/quote_control.png",
+          "image": "/images/steps_analyze_quote/quote_control.webp",
           "title": "Pré-contrôlez en un clic les devis de rénovation énergétique"
         },
         {
           "description": "Appliquez les corrections pour un devis sans oublis, prêt pour les demandes d’aides.",
-          "image": "/images/change_quote.png",
+          "image": "/images/steps_analyze_quote/change_quote.webp",
           "title": "Recevez un pas à pas des modifications à apporter au devis"
         },
         {
           "description": "Accélérez l’instruction des aides de rénovation énergétique en évitant les allers-retours avec les instructeurs grâce à des devis conformes.",
-          "image": "/images/get_help.png",
+          "image": "/images/steps_analyze_quote/get_help.webp",
           "title": "Obtenez vos aides de rénovation plus rapidement"
         }
       ],
@@ -185,7 +185,7 @@
       ],
       "image": {
         "alt": "Mon Devis Sans Oublis",
-        "src": "/images/homepage.png"
+        "src": "/images/homepage.webp"
       },
       "title": "Je souhaite contrôler un devis avant une demande d’aide de rénovation énergétique"
     },
@@ -194,28 +194,28 @@
         {
           "alt": "Artisan qui souhaite gagner du temps",
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
-          "image": "/images/card_artisan.png",
+          "image": "/images/who_are_you/card_artisan.webp",
           "title": "Je suis artisan",
           "url": "/artisan/televersement"
         },
         {
           "alt": "Particulier qui souhaite gagner du temps",
           "description": "Je souhaite effectuer une demande d’aide de rénovation énergétique sans encombre",
-          "image": "/images/card_individual.png",
+          "image": "/images/who_are_you/card_individual.webp",
           "title": "Je suis particulier",
           "url": "/particulier/televersement"
         },
         {
           "alt": "Mandataire qui souhaite faire le lien",
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "image": "/images/card_agent.png",
+          "image": "/images/who_are_you/card_agent.webp",
           "title": "Je suis mandataire",
           "url": "/mandataire/televersement"
         },
         {
           "alt": "Conseiller qui souhaite accompagner ses clients",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
-          "image": "/images/card_advisor.png",
+          "image": "/images/who_are_you/card_advisor.webp",
           "title": "Je suis conseiller",
           "url": "/conseiller/televersement"
         }
@@ -339,29 +339,29 @@
     ],
     "button_copied_url": "Lien copié",
     "button_copy_url": "Copier le lien de la page",
-    "quote_status_card_ko": {
+    "quotation_status_card_ko": {
       "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
       "description_ko_more": "Nous vous conseillons de le corriger dès maintenant pour éviter les allers-retours lors de l'instruction.",
       "image_alt": "Devis non conforme",
-      "image_src": "/images/quote_status_ko.png",
+      "image_src": "/images/quotation_results/quotation_status_ko.webp",
       "title": "Aïe, ce devis va coincer..."
     },
-    "quote_status_card_ok": {
+    "quotation_status_card_ok": {
       "description": "Bravo, votre devis est complet. Il est conforme aux aides de rénovation énergétique et pourra être instruit sans demande complémentaire.",
       "description_ok_more": "Prochaine étape : créer votre dossier d'aide pour instruction.",
       "image_alt": "Devis complet",
-      "image_src": "/images/quote_status_ok.png",
+      "image_src": "/images/quotation_results/quotation_status_ok.webp",
       "title": "Il est top ce devis !"
     },
-    "quote_status_link_ko": {
+    "quotation_status_link_ko": {
       "image_alt": "Quote ko",
-      "image_src": "/images/quote_link_ko.png",
+      "image_src": "/images/quotation_results/quotation_link_ko.webp",
       "title": "Vous souhaitez analyser un nouveau devis ?",
       "link_label": "Vérifier un devis"
     },
-    "quote_status_link_ok": {
+    "quotation_status_link_ok": {
       "image_alt": "Quote ok",
-      "image_src": "/images/quote_link_ok.png",
+      "image_src": "/images/quotation_results/quotation_link_ok.webp",
       "title": "Revenez quand vous voulez !",
       "link_label": "Vérifier un nouveau devis"
     },

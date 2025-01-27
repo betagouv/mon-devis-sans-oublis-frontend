@@ -24,7 +24,7 @@ export const WhoAreWe: Story = {
         }
       </p>
     ),
-    image: '/images/ministere_transition_ecologique.png',
+    image: '/images/ministere_transition_ecologique.webp',
     title: 'Qui sommes-nous ?',
   },
 };

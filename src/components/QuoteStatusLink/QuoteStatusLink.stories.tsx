@@ -23,7 +23,7 @@ type Story = StoryObj<typeof QuoteStatusLink>;
 export const QuoteLinkOK: Story = {
   args: {
     imageAlt: 'Quote Status',
-    imageSrc: '/images/quote_link_ok.png',
+    imageSrc: '/images/quotation_results/quotation_link_ok.webp',
     title: 'Revenez quand vous voulez !',
     linkHref: '/quote-status',
     linkLabel: 'Vérifier un nouveau devis',
@@ -34,7 +34,7 @@ export const QuoteLinkOK: Story = {
 export const QuoteLinkKO: Story = {
   args: {
     imageAlt: 'Quote Status',
-    imageSrc: '/images/quote_link_ko.png',
+    imageSrc: '/images/quotation_results/quotation_link_ko.webp',
     title: 'Psst, c’est bon vous avez tout corrigé ?',
     linkHref: '/analysis-report',
     linkLabel: 'Vérifier à nouveau le devis',
