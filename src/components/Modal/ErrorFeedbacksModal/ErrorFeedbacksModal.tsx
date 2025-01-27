@@ -14,7 +14,7 @@ export enum ModalPosition {
 export interface ErrorFeedbacksModalProps {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback?: (comment: string | null) => void;
+  onSubmitFeedback?: (comment: string) => void;
   problem: string | null;
   solution: string | null;
   title: string;
@@ -28,7 +28,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   solution,
   title,
 }) => {
-  const [comment, setComment] = useState<string | null>(null);
+  const [comment, setComment] = useState<string>('');
 
   const handleSubmit = () => {
     if (onSubmitFeedback) {

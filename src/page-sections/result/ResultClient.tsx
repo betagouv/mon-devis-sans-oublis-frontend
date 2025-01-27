@@ -125,9 +125,9 @@ export default function ResultClient({
   };
 
   const handleSubmitFeedback = async (
-    comment: string | null,
+    comment: string,
     email: string | null,
-    rating: Rating | null
+    rating: Rating
   ) => {
     try {
       await quoteService.sendGlobalFeedback(quoteCheckId, {
@@ -174,48 +174,52 @@ export default function ResultClient({
   }
 
   return (
-    <div className='fr-container-fluid fr-py-10w'>
-      {currentDevis.status === Status.VALID ? (
-        <ValidQuote uploadedFileName={currentDevis.filename} />
-      ) : (
-        <InvalidQuote
-          isUrlCopied={isUrlCopied}
-          list={currentDevis.error_details || []}
-          onCopyUrl={copyUrlToClipboard}
-          onHelpClick={handleHelpClick}
-          uploadedFileName={currentDevis.filename || ''}
-        />
-      )}
-      <div className='fr-container flex flex-col relative'>
-        <div
-          className={`${
-            isButtonSticky
-              ? 'fixed bottom-14 right-50'
-              : 'absolute bottom-40 right-50'
-          } self-end z-20`}
-        >
-          <button
-            className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
-            onClick={() => setIsModalOpen(!isModalOpen)}
-          >
-            Donner mon avis
-          </button>
-        </div>
-        {showToast && (
+    <>
+      {showToast && (
+        <div className='fixed top-10 right-20 z-50'>
           <Toast
-            duration={4000}
-            message='Merci pour votre retour !'
+            duration={3000}
+            message='Votre avis a bien été pris en compte. Merci pour votre aide précieuse !'
             onClose={() => setShowToast(false)}
           />
-        )}
-        {isModalOpen && (
-          <GlobalErrorFeedbacksModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSubmitFeedback={handleSubmitFeedback}
+        </div>
+      )}
+      <div className='fr-container-fluid fr-py-10w'>
+        {currentDevis.status === Status.VALID ? (
+          <ValidQuote uploadedFileName={currentDevis.filename} />
+        ) : (
+          <InvalidQuote
+            isUrlCopied={isUrlCopied}
+            list={currentDevis.error_details || []}
+            onCopyUrl={copyUrlToClipboard}
+            onHelpClick={handleHelpClick}
+            uploadedFileName={currentDevis.filename || ''}
           />
         )}
+        <div className='fr-container flex flex-col relative'>
+          <div
+            className={`${
+              isButtonSticky
+                ? 'fixed bottom-14 right-50'
+                : 'absolute bottom-40 right-50'
+            } self-end z-20`}
+          >
+            <button
+              className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              Donner mon avis
+            </button>
+          </div>
+          {isModalOpen && (
+            <GlobalErrorFeedbacksModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSubmitFeedback={handleSubmitFeedback}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

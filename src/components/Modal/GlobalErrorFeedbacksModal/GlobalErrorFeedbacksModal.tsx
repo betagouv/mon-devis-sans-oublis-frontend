@@ -11,9 +11,9 @@ export interface GlobalErrorFeedbacksModalProps {
   isOpen: boolean;
   onClose?: () => void;
   onSubmitFeedback: (
-    comment: string | null,
+    comment: string,
     email: string | null,
-    rating: Rating | null
+    rating: Rating
   ) => void;
 }
 
@@ -33,7 +33,9 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
   };
 
   const handleSubmit = () => {
-    onSubmitFeedback(comment, email, rating);
+    if (comment !== null && rating !== null) {
+      onSubmitFeedback(comment, email, rating);
+    }
   };
 
   return (
