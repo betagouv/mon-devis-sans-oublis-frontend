@@ -125,6 +125,13 @@ h2 {
   -webkit-mask-image: url('../../public/svg/design/tools-fill.svg');
 }
 
+/* System */
+.fr-icon-share-box-line::after,
+.fr-icon-share-box-line::before {
+  mask-image: url('../../public/svg/system/share-box-line.svg');
+  -webkit-mask-image: url('../../public/svg/system/share-box-line.svg');
+}
+
 @media (max-width: 767px) {
   .fr-tile__title a::after {
     height: 16px;
