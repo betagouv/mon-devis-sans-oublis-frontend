@@ -22,14 +22,15 @@ export default function HeroSection() {
             </ul>
             <Link {...wording.homepage.check_quote_button} />
           </div>
-          <div className='mt-10 md:mt-0 flex justify-center'>
+          <div className='mt-10 md:mt-0 flex justify-center relative h-[220px] md:h-[300px] lg:h-[376px] w-full'>
             <Image
               alt={wording.homepage.hero_section.image.alt}
-              className='w-auto h-[220px] md:h-[300px] lg:h-[376px] object-contain'
-              height={376}
+              className='object-contain'
+              fill
+              priority
+              quality={85}
               sizes='100vw'
               src={wording.homepage.hero_section.image.src}
-              width={0}
             />
           </div>
         </div>

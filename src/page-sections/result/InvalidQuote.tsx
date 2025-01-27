@@ -116,10 +116,10 @@ export default function InvalidQuote({
         </div>
         <div className='fr-col-12'>
           <QuoteStatusCard
-            description={wording.upload_id.quote_status_card_ko.description}
-            imageAlt={wording.upload_id.quote_status_card_ko.image_alt}
-            imageSrc={wording.upload_id.quote_status_card_ko.image_src}
-            title={wording.upload_id.quote_status_card_ko.title}
+            description={wording.upload_id.quotation_status_card_ko.description}
+            imageAlt={wording.upload_id.quotation_status_card_ko.image_alt}
+            imageSrc={wording.upload_id.quotation_status_card_ko.image_src}
+            title={wording.upload_id.quotation_status_card_ko.title}
           />
           <ul className='fr-raw-list my-8 w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
             {wording.upload_id.block_number.map((block, index) => (
@@ -142,7 +142,7 @@ export default function InvalidQuote({
                             <Link
                               href={goBackToUpload}
                               label={
-                                wording.upload_id.quote_status_link_ko
+                                wording.upload_id.quotation_status_link_ko
                                   .link_label
                               }
                               legacyBehavior
@@ -202,11 +202,11 @@ export default function InvalidQuote({
       <section className='fr-container fr-mt-10w hidden md:block'>
         <QuoteStatusLink
           className='mb-16 mt-8'
-          imageAlt={wording.upload_id.quote_status_link_ko.image_alt}
-          imageSrc={wording.upload_id.quote_status_link_ko.image_src}
+          imageAlt={wording.upload_id.quotation_status_link_ko.image_alt}
+          imageSrc={wording.upload_id.quotation_status_link_ko.image_src}
           linkHref={goBackToUpload}
-          linkLabel={wording.upload_id.quote_status_link_ko.link_label}
-          title={wording.upload_id.quote_status_link_ko.title}
+          linkLabel={wording.upload_id.quotation_status_link_ko.link_label}
+          title={wording.upload_id.quotation_status_link_ko.title}
           variant={QuoteStatusVariant.PRIMARY}
         />
       </section>

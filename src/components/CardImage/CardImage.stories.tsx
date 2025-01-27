@@ -15,7 +15,7 @@ export const PreControl: Story = {
     title: 'Pré-contrôler en un clic les devis de rénovation énergétique',
     description:
       'Identifiez les mentions manquantes aux attendus réglementaires des aides.',
-    image: '/images/quote_control.png',
+    image: '/images/steps_analyze_quote/quote_control.webp',
   },
 };
 
@@ -24,7 +24,7 @@ export const GetHelp: Story = {
     title: 'Obtenez vos aides de rénovation plus rapidement',
     description:
       'Accélérez l’instruction des aides de rénovation énergétique en évitant les allers-retours avec les instructeurs grâce à des devis conformes.',
-    image: '/images/get_help.png',
+    image: '/images/steps_analyze_quote/get_help.webp',
   },
 };
 
@@ -33,6 +33,6 @@ export const ChangeQuote: Story = {
     title: 'Recevez un pas à pas des modifications à apporter au devis',
     description:
       'Appliquez les corrections pour un devis sans oublis, prêt pour les demandes d’aides.',
-    image: '/images/change_quote.png',
+    image: '/images/steps_analyze_quote/change_quote.webp',
   },
 };

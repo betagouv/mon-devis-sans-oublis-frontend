@@ -16,7 +16,7 @@ describe('Card Component', () => {
   });
 
   test('renders an image when the image prop is provided', () => {
-    const imageSrc = '/test-image.png';
+    const imageSrc = '/test-image.webp';
     render(<Card {...baseProps} image={imageSrc} />);
 
     const image = screen.getByAltText('Test Card');
