@@ -198,10 +198,10 @@ export default function InvalidQuote({
             sur le devis.
           </p>
         </div> */}
-        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[530px]'>
-          <span className='flex flex-row gap-2'>
+        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[580px]'>
+          <span className='flex flex-row gap-2 items-center mb-4'>
             <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
-            <h6 className='mb-2'>Partager les corrections</h6>
+            <h6 className='mb-0'>Partager les corrections</h6>
           </span>
           <p>
             Grâce au lien, retrouvez cette page et les corrections à apporter

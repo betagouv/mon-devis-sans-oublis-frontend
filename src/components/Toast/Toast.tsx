@@ -28,7 +28,7 @@ const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
         visible ? 'translate-x-0' : 'translate-x-[120%]'
       } `}
     >
-      <p>{message}</p>
+      <p className='font-bold'>{message}</p>
     </div>
   );
 };

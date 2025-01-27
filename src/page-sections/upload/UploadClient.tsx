@@ -67,7 +67,7 @@ export default function UploadClient({
       router.push(`/${profile}/televersement/${data.id}`);
     } catch (error) {
       console.error('Error during upload:', error);
-      setFileUploadedError('An error occurred. Please try again.');
+      setFileError('An error occurred. Please try again.');
     }
   };
 
