@@ -148,7 +148,7 @@ export default function UploadClient({
                 label={wording.upload.link_check_quote.label}
                 onSubmit={handleSubmit}
                 variant={
-                  file && !fileError && !fileUploadedError
+                  file && !fileError
                     ? LinkVariant.PRIMARY
                     : LinkVariant.DISABLED
                 }
