@@ -338,8 +338,8 @@
       }
     ],
     "button_copied_url": "Lien copié",
-    "button_copy_url": "Partager l'analyse",
-    "quotation_status_card_ko": {
+    "button_copy_url": "Copier le lien de la page",
+    "quote_status_card_ko": {
       "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
       "description_ko_more": "Nous vous conseillons de le corriger dès maintenant pour éviter les allers-retours lors de l'instruction.",
       "image_alt": "Devis non conforme",
@@ -356,8 +356,8 @@
     "quotation_status_link_ko": {
       "image_alt": "Quote ko",
       "image_src": "/images/quotation_results/quotation_link_ko.webp",
-      "title": "Psst, c’est bon vous avez tout corrigé ?",
-      "link_label": "Vérifier le devis corrigé"
+      "title": "Vous souhaitez analyser un nouveau devis ?",
+      "link_label": "Vérifier un devis"
     },
     "quotation_status_link_ok": {
       "image_alt": "Quote ok",

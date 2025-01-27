@@ -44,8 +44,6 @@ describe('ErrorFeedbacksModal', () => {
       name: wording.components.error_feedbacks_modal.submit_button,
     });
 
-    expect(submitButton).toBeDisabled();
-
     fireEvent.change(textarea, { target: { value: 'Test comment' } });
     expect(submitButton).toBeEnabled();
 

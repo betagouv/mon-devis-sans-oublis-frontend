@@ -84,6 +84,8 @@ export const quoteService = {
         body: JSON.stringify({ comment }),
       });
 
+      console.log('response', response);
+
       if (!response.ok) {
         throw new Error(
           `Failed to send feedback: ${response.status} ${response.statusText}`
@@ -100,9 +102,9 @@ export const quoteService = {
   async sendGlobalFeedback(
     quoteCheckId: string,
     feedback: {
-      comment: string | null;
+      comment: string;
       email: string | null;
-      rating: Rating | null;
+      rating: Rating;
     }
   ) {
     const globalFeedbackUrl =
@@ -120,7 +122,7 @@ export const quoteService = {
       const response = await fetch(url, {
         method: 'POST',
         headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ feedback }),
+        body: JSON.stringify({ ...feedback }),
       });
 
       if (!response.ok) {

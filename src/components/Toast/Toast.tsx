@@ -24,11 +24,11 @@ const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
 
   return (
     <div
-      className={`fr-alert fr-alert--success fixed top-10 right-10 transition-transform transform bg-white ${
+      className={`fr-alert fr-alert--success transition-transform transform bg-white ${
         visible ? 'translate-x-0' : 'translate-x-[120%]'
-      }`}
+      } `}
     >
-      <p>{message}</p>
+      <p className='font-bold'>{message}</p>
     </div>
   );
 };

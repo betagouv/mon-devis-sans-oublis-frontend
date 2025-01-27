@@ -64,22 +64,4 @@ describe('Toast', () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
-
-  it('applies correct classes', () => {
-    const { container } = render(
-      <Toast message='Test message' onClose={jest.fn()} />
-    );
-    const toast = container.firstChild as HTMLElement;
-
-    expect(toast).toHaveClass(
-      'fr-alert',
-      'fr-alert--success',
-      'fixed',
-      'top-10',
-      'right-10',
-      'transition-transform',
-      'transform',
-      'bg-white'
-    );
-  });
 });

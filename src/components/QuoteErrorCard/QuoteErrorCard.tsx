@@ -63,6 +63,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
             gesteId,
             providedValue: providedValue === 'noValue' ? null : providedValue,
             id: `${gesteId || 'admin'}-${index}`, // Unique ID for each item
+            realId: matchingItem?.id || null,
             code: matchingItem?.code || null,
             type: matchingItem?.type,
             problem: matchingItem?.modalContent.problem || null,
@@ -140,7 +141,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                   },
                 }}
                 key={item.id}
-                onHelpClick={onHelpClick}
+                onHelpClick={(comment) => onHelpClick(comment, item.id)}
                 openModal={() => openModal(item.id)}
                 openModalId={openModalId}
               />
@@ -181,7 +182,9 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                     },
                   }}
                   key={item.id}
-                  onHelpClick={onHelpClick}
+                  onHelpClick={(comment) =>
+                    onHelpClick(comment, item.realId || '')
+                  }
                   openModal={() => openModal(item.id)}
                   openModalId={openModalId}
                 />
