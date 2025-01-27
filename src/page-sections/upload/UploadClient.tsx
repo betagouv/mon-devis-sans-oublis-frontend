@@ -79,6 +79,14 @@ export default function UploadClient({
     }
   }, [router, profile, searchParams]);
 
+  useEffect(() => {
+    if (fileUploadedError) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 0);
+    }
+  }, [fileUploadedError]);
+
   return (
     <>
       {fileUploadedError && (

@@ -52,8 +52,8 @@ export default function ExplanationCards() {
           <Image
             alt={wording.homepage.explanation_cards.image.alt}
             className='w-auto lg:h-[420px] md:h-[380px] h-[224px] object-contain'
-            height={420}
-            sizes='100vw'
+            height={0}
+            sizes='(min-width: 1024px) 420px, (min-width: 768px) 380px, 224px'
             src={wording.homepage.explanation_cards.image.src}
             width={0}
           />
