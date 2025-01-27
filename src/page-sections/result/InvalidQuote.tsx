@@ -76,15 +76,6 @@ export default function InvalidQuote({
               {wording.upload_id.title}
             </h1>
           </div>
-          <button
-            className='fr-btn fr-btn--secondary shrink-0 self-start fr-ml-1w !hidden md:!block'
-            onClick={onCopyUrl}
-          >
-            {isUrlCopied
-              ? wording.upload_id.button_copied_url
-              : wording.upload_id.button_copy_url}
-            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-          </button>
         </div>
         <div className='flex flex-col items-center md:items-start'>
           <div className='flex flex-wrap gap-4 fr-mb-3w justify-center md:justify-start'>
@@ -104,15 +95,6 @@ export default function InvalidQuote({
               variant={BadgeVariant.GREY}
             />
           </div>
-          <button
-            className='fr-btn fr-btn--secondary shrink-0 fr-mb-6w !block md:!hidden'
-            onClick={onCopyUrl}
-          >
-            {isUrlCopied
-              ? wording.upload_id.button_copied_url
-              : wording.upload_id.button_copy_url}
-            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-          </button>
         </div>
         <div className='fr-col-12'>
           <QuoteStatusCard
@@ -199,16 +181,55 @@ export default function InvalidQuote({
           )}
         </div>
       </section>
-      <section className='fr-container fr-mt-10w hidden md:block'>
-        <QuoteStatusLink
-          className='mb-16 mt-8'
-          imageAlt={wording.upload_id.quote_status_link_ko.image_alt}
-          imageSrc={wording.upload_id.quote_status_link_ko.image_src}
-          linkHref={goBackToUpload}
-          linkLabel={wording.upload_id.quote_status_link_ko.link_label}
-          title={wording.upload_id.quote_status_link_ko.title}
-          variant={QuoteStatusVariant.PRIMARY}
-        />
+      <section className='fr-container fr-mt-6w'>
+        {/* <div className='flex flex-col rounded-lg w-fit md:w-[530px]'>
+          <span className='flex flex-row gap-2'>
+            <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
+            <button onClick={onCopyUrl} className='fr-link fr-link--lg'>
+              <h6 className='mb-2 border-bottom-black'>
+                {isUrlCopied
+                  ? wording.upload_id.button_copied_url
+                  : wording.upload_id.button_copy_url}
+              </h6>
+            </button>
+          </span>
+          <p>
+            Grâce au lien, retrouvez cette page et les corrections à apporter
+            sur le devis.
+          </p>
+        </div> */}
+        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[530px]'>
+          <span className='flex flex-row gap-2'>
+            <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
+            <h6 className='mb-2'>Partager les corrections</h6>
+          </span>
+          <p>
+            Grâce au lien, retrouvez cette page et les corrections à apporter
+            sur le devis.
+          </p>
+          <button
+            className={`fr-btn ${
+              isUrlCopied && 'fr-btn--secondary'
+            } fr-btn--sm shrink-0 self-start`}
+            onClick={onCopyUrl}
+          >
+            {isUrlCopied
+              ? wording.upload_id.button_copied_url
+              : wording.upload_id.button_copy_url}
+            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
+          </button>
+        </div>
+        <div className='hidden md:block'>
+          <QuoteStatusLink
+            className='mb-16 mt-8'
+            imageAlt={wording.upload_id.quote_status_link_ko.image_alt}
+            imageSrc={wording.upload_id.quote_status_link_ko.image_src}
+            linkHref={goBackToUpload}
+            linkLabel={wording.upload_id.quote_status_link_ko.link_label}
+            title={wording.upload_id.quote_status_link_ko.title}
+            variant={QuoteStatusVariant.PRIMARY}
+          />
+        </div>
       </section>
     </>
   );

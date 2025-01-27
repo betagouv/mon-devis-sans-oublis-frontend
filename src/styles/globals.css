@@ -39,6 +39,10 @@ h2 {
   border: 1px solid var(--background-action-high-blue-france);
 }
 
+.border-bottom-black {
+  border-bottom: 1px solid var(--text-title-grey);
+}
+
 .border-bottom-grey {
   border-bottom: 1px solid var(--border-default-grey);
 }
@@ -123,6 +127,13 @@ h2 {
 .fr-icon-tools-fill::before {
   mask-image: url('../../public/svg/design/tools-fill.svg');
   -webkit-mask-image: url('../../public/svg/design/tools-fill.svg');
+}
+
+/* System */
+.fr-icon-share-box-line::after,
+.fr-icon-share-box-line::before {
+  mask-image: url('../../public/svg/system/share-box-line.svg');
+  -webkit-mask-image: url('../../public/svg/system/share-box-line.svg');
 }
 
 @media (max-width: 767px) {
