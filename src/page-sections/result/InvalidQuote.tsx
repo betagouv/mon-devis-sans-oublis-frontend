@@ -182,7 +182,23 @@ export default function InvalidQuote({
         </div>
       </section>
       <section className='fr-container fr-mt-6w'>
-        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col p-8 rounded-lg w-fit md:w-[530px]'>
+        {/* <div className='flex flex-col rounded-lg w-fit md:w-[530px]'>
+          <span className='flex flex-row gap-2'>
+            <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
+            <button onClick={onCopyUrl} className='fr-link fr-link--lg'>
+              <h6 className='mb-2 border-bottom-black'>
+                {isUrlCopied
+                  ? wording.upload_id.button_copied_url
+                  : wording.upload_id.button_copy_url}
+              </h6>
+            </button>
+          </span>
+          <p>
+            Grâce au lien, retrouvez cette page et les corrections à apporter
+            sur le devis.
+          </p>
+        </div> */}
+        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[530px]'>
           <span className='flex flex-row gap-2'>
             <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
             <h6 className='mb-2'>Partager les corrections</h6>
