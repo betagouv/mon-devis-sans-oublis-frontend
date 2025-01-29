@@ -3,113 +3,226 @@ import '@testing-library/jest-dom';
 
 import Upload from './Upload';
 
-const mockOnFileUpload = jest.fn();
-const mockSetError = jest.fn();
-
-jest.mock('@/wording', () => ({
-  components: {
-    upload: {
-      label: 'Upload your file',
-      description: 'Max file size: {maxFileSize}Mo',
-      error_file_size: 'File size exceeds {maxFileSize}Mo.',
-      error_file_type: 'Only PDF files are allowed.',
-    },
-  },
-}));
-
 describe('Upload Component', () => {
-  const maxFileSize = 5; // 5 Mo
+  let onFileUploadMock: jest.Mock;
+  let setErrorMock: jest.Mock;
+  const maxFileSize = 5; // 5MB
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    onFileUploadMock = jest.fn();
+    setErrorMock = jest.fn();
   });
 
-  test('renders correctly', () => {
+  it('renders correctly with default text', () => {
     render(
       <Upload
         maxFileSize={maxFileSize}
-        onFileUpload={mockOnFileUpload}
-        setError={mockSetError}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
       />
     );
 
-    expect(screen.getByLabelText(/upload your file/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(`Max file size: ${maxFileSize}Mo`)
-    ).toBeInTheDocument();
+    expect(screen.getByText('Aucun fichier sélectionné')).toBeInTheDocument();
+    expect(screen.getByText(/Choisir le fichier/i)).toBeInTheDocument();
   });
 
-  test('accepts a valid PDF file under the size limit', () => {
+  it('opens the file explorer when clicking on the upload area', () => {
     render(
       <Upload
         maxFileSize={maxFileSize}
-        onFileUpload={mockOnFileUpload}
-        setError={mockSetError}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
       />
     );
 
-    const file = new File(
-      [new Array(3 * 1024 * 1024).fill('a').join('')],
-      'example.pdf',
-      {
-        type: 'application/pdf',
-      }
-    );
+    const uploadDiv = screen.getByTestId('upload-area');
+    const fileInput = screen.getByTestId('file-upload') as HTMLInputElement;
 
-    const input = screen.getByLabelText(/upload your file/i);
-    fireEvent.change(input, { target: { files: [file] } });
-
-    expect(mockOnFileUpload).toHaveBeenCalledWith(file);
-    expect(mockSetError).toHaveBeenCalledWith(null);
+    fireEvent.click(uploadDiv);
+    expect(fileInput).toBeDefined();
   });
 
-  test('rejects files that exceed the size limit', () => {
+  it('accepts a valid PDF file and resets errors', () => {
     render(
       <Upload
         maxFileSize={maxFileSize}
-        onFileUpload={mockOnFileUpload}
-        setError={mockSetError}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
       />
     );
 
-    const file = new File(
-      [new Array(6 * 1024 * 1024).fill('a').join('')],
-      'large.pdf',
-      {
-        type: 'application/pdf',
-      }
-    );
+    const fileInput = screen.getByTestId('file-upload') as HTMLInputElement;
+    const validFile = new File(['dummy content'], 'test.pdf', {
+      type: 'application/pdf',
+    });
 
-    const input = screen.getByLabelText(/upload your file/i);
-    fireEvent.change(input, { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [validFile] } });
 
-    expect(mockOnFileUpload).not.toHaveBeenCalled();
-    expect(mockSetError).toHaveBeenCalledWith(
-      `File size exceeds ${maxFileSize}Mo.`
-    );
+    expect(onFileUploadMock).toHaveBeenCalledWith(validFile);
+    expect(setErrorMock).toHaveBeenCalledWith(null);
   });
 
-  test('rejects non-PDF files', () => {
+  it('shows an error when uploading a non-PDF file', () => {
     render(
       <Upload
         maxFileSize={maxFileSize}
-        onFileUpload={mockOnFileUpload}
-        setError={mockSetError}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
       />
     );
 
-    const file = new File(
-      [new Array(2 * 1024 * 1024).fill('a').join('')],
-      'image.png',
-      {
-        type: 'image/png',
-      }
+    const fileInput = screen.getByTestId('file-upload') as HTMLInputElement;
+    const invalidFile = new File(['dummy content'], 'test.txt', {
+      type: 'text/plain',
+    });
+
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+
+    expect(setErrorMock).toHaveBeenCalled();
+    expect(onFileUploadMock).not.toHaveBeenCalled();
+  });
+
+  it('shows an error when the file is too large', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
     );
 
-    const input = screen.getByLabelText(/upload your file/i);
-    fireEvent.change(input, { target: { files: [file] } });
+    const fileInput = screen.getByTestId('file-upload') as HTMLInputElement;
+    const largeFile = new File(['a'.repeat(6 * 1024 * 1024)], 'big.pdf', {
+      type: 'application/pdf',
+    });
 
-    expect(mockOnFileUpload).not.toHaveBeenCalled();
-    expect(mockSetError).toHaveBeenCalledWith('Only PDF files are allowed.');
+    fireEvent.change(fileInput, { target: { files: [largeFile] } });
+
+    expect(setErrorMock).toHaveBeenCalled();
+    expect(onFileUploadMock).not.toHaveBeenCalled();
+  });
+
+  it('handles drag and drop correctly', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const uploadDiv = screen.getByTestId('upload-area');
+    const droppedFile = new File(['dummy content'], 'dragged.pdf', {
+      type: 'application/pdf',
+    });
+
+    fireEvent.dragOver(uploadDiv);
+    fireEvent.drop(uploadDiv, { dataTransfer: { files: [droppedFile] } });
+
+    expect(onFileUploadMock).toHaveBeenCalledWith(droppedFile);
+    expect(setErrorMock).toHaveBeenCalledWith(null);
+  });
+
+  it('resets drag state on drag leave', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const uploadDiv = screen.getByTestId('upload-area');
+
+    fireEvent.dragOver(uploadDiv);
+    fireEvent.dragLeave(uploadDiv);
+  });
+
+  it('changes button background color on hover', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const uploadDiv = screen.getByTestId('upload-area');
+    const button = screen.getByText(/Choisir le fichier/i);
+
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey)'
+    );
+
+    fireEvent.mouseEnter(uploadDiv);
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey-hover)'
+    );
+
+    fireEvent.mouseLeave(uploadDiv);
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey)'
+    );
+  });
+
+  it('changes button background color on mouse down and mouse up', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const button = screen.getByText(/Choisir le fichier/i);
+
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey)'
+    );
+
+    fireEvent.mouseDown(button);
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey-active)'
+    );
+
+    fireEvent.mouseUp(button);
+    expect(button).toHaveStyle(
+      'background-color: var(--background-contrast-grey-hover)'
+    );
+  });
+
+  it('sets isDragging to true on drag enter', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const uploadDiv = screen.getByTestId('upload-area');
+
+    fireEvent.dragEnter(uploadDiv);
+
+    expect(uploadDiv).toHaveClass('bg-blue-100 border-blue-500');
+  });
+
+  it('displays an error message when a file is invalid', () => {
+    render(
+      <Upload
+        maxFileSize={maxFileSize}
+        onFileUpload={onFileUploadMock}
+        setError={setErrorMock}
+      />
+    );
+
+    const fileInput = screen.getByTestId('file-upload') as HTMLInputElement;
+    const invalidFile = new File(['dummy content'], 'test.txt', {
+      type: 'text/plain',
+    });
+
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+
+    expect(screen.getByTestId('upload-error-message')).toBeInTheDocument();
   });
 });
