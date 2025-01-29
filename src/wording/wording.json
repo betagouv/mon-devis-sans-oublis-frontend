@@ -69,6 +69,7 @@
       "error_file_size": "Le fichier dépasse la taille maximale de {maxFileSize}Mo.",
       "error_file_type": "Le fichier doit être au format PDF.",
       "label": "Ajouter un fichier",
+      "none_selected_file": "Aucun fichier sélectionné",
       "select_file": "Choisir le fichier"
     }
   },
@@ -308,13 +309,11 @@
       "description": "Les devis soumis restent strictement confidentiels.",
       "more_info": "Les devis sont conservés de manière sécurisée pendant une durée de six mois afin de vous permettre l'accès aux corrections si nécessaire, après quoi ils sont automatiquement supprimés de nos systèmes."
     },
+    "button_check_quote": "Vérifiez le devis",
+    "button_send_quote": "Envoi du devis...",
     "link_back": {
       "href": "/bienvenue",
       "label": "Retour"
-    },
-    "link_check_quote": {
-      "href": "",
-      "label": "Vérifiez le devis"
     },
     "select_aides": "Aide(s) visée(s) avec le devis",
     "select_gestes": "Geste(s) technique(s) concerné(s) par le devis",
