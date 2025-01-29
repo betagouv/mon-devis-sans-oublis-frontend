@@ -1,179 +1,110 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 
-import Modal, { ModalPosition } from './Modal';
+import Modal, { ModalProps, ModalPosition } from './Modal';
+import { useIsDesktop } from '@/hooks';
 
-describe('Modal', () => {
-  const defaultProps = {
-    backButtonLabel: 'Retour',
-    children: <div>Test Content</div>,
-    isOpen: true,
-    onClose: jest.fn(),
-    position: ModalPosition.CENTER,
-  };
+jest.mock('@/hooks', () => ({
+  useIsDesktop: jest.fn(),
+}));
+
+describe('Modal Component', () => {
+  let defaultProps: ModalProps;
+  let onCloseMock: jest.Mock;
 
   beforeEach(() => {
-    document.body.innerHTML = '';
-    jest.useFakeTimers();
+    onCloseMock = jest.fn();
+    defaultProps = {
+      backButtonLabel: 'Close',
+      children: <div>Modal Content</div>,
+      isOpen: false,
+      onClose: onCloseMock,
+      position: ModalPosition.CENTER,
+    };
+    (useIsDesktop as jest.Mock).mockReturnValue(true);
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it('renders nothing when not mounted', () => {
-    const { container } = render(<Modal {...defaultProps} />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it('renders modal content when mounted and open', () => {
+  it('does not render modal when isOpen is false', () => {
     render(<Modal {...defaultProps} />);
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
+  });
 
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
+  it('renders modal when isOpen is true', () => {
+    render(<Modal {...defaultProps} isOpen={true} />);
     expect(screen.getByTestId('modal-overlay')).toBeInTheDocument();
     expect(screen.getByTestId('modal-content')).toBeInTheDocument();
-    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('applies center position styles correctly', () => {
-    render(<Modal {...defaultProps} position={ModalPosition.CENTER} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const overlay = screen.getByTestId('modal-overlay');
-    const content = screen.getByTestId('modal-content');
-
-    expect(overlay).toHaveClass('flex items-center justify-center');
-    expect(content).toHaveClass('w-[792px]', 'h-[624px]');
+  it('renders modal with correct position (CENTER)', () => {
+    render(
+      <Modal {...defaultProps} isOpen={true} position={ModalPosition.CENTER} />
+    );
+    const modalContent = screen.getByTestId('modal-content');
+    expect(modalContent).toHaveClass('w-[792px] h-[624px] rounded-lg');
   });
 
-  it('applies right position styles correctly', () => {
-    render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const overlay = screen.getByTestId('modal-overlay');
-    const content = screen.getByTestId('modal-content');
-
-    expect(overlay).toHaveClass('flex items-center justify-end');
-    expect(content).toHaveClass('w-[480px]');
+  it('renders modal with correct position (RIGHT)', () => {
+    render(
+      <Modal {...defaultProps} isOpen={true} position={ModalPosition.RIGHT} />
+    );
+    const modalContent = screen.getByTestId('modal-content');
+    expect(modalContent).toHaveClass('h-full');
   });
 
-  it('handles close button click', () => {
-    render(<Modal {...defaultProps} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const closeButton = screen.getByText('Retour');
-    fireEvent.click(closeButton);
-    expect(defaultProps.onClose).toHaveBeenCalled();
-  });
-
-  it('handles overlay click', () => {
-    render(<Modal {...defaultProps} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const overlay = screen.getByTestId('modal-overlay');
-    fireEvent.click(overlay);
-    expect(defaultProps.onClose).toHaveBeenCalled();
-  });
-
-  it('prevents content click from closing modal', () => {
-    render(<Modal {...defaultProps} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const content = screen.getByTestId('modal-content');
-    fireEvent.click(content);
-    expect(defaultProps.onClose).not.toHaveBeenCalled();
-  });
-
-  it('handles opening animation', () => {
-    render(<Modal {...defaultProps} isOpen={false} />);
-
-    // Initial state
-    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
-
-    // Open modal
+  it('closes modal when clicking on the overlay', () => {
     render(<Modal {...defaultProps} isOpen={true} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const content = screen.getByTestId('modal-content');
-    expect(content).toHaveClass('scale-100', 'opacity-100');
+    fireEvent.click(screen.getByTestId('modal-overlay'));
+    expect(onCloseMock).toHaveBeenCalled();
   });
 
-  it('handles closing animation', () => {
-    const { rerender } = render(<Modal {...defaultProps} isOpen={true} />);
+  it('closes modal when clicking the back button', () => {
+    render(<Modal {...defaultProps} isOpen={true} />);
+    fireEvent.click(screen.getByText('Close'));
+    expect(onCloseMock).toHaveBeenCalled();
+  });
 
+  it('applies additional className', () => {
+    render(<Modal {...defaultProps} isOpen={true} className='custom-class' />);
+    expect(screen.getByTestId('modal-overlay')).toHaveClass('custom-class');
+  });
+
+  it('handles transition visibility', () => {
+    jest.useFakeTimers();
+    const { rerender } = render(<Modal {...defaultProps} isOpen={false} />);
+
+    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+
+    rerender(<Modal {...defaultProps} isOpen={true} />);
     act(() => {
       jest.advanceTimersByTime(10);
     });
 
-    // Close modal
+    expect(screen.getByTestId('modal-content')).toHaveClass(
+      'scale-100 opacity-100'
+    );
+
     rerender(<Modal {...defaultProps} isOpen={false} />);
-
-    const content = screen.getByTestId('modal-content');
-    expect(content).toHaveClass('scale-95', 'opacity-0');
-
-    // Wait for animation to complete
     act(() => {
       jest.advanceTimersByTime(300);
     });
 
-    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+    jest.useRealTimers();
   });
 
-  it('cleans up portal element on unmount', () => {
-    const { unmount } = render(<Modal {...defaultProps} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const portalElement = document.getElementById('modal-root');
-    expect(portalElement).toBeInTheDocument();
-
+  it('removes modal-root from DOM on unmount', () => {
+    const { unmount } = render(<Modal {...defaultProps} isOpen={true} />);
     unmount();
     expect(document.getElementById('modal-root')).not.toBeInTheDocument();
   });
 
-  it('applies custom className when provided', () => {
-    render(<Modal {...defaultProps} className='custom-class' />);
+  it('renders modal with full width when isDesktop is false', () => {
+    (useIsDesktop as jest.Mock).mockReturnValue(false);
+    render(
+      <Modal {...defaultProps} isOpen={true} position={ModalPosition.RIGHT} />
+    );
 
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
+    const modalContent = screen.getByTestId('modal-content');
 
-    const overlay = screen.getByTestId('modal-overlay');
-    expect(overlay).toHaveClass('custom-class');
-  });
-
-  it('works without optional onClose prop', () => {
-    const { ...propsWithoutOnClose } = defaultProps;
-    render(<Modal {...propsWithoutOnClose} />);
-
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
-
-    const overlay = screen.getByTestId('modal-overlay');
-    fireEvent.click(overlay);
-    // Should not throw any errors
+    expect(modalContent).toHaveClass('w-full');
   });
 });

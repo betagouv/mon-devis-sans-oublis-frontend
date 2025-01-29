@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import wording from '@/wording';
 
 export enum NoticeType {
@@ -20,6 +24,11 @@ export default function Notice({
   title,
   type,
 }: NoticeProps) {
+  const [isCloseButtonVisible, setIsCloseButtonVisible] =
+    useState<boolean>(true);
+
+  if (!isCloseButtonVisible) return null;
+
   return (
     <div
       className={`fr-notice ${type ? `fr-notice--${type}` : className} ${
@@ -37,12 +46,7 @@ export default function Notice({
           {buttonClose && (
             <button
               className='fr-btn--close fr-btn'
-              onClick={(event) => {
-                const notice = (event.target as HTMLElement).closest(
-                  '.fr-notice'
-                );
-                notice?.parentNode?.removeChild(notice);
-              }}
+              onClick={() => setIsCloseButtonVisible(false)}
               title={wording.components.notice.button_close}
               type='button'
             >

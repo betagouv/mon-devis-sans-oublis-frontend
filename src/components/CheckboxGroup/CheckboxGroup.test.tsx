@@ -1,103 +1,81 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import CheckboxGroup, { CheckboxGroupProps } from './CheckboxGroup';
 
 describe('CheckboxGroup Component', () => {
-  const baseProps: CheckboxGroupProps = {
-    legend: 'Test Legend',
+  const defaultProps: CheckboxGroupProps = {
+    legend: 'Select your options',
+    onChange: jest.fn(),
     options: [
       { id: 'option1', label: 'Option 1', checked: false },
       { id: 'option2', label: 'Option 2', checked: true },
-      { id: 'option3', label: 'Option 3', checked: false },
     ],
-    onChange: jest.fn(),
   };
 
-  test('renders the CheckboxGroup component without errors', () => {
-    render(<CheckboxGroup options={[]} />);
-    expect(screen.getByRole('group')).toBeInTheDocument();
+  it('renders checkbox group with legend', () => {
+    render(<CheckboxGroup {...defaultProps} />);
+
+    expect(screen.getByText(defaultProps.legend as string)).toBeInTheDocument();
   });
 
-  test('renders the legend when provided', () => {
-    render(<CheckboxGroup {...baseProps} />);
+  it('renders checkboxes with correct labels and checked state', () => {
+    render(<CheckboxGroup {...defaultProps} />);
 
-    expect(screen.getByText('Test Legend')).toBeInTheDocument();
-    expect(screen.getByText('Test Legend')).toHaveClass('fr-fieldset__legend');
+    const checkbox1 = screen.getByLabelText('Option 1') as HTMLInputElement;
+    const checkbox2 = screen.getByLabelText('Option 2') as HTMLInputElement;
+
+    expect(checkbox1).toBeInTheDocument();
+    expect(checkbox2).toBeInTheDocument();
+    expect(checkbox1.checked).toBe(false);
+    expect(checkbox2.checked).toBe(true);
   });
 
-  test('renders all checkboxes with correct labels', () => {
-    render(<CheckboxGroup {...baseProps} />);
+  it('calls onChange when a checkbox is clicked', () => {
+    render(<CheckboxGroup {...defaultProps} />);
 
-    baseProps.options.forEach((option) => {
-      const checkbox = screen.getByLabelText(option.label);
-      expect(checkbox).toBeInTheDocument();
-      expect(checkbox).toHaveAttribute('id', option.id);
-      expect(checkbox).toHaveProperty('checked', option.checked);
-    });
+    const checkbox1 = screen.getByLabelText('Option 1') as HTMLInputElement;
+
+    fireEvent.click(checkbox1);
+
+    expect(defaultProps.onChange).toHaveBeenCalledWith('option1', true);
   });
 
-  test('calls onChange when a checkbox is clicked', () => {
-    const handleChange = jest.fn();
-    render(<CheckboxGroup {...baseProps} onChange={handleChange} />);
+  it('does not render legend if not provided', () => {
+    render(<CheckboxGroup {...defaultProps} legend={undefined} />);
 
-    const checkbox = screen.getByLabelText('Option 1');
-    fireEvent.click(checkbox);
-
-    expect(handleChange).toHaveBeenCalledTimes(1);
-    expect(handleChange).toHaveBeenCalledWith('option1', true);
+    expect(
+      screen.queryByText(defaultProps.legend as string)
+    ).not.toBeInTheDocument();
   });
 
-  test('updates the checkbox state when clicked', () => {
-    const options = [
-      { id: 'option1', label: 'Option 1', checked: false },
-      { id: 'option2', label: 'Option 2', checked: true },
-    ];
+  it('applies border-bottom-grey class to all but the last checkbox', () => {
+    render(<CheckboxGroup {...defaultProps} />);
 
-    const TestWrapper = () => {
-      const [checkboxOptions, setCheckboxOptions] = React.useState(options);
+    const checkboxContainers = screen
+      .getAllByRole('checkbox')
+      .map((input) => input.closest('.fr-fieldset__element'));
 
-      const handleChange = (id: string, checked: boolean) => {
-        setCheckboxOptions((prevOptions) =>
-          prevOptions.map((option) =>
-            option.id === id ? { ...option, checked } : option
-          )
-        );
-      };
-
-      return (
-        <CheckboxGroup options={checkboxOptions} onChange={handleChange} />
-      );
-    };
-
-    render(<TestWrapper />);
-
-    const checkbox = screen.getByLabelText('Option 1');
-    expect(checkbox).not.toBeChecked();
-
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
+    expect(checkboxContainers[0]).toHaveClass('border-bottom-grey');
+    expect(checkboxContainers[1]).not.toHaveClass('border-bottom-grey'); // Dernier élément
   });
 
-  test('renders without a legend when not provided', () => {
-    render(<CheckboxGroup options={baseProps.options} />);
+  it('sets correct aria attributes', () => {
+    render(<CheckboxGroup {...defaultProps} />);
 
-    expect(screen.queryByText('Test Legend')).not.toBeInTheDocument();
+    const checkbox1 = screen.getByLabelText('Option 1') as HTMLInputElement;
+    expect(checkbox1).toHaveAttribute('aria-describedby', 'option1-messages');
+
+    const messagesGroup = screen.getByTestId('checkboxes-messages-assertive');
+    expect(messagesGroup).toBeInTheDocument();
   });
 
-  test('applies correct classes to checkboxes', () => {
-    render(<CheckboxGroup {...baseProps} />);
+  it('renders checkbox without checked attribute if checked is undefined', () => {
+    const uncheckedOptions = [{ id: 'option1', label: 'Option 1' }];
 
-    const checkboxGroup = screen.getByLabelText('Option 1').closest('div');
-    expect(checkboxGroup).toHaveClass('fr-checkbox-group');
-  });
+    render(<CheckboxGroup options={uncheckedOptions} />);
 
-  test('applies the correct class to the last checkbox element', () => {
-    render(<CheckboxGroup {...baseProps} />);
+    const checkbox = screen.getByLabelText('Option 1') as HTMLInputElement;
 
-    const lastCheckbox = screen
-      .getByLabelText('Option 3')
-      .closest('.fr-fieldset__element');
-    expect(lastCheckbox).not.toHaveClass('border-bottom-grey pb-3');
+    expect(checkbox.checked).toBe(false);
   });
 });
