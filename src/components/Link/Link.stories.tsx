@@ -20,12 +20,12 @@ const meta: Meta<typeof Link> = {
       description: 'Optional icon class to be displayed',
     },
     size: {
-      control: 'select',
+      control: 'radio',
       options: Object.values(LinkSize),
       description: 'The size of the link',
     },
     variant: {
-      control: 'select',
+      control: 'radio',
       options: Object.values(LinkVariant),
       description: 'The visual style variant of the link',
     },

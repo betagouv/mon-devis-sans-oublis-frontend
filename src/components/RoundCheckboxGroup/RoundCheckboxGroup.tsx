@@ -10,15 +10,17 @@ export interface CheckboxOption {
 }
 
 export interface RoundCheckboxGroupProps {
+  defaultValue?: Rating;
   onChange: (value: Rating) => void;
   options: CheckboxOption[];
 }
 
 const RoundCheckboxGroup: React.FC<RoundCheckboxGroupProps> = ({
+  defaultValue,
   options,
   onChange,
 }) => {
-  const [selected, setSelected] = useState<Rating | null>(null);
+  const [selected, setSelected] = useState<Rating | null>(defaultValue || null);
 
   const handleSelect = (value: Rating) => {
     setSelected(value);
@@ -29,10 +31,10 @@ const RoundCheckboxGroup: React.FC<RoundCheckboxGroupProps> = ({
     <div className='flex gap-6'>
       <span>{wording.components.round_checkbox_group.insufficient}</span>
       {options.map((option) => (
-        <label key={option.value} className='flex items-center cursor-pointer'>
+        <label className='flex items-center cursor-pointer' key={option.value}>
           <input
-            className='hidden'
             checked={selected === option.value}
+            className='hidden'
             onChange={() => handleSelect(option.value)}
             type='checkbox'
           />
