@@ -28,12 +28,6 @@ export default function Statistics() {
     );
   }
 
-  const processingTimeInCentiSeconds =
-    statistics.average_quote_check_processing_time;
-  const processingTimeInSeconds = (processingTimeInCentiSeconds / 100).toFixed(
-    0
-  );
-
   const usageStats = [
     {
       value: statistics.unique_visitors_count,
@@ -52,7 +46,7 @@ export default function Statistics() {
 
   const processingStats = [
     {
-      value: `${processingTimeInSeconds} secondes`,
+      value: `${statistics.median_quote_check_processing_time} secondes`,
       label: wording.statistics.processing_time_label,
       tag: wording.statistics.processing_time_tag,
     },
