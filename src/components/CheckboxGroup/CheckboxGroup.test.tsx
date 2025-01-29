@@ -56,7 +56,7 @@ describe('CheckboxGroup Component', () => {
       .map((input) => input.closest('.fr-fieldset__element'));
 
     expect(checkboxContainers[0]).toHaveClass('border-bottom-grey');
-    expect(checkboxContainers[1]).not.toHaveClass('border-bottom-grey'); // Dernier élément
+    expect(checkboxContainers[1]).not.toHaveClass('border-bottom-grey');
   });
 
   it('sets correct aria attributes', () => {

@@ -18,13 +18,6 @@ export const Default: Story = {
   args: {
     affiliatedMinistry: 'Ministère<br>de la transition<br>écologique',
     beta: 'beta',
-    buttons: [
-      {
-        href: 'https://example.com/contact',
-        icon: 'fr-icon-question-line',
-        label: 'Nous contacter',
-      },
-    ],
     organizationDescription: 'Vérifiez vos devis de rénovation énergétique',
     organizationLink: '/',
     organizationName: 'Mon Devis Sans Oublis',
