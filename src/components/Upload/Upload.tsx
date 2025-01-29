@@ -15,8 +15,8 @@ const Upload: React.FC<UploadProps> = ({
   onFileUpload,
   setError,
 }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,6 +39,8 @@ const Upload: React.FC<UploadProps> = ({
   };
 
   const validateFile = (file: File) => {
+    setUploadedFile(file);
+
     if (file.size > maxFileSize * 1024 * 1024) {
       const error = wording.components.upload.error_file_size.replace(
         '{maxFileSize}',
@@ -58,7 +60,6 @@ const Upload: React.FC<UploadProps> = ({
 
     setLocalError(null);
     setError(null);
-    setUploadedFile(file);
     onFileUpload(file);
   };
 
@@ -97,12 +98,6 @@ const Upload: React.FC<UploadProps> = ({
       <span className='flex flex-row gap-2 items-center mt-4'>
         <p
           className='mb-0 rounded-lg p-2 text-sm'
-          style={{
-            backgroundColor: isHovered
-              ? 'var(--background-contrast-grey-hover)'
-              : 'var(--background-contrast-grey)',
-            transition: 'background-color 0.2s ease-in-out',
-          }}
           onMouseDown={(e) =>
             (e.currentTarget.style.backgroundColor =
               'var(--background-contrast-grey-active)')
@@ -111,11 +106,19 @@ const Upload: React.FC<UploadProps> = ({
             (e.currentTarget.style.backgroundColor =
               'var(--background-contrast-grey-hover)')
           }
+          style={{
+            backgroundColor: isHovered
+              ? 'var(--background-contrast-grey-hover)'
+              : 'var(--background-contrast-grey)',
+            transition: 'background-color 0.2s ease-in-out',
+          }}
         >
           {wording.components.upload.select_file}
         </p>
         <p className='text-sm mb-0'>
-          {uploadedFile ? uploadedFile.name : 'Aucun fichier sélectionné'}
+          {uploadedFile
+            ? uploadedFile.name
+            : wording.components.upload.none_selected_file}
         </p>
       </span>
       <input

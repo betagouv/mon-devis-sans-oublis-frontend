@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
@@ -27,12 +27,14 @@ export default function UploadClient({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileUploadedError, setFileUploadedError] = useState<string | null>(
     null
   );
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedAides, setSelectedAides] = useState<string[]>([]);
   const [selectedGestes, setSelectedGestes] = useState<string[]>([]);
 
@@ -49,13 +51,17 @@ export default function UploadClient({
     setSelectedGestes(values);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+
+    if (isSubmitting || isPending) return;
 
     if (!file) {
       setFileError('Please upload a file.');
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const data = await quoteService.uploadQuote(
@@ -64,10 +70,13 @@ export default function UploadClient({
         profile as Profile
       );
 
-      router.push(`/${profile}/televersement/${data.id}`);
+      startTransition(() => {
+        router.push(`/${profile}/televersement/${data.id}`);
+      });
     } catch (error) {
       console.error('Error during upload:', error);
       setFileError('An error occurred. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
@@ -143,16 +152,15 @@ export default function UploadClient({
               />
             </li>
             <li>
-              <Link
-                href={wording.upload.link_check_quote.href}
-                label={wording.upload.link_check_quote.label}
-                onSubmit={handleSubmit}
-                variant={
-                  file && !fileError
-                    ? LinkVariant.PRIMARY
-                    : LinkVariant.DISABLED
-                }
-              />
+              <button
+                className='fr-btn fr-text--lg'
+                disabled={isSubmitting || !file || fileError ? true : false}
+                onClick={handleSubmit}
+              >
+                {isSubmitting
+                  ? wording.upload.button_send_quote
+                  : wording.upload.button_check_quote}
+              </button>
             </li>
           </ul>
         </div>
