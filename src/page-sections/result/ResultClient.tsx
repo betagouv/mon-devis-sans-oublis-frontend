@@ -200,8 +200,8 @@ export default function ResultClient({
           <div
             className={`${
               isButtonSticky
-                ? 'fixed bottom-14 right-50'
-                : 'absolute bottom-40 right-50'
+                ? 'fixed bottom-14 right-39'
+                : 'absolute bottom-40 right-8'
             } self-end z-20`}
           >
             <button

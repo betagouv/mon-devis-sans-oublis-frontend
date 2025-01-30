@@ -72,7 +72,7 @@ export default function InvalidQuote({
       <section className='fr-container fr-gap-8'>
         <div className='flex flex-col md:flex-row justify-between fr-mb-2w'>
           <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
-            <h1 className='mb-0 text-center md:text-left'>
+            <h1 className='mb-0! text-center md:text-left'>
               {wording.upload_id.title}
             </h1>
           </div>
@@ -103,7 +103,7 @@ export default function InvalidQuote({
             imageSrc={wording.upload_id.quotation_status_card_ko.image_src}
             title={wording.upload_id.quotation_status_card_ko.title}
           />
-          <ul className='fr-raw-list my-8 w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
+          <ul className='fr-raw-list my-8! w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
             {wording.upload_id.block_number.map((block, index) => (
               <React.Fragment key={block.number}>
                 <li className='fr-col-auto flex items-stretch w-full'>
@@ -201,7 +201,7 @@ export default function InvalidQuote({
         <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[580px]'>
           <span className='flex flex-row gap-2 items-center mb-4'>
             <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
-            <h6 className='mb-0'>Partager les corrections</h6>
+            <h6 className='mb-0!'>Partager les corrections</h6>
           </span>
           <p>
             Grâce au lien, retrouvez cette page et les corrections à apporter
