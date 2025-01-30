@@ -1,4 +1,4 @@
-import Image, { ImageProps } from 'next/image';
+import { ImageProps } from 'next/image';
 import { render, screen } from '@testing-library/react';
 
 import Tile from './Tile';
@@ -6,7 +6,8 @@ import Tile from './Tile';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: ImageProps) => (
-    <Image
+    /* eslint-disable @next/next/no-img-element */
+    <img
       alt={props.alt}
       height={props.height}
       src={props.src as string}

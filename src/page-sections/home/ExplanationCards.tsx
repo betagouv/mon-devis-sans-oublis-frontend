@@ -24,7 +24,7 @@ export default function ExplanationCards() {
           <h2 className='fr-mt-8w'>
             {wording.homepage.explanation_cards.title_2}
           </h2>
-          <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
+          <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-blue'>
             <ul className='fr-raw-list fr-grid-row flex-nowrap gap-6 justify-start! w-max lg:flex-wrap lg:justify-center! lg:w-full'>
               {wording.homepage.explanation_cards.cards.map((card, index) => (
                 <li
