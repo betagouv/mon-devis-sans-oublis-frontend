@@ -31,6 +31,7 @@ const SVGLoader = ({
   return (
     <div
       className='inline-block'
+      data-testid='svg-container'
       dangerouslySetInnerHTML={{
         __html: svgContent.replace(/fill="[^"]*"/g, 'fill="currentColor"'),
       }}

@@ -18,17 +18,17 @@ const Tile: React.FC<TileProps> = ({
   title,
 }) => {
   const iconPaths: Record<string, string> = {
-    'tools-fill': '/svg/design/tools-fill.svg',
-    'home-4-fill': '/svg/buildings/home-4-fill.svg',
     'compasses-2-fill': '/svg/design/compasses-2-fill.svg',
     'customer-service-fill': '/svg/business/customer-service-fill.svg',
+    'home-4-fill': '/svg/buildings/home-4-fill.svg',
+    'tools-fill': '/svg/design/tools-fill.svg',
   };
 
   const src = icon ? iconPaths[icon] : undefined;
 
   return (
     <div
-      className='fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link'
+      className='fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link w-full'
       id='tile-6661'
     >
       <div
