@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({
                     title={`Accueil - ${organizationName} - ${affiliatedMinistry}`}
                   >
                     <span className='flex flex-row'>
-                      <p className='fr-header__service-title mr-4'>
+                      <p className='fr-header__service-title mr-4!'>
                         {organizationName}
                       </p>
                       {beta && (

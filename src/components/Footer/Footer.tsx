@@ -31,7 +31,7 @@ const Footer: React.FC<FooterProps> = ({
             </Link>
           </div>
           <div className='fr-footer__content'>
-            <div className='fr-footer__content-desc [&_a]:after:content-none'>
+            <div className='fr-footer__content-desc [&_a]:after:content-none!'>
               {richTextParser(organizationDescription)}
             </div>
           </div>
