@@ -60,7 +60,7 @@ const Link: React.FC<LinkProps> = ({
     size === LinkSize.LARGE && 'fr-btn--lg',
     size === LinkSize.SMALL && 'fr-btn--sm',
     variant === LinkVariant.DISABLED &&
-      '!bg-[var(--background-disabled-grey)] !text-[var(--text-disabled-grey)] !cursor-not-allowed',
+      'bg-(--background-disabled-grey)! text-(--text-disabled-grey)! cursor-not-allowed!',
     variant === LinkVariant.SECONDARY && 'fr-btn--secondary',
   ]
     .filter(Boolean)

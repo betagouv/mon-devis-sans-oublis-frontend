@@ -36,7 +36,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
     >
       <Image
         alt={imageAlt}
-        className='flex-shrink-0'
+        className='shrink-0'
         height={80}
         src={imageSrc}
         width={80}

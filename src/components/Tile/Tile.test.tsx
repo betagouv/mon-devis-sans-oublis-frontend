@@ -20,9 +20,9 @@ describe('Tile Component', () => {
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
 
     const contentDiv = screen.getByText(mockProps.description).parentElement;
-    expect(contentDiv).toHaveClass('!items-start');
+    expect(contentDiv).toHaveClass('items-start!');
     expect(screen.getByText(mockProps.title).parentElement).toHaveClass(
-      '!text-left'
+      'text-left!'
     );
   });
 
@@ -43,9 +43,9 @@ describe('Tile Component', () => {
     const contentDiv = screen.getByText(
       propsWithImage.description
     ).parentElement;
-    expect(contentDiv).toHaveClass('!items-center');
+    expect(contentDiv).toHaveClass('items-center!');
     expect(screen.getByText(propsWithImage.title).parentElement).toHaveClass(
-      '!text-center'
+      'text-center!'
     );
   });
 
@@ -58,6 +58,6 @@ describe('Tile Component', () => {
     render(<Tile {...propsWithImage} />);
 
     const titleLink = screen.getByRole('link', { name: propsWithImage.title });
-    expect(titleLink).toHaveClass('!text-[var(--text-title-grey)]');
+    expect(titleLink).toHaveClass('text-(--text-title-grey)!');
   });
 });

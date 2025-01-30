@@ -21,7 +21,7 @@ const CardLinkProfile: React.FC<CardLinkProfileProps> = ({
 }) => {
   return (
     <Link
-      className='fr-btn rounded-lg !p-4 !w-full flex justify-between'
+      className='fr-btn rounded-lg p-4! w-full! flex justify-between'
       href={href}
       style={{
         backgroundColor: 'var(--background-default-grey-hover)',

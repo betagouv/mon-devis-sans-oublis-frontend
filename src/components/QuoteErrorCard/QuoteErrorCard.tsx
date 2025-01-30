@@ -101,7 +101,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
         </div>
         <div className='relative inline-block shrink-0 ml-4'>
           <Tooltip
-            className='absolute top-full right-0 !mt-2 !font-normal'
+            className='absolute top-full right-0 mt-2! font-normal!'
             icon={
               isCategoryAdmin
                 ? wording.components.quote_error_card.tooltip_admin.icon

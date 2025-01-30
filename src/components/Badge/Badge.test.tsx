@@ -42,25 +42,25 @@ describe('Badge Component', () => {
     const badge = screen.getByText('Blue Dark Badge');
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveClass(
-      '!bg-[var(--background-action-high-blue-france)]'
+      'bg-(--background-action-high-blue-france)!'
     );
-    expect(badge).toHaveClass('!text-[var(--text-inverted-grey)]');
+    expect(badge).toHaveClass('text-(--text-inverted-grey)!');
   });
 
   it('renders with the GREY variant', () => {
     render(<Badge label='Grey Badge' variant={BadgeVariant.GREY} />);
     const badge = screen.getByText('Grey Badge');
     expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('!bg-[var(--background-alt-grey-hover)]');
-    expect(badge).toHaveClass('!text-[var(--text-default-grey)]');
+    expect(badge).toHaveClass('bg-(--background-alt-grey-hover)!');
+    expect(badge).toHaveClass('text-(--text-default-grey)!');
   });
 
   it('renders with the GREEN variant', () => {
     render(<Badge label='Green Badge' variant={BadgeVariant.GREEN} />);
     const badge = screen.getByText('Green Badge');
     expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('!bg-[var(--background-alt-green-emeraude)]');
-    expect(badge).toHaveClass('!text-[var(--text-default-success)]');
+    expect(badge).toHaveClass('bg-(--background-alt-green-emeraude)!');
+    expect(badge).toHaveClass('text-(--text-default-success)!');
   });
 
   it('renders with the BLUE_LIGHT variant', () => {
@@ -69,7 +69,7 @@ describe('Badge Component', () => {
     );
     const badge = screen.getByText('Blue Light Badge');
     expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('!bg-[var(--background-alt-green-archipel)]');
-    expect(badge).toHaveClass('!text-[var(--text-default-info)]');
+    expect(badge).toHaveClass('bg-(--background-alt-green-archipel)!');
+    expect(badge).toHaveClass('text-(--text-default-info)!');
   });
 });

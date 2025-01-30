@@ -45,7 +45,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
       onClose={onClose}
       position={ModalPosition.RIGHT}
     >
-      <div className='flex-grow'>
+      <div className='grow'>
         <Image
           alt={wording.components.error_feedbacks_modal.icon_alt}
           className='mt-10'

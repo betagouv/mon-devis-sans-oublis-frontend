@@ -18,7 +18,7 @@ const QuoteStatusCard: React.FC<QuoteStatusCardProps> = ({
   title,
 }) => {
   const descriptionOK = descriptionOKMore && (
-    <p className='!font-bold !text-[var(--text-title-blue-france)] mb-8 md:mb-0'>
+    <p className='font-bold! text-(--text-title-blue-france)! mb-8 md:mb-0'>
       {descriptionOKMore}
     </p>
   );

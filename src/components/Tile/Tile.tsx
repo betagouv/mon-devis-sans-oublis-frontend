@@ -24,24 +24,24 @@ const Tile: React.FC<TileProps> = ({
         {image && <Image alt={title} height={80} src={image} width={80} />}
         <div
           className={`fr-tile__content !flex !flex-col ${
-            image ? '!items-center p-2' : '!items-start'
+            image ? 'items-center! p-2' : 'items-start!'
           }`}
         >
           <h3
             className={`fr-tile__title fr-text--lg ${
-              image ? '!text-center' : '!text-left'
+              image ? 'text-center!' : 'text-left!'
             }`}
           >
             <a
               href={href}
-              className={`${image && '!text-[var(--text-title-grey)]'}`}
+              className={`${image && 'text-(--text-title-grey)!'}`}
             >
               {title}
             </a>
           </h3>
           <p
             className={`fr-tile__detail fr-text--md ${
-              image ? '!text-center' : '!text-left'
+              image ? 'text-center!' : 'text-left!'
             }`}
           >
             {description}
