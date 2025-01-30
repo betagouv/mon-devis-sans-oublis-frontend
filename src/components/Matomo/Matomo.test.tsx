@@ -1,148 +1,109 @@
-import { usePathname, useSearchParams } from 'next/navigation';
+import { render, waitFor } from '@testing-library/react';
 import { init, push } from '@socialgouv/matomo-next';
-import { render } from '@testing-library/react';
 
 import Matomo from './Matomo';
-
-jest.mock('next/navigation', () => ({
-  usePathname: jest.fn(),
-  useSearchParams: jest.fn(),
-}));
 
 jest.mock('@socialgouv/matomo-next', () => ({
   init: jest.fn(),
   push: jest.fn(),
 }));
 
-describe('Matomo', () => {
-  const originalEnv = process.env;
+const mockUsePathname = jest.fn();
+const mockUseSearchParams = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  usePathname: () => mockUsePathname(),
+  useSearchParams: () => mockUseSearchParams(),
+}));
+
+describe('Matomo Tracking', () => {
+  let originalEnv: NodeJS.ProcessEnv;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env = { ...originalEnv };
-  });
+    originalEnv = { ...process.env };
 
-  afterAll(() => {
-    process.env = originalEnv;
-  });
-
-  it('initializes Matomo when variables are set', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
+    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://example.com/matomo';
     process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
+  });
 
-    (usePathname as jest.Mock).mockReturnValue('/test-path');
-    (useSearchParams as jest.Mock).mockReturnValue(
-      new URLSearchParams('param=value')
-    );
+  afterEach(() => {
+    process.env = originalEnv;
+    jest.resetModules();
+  });
+
+  it('initializes Matomo only once', async () => {
+    mockUsePathname.mockReturnValue('/test-path');
+    mockUseSearchParams.mockReturnValue(new URLSearchParams('param=value'));
 
     render(<Matomo />);
 
-    expect(init).toHaveBeenCalledWith({
-      siteId: '123',
-      url: 'https://matomo.example.com',
+    await waitFor(() => {
+      expect(init).toHaveBeenCalledTimes(1);
+      expect(init).toHaveBeenCalledWith({
+        siteId: '123',
+        url: 'https://example.com/matomo',
+      });
+    });
+
+    expect(push).toHaveBeenCalledWith(['disableJavaScriptDetection']);
+  });
+
+  it('sends tracking events when the route changes', async () => {
+    mockUsePathname.mockReturnValue('/test-path');
+    mockUseSearchParams.mockReturnValue(new URLSearchParams('param=value'));
+
+    render(<Matomo />);
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith([
+        'setCustomUrl',
+        '/test-path?param=value',
+      ]);
+      expect(push).toHaveBeenCalledWith(['trackPageView']);
     });
   });
 
-  it('does not initialize Matomo if variables are missing', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = undefined;
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = undefined;
-
-    (usePathname as jest.Mock).mockReturnValue('/test-path');
-    (useSearchParams as jest.Mock).mockReturnValue(
-      new URLSearchParams('param=value')
-    );
+  it('does not send tracking events if pathname is null', async () => {
+    mockUsePathname.mockReturnValue(null);
+    mockUseSearchParams.mockReturnValue(new URLSearchParams());
 
     render(<Matomo />);
 
-    expect(init).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(push).not.toHaveBeenCalledWith([
+        'setCustomUrl',
+        expect.any(String),
+      ]);
+      expect(push).not.toHaveBeenCalledWith(['trackPageView']);
+    });
   });
 
-  it('tracks page view when pathname or search params change', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
-
-    (usePathname as jest.Mock).mockReturnValue('/test-path');
-    (useSearchParams as jest.Mock).mockReturnValue(
-      new URLSearchParams('param=value')
-    );
+  it('sends tracking event with pathname but without searchParams', async () => {
+    mockUsePathname.mockReturnValue('/test-path');
+    mockUseSearchParams.mockReturnValue(new URLSearchParams());
 
     render(<Matomo />);
 
-    expect(push).toHaveBeenCalledWith([
-      'setCustomUrl',
-      '/test-path?param=value',
-    ]);
-    expect(push).toHaveBeenCalledWith(['trackPageView']);
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith(['setCustomUrl', '/test-path']);
+      expect(push).toHaveBeenCalledWith(['trackPageView']);
+    });
   });
 
-  it('encodes URL correctly when pathname and searchParams are present', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
-
-    (usePathname as jest.Mock).mockReturnValue('/test-path');
-    (useSearchParams as jest.Mock).mockReturnValue(
-      new URLSearchParams('param=value')
-    );
-
-    render(<Matomo />);
-
-    expect(push).toHaveBeenCalledWith([
-      'setCustomUrl',
-      '/test-path?param=value',
-    ]);
-  });
-
-  it('encodes URL correctly when pathname is present but searchParams are empty', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
-
-    (usePathname as jest.Mock).mockReturnValue('/test-path');
-    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
-
-    render(<Matomo />);
-
-    expect(push).toHaveBeenCalledWith(['setCustomUrl', '/test-path']);
-  });
-  it('does not render anything in development mode', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env = { ...process.env, NODE_ENV: 'development' };
-
-    const { container } = render(<Matomo />);
-
-    expect(container.firstChild).toBeNull();
-    process.env = { ...process.env, NODE_ENV: originalEnv };
-  });
-
-  it('does not call push if pathname is not set', () => {
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
-
-    (usePathname as jest.Mock).mockReturnValue(null);
-    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
-
-    render(<Matomo />);
-
-    expect(push).not.toHaveBeenCalled();
-  });
-  it('returns null when NODE_ENV is not production', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env = { ...process.env, NODE_ENV: 'test' };
+  it('does not render anything in development environment', () => {
+    jest.resetModules();
+    process.env = { ...originalEnv, NODE_ENV: 'development' };
 
     const { container } = render(<Matomo />);
     expect(container.firstChild).toBeNull();
-    process.env = { ...process.env, NODE_ENV: originalEnv };
   });
 
-  it('returns null when NODE_ENV is production but no valid pathname', () => {
-    process.env = { ...process.env, NODE_ENV: 'production' };
-    process.env.NEXT_PUBLIC_MATOMO_URL = 'https://matomo.example.com';
-    process.env.NEXT_PUBLIC_MATOMO_SITE_ID = '123';
-
-    (usePathname as jest.Mock).mockReturnValue(null);
-    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
+  it('does not render anything in production environment', () => {
+    jest.resetModules();
+    process.env = { ...originalEnv, NODE_ENV: 'production' };
 
     const { container } = render(<Matomo />);
-
     expect(container.firstChild).toBeNull();
   });
 });
