@@ -1,47 +1,64 @@
 import Image from 'next/image';
 
+import SVGLoader from '../SvgLoader/SvgLoader';
+
 export interface TileProps {
-  className?: string;
   description: string;
   href: string;
+  icon?: string;
   image?: string;
   title: string;
 }
 
 const Tile: React.FC<TileProps> = ({
-  className,
   description,
   href,
+  icon,
   image,
   title,
 }) => {
+  const iconPaths: Record<string, string> = {
+    'tools-fill': '/svg/design/tools-fill.svg',
+    'home-4-fill': '/svg/buildings/home-4-fill.svg',
+    'compasses-2-fill': '/svg/design/compasses-2-fill.svg',
+    'customer-service-fill': '/svg/business/customer-service-fill.svg',
+  };
+
+  const src = icon ? iconPaths[icon] : undefined;
+
   return (
     <div
-      className={`fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link ${className}`}
+      className='fr-tile fr-tile--sm fr-tile--vertical fr-enlarge-link'
       id='tile-6661'
     >
-      <div className='fr-tile__body'>
+      <div
+        className={`fr-tile__body flex flex-col ${
+          image ? 'justify-center items-center p-2' : ''
+        }`}
+      >
         {image && <Image alt={title} height={80} src={image} width={80} />}
-        <div
-          className={`fr-tile__content !flex !flex-col ${
-            image ? 'items-center! p-2' : 'items-start!'
-          }`}
-        >
+        {src && (
+          <SVGLoader
+            color='var(--background-action-high-blue-france)'
+            src={src}
+          />
+        )}
+        <div className='fr-tile__content fr-mt-2w'>
           <h3
             className={`fr-tile__title fr-text--lg ${
-              image ? 'text-center!' : 'text-left!'
+              image ? 'self-center' : 'self-start'
             }`}
           >
             <a
+              className={image ? 'text-[var(--text-title-grey)]!' : ''}
               href={href}
-              className={`${image && 'text-(--text-title-grey)!'}`}
             >
               {title}
             </a>
           </h3>
           <p
-            className={`fr-tile__detail fr-text--md ${
-              image ? 'text-center!' : 'text-left!'
+            className={`fr-tile__detail fr-text--md fr-mt-1w ${
+              image ? 'text-center' : 'self-start text-left'
             }`}
           >
             {description}

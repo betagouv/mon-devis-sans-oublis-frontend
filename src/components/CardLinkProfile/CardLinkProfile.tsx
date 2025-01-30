@@ -42,7 +42,10 @@ const CardLinkProfile: React.FC<CardLinkProfileProps> = ({
       }
     >
       <div className='flex items-center'>
-        <IconBackground icon={icon} variant={IconBackgroundVariant.WHITE} />
+        <IconBackground
+          icon={`fr-icon-${icon}`}
+          variant={IconBackgroundVariant.WHITE}
+        />
         <div className='flex flex-col mx-6 text-[var(--text-default-grey)]'>
           <div className='text-[20px] font-bold leading-8 text-left underline-offset-[from-font] decoration-skip-ink-none'>
             {title}

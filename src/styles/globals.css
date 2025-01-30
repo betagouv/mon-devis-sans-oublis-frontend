@@ -57,6 +57,10 @@ h2 {
   z-index: 98;
 }
 
+.fr-tile__title {
+  color: red;
+}
+
 .fr-tile__title a::after {
   color: var(--background-action-high-blue-france);
   height: 24px;
