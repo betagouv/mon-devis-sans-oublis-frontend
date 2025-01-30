@@ -17,6 +17,9 @@ const MatomoContent = () => {
         siteId: process.env.NEXT_PUBLIC_MATOMO_SITE_ID,
         url: process.env.NEXT_PUBLIC_MATOMO_URL,
       });
+
+      push(['disableJavaScriptDetection']);
+
       setInitialised(true);
     }
   }, [initialised]);
