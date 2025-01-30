@@ -24,6 +24,7 @@ const Accordion = ({ badgeLabel, children, title }: AccordionProps) => {
       if (
         charBeforeSpace !== ',' &&
         charBeforeSpace !== '-' &&
+        charBeforeSpace !== ':' &&
         charBeforeSpace !== '/'
       ) {
         break;

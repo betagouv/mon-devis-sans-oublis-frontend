@@ -52,7 +52,10 @@ describe('CardLinkProfile', () => {
 
     const iconBackgrounds = screen.getAllByTestId('icon-background');
     expect(iconBackgrounds).toHaveLength(2);
-    expect(iconBackgrounds[0]).toHaveAttribute('data-icon', defaultProps.icon);
+    expect(iconBackgrounds[0]).toHaveAttribute(
+      'data-icon',
+      `fr-icon-${defaultProps.icon}`
+    );
     expect(iconBackgrounds[0]).toHaveAttribute(
       'data-variant',
       IconBackgroundVariant.WHITE

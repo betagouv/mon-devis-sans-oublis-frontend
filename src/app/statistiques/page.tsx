@@ -19,7 +19,7 @@ export default function Statistics() {
     return (
       <section className='fr-container-fluid fr-py-10w'>
         <div className='fr-container'>
-          <h1 className='fr-mb-6w !text-[var(--text-title-grey)]'>
+          <h1 className='fr-mb-6w text-(--text-title-grey)!'>
             {wording.statistics.title}
           </h1>
           <p>Une erreur est survenue lors du chargement des statistiques.</p>
@@ -76,10 +76,10 @@ export default function Statistics() {
   return (
     <section className='fr-container-fluid fr-py-10w'>
       <div className='fr-container [&_h2]:text-[var(--text-title-grey)] [&_h2]:mt-10'>
-        <h1 className='fr-mb-6w !text-[var(--text-title-grey)]'>
+        <h1 className='fr-mb-6w text-(--text-title-grey)!'>
           {wording.statistics.title}
         </h1>
-        <h2 className='fr-mb-3w !text-[var(--text-title-grey)]'>
+        <h2 className='fr-mb-3w text-(--text-title-grey)!'>
           {wording.statistics.title_usage}
         </h2>
         <div className='fr-grid-row fr-grid-row--gutters'>
@@ -89,7 +89,7 @@ export default function Statistics() {
             </div>
           ))}
         </div>
-        <h2 className='fr-mb-3w fr-mt-8w !text-[var(--text-title-grey)]'>
+        <h2 className='fr-mb-3w fr-mt-8w text-(--text-title-grey)!'>
           {wording.statistics.title_processing}
         </h2>
         <div className='fr-grid-row fr-grid-row--gutters'>

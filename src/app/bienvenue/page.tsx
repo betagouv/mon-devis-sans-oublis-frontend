@@ -18,6 +18,7 @@ export default function Bienvenue() {
                     <Tile
                       description={card.description}
                       href={card.href}
+                      icon={card.icon}
                       title={card.title}
                     />
                   </div>

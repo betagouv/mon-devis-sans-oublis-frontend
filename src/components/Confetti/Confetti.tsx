@@ -14,7 +14,7 @@ const Confetti = () => {
     'w-2 h-4',
     'w-3 h-3 rounded-full',
     'w-4 h-2 rotate-45',
-    'w-2 h-2 rounded',
+    'w-2 h-2 rounded-sm',
   ];
 
   return (

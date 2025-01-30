@@ -374,25 +374,25 @@
         {
           "description": "Je souhaite gagner du temps en évitant les multiples changements sur mes devis",
           "href": "/artisan/televersement",
-          "icon": "fr-icon-tools-fill",
+          "icon": "tools-fill",
           "title": "Je suis artisan"
         },
         {
           "description": "Je souhaite effectuer une demande d’aide de rénovation énergétique sans encombre",
           "href": "/particulier/televersement",
-          "icon": "fr-icon-home-4-fill",
+          "icon": "home-4-fill",
           "title": "Je suis particulier"
         },
         {
           "description": "Je souhaite faire le lien entre les différentes parties prenantes",
           "href": "/mandataire/televersement",
-          "icon": "fr-icon-compasses-2-fill",
+          "icon": "compasses-2-fill",
           "title": "Je suis mandataire"
         },
         {
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "href": "/conseiller/televersement",
-          "icon": "fr-icon-customer-service-fill",
+          "icon": "customer-service-fill",
           "title": "Je suis conseiller"
         }
       ],

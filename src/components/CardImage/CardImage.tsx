@@ -23,7 +23,7 @@ const CardImage: React.FC<CardImageProps> = ({ description, image, title }) => {
         />
       </div>
       <div
-        className='flex flex-col flex-grow p-8 pb-0'
+        className='flex flex-col grow p-8 pb-0'
         style={{ borderTop: 'none' }}
       >
         <h5>{title}</h5>

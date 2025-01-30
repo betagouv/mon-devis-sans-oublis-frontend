@@ -44,9 +44,9 @@ describe('Link', () => {
       <Link href='/test' label='Test Link' variant={LinkVariant.DISABLED} />
     );
     expect(screen.getByText('Test Link').closest('a')).toHaveClass(
-      '!bg-[var(--background-disabled-grey)]',
-      '!text-[var(--text-disabled-grey)]',
-      '!cursor-not-allowed'
+      'bg-(--background-disabled-grey)!',
+      'text-(--text-disabled-grey)!',
+      'cursor-not-allowed!'
     );
   });
 

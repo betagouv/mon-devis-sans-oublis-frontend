@@ -24,15 +24,16 @@ export default function AboutUs() {
               <div className='[&_p]:m-0'>
                 {wording.homepage.about_us.our_missions.missions.map(
                   (mission, index) => (
-                    <div className='flex flex-row gap-2 mt-8' key={index}>
+                    <div className='flex flex-row gap-2 mt-6' key={index}>
                       <span
-                        className={`${mission.icon} text-[var(--background-action-high-blue-france)] mt-1`}
+                        className={`${mission.icon} text-[var(--background-action-high-blue-france)] mt-0.5`}
+                        style={{ marginLeft: -2 }}
                       />
                       <div className='flex flex-col'>
-                        <p className='font-bold text-[var(--text-title-grey)]'>
+                        <p className='font-bold text-[var(--text-title-grey)] m-0! p-0!'>
                           {mission.title}
                         </p>
-                        <p className='text-[var(--text-mention-grey)]'>
+                        <p className='text-[var(--text-mention-grey)] m-0! pt-2'>
                           {mission.description}
                         </p>
                       </div>

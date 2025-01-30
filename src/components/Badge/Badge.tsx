@@ -24,7 +24,7 @@ const Badge: React.FC<BadgeProps> = ({
   size = BadgeSize.MEDIUM,
   variant,
 }) => {
-  const baseClasses = 'rounded font-bold px-1.5 py-0.5 uppercase h-fit w-fit';
+  const baseClasses = 'rounded-sm font-bold px-1.5 py-0.5 uppercase h-fit w-fit';
 
   const sizeClasses = {
     [BadgeSize.X_SMALL]: 'text-xs',
@@ -34,13 +34,13 @@ const Badge: React.FC<BadgeProps> = ({
 
   const variantClasses = {
     [BadgeVariant.BLUE_LIGHT]:
-      '!bg-[var(--background-alt-green-archipel)] !text-[var(--text-default-info)]',
+      'bg-(--background-alt-green-archipel)! text-(--text-default-info)!',
     [BadgeVariant.BLUE_DARK]:
-      '!bg-[var(--background-action-high-blue-france)] !text-[var(--text-inverted-grey)]',
+      'bg-(--background-action-high-blue-france)! text-(--text-inverted-grey)!',
     [BadgeVariant.GREEN]:
-      '!bg-[var(--background-alt-green-emeraude)] !text-[var(--text-default-success)]',
+      'bg-(--background-alt-green-emeraude)! text-(--text-default-success)!',
     [BadgeVariant.GREY]:
-      '!bg-[var(--background-alt-grey-hover)] !text-[var(--text-default-grey)]',
+      'bg-(--background-alt-grey-hover)! text-(--text-default-grey)!',
   };
 
   return (

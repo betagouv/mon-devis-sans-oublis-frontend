@@ -21,31 +21,34 @@ export default function ExplanationCards() {
           ))}
         </div>
         <div className='fr-grid-row fr-grid-row--center'>
-          <h2 className='fr-mt-8w'>
+          <h2 className='fr-mt-10w'>
             {wording.homepage.explanation_cards.title_2}
           </h2>
-          <div className='lg:block overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-            <ul className='fr-raw-list fr-grid-row flex-nowrap gap-6 !justify-start w-max lg:flex-wrap lg:!justify-center lg:w-full'>
-              {wording.homepage.explanation_cards.cards.map((card, index) => (
-                <li
-                  className='flex-none w-[147px] whitespace-normal flex flex-col items-center'
-                  key={index}
-                >
-                  <Image
-                    alt={card.title}
-                    height={132}
-                    src={card.image}
-                    width={147}
-                  />
-                  <p className='fr-text--xs fr-mt-1w text-center'>
-                    {card.title}
-                  </p>
-                </li>
-              ))}
-            </ul>
+          <div className='overflow-x-auto overflow-y-hidden whitespace-nowrap w-full scrollbar-none touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
+            <div className='flex justify-center'>
+              <ul className='fr-raw-list flex flex-nowrap gap-6'>
+                {wording.homepage.explanation_cards.cards.map((card, index) => (
+                  <li
+                    className='flex-none w-[147px] whitespace-normal flex flex-col items-center'
+                    key={index}
+                  >
+                    <Image
+                      alt={card.title}
+                      height={132}
+                      src={card.image}
+                      width={147}
+                      className='w-[147px] h-[132px] object-cover'
+                    />
+                    <p className='fr-text--xs fr-mt-1w text-center'>
+                      {card.title}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-        <h2 className='fr-mt-6w fr-mb-5w'>
+        <h2 className='fr-mt-8w fr-mb-5w'>
           {wording.homepage.explanation_cards.title_3}
         </h2>
         <div className='flex flex-col md:flex-row gap-10'>
@@ -68,8 +71,8 @@ export default function ExplanationCards() {
                 />
               )
             )}
-            <p className='bg-[var(--background-alt-blue-france)] p-4'>
-              <span className='fr-icon-restart-line mr-1 ml-0 text-[var(--text-title-blue-france)]' />
+            <p className='bg-[var(--background-alt-blue-france)] pl-2 p-4'>
+              <span className='fr-icon-restart-line mr-2 ml-0 text-[var(--text-title-blue-france)]' />
               {wording.homepage.explanation_cards.correction}
             </p>
             <div className='flex items-end md:mt-auto mt-6 justify-center md:justify-start'>

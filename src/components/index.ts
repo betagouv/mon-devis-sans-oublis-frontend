@@ -83,6 +83,9 @@ export type {
   CheckboxOption,
   RoundCheckboxGroupProps,
 } from './RoundCheckboxGroup/RoundCheckboxGroup';
+// SvgLoader
+export { default as SVGLoader } from './SvgLoader/SvgLoader';
+export type { SVGLoaderProps } from './SvgLoader/SvgLoader';
 // Tile
 export { default as Tile } from './Tile/Tile';
 export type { TileProps } from './Tile/Tile';
