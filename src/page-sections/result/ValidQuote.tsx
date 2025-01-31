@@ -25,7 +25,7 @@ export default function ValidQuote({ uploadedFileName }: ValidQuoteProps) {
       <section className='fr-container fr-gap-8'>
         <div className='flex flex-col md:flex-row justify-between fr-mb-6w'>
           <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
-            <h1 className='mb-0 text-center md:text-left'>
+            <h1 className='mb-0! text-center md:text-left'>
               {wording.upload_id.title}
             </h1>
             {uploadedFileName && (

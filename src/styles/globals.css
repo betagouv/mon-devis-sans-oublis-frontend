@@ -1,16 +1,19 @@
 @import 'tailwindcss';
 
-@theme {
-  --animate-confetti-fall: confettiFall linear forwards;
-
-  @keyframes confettiFall {
-    0% {
-      transform: translateY(-100%) rotate(0deg);
-    }
-    100% {
-      transform: translateY(100vh) rotate(720deg);
-    }
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10%) rotate(0deg);
+    opacity: 1;
   }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti-fall {
+  animation: confettiFall linear forwards;
+  will-change: transform, opacity;
 }
 
 /*

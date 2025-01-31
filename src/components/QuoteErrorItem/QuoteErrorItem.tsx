@@ -69,7 +69,7 @@ const QuoteErrorItem = ({
         </div>
       )}
       <li
-        className='flex flex-row p-4 md:p-6 border-bottom-grey last:border-b-0! items-start gap-4 md:items-center'
+        className='flex flex-row p-4! md:p-6! border-bottom-grey last:border-b-0! items-start! gap-4 md:items-center!'
         onClick={onClickMobileSolution}
         style={{
           cursor: isSolutionAndIsMobile ? 'pointer' : 'default',
@@ -77,7 +77,7 @@ const QuoteErrorItem = ({
       >
         <div className='flex-1 flex flex-row justify-between gap-4 items-center'>
           <span className='inline-flex flex-wrap items-center gap-4'>
-            <p className='text-[var(--text-title-grey)]'>{item.title}</p>
+            <p className='text-[var(--text-title-grey)] mb-0!'>{item.title}</p>
             {/*<p
             className={`fr-tag fr-tag--sm ${icon} fr-tag--icon-left bg-(--background-contrast-warning)! text-xs!`}
           >

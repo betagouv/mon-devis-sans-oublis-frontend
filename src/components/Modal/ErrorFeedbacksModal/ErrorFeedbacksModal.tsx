@@ -48,12 +48,12 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
       <div className='grow'>
         <Image
           alt={wording.components.error_feedbacks_modal.icon_alt}
-          className='mt-10'
+          className='mt-10!'
           height={64}
           src={wording.components.error_feedbacks_modal.icon_src}
           width={64}
         />
-        <h4 className='mb-8'>{title}</h4>
+        <h4 className='mb-8!'>{title}</h4>
         {problem && (
           <>
             <p className='fr-mb-1w fr-text--lead text-[var(--text-title-blue-france)] font-bold'>
@@ -71,10 +71,10 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
           </>
         )}
       </div>
-      <div className='mb-8'>
-        <div className='fr-input-group mt-4 flex flex-col border-grey p-6 rounded-lg'>
+      <div className='mb-8!'>
+        <div className='fr-input-group mt-4! flex flex-col border-grey p-6 rounded-lg'>
           <label
-            className='text-[var(--text-default-grey)] font-bold mb-2'
+            className='text-[var(--text-default-grey)] font-bold mb-2!'
             htmlFor='textarea-input'
           >
             {
@@ -96,7 +96,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
             aria-live='polite'
           />
           <button
-            className='fr-btn fr-btn--primary self-end mt-4'
+            className='fr-btn fr-btn--primary self-end mt-4!'
             disabled={comment === null}
             onClick={handleSubmit}
           >

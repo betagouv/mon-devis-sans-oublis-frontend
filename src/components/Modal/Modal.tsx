@@ -105,15 +105,15 @@ const Modal: React.FC<ModalProps> = ({
           <button
             className={`fr-link ${
               position === ModalPosition.RIGHT
-                ? 'fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6 text-[var(--border-plain-grey)]'
-                : 'fr-link--sm fr-link--icon-right fr-icon-close-line mt-2'
+                ? 'fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6! text-[var(--border-plain-grey)]'
+                : 'fr-link--sm fr-link--icon-right fr-icon-close-line mt-2!'
             }`}
             onClick={onClose}
           >
             <span
               className={`${
                 position === ModalPosition.RIGHT
-                  ? 'text-[20px] ml-2.5 font-bold text-[var(--text-disabled-grey)]'
+                  ? 'text-[20px] ml-2.5! font-bold text-[var(--text-disabled-grey)]'
                   : 'font-[500]'
               }`}
             >

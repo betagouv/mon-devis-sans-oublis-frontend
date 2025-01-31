@@ -47,8 +47,8 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
       onClose={onClose}
       position={ModalPosition.CENTER}
     >
-      <h4 className='text-[var(--text-title-blue-france)] fr-mb-1w flex items-center gap-2'>
-        <span className='fr-icon-questionnaire-fill mt-1' aria-hidden='true' />
+      <h4 className='text-[var(--text-title-blue-france)]! fr-mb-1w flex items-center gap-2'>
+        <span className='fr-icon-questionnaire-fill mt-1!' aria-hidden='true' />
         {wording.components.global_error_feedbacks_modal.title}
       </h4>
       <p className='fr-text--sm text-[var(--text-mention-grey)]'>
