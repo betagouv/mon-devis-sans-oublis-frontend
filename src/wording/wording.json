@@ -66,12 +66,12 @@
         "button_copy_url": "Copier le lien de la page",
         "description": "Retrouvez cette page et les corrections à apporter sur le devis.",
         "image_alt": "Image partagez les corrections",
-        "image_src": "/images/quotation_results/quotation_link_ok.webp",
+        "image_src": "/images/quotation_results/quotation_link_share.webp",
         "title": "Partagez les corrections"
       },
       "upload": {
         "image_alt": "Image vérifier un devis",
-        "image_src": "/images/quotation_results/mail-send.webp",
+        "image_src": "/images/quotation_results/quotation_link_upload.webp",
         "title": "Vous souhaitez analyser un nouveau devis ?",
         "link_label": "Vérifier un devis"
       }
