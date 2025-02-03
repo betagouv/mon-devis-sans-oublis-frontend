@@ -97,7 +97,7 @@ const Upload: React.FC<UploadProps> = ({
       </label>
       <span className='flex flex-row gap-2 items-center mt-4 pb-0! mb-0!'>
         <p
-          className='mb-0! rounded-lg p-2 text-sm'
+          className='mb-0! rounded-lg p-2 text-sm!'
           onMouseDown={(e) =>
             (e.currentTarget.style.backgroundColor =
               'var(--background-contrast-grey-active)')
@@ -115,7 +115,7 @@ const Upload: React.FC<UploadProps> = ({
         >
           {wording.components.upload.select_file}
         </p>
-        <p className='text-sm mb-0!'>
+        <p className='text-sm! mb-0!'>
           {uploadedFile
             ? uploadedFile.name
             : wording.components.upload.none_selected_file}

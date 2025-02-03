@@ -1,93 +1,113 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
-import QuoteStatusLink, { QuoteStatusVariant } from './QuoteStatusLink';
+import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
+import wording from '@/wording';
 
+/* eslint-disable @next/next/no-img-element */
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: function MockImage({
-    alt,
-    height,
-    src,
-    width,
-  }: {
-    alt: string;
-    height: number;
-    src: string;
-    width: number;
-  }) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img alt={alt} height={height} src={src} width={width} />;
-  },
+  default: (props: React.ComponentPropsWithoutRef<'img'>) => (
+    <img alt={props.alt || 'Mocked image'} {...props} />
+  ),
 }));
 
-describe('QuoteStatusLink Component', () => {
-  const defaultProps = {
-    imageAlt: 'Sample Image',
-    imageSrc: '/sample-image.webp',
-    linkHref: '/sample-link',
-    linkLabel: 'Sample Link',
-    title: 'Sample Title',
-    variant: QuoteStatusVariant.PRIMARY,
-  };
+Object.assign(navigator, {
+  clipboard: {
+    writeText: jest.fn(),
+  },
+});
 
-  it('renders the component with provided props', () => {
-    render(<QuoteStatusLink {...defaultProps} />);
+const mockLocation = new URL('http://test.com');
+Object.defineProperty(window, 'location', {
+  value: mockLocation,
+  writable: true,
+});
 
-    // Check the image
-    const image = screen.getByAltText('Sample Image');
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', '/sample-image.webp');
+describe('QuoteStatusLink', () => {
+  describe('SHARE type', () => {
+    beforeEach(() => {
+      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
+    });
 
-    // Check the title
-    const titleElement = screen.getByText('Sample Title');
-    expect(titleElement).toBeInTheDocument();
+    it('renders share type correctly', () => {
+      expect(
+        screen.getByAltText(
+          wording.components.quote_status_link.share.image_alt
+        )
+      ).toBeInTheDocument();
 
-    // Check the link
-    const linkElement = screen.getByText('Sample Link').closest('a');
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toHaveAttribute('href', '/sample-link');
+      expect(
+        screen.getByText(wording.components.quote_status_link.share.title)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(wording.components.quote_status_link.share.description)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.share.button_copy_url
+        )
+      ).toBeInTheDocument();
+    });
+
+    it('handles copy url button click', async () => {
+      const copyButton = screen.getByText(
+        wording.components.quote_status_link.share.button_copy_url
+      );
+
+      fireEvent.click(copyButton);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        'http://test.com/'
+      );
+
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.share.button_copied_url
+        )
+      ).toBeInTheDocument();
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('fr-btn--secondary');
+      expect(button).toHaveClass('fr-icon-check-line');
+    });
   });
 
-  it('applies the correct background color for the PRIMARY variant', () => {
+  describe('UPLOAD type', () => {
+    beforeEach(() => {
+      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
+    });
+
+    it('renders upload type correctly', () => {
+      expect(
+        screen.getByAltText(
+          wording.components.quote_status_link.upload.image_alt
+        )
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(wording.components.quote_status_link.upload.title)
+      ).toBeInTheDocument();
+
+      const link = screen.getByText(
+        wording.components.quote_status_link.upload.link_label
+      );
+      expect(link).toBeInTheDocument();
+      expect(link.closest('a')).toHaveAttribute('href', expect.any(String));
+    });
+  });
+
+  it('applies custom className correctly', () => {
+    const customClass = 'custom-class';
     render(
-      <QuoteStatusLink {...defaultProps} variant={QuoteStatusVariant.PRIMARY} />
-    );
-    const container =
-      screen.getByText('Sample Title').parentElement?.parentElement;
-    expect(container).toHaveClass('bg-[var(--background-alt-blue-france)]');
-  });
-
-  it('applies the correct background color for the SECONDARY variant', () => {
-    render(
-      <QuoteStatusLink
-        {...defaultProps}
-        variant={QuoteStatusVariant.SECONDARY}
-      />
-    );
-    const container =
-      screen.getByText('Sample Title').parentElement?.parentElement;
-    expect(container).toHaveClass('bg-[var(--background-default-grey)]');
-  });
-
-  it('renders dynamic title and link label', () => {
-    render(
-      <QuoteStatusLink
-        {...defaultProps}
-        title='Dynamic Title'
-        linkLabel='Dynamic Link'
-      />
+      <QuoteStatusLink type={QuoteStatusType.SHARE} className={customClass} />
     );
 
-    const titleElement = screen.getByText('Dynamic Title');
-    const linkElement = screen.getByText('Dynamic Link');
-
-    expect(titleElement).toBeInTheDocument();
-    expect(linkElement).toBeInTheDocument();
-  });
-
-  it('renders the Link component with SMALL size', () => {
-    render(<QuoteStatusLink {...defaultProps} />);
-    const linkElement = screen.getByText('Sample Link').closest('a');
-    expect(linkElement).toHaveClass('fr-btn--sm');
+    const container = screen
+      .getByRole('img', {
+        name: wording.components.quote_status_link.share.image_alt,
+      })
+      .closest('div');
+    expect(container).toHaveClass(customClass);
   });
 });

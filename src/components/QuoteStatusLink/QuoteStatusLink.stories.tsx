@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import QuoteStatusLink, { QuoteStatusVariant } from './QuoteStatusLink';
+import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
 
 const meta: Meta<typeof QuoteStatusLink> = {
   title: 'Components/QuoteStatusLink',
   component: QuoteStatusLink,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    type: {
       control: {
         type: 'radio',
       },
-      options: Object.values(QuoteStatusVariant),
+      options: Object.values(QuoteStatusType),
     },
   },
 };
@@ -20,24 +20,14 @@ export default meta;
 
 type Story = StoryObj<typeof QuoteStatusLink>;
 
-export const QuoteLinkOK: Story = {
+export const QuoteLinkShare: Story = {
   args: {
-    imageAlt: 'Quote Status',
-    imageSrc: '/images/quotation_results/quotation_link_ok.webp',
-    title: 'Revenez quand vous voulez !',
-    linkHref: '/quote-status',
-    linkLabel: 'Vérifier un nouveau devis',
-    variant: QuoteStatusVariant.SECONDARY,
+    type: QuoteStatusType.SHARE,
   },
 };
 
-export const QuoteLinkKO: Story = {
+export const QuoteLinkOK: Story = {
   args: {
-    imageAlt: 'Quote Status',
-    imageSrc: '/images/quotation_results/quotation_link_ko.webp',
-    title: 'Psst, c’est bon vous avez tout corrigé ?',
-    linkHref: '/analysis-report',
-    linkLabel: 'Vérifier à nouveau le devis',
-    variant: QuoteStatusVariant.PRIMARY,
+    type: QuoteStatusType.UPLOAD,
   },
 };

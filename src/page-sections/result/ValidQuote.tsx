@@ -1,5 +1,3 @@
-import { usePathname } from 'next/navigation';
-
 import {
   Badge,
   BadgeSize,
@@ -7,7 +5,7 @@ import {
   Confetti,
   QuoteStatusCard,
   QuoteStatusLink,
-  QuoteStatusVariant,
+  QuoteStatusType,
 } from '@/components';
 import wording from '@/wording';
 
@@ -16,9 +14,6 @@ interface ValidQuoteProps {
 }
 
 export default function ValidQuote({ uploadedFileName }: ValidQuoteProps) {
-  const pathname = usePathname();
-  const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
-
   return (
     <>
       <Confetti />
@@ -47,15 +42,7 @@ export default function ValidQuote({ uploadedFileName }: ValidQuoteProps) {
         </div>
       </section>
       <section className='fr-container fr-mt-10w hidden md:block'>
-        <QuoteStatusLink
-          className='mb-16 mt-8'
-          imageAlt={wording.upload_id.quotation_status_link_ok.image_alt}
-          imageSrc={wording.upload_id.quotation_status_link_ok.image_src}
-          linkHref={goBackToUpload}
-          linkLabel={wording.upload_id.quotation_status_link_ok.link_label}
-          title={wording.upload_id.quotation_status_link_ok.title}
-          variant={QuoteStatusVariant.SECONDARY}
-        />
+        <QuoteStatusLink className='mb-16 mt-8' type={QuoteStatusType.UPLOAD} />
       </section>
     </>
   );

@@ -35,7 +35,6 @@ export default function ResultClient({
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
-  const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
 
@@ -103,11 +102,6 @@ export default function ResultClient({
       window.location.href = `/${profile}/televersement?error=${FILE_ERROR}`;
     }
   }, [shouldRedirectToUpload, profile]);
-
-  const copyUrlToClipboard = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setIsUrlCopied(true);
-  };
 
   const handleHelpClick = async (
     comment: string | null,
@@ -189,9 +183,7 @@ export default function ResultClient({
           <ValidQuote uploadedFileName={currentDevis.filename} />
         ) : (
           <InvalidQuote
-            isUrlCopied={isUrlCopied}
             list={currentDevis.error_details || []}
-            onCopyUrl={copyUrlToClipboard}
             onHelpClick={handleHelpClick}
             uploadedFileName={currentDevis.filename || ''}
           />
@@ -201,7 +193,7 @@ export default function ResultClient({
             className={`${
               isButtonSticky
                 ? 'fixed bottom-14 right-39'
-                : 'absolute bottom-40 right-8'
+                : 'absolute bottom-[-40px] right-8'
             } self-end z-20`}
           >
             <button
