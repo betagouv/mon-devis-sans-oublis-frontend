@@ -1,55 +1,90 @@
-import Image from 'next/image';
-import Link, { LinkSize } from '../Link/Link';
+'use client';
 
-export enum QuoteStatusVariant {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
+import { useState } from 'react';
+import Image from 'next/image';
+
+import Link, { LinkSize, LinkVariant } from '../Link/Link';
+import { useGoBackToUpload } from '@/hooks';
+import wording from '@/wording';
+
+export enum QuoteStatusType {
+  SHARE = 'share',
+  UPLOAD = 'upload',
 }
 
 export interface QuoteStatusLinkProps {
   className?: string;
-  imageAlt: string;
-  imageSrc: string;
-  linkHref: string;
-  linkLabel: string;
-  title: string;
-  variant: QuoteStatusVariant;
+  type: QuoteStatusType;
 }
 
 const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   className,
-  imageAlt,
-  imageSrc,
-  linkHref,
-  linkLabel,
-  title,
-  variant,
+  type,
 }) => {
-  const backgroundColor =
-    variant === QuoteStatusVariant.PRIMARY
-      ? 'bg-[var(--background-alt-blue-france)]'
-      : 'bg-[var(--background-default-grey)]';
+  const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
+  const goBackToUpload = useGoBackToUpload();
+
+  const copyUrlToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setIsUrlCopied(true);
+  };
 
   return (
     <div
-      className={`${backgroundColor} border-shadow flex items-center gap-4 p-8 rounded-lg w-fit ${className}`}
+      className={`bg-[var(--background-default-grey-hover)] border-shadow flex items-center gap-6 px-4 py-6 rounded-lg w-fit ${className}`}
     >
       <Image
-        alt={imageAlt}
+        alt={
+          type === QuoteStatusType.SHARE
+            ? wording.components.quote_status_link.share.image_alt
+            : wording.components.quote_status_link.upload.image_alt
+        }
         className='shrink-0'
         height={80}
-        src={imageSrc}
+        src={
+          type === QuoteStatusType.SHARE
+            ? wording.components.quote_status_link.share.image_src
+            : wording.components.quote_status_link.upload.image_src
+        }
         width={80}
       />
-      <div className='flex flex-col'>
-        <h6 className='mb-4'>{title}</h6>
-        <Link
-          href={linkHref}
-          label={linkLabel}
-          legacyBehavior
-          size={LinkSize.SMALL}
-        />
-      </div>
+      {type === QuoteStatusType.SHARE ? (
+        <div className='flex flex-col'>
+          <h5 className='fr-mb-1w'>
+            {wording.components.quote_status_link.share.title}
+          </h5>
+          <p className='fr-mb-2w'>
+            {wording.components.quote_status_link.share.description}
+          </p>
+          <span className='flex flex-row gap-4'>
+            <button
+              className={`fr-btn ${
+                isUrlCopied && 'fr-btn--secondary'
+              } fr-btn--sm shrink-0 self-start fr-btn--icon-right ${
+                isUrlCopied ? 'fr-icon-check-line' : 'fr-icon-share-box-line'
+              }`}
+              onClick={copyUrlToClipboard}
+            >
+              {isUrlCopied
+                ? wording.components.quote_status_link.share.button_copied_url
+                : wording.components.quote_status_link.share.button_copy_url}
+            </button>
+          </span>
+        </div>
+      ) : (
+        <div className='flex flex-col'>
+          <h6 className='fr-mb-1w'>
+            {wording.components.quote_status_link.upload.title}
+          </h6>
+          <Link
+            href={goBackToUpload}
+            label={wording.components.quote_status_link.upload.link_label}
+            legacyBehavior
+            size={LinkSize.SMALL}
+            variant={LinkVariant.SECONDARY}
+          />
+        </div>
+      )}
     </div>
   );
 };

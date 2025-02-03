@@ -74,7 +74,7 @@ export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
 // QuoteStatusLink
 export {
   default as QuoteStatusLink,
-  QuoteStatusVariant,
+  QuoteStatusType,
 } from './QuoteStatusLink/QuoteStatusLink';
 export type { QuoteStatusLinkProps } from './QuoteStatusLink/QuoteStatusLink';
 // RoundCheckboxGroup

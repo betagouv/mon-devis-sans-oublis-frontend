@@ -35,7 +35,7 @@ describe('Components exports', () => {
       'QuoteErrorItem',
       'QuoteStatusCard',
       'QuoteStatusLink',
-      'QuoteStatusVariant',
+      'QuoteStatusType',
       'RoundCheckboxGroup',
       'SVGLoader',
       'Tile',
@@ -105,6 +105,6 @@ describe('Components exports', () => {
     expect(Components.LinkVariant).toBeDefined();
     expect(Components.ModalPosition).toBeDefined();
     expect(Components.NoticeType).toBeDefined();
-    expect(Components.QuoteStatusVariant).toBeDefined();
+    expect(Components.QuoteStatusType).toBeDefined();
   });
 });

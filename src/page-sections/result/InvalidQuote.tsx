@@ -1,5 +1,4 @@
 import React from 'react';
-import { usePathname } from 'next/navigation';
 
 import {
   Badge,
@@ -13,15 +12,14 @@ import {
   QuoteErrorCard,
   QuoteStatusCard,
   QuoteStatusLink,
-  QuoteStatusVariant,
+  QuoteStatusType,
 } from '@/components';
+import { useGoBackToUpload } from '@/hooks';
 import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
-  isUrlCopied: boolean;
   list: EnrichedErrorDetails[];
-  onCopyUrl: () => void;
   onHelpClick: (
     comment: string | null,
     errorDetailsId: string
@@ -30,14 +28,11 @@ interface InvalidQuoteProps {
 }
 
 export default function InvalidQuote({
-  isUrlCopied,
   list,
-  onCopyUrl,
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) {
-  const pathname = usePathname();
-  const goBackToUpload = pathname.split('/').slice(0, 3).join('/');
+  const goBackToUpload = useGoBackToUpload();
 
   const errorDetails = (
     errors: EnrichedErrorDetails[] | null = [],
@@ -124,7 +119,7 @@ export default function InvalidQuote({
                             <Link
                               href={goBackToUpload}
                               label={
-                                wording.upload_id.quotation_status_link_ko
+                                wording.components.quote_status_link.upload
                                   .link_label
                               }
                               legacyBehavior
@@ -181,53 +176,12 @@ export default function InvalidQuote({
           )}
         </div>
       </section>
-      <section className='fr-container fr-mt-6w'>
-        {/* <div className='flex flex-col rounded-lg w-fit md:w-[530px]'>
-          <span className='flex flex-row gap-2'>
-            <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
-            <button onClick={onCopyUrl} className='fr-link fr-link--lg'>
-              <h6 className='mb-2 border-bottom-black'>
-                {isUrlCopied
-                  ? wording.upload_id.button_copied_url
-                  : wording.upload_id.button_copy_url}
-              </h6>
-            </button>
-          </span>
-          <p>
-            Grâce au lien, retrouvez cette page et les corrections à apporter
-            sur le devis.
-          </p>
-        </div> */}
-        <div className='bg-[var(--background-alt-blue-france)] border-shadow flex flex-col px-12 py-8 rounded-lg w-fit md:w-[580px]'>
-          <span className='flex flex-row gap-2 items-center mb-4'>
-            <span className='fr-icon-share-box-line text-[var(--background-action-high-blue-france)]' />
-            <h6 className='mb-0!'>Partager les corrections</h6>
-          </span>
-          <p>
-            Grâce au lien, retrouvez cette page et les corrections à apporter
-            sur le devis.
-          </p>
-          <button
-            className={`fr-btn ${
-              isUrlCopied && 'fr-btn--secondary'
-            } fr-btn--sm shrink-0 self-start`}
-            onClick={onCopyUrl}
-          >
-            {isUrlCopied
-              ? wording.upload_id.button_copied_url
-              : wording.upload_id.button_copy_url}
-            {isUrlCopied && <span className='fr-icon-check-line fr-ml-1w' />}
-          </button>
-        </div>
-        <div className='hidden md:block'>
+      <section className='fr-container fr-my-6w'>
+        <div className='flex md:flex-row flex-col gap-4 justify-between'>
+          <QuoteStatusLink type={QuoteStatusType.SHARE} />
           <QuoteStatusLink
-            className='mb-16 mt-8'
-            imageAlt={wording.upload_id.quotation_status_link_ko.image_alt}
-            imageSrc={wording.upload_id.quotation_status_link_ko.image_src}
-            linkHref={goBackToUpload}
-            linkLabel={wording.upload_id.quotation_status_link_ko.link_label}
-            title={wording.upload_id.quotation_status_link_ko.title}
-            variant={QuoteStatusVariant.PRIMARY}
+            className='md:w-[480px]!'
+            type={QuoteStatusType.UPLOAD}
           />
         </div>
       </section>

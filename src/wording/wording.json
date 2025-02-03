@@ -60,6 +60,22 @@
         "label": "Information erronée"
       }
     },
+    "quote_status_link": {
+      "share": {
+        "button_copied_url": "Lien copié",
+        "button_copy_url": "Copier le lien de la page",
+        "description": "Retrouvez cette page et les corrections à apporter sur le devis.",
+        "image_alt": "Image partagez les corrections",
+        "image_src": "/images/quotation_results/quotation_link_ok.webp",
+        "title": "Partagez les corrections"
+      },
+      "upload": {
+        "image_alt": "Image vérifier un devis",
+        "image_src": "/images/quotation_results/mail-send.webp",
+        "title": "Vous souhaitez analyser un nouveau devis ?",
+        "link_label": "Vérifier un devis"
+      }
+    },
     "round_checkbox_group": {
       "insufficient": "Insuffisante",
       "satisfactory": "Très satisfaisante"
@@ -337,8 +353,6 @@
         "title": "Vérifiez le nouveau devis"
       }
     ],
-    "button_copied_url": "Lien copié",
-    "button_copy_url": "Copier le lien de la page",
     "quotation_status_card_ko": {
       "description": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
       "description_ko_more": "Nous vous conseillons de le corriger dès maintenant pour éviter les allers-retours lors de l'instruction.",
@@ -352,18 +366,6 @@
       "image_alt": "Devis complet",
       "image_src": "/images/quotation_results/quotation_status_ok.webp",
       "title": "Il est top ce devis !"
-    },
-    "quotation_status_link_ko": {
-      "image_alt": "Quote ko",
-      "image_src": "/images/quotation_results/quotation_link_ko.webp",
-      "title": "Vous souhaitez analyser un nouveau devis ?",
-      "link_label": "Vérifier un devis"
-    },
-    "quotation_status_link_ok": {
-      "image_alt": "Quote ok",
-      "image_src": "/images/quotation_results/quotation_link_ok.webp",
-      "title": "Revenez quand vous voulez !",
-      "link_label": "Vérifier un nouveau devis"
     },
     "subtitle": "Pas de panique, voici les corrections à apporter ⬇️",
     "title": "Résultat de l’analyse"
