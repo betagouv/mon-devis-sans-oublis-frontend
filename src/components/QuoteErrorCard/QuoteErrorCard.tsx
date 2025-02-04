@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import Accordion from '../Accordion/Accordion';
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import QuoteErrorItem from '../QuoteErrorItem/QuoteErrorItem';
 import Tooltip from '../Tooltip/Tooltip';
@@ -81,7 +80,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] pl-5 pr-3 py-4 flex justify-between items-start'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] pl-4 md:pl-6 pr-3 py-4 flex justify-between items-start'>
         <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
           <p className='fr-mb-0'>
             {list.length > 0 &&
@@ -151,14 +150,23 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
         {transformedData
           .filter((group) => group.title !== null)
           .map((group) => (
-            <Accordion
-              badgeLabel={`${(group.items.length > 1
-                ? wording.upload_id.badge_correction_plural
-                : wording.upload_id.badge_correction
-              ).replace('{number}', group.items.length.toString())}`}
-              key={`${group.title}-${group.gesteId}`}
-              title={group.title || ''}
-            >
+            <div key={`${group.title}-${group.gesteId}`}>
+              <div className='bg-[var(--background-default-grey-hover)] px-4 md:px-6 py-4 flex gap-4'>
+                <span
+                  className='mb-0! text-[var(--text-action-high-blue-france)]'
+                  style={{ fontWeight: 500 }}
+                >
+                  {group.title}
+                </span>
+                <Badge
+                  label={`${(group.items.length > 1
+                    ? wording.upload_id.badge_correction_plural
+                    : wording.upload_id.badge_correction
+                  ).replace('{number}', group.items.length.toString())}`}
+                  size={BadgeSize.X_SMALL}
+                  variant={BadgeVariant.GREY}
+                />
+              </div>
               {group.items.map((item) => (
                 <QuoteErrorItem
                   closeModal={closeModal}
@@ -189,7 +197,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                   openModalId={openModalId}
                 />
               ))}
-            </Accordion>
+            </div>
           ))}
       </ul>
     </div>

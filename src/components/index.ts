@@ -1,6 +1,3 @@
-// Accordion
-export { default as Accordion } from './Accordion/Accordion';
-export type { AccordionProps } from './Accordion/Accordion';
 // Alert
 export { default as Alert } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';

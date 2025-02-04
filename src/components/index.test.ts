@@ -3,7 +3,6 @@ import * as Components from './index';
 describe('Components exports', () => {
   it('exports all components correctly', () => {
     const expectedExports = [
-      'Accordion',
       'Alert',
       'Badge',
       'BadgeVariant',
@@ -54,7 +53,6 @@ describe('Components exports', () => {
 
   it('exports components as non-null values', () => {
     const componentNames = [
-      'Accordion',
       'Alert',
       'Badge',
       'BlockNumber',
