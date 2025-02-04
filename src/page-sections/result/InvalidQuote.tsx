@@ -75,9 +75,11 @@ export default function InvalidQuote({
               </h1>
             </div>
           </div>
-          <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
-            {`Analyse du ${analysisDate}`}
-          </p>
+          {analysisDate !== 'Unknown Type: datetime' ? (
+            <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
+              {`Analyse du ${analysisDate}`}
+            </p>
+          ) : null}
         </span>
         <div className='flex flex-col items-center md:items-start'>
           <div className='flex flex-wrap gap-4 fr-mb-4w justify-center md:justify-start'>
