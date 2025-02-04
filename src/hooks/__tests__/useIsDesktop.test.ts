@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 
-import { useIsDesktop } from './useIsDesktop';
+import { useIsDesktop } from '../useIsDesktop';
 
 describe('useIsDesktop Hook', () => {
   beforeEach(() => {

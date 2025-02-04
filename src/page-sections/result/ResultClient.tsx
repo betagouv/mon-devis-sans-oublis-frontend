@@ -14,6 +14,7 @@ import {
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
+import { formatDateToFrench } from '@/utils';
 
 interface ResultClientProps {
   currentDevis: QuoteChecksIdEnrichedErrorDetails | null;
@@ -167,6 +168,8 @@ export default function ResultClient({
     );
   }
 
+  console.log(formatDateToFrench(currentDevis.finished_at));
+
   return (
     <>
       {showToast && (
@@ -180,9 +183,13 @@ export default function ResultClient({
       )}
       <div className='fr-container-fluid fr-py-10w'>
         {currentDevis.status === Status.VALID ? (
-          <ValidQuote uploadedFileName={currentDevis.filename} />
+          <ValidQuote
+            analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            uploadedFileName={currentDevis.filename}
+          />
         ) : (
           <InvalidQuote
+            analysisDate={formatDateToFrench(currentDevis.finished_at)}
             list={currentDevis.error_details || []}
             onHelpClick={handleHelpClick}
             uploadedFileName={currentDevis.filename || ''}

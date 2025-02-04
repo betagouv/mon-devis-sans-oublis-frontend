@@ -42,7 +42,7 @@
       "badge_correction_plural": "{number} corrections",
       "button_see_detail": "Voir le détail",
       "title_admin": "Mentions administratives",
-      "title_gestes": "Descriptif technique des gestes",
+      "title_gestes": "Gestes détectés",
       "tooltip_admin": {
         "icon": "fr-icon-information-fill",
         "text": "Les mentions administratives sont les informations générales concernant le devis, l'entreprise, le client et le logement. Elles sont obligatoires pour l'obtention d’aides financières."

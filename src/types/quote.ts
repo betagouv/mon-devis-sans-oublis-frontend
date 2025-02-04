@@ -72,6 +72,7 @@ export interface QuoteChecksId {
   parent_id: string;
   status: Status;
   filename: string;
+  finished_at: string;
   metadata: Metadata;
   profile: Profile;
   valid: boolean;
@@ -86,6 +87,7 @@ export interface QuoteChecksIdEnrichedErrorDetails {
   parent_id: string;
   status: Status;
   filename: string;
+  finished_at: string;
   profile: Profile;
   valid: boolean;
   errors: string[];
