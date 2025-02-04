@@ -10,7 +10,7 @@ import {
 import wording from '@/wording';
 
 interface ValidQuoteProps {
-  analysisDate: string;
+  analysisDate: string | null;
   uploadedFileName: string;
 }
 
@@ -30,9 +30,11 @@ export default function ValidQuote({
               </h1>
             </div>
           </div>
-          <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
-            {`Analyse du ${analysisDate}`}
-          </p>
+          {analysisDate !== null && (
+            <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
+              {`Analyse du ${analysisDate}`}
+            </p>
+          )}
         </span>
         <div className='flex gap-4 fr-mb-4w justify-center md:justify-start'>
           {uploadedFileName && (
