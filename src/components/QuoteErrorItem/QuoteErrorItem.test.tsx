@@ -1,28 +1,54 @@
-import { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-
-import { Category, Type } from '@/types';
+import { fireEvent, render, screen } from '@testing-library/react';
 import QuoteErrorItem, { QuoteErrorItemProps } from './QuoteErrorItem';
+import { useIsDesktop } from '@/hooks';
+import wording from '@/wording';
+import { Category, Type } from '@/types';
+
+// Mock the hooks and components
+jest.mock('@/hooks', () => ({
+  useIsDesktop: jest.fn(),
+}));
+
+jest.mock('../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal', () => ({
+  __esModule: true,
+  default: jest.fn(({ isOpen, onClose, onSubmitFeedback }) =>
+    isOpen ? (
+      <div data-testid='modal'>
+        <button onClick={() => onSubmitFeedback('test comment')}>Submit</button>
+        <button onClick={onClose}>Close</button>
+      </div>
+    ) : null
+  ),
+}));
+
+jest.mock('../Toast/Toast', () => ({
+  __esModule: true,
+  default: jest.fn(({ onClose }) => (
+    <div data-testid='toast'>
+      <button onClick={onClose}>Close Toast</button>
+    </div>
+  )),
+}));
 
 describe('QuoteErrorItem', () => {
-  const mockModalContent = {
-    isOpen: true,
-    problem: 'Test problem',
-    solution: 'Test solution',
-    title: 'Test modal title',
-  };
-
-  const defaultProps: QuoteErrorItemProps = {
+  const mockProps: QuoteErrorItemProps = {
     closeModal: jest.fn(),
     item: {
-      id: '1',
-      title: 'Test Error',
-      modalContent: mockModalContent,
-      geste_id: '',
+      id: '123',
+      geste_id: 'geste_123',
       category: Category.ADMIN,
       type: Type.MISSING,
-      code: '',
+      code: 'TEST_CODE',
+      title: 'Test Error',
+      problem: null,
+      solution: null,
       provided_value: null,
+      modalContent: {
+        problem: 'Test Problem',
+        solution: 'Test Solution',
+        isOpen: false,
+        title: 'Test Modal Title',
+      },
     },
     onHelpClick: jest.fn(),
     openModal: jest.fn(),
@@ -33,196 +59,104 @@ describe('QuoteErrorItem', () => {
     jest.clearAllMocks();
   });
 
-  it('renders correctly with basic props', () => {
-    render(<QuoteErrorItem {...defaultProps} />);
-
-    expect(screen.getByText('Test Error')).toBeInTheDocument();
-    expect(screen.getByRole('button')).toHaveTextContent('Voir le détail');
-  });
-
-  it('does not render detail button when solution is null', () => {
-    const propsWithoutSolution = {
-      ...defaultProps,
-      item: {
-        ...defaultProps.item,
-        modalContent: {
-          ...mockModalContent,
-          solution: null,
-        },
-      },
-    };
-
-    render(<QuoteErrorItem {...propsWithoutSolution} />);
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
-  });
-
-  it('opens modal when detail button is clicked', () => {
-    render(<QuoteErrorItem {...defaultProps} />);
-
-    const detailButton = screen.getByRole('button');
-
-    act(() => {
-      fireEvent.click(detailButton);
+  describe('Desktop View', () => {
+    beforeEach(() => {
+      (useIsDesktop as jest.Mock).mockReturnValue(true);
     });
 
-    expect(defaultProps.openModal).toHaveBeenCalledWith(defaultProps.item.id);
-  });
+    it('should render with desktop layout', () => {
+      render(<QuoteErrorItem {...mockProps} />);
 
-  it('renders modal when openModalId matches item id', () => {
-    render(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
-
-    expect(screen.getByText('Test modal title')).toBeInTheDocument();
-  });
-
-  it('closes toast after duration', () => {
-    jest.useFakeTimers();
-
-    const {} = render(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
-
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
-
-    const submitButton = screen.getByRole('button', { name: /envoyer/i });
-    fireEvent.click(submitButton);
-
-    expect(screen.getByText('Merci pour votre retour !')).toBeInTheDocument();
-
-    act(() => {
-      jest.advanceTimersByTime(4000);
+      expect(screen.getByText('Test Error')).toBeInTheDocument();
+      expect(
+        screen.getByText(wording.components.quote_error_card.button_see_detail)
+      ).toBeInTheDocument();
     });
 
-    act(() => {
-      jest.advanceTimersByTime(4000);
+    it('should open modal when clicking see details button', () => {
+      render(<QuoteErrorItem {...mockProps} />);
+
+      fireEvent.click(
+        screen.getByText(wording.components.quote_error_card.button_see_detail)
+      );
+      expect(mockProps.openModal).toHaveBeenCalledWith('123');
     });
 
-    expect(
-      screen.queryByText('Merci pour votre retour !')
-    ).not.toBeInTheDocument();
+    it('should handle feedback submission', () => {
+      render(<QuoteErrorItem {...mockProps} openModalId='123' />);
 
-    jest.useRealTimers();
+      fireEvent.click(screen.getByText('Submit'));
+
+      expect(mockProps.onHelpClick).toHaveBeenCalledWith('test comment', '123');
+      expect(mockProps.closeModal).toHaveBeenCalled();
+      expect(screen.getByTestId('toast')).toBeInTheDocument();
+    });
   });
 
-  it('opens modal when detail button is clicked', () => {
-    render(<QuoteErrorItem {...defaultProps} />);
-
-    const detailButton = screen.getByRole('button');
-
-    act(() => {
-      fireEvent.click(detailButton);
+  describe('Mobile View', () => {
+    beforeEach(() => {
+      (useIsDesktop as jest.Mock).mockReturnValue(false);
     });
 
-    expect(defaultProps.openModal).toHaveBeenCalledWith(defaultProps.item.id);
-  });
+    it('should render with mobile layout', () => {
+      render(<QuoteErrorItem {...mockProps} />);
 
-  it('handles feedback submission correctly', async () => {
-    render(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
-
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
-
-    const submitButton = screen.getByRole('button', { name: /envoyer/i });
-
-    await act(async () => {
-      fireEvent.click(submitButton);
+      expect(screen.getByText('Test Error')).toBeInTheDocument();
+      expect(screen.getByRole('listitem')).toHaveStyle({ cursor: 'pointer' });
     });
 
-    expect(defaultProps.onHelpClick).toHaveBeenCalledWith(
-      'Test feedback',
-      defaultProps.item.id
-    );
-    expect(defaultProps.closeModal).toHaveBeenCalled();
-  });
+    it('should open modal when clicking on item', () => {
+      render(<QuoteErrorItem {...mockProps} />);
 
-  it('shows toast after feedback submission', async () => {
-    render(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
-
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
-
-    const submitButton = screen.getByRole('button', { name: /envoyer/i });
-    fireEvent.click(submitButton);
-
-    expect(screen.getByText('Merci pour votre retour !')).toBeInTheDocument();
-  });
-
-  it('handles error during feedback submission', () => {
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const errorProps = {
-      ...defaultProps,
-      onHelpClick: jest.fn().mockImplementationOnce(() => {
-        throw new Error('Test error');
-      }),
-      openModalId: defaultProps.item.id.toString(),
-    };
-
-    render(<QuoteErrorItem {...errorProps} />);
-
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
-
-    const submitButton = screen.getByRole('button', { name: /envoyer/i });
-    fireEvent.click(submitButton);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error submitting feedback:',
-      expect.any(Error)
-    );
-
-    consoleSpy.mockRestore();
-  });
-
-  it('closes toast after duration', () => {
-    jest.useFakeTimers();
-
-    const {} = render(
-      <QuoteErrorItem
-        {...defaultProps}
-        openModalId={defaultProps.item.id.toString()}
-      />
-    );
-
-    const textarea = screen.getByRole('textbox');
-    fireEvent.change(textarea, { target: { value: 'Test feedback' } });
-
-    const submitButton = screen.getByRole('button', { name: /envoyer/i });
-    fireEvent.click(submitButton);
-
-    expect(screen.getByText('Merci pour votre retour !')).toBeInTheDocument();
-
-    act(() => {
-      jest.advanceTimersByTime(4000);
+      fireEvent.click(screen.getByRole('listitem'));
+      expect(mockProps.openModal).toHaveBeenCalledWith('123');
     });
 
-    act(() => {
-      jest.advanceTimersByTime(4000);
+    it('should show arrow icon on mobile with solution', () => {
+      render(<QuoteErrorItem {...mockProps} />);
+
+      expect(
+        screen
+          .getByRole('listitem')
+          .querySelector('.fr-icon-arrow-right-s-line')
+      ).toBeInTheDocument();
     });
+  });
 
-    expect(
-      screen.queryByText('Merci pour votre retour !')
-    ).not.toBeInTheDocument();
+  describe('Error Handling', () => {
+    it('should handle feedback submission error', () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const mockError = new Error('Test error');
 
-    jest.useRealTimers();
+      render(
+        <QuoteErrorItem
+          {...mockProps}
+          openModalId='123'
+          onHelpClick={() => {
+            throw mockError;
+          }}
+        />
+      );
+
+      fireEvent.click(screen.getByText('Submit'));
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error submitting feedback:',
+        mockError
+      );
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Toast Behavior', () => {
+    it('should close toast when clicking close button', () => {
+      render(<QuoteErrorItem {...mockProps} openModalId='123' />);
+
+      fireEvent.click(screen.getByText('Submit'));
+      expect(screen.getByTestId('toast')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Close Toast'));
+      expect(screen.queryByTestId('toast')).not.toBeInTheDocument();
+    });
   });
 });

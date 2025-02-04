@@ -1,7 +1,7 @@
 import { usePathname } from 'next/navigation';
 import { renderHook } from '@testing-library/react';
 
-import { useGoBackToUpload } from './useGoBackToUpload';
+import { useGoBackToUpload } from '../useGoBackToUpload';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({

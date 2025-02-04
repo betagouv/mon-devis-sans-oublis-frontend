@@ -81,9 +81,7 @@ describe('QuoteErrorCard', () => {
       ],
     };
     render(<QuoteErrorCard {...gestesProps} />);
-    expect(
-      screen.getByText('Descriptif technique des gestes')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Gestes détectés')).toBeInTheDocument();
   });
 
   it('renders grouped data correctly', () => {

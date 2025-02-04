@@ -81,7 +81,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] px-4 md:px-6 py-4 flex justify-between items-start'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] pl-5 pr-3 py-4 flex justify-between items-start'>
         <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
           <p className='fr-mb-0'>
             {list.length > 0 &&
@@ -99,7 +99,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
             variant={BadgeVariant.GREY}
           />
         </div>
-        <div className='relative inline-block shrink-0 ml-4'>
+        <div className='relative inline-block shrink-0'>
           <Tooltip
             className='absolute top-full right-0 mt-2! font-normal!'
             icon={

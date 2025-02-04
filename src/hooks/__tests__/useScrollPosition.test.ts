@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 
-import { useScrollPosition } from './useScrollPosition';
+import { useScrollPosition } from '../useScrollPosition';
 
 describe('useScrollPosition Hook', () => {
   beforeEach(() => {

@@ -19,6 +19,7 @@ import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
+  analysisDate: string;
   list: EnrichedErrorDetails[];
   onHelpClick: (
     comment: string | null,
@@ -28,6 +29,7 @@ interface InvalidQuoteProps {
 }
 
 export default function InvalidQuote({
+  analysisDate,
   list,
   onHelpClick,
   uploadedFileName,
@@ -65,15 +67,20 @@ export default function InvalidQuote({
   return (
     <>
       <section className='fr-container fr-gap-8'>
-        <div className='flex flex-col md:flex-row justify-between fr-mb-2w'>
-          <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
-            <h1 className='mb-0! text-center md:text-left'>
-              {wording.upload_id.title}
-            </h1>
+        <span className='flex flex-col md:flex-row items-center justify-between fr-mb-2w'>
+          <div className='flex flex-col md:flex-row justify-between'>
+            <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
+              <h1 className='mb-0! text-center md:text-left'>
+                {wording.upload_id.title}
+              </h1>
+            </div>
           </div>
-        </div>
+          <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
+            {`Analyse du ${analysisDate}`}
+          </p>
+        </span>
         <div className='flex flex-col items-center md:items-start'>
-          <div className='flex flex-wrap gap-4 fr-mb-3w justify-center md:justify-start'>
+          <div className='flex flex-wrap gap-4 fr-mb-4w justify-center md:justify-start'>
             {uploadedFileName && (
               <Badge
                 label={uploadedFileName}
