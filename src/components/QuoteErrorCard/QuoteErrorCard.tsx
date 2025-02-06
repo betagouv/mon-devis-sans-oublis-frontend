@@ -101,7 +101,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                   ? wording.components.quote_error_card
                       .title_gestes_number_plural
                   : wording.components.quote_error_card.title_gestes_number
-                ).replace('{number}', list.length.toString())}`}
+                ).replace('{number}', uniqueGesteIdsCount.toString())}`}
               </p>
             )}
           </span>
