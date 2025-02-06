@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   Alert,
+  AlertType,
   Link,
   LinkVariant,
   MultiSelectCheckbox,
@@ -118,6 +119,7 @@ export default function UploadClient({
           className='fr-mb-8w fr-mt-4w'
           description={wording.upload.alert.description}
           moreDescription={wording.upload.alert.more_info}
+          type={AlertType.INFO}
         />
         <h2>{wording.upload.subtitle}</h2>
         {metadata.gestes && (

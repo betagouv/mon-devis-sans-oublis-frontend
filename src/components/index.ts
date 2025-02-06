@@ -1,5 +1,5 @@
 // Alert
-export { default as Alert } from './Alert/Alert';
+export { default as Alert, AlertType } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';
 // Badge
 export { default as Badge, BadgeVariant, BadgeSize } from './Badge/Badge';

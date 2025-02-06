@@ -1,5 +1,6 @@
 import {
   Alert,
+  AlertType,
   Badge,
   BadgeSize,
   BadgeVariant,
@@ -96,6 +97,7 @@ export default function InvalidQuote({
         <Alert
           className='fr-pr-2w font-bold w-fit'
           description={wording.page_upload_id.quotation_card_ko}
+          type={AlertType.INFO}
         />
       </section>
       <section className='fr-container'>

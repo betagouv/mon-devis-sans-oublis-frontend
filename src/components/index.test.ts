@@ -4,6 +4,7 @@ describe('Components exports', () => {
   it('exports all components correctly', () => {
     const expectedExports = [
       'Alert',
+      'AlertType',
       'Badge',
       'BadgeVariant',
       'BadgeSize',
@@ -54,6 +55,7 @@ describe('Components exports', () => {
   it('exports components as non-null values', () => {
     const componentNames = [
       'Alert',
+      'AlertType',
       'Badge',
       'BlockNumber',
       'Card',
