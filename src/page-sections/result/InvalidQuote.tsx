@@ -96,7 +96,7 @@ export default function InvalidQuote({
         </div>
         <Alert
           className='fr-pr-2w font-bold w-fit'
-          description={wording.page_upload_id.quotation_card_ko}
+          description={wording.page_upload_id.quotation_alert_ko}
           type={AlertType.INFO}
         />
       </section>

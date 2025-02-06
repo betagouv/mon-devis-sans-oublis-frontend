@@ -51,7 +51,7 @@ export default function ValidQuote({
         </div>
         <Alert
           className='fr-pr-2w font-bold w-fit'
-          description={wording.page_upload_id.quotation_card_ok}
+          description={wording.page_upload_id.quotation_alert_ok}
           type={AlertType.SUCCESS}
         />
       </section>
