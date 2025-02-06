@@ -91,8 +91,8 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
           <Badge
             className='self-center inline-block'
             label={`${(list.length > 1
-              ? wording.upload_id.badge_correction_plural
-              : wording.upload_id.badge_correction
+              ? wording.page_upload_id.badge_correction_plural
+              : wording.page_upload_id.badge_correction
             ).replace('{number}', list.length.toString())}`}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
@@ -160,8 +160,8 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                 </span>
                 <Badge
                   label={`${(group.items.length > 1
-                    ? wording.upload_id.badge_correction_plural
-                    : wording.upload_id.badge_correction
+                    ? wording.page_upload_id.badge_correction_plural
+                    : wording.page_upload_id.badge_correction
                   ).replace('{number}', group.items.length.toString())}`}
                   size={BadgeSize.X_SMALL}
                   variant={BadgeVariant.GREY}

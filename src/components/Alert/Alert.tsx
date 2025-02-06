@@ -4,16 +4,23 @@ import { useState } from 'react';
 
 import wording from '@/wording';
 
+export enum AlertType {
+  INFO = 'info',
+  SUCCESS = 'success',
+}
+
 export interface AlertProps {
   className?: string;
   description: string;
   moreDescription?: string;
+  type: AlertType;
 }
 
 const Alert: React.FC<AlertProps> = ({
   className,
   description,
   moreDescription,
+  type,
 }) => {
   const [showMore, setShowMore] = useState<boolean>(false);
 
@@ -22,7 +29,11 @@ const Alert: React.FC<AlertProps> = ({
   };
 
   return (
-    <div className={`fr-alert fr-alert--info ${className}`}>
+    <div
+      className={`fr-alert ${
+        type === AlertType.INFO ? 'fr-alert--info' : 'fr-alert--success'
+      } ${className}`}
+    >
       <p>
         {`${description} `}
         {moreDescription && (

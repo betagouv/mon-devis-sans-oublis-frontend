@@ -1,9 +1,10 @@
 import {
+  Alert,
+  AlertType,
   Badge,
   BadgeSize,
   BadgeVariant,
   Confetti,
-  QuoteStatusCard,
   QuoteStatusLink,
   QuoteStatusType,
 } from '@/components';
@@ -26,13 +27,16 @@ export default function ValidQuote({
           <div className='flex flex-col md:flex-row justify-between'>
             <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
               <h1 className='mb-0! text-center md:text-left'>
-                {wording.upload_id.title}
+                {wording.page_upload_id.title}
               </h1>
             </div>
           </div>
           {analysisDate !== null && (
             <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
-              {`Analyse du ${analysisDate}`}
+              {wording.page_upload_id.analysis_date.replace(
+                '{date}',
+                analysisDate
+              )}
             </p>
           )}
         </span>
@@ -45,14 +49,11 @@ export default function ValidQuote({
             />
           )}
         </div>
-        <div className='fr-col-12'>
-          <QuoteStatusCard
-            description={wording.upload_id.quotation_status_card_ok.description}
-            imageAlt={wording.upload_id.quotation_status_card_ok.image_alt}
-            imageSrc={wording.upload_id.quotation_status_card_ok.image_src}
-            title={wording.upload_id.quotation_status_card_ok.title}
-          />
-        </div>
+        <Alert
+          className='fr-pr-2w font-bold w-fit'
+          description={wording.page_upload_id.quotation_alert_ok}
+          type={AlertType.SUCCESS}
+        />
       </section>
       <section className='fr-container fr-mt-10w'>
         <QuoteStatusLink className='mb-16 mt-8' type={QuoteStatusType.UPLOAD} />

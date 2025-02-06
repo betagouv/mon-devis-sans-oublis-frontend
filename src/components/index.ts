@@ -1,5 +1,5 @@
 // Alert
-export { default as Alert } from './Alert/Alert';
+export { default as Alert, AlertType } from './Alert/Alert';
 export type { AlertProps } from './Alert/Alert';
 // Badge
 export { default as Badge, BadgeVariant, BadgeSize } from './Badge/Badge';
@@ -65,9 +65,6 @@ export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
 // QuoteErrorItem
 export { default as QuoteErrorItem } from './QuoteErrorItem/QuoteErrorItem';
 export type { QuoteErrorItemProps } from './QuoteErrorItem/QuoteErrorItem';
-// QuoteStatusCard
-export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
-export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
 // QuoteStatusLink
 export {
   default as QuoteStatusLink,

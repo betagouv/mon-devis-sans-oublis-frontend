@@ -15,6 +15,7 @@ import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 import { formatDateToFrench } from '@/utils';
+import wording from '@/wording';
 
 interface ResultClientProps {
   currentDevis: QuoteChecksIdEnrichedErrorDetails | null;
@@ -140,11 +141,10 @@ export default function ResultClient({
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
-        <LoadingDots title='Analyse en cours' />
-        <p>
-          Votre devis est en cours de traitement, cela peut prendre plusieurs
-          secondes.
-        </p>
+        <LoadingDots
+          title={wording.page_upload_id.analysis_in_progress_title}
+        />
+        <p>{wording.page_upload_id.analysis_in_progress}</p>
       </section>
     );
   }
@@ -152,9 +152,7 @@ export default function ResultClient({
   if (!currentDevis) {
     return (
       <section className='fr-container-fluid fr-py-10w'>
-        <p>
-          Impossible de récupérer les données. Veuillez réessayer plus tard.
-        </p>
+        <p>{wording.page_upload_id.analysis_error}</p>
       </section>
     );
   }
@@ -162,13 +160,11 @@ export default function ResultClient({
   if (shouldRedirectToUpload) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
-        <LoadingDots title='Redirection en cours...' />
-        <p>Vous allez être redirigé, veuillez patienter.</p>
+        <LoadingDots title={wording.page_upload_id.analysis_redirect_title} />
+        <p>{wording.page_upload_id.analysis_redirect}</p>
       </section>
     );
   }
-
-  console.log(formatDateToFrench(currentDevis.finished_at));
 
   return (
     <>
@@ -198,9 +194,11 @@ export default function ResultClient({
         <div className='fr-container flex flex-col relative'>
           <div
             className={`${
-              isButtonSticky
-                ? 'fixed bottom-14 right-39'
-                : 'absolute bottom-[-40px] right-8'
+              currentDevis.status === Status.VALID
+                ? 'fixed bottom-14 md:right-37 right-4'
+                : isButtonSticky
+                ? 'fixed bottom-84 md:right-37 right-4'
+                : 'absolute bottom-[-40px] md:right-6 right-4'
             } self-end z-20`}
           >
             <button

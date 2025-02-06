@@ -4,6 +4,7 @@ describe('Components exports', () => {
   it('exports all components correctly', () => {
     const expectedExports = [
       'Alert',
+      'AlertType',
       'Badge',
       'BadgeVariant',
       'BadgeSize',
@@ -32,7 +33,6 @@ describe('Components exports', () => {
       'NoticeType',
       'QuoteErrorCard',
       'QuoteErrorItem',
-      'QuoteStatusCard',
       'QuoteStatusLink',
       'QuoteStatusType',
       'RoundCheckboxGroup',
@@ -54,6 +54,7 @@ describe('Components exports', () => {
   it('exports components as non-null values', () => {
     const componentNames = [
       'Alert',
+      'AlertType',
       'Badge',
       'BlockNumber',
       'Card',
@@ -74,7 +75,6 @@ describe('Components exports', () => {
       'Notice',
       'QuoteErrorCard',
       'QuoteErrorItem',
-      'QuoteStatusCard',
       'QuoteStatusLink',
       'RoundCheckboxGroup',
       'SVGLoader',
