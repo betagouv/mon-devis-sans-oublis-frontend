@@ -97,7 +97,7 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
             </p>
             {!isCategoryAdmin && (
               <p className='fr-mb-0 font-normal! text-sm!'>
-                {`${(uniqueGesteIdsCount > 1
+                {`${(Number(uniqueGesteIdsCount) > 1
                   ? wording.components.quote_error_card
                       .title_gestes_number_plural
                   : wording.components.quote_error_card.title_gestes_number
