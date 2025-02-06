@@ -65,9 +65,6 @@ export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
 // QuoteErrorItem
 export { default as QuoteErrorItem } from './QuoteErrorItem/QuoteErrorItem';
 export type { QuoteErrorItemProps } from './QuoteErrorItem/QuoteErrorItem';
-// QuoteStatusCard
-export { default as QuoteStatusCard } from './QuoteStatusCard/QuoteStatusCard';
-export type { QuoteStatusCardProps } from './QuoteStatusCard/QuoteStatusCard';
 // QuoteStatusLink
 export {
   default as QuoteStatusLink,
