@@ -9,10 +9,12 @@ export enum BadgeVariant {
   BLUE_LIGHT = 'blue-light',
   GREEN = 'green',
   GREY = 'grey',
+  ORANGE_LIGHT = 'orange-light',
 }
 
 export interface BadgeProps {
   className?: string;
+  icon?: string;
   label: string;
   size?: BadgeSize;
   variant: BadgeVariant;
@@ -20,11 +22,13 @@ export interface BadgeProps {
 
 const Badge: React.FC<BadgeProps> = ({
   className,
+  icon,
   label,
   size = BadgeSize.MEDIUM,
   variant,
 }) => {
-  const baseClasses = 'rounded-sm font-bold px-1.5 py-0.5 uppercase h-fit w-fit';
+  const baseClasses =
+    'rounded-sm font-bold px-1.5 py-0.5 uppercase h-fit w-fit whitespace-nowrap';
 
   const sizeClasses = {
     [BadgeSize.X_SMALL]: 'text-xs',
@@ -41,12 +45,14 @@ const Badge: React.FC<BadgeProps> = ({
       'bg-(--background-alt-green-emeraude)! text-(--text-default-success)!',
     [BadgeVariant.GREY]:
       'bg-(--background-alt-grey-hover)! text-(--text-default-grey)!',
+    [BadgeVariant.ORANGE_LIGHT]: 'bg-[#ffe9e6]! text-(--text-default-warning)!',
   };
 
   return (
     <span
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]}  ${className}`}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} flex flex-row gap-1`}
     >
+      {icon && <span className={`${icon} fr-icon--sm aria-hidden='true`} />}
       {label}
     </span>
   );

@@ -69,7 +69,7 @@ const QuoteErrorItem = ({
         </div>
       )}
       <li
-        className='flex flex-row p-4! md:p-6! border-bottom-grey last:border-b-0! items-start! gap-4 md:items-center!'
+        className='flex flex-row px-4! py-5! border-bottom-grey last:border-b-0! items-start! gap-4 md:items-center!'
         onClick={onClickMobileSolution}
         style={{
           cursor: isSolutionAndIsMobile ? 'pointer' : 'default',
