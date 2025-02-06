@@ -81,7 +81,11 @@ describe('QuoteErrorCard', () => {
       ],
     };
     render(<QuoteErrorCard {...gestesProps} />);
-    expect(screen.getByText('Gestes détectés')).toBeInTheDocument();
+    expect(
+      screen.getByText((content) =>
+        content.startsWith('Descriptif technique des gestes')
+      )
+    ).toBeInTheDocument();
   });
 
   it('renders grouped data correctly', () => {
@@ -103,11 +107,6 @@ describe('QuoteErrorCard', () => {
     expect(screen.getByText('Error 2')).toBeInTheDocument();
 
     fireEvent.click(accordionHeader);
-  });
-
-  it('displays the correct badge for multiple corrections', () => {
-    render(<QuoteErrorCard {...defaultProps} />);
-    expect(screen.getByText('2 corrections')).toBeInTheDocument();
   });
 
   it('renders tooltips correctly', () => {

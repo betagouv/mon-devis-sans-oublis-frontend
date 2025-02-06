@@ -76,31 +76,36 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
   const groupedData = groupByProvidedValueAndGesteId(list);
   const transformedData = transformGroupedData(groupedData, list);
 
+  const uniqueGesteIdsCount = new Set(
+    transformedData
+      .filter((group) => group.gesteId !== undefined)
+      .map((group) => group.gesteId)
+  ).size;
+
   const isCategoryAdmin = list[0]?.category === Category.ADMIN;
 
   return (
     <div className='border-shadow rounded-lg [&_p]:font-bold [&_p]:mb-0'>
-      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] pl-4 md:pl-6 pr-3 py-4 flex justify-between items-start'>
-        <div className='flex flex-wrap gap-2 md:gap-4 flex-1'>
-          <p className='fr-mb-0'>
-            {list.length > 0 &&
-              (isCategoryAdmin
-                ? wording.components.quote_error_card.title_admin
-                : wording.components.quote_error_card.title_gestes)}
-          </p>
-          <Badge
-            className='self-center inline-block'
-            label={`${(list.length > 1
-              ? wording.page_upload_id.badge_correction_plural
-              : wording.page_upload_id.badge_correction
-            ).replace('{number}', list.length.toString())}`}
-            size={BadgeSize.X_SMALL}
-            variant={BadgeVariant.GREY}
-          />
-        </div>
-        <div className='relative inline-block shrink-0'>
+      <div className='bg-[var(--background-action-low-blue-france)] rounded-tl-[8px] rounded-tr-[8px] p-4 flex justify-between items-start md:items-center'>
+        <div className='flex gap-2'>
+          <span className='flex flex-col md:flex-row gap-2 items-start md:items-center'>
+            <p className='fr-mb-0'>
+              {list.length > 0 &&
+                (isCategoryAdmin
+                  ? wording.components.quote_error_card.title_admin
+                  : wording.components.quote_error_card.title_gestes)}
+            </p>
+            {!isCategoryAdmin && (
+              <p className='fr-mb-0 font-normal! text-sm!'>
+                {`${(uniqueGesteIdsCount > 1
+                  ? wording.components.quote_error_card
+                      .title_gestes_number_plural
+                  : wording.components.quote_error_card.title_gestes_number
+                ).replace('{number}', list.length.toString())}`}
+              </p>
+            )}
+          </span>
           <Tooltip
-            className='absolute top-full right-0 mt-2! font-normal!'
             icon={
               isCategoryAdmin
                 ? wording.components.quote_error_card.tooltip_admin.icon
@@ -111,6 +116,17 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
                 ? wording.components.quote_error_card.tooltip_admin.text
                 : wording.components.quote_error_card.tooltip_gestes.text
             }
+          />
+        </div>
+        <div className='relative inline-block shrink-0'>
+          <Badge
+            className='self-center inline-block'
+            label={`${(list.length > 1
+              ? wording.page_upload_id.badge_correction_plural
+              : wording.page_upload_id.badge_correction
+            ).replace('{number}', list.length.toString())}`}
+            size={BadgeSize.X_SMALL}
+            variant={BadgeVariant.GREY}
           />
         </div>
       </div>
@@ -151,20 +167,18 @@ const QuoteErrorCard = ({ list, onHelpClick }: QuoteErrorCardProps) => {
           .filter((group) => group.title !== null)
           .map((group) => (
             <div key={`${group.title}-${group.gesteId}`}>
-              <div className='bg-[var(--background-default-grey-hover)] px-4 md:px-6 py-4 flex gap-4'>
+              <div className='bg-[var(--background-default-grey-hover)] p-4 flex justify-between items-center'>
                 <span
-                  className='mb-0! text-[var(--text-action-high-blue-france)]'
+                  className='mb-0! text-[var(--text-action-high-blue-france)] fr-mr-1w'
                   style={{ fontWeight: 500 }}
                 >
                   {group.title}
                 </span>
                 <Badge
-                  label={`${(group.items.length > 1
-                    ? wording.page_upload_id.badge_correction_plural
-                    : wording.page_upload_id.badge_correction
-                  ).replace('{number}', group.items.length.toString())}`}
+                  icon='fr-icon-alert-fill'
+                  label={group.items.length.toString()}
                   size={BadgeSize.X_SMALL}
-                  variant={BadgeVariant.GREY}
+                  variant={BadgeVariant.ORANGE_LIGHT}
                 />
               </div>
               {group.items.map((item) => (
