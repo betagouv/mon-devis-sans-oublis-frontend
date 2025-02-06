@@ -1,20 +1,12 @@
-import React from 'react';
-
 import {
+  Alert,
   Badge,
   BadgeSize,
   BadgeVariant,
-  BlockNumber,
-  BlockNumberSize,
-  Link,
-  LinkSize,
-  LinkVariant,
   QuoteErrorCard,
-  QuoteStatusCard,
   QuoteStatusLink,
   QuoteStatusType,
 } from '@/components';
-import { useGoBackToUpload } from '@/hooks';
 import { Category, EnrichedErrorDetails } from '@/types';
 import wording from '@/wording';
 
@@ -34,8 +26,6 @@ export default function InvalidQuote({
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) {
-  const goBackToUpload = useGoBackToUpload();
-
   const errorDetails = (
     errors: EnrichedErrorDetails[] | null = [],
     category: Category
@@ -71,13 +61,16 @@ export default function InvalidQuote({
           <div className='flex flex-col md:flex-row justify-between'>
             <div className='flex flex-col md:flex-row flex-wrap gap-4 items-center'>
               <h1 className='mb-0! text-center md:text-left'>
-                {wording.upload_id.title}
+                {wording.page_upload_id.title}
               </h1>
             </div>
           </div>
           {analysisDate !== null && (
             <p className='bg-[var(--background-default-grey-hover)] mt-2! md:mt-0! mb-0! p-2 rounded-sm text-sm!'>
-              {`Analyse du ${analysisDate}`}
+              {wording.page_upload_id.analysis_date.replace(
+                '{date}',
+                analysisDate
+              )}
             </p>
           )}
         </span>
@@ -92,90 +85,23 @@ export default function InvalidQuote({
             )}
             <Badge
               label={(list.length > 1
-                ? wording.upload_id.badge_correction_plural
-                : wording.upload_id.badge_correction
+                ? wording.page_upload_id.badge_correction_plural
+                : wording.page_upload_id.badge_correction
               ).replace('{number}', list.length.toString())}
               size={BadgeSize.SMALL}
               variant={BadgeVariant.GREY}
             />
           </div>
         </div>
-        <div className='fr-col-12'>
-          <QuoteStatusCard
-            description={wording.upload_id.quotation_status_card_ko.description}
-            imageAlt={wording.upload_id.quotation_status_card_ko.image_alt}
-            imageSrc={wording.upload_id.quotation_status_card_ko.image_src}
-            title={wording.upload_id.quotation_status_card_ko.title}
-          />
-          <ul className='fr-raw-list my-8! w-full flex flex-col gap-6 md:flex-row md:justify-between md:items-center'>
-            {wording.upload_id.block_number.map((block, index) => (
-              <React.Fragment key={block.number}>
-                <li className='fr-col-auto flex items-stretch w-full'>
-                  <BlockNumber
-                    className='border-open-blue rounded-lg p-4 w-full h-full'
-                    number={block.number}
-                    size={BlockNumberSize.MEDIUM}
-                    title={
-                      <>
-                        <span className='flex flex-row gap-3'>
-                          {block.title}
-                          {index === 0 && (
-                            <span className='block md:hidden'>⬇️</span>
-                          )}
-                        </span>
-                        {index === 2 && (
-                          <span className='block fr-mt-2w md:hidden'>
-                            <Link
-                              href={goBackToUpload}
-                              label={
-                                wording.components.quote_status_link.upload
-                                  .link_label
-                              }
-                              legacyBehavior
-                              size={LinkSize.SMALL}
-                              variant={LinkVariant.SECONDARY}
-                            ></Link>
-                          </span>
-                        )}
-                      </>
-                    }
-                  />
-                </li>
-                {index === 0 && (
-                  <div className='block md:hidden w-full'>
-                    <div className='flex flex-col gap-8'>
-                      {adminErrors.length > 0 && (
-                        <QuoteErrorCard
-                          list={adminErrors}
-                          onHelpClick={onHelpClick}
-                        />
-                      )}
-                      {gestesErrors.length > 0 && (
-                        <QuoteErrorCard
-                          list={gestesErrors}
-                          onHelpClick={onHelpClick}
-                        />
-                      )}
-                    </div>
-                  </div>
-                )}
-                {index < wording.upload_id.block_number.length - 1 && (
-                  <div className='hidden md:flex items-center h-full'>
-                    <span
-                      aria-hidden='true'
-                      className='fr-icon-arrow-right-circle-fill text-[var(--text-title-blue-france)]'
-                    />
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-          </ul>
-        </div>
+        <Alert
+          className='fr-pr-2w font-bold w-fit'
+          description={wording.page_upload_id.quotation_card_ko}
+        />
       </section>
-      <section className='fr-container hidden md:block'>
-        <h2 className='text-[var(--text-title-grey)] fr-mt-1w'>
-          {wording.upload_id.subtitle}
-        </h2>
+      <section className='fr-container'>
+        <h3 className='fr-mt-6w text-center md:text-left'>
+          {wording.page_upload_id.subtitle}
+        </h3>
         <div className='flex flex-col gap-8'>
           {adminErrors.length > 0 && (
             <QuoteErrorCard list={adminErrors} onHelpClick={onHelpClick} />

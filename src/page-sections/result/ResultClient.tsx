@@ -199,8 +199,8 @@ export default function ResultClient({
           <div
             className={`${
               isButtonSticky
-                ? 'fixed bottom-14 right-39'
-                : 'absolute bottom-[-40px] right-8'
+                ? 'fixed bottom-14 md:right-37 right-4'
+                : 'absolute bottom-[-40px] md:right-6 right-4'
             } self-end z-20`}
           >
             <button
