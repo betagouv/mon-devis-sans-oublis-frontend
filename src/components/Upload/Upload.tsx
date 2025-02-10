@@ -51,16 +51,23 @@ const Upload: React.FC<UploadProps> = ({
       return;
     }
 
-    if (file.type !== 'application/pdf') {
-      const error = wording.components.upload.error_file_type;
-      setLocalError(error);
-      setError(error);
-      return;
-    }
+    const allowedTypes = ['application/pdf'];
+    const reader = new FileReader();
 
-    setLocalError(null);
-    setError(null);
-    onFileUpload(file);
+    reader.onloadend = () => {
+      if (!allowedTypes.includes(file.type)) {
+        const error = wording.components.upload.error_file_type;
+        setLocalError(error);
+        setError(error);
+        return;
+      }
+
+      setLocalError(null);
+      setError(null);
+      onFileUpload(file);
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
   return (
