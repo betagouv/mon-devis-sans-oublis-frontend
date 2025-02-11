@@ -108,6 +108,7 @@ const Modal: React.FC<ModalProps> = ({
                 ? 'fr-link--lg fr-icon-arrow-left-line fr-link--icon-left mt-6! text-[var(--border-plain-grey)]'
                 : 'fr-link--sm fr-link--icon-right fr-icon-close-line mt-2!'
             }`}
+            data-testid='modal-close-button'
             onClick={onClose}
           >
             <span

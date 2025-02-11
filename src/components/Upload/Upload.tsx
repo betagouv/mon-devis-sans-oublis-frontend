@@ -95,7 +95,7 @@ const Upload: React.FC<UploadProps> = ({
     >
       <label className='fr-label cursor-pointer' htmlFor='file-upload'>
         {wording.components.upload.label}
-        <span className='fr-hint-text'>
+        <span data-testid='upload-description' className='fr-hint-text'>
           {wording.components.upload.description.replace(
             '{maxFileSize}',
             maxFileSize.toString()
@@ -105,6 +105,7 @@ const Upload: React.FC<UploadProps> = ({
       <span className='flex flex-row gap-2 items-center mt-4 pb-0! mb-0!'>
         <p
           className='mb-0! rounded-lg p-2 text-sm!'
+          data-testid='upload-button'
           onMouseDown={(e) =>
             (e.currentTarget.style.backgroundColor =
               'var(--background-contrast-grey-active)')
@@ -122,7 +123,7 @@ const Upload: React.FC<UploadProps> = ({
         >
           {wording.components.upload.select_file}
         </p>
-        <p className='text-sm! mb-0!'>
+        <p data-testid='upload-file-name' className='text-sm! mb-0!'>
           {uploadedFile
             ? uploadedFile.name
             : wording.components.upload.none_selected_file}

@@ -84,8 +84,6 @@ export const quoteService = {
         body: JSON.stringify({ comment }),
       });
 
-      console.log('response', response);
-
       if (!response.ok) {
         throw new Error(
           `Failed to send feedback: ${response.status} ${response.statusText}`

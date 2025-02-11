@@ -1,110 +1,252 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
-
-import Modal, { ModalProps, ModalPosition } from './Modal';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
+import Modal, { ModalPosition, ModalProps } from './Modal';
 import { useIsDesktop } from '@/hooks';
 
 jest.mock('@/hooks', () => ({
   useIsDesktop: jest.fn(),
 }));
 
-describe('Modal Component', () => {
-  let defaultProps: ModalProps;
-  let onCloseMock: jest.Mock;
+jest.mock('react-dom', () => ({
+  ...jest.requireActual('react-dom'),
+  createPortal: jest.fn((element) => element),
+}));
+
+describe('Modal', () => {
+  const mockOnClose = jest.fn();
+  const defaultProps: ModalProps = {
+    backButtonLabel: 'Close Modal',
+    children: <div>Modal Content</div>,
+    className: 'custom-class',
+    isOpen: true,
+    onClose: mockOnClose,
+    position: ModalPosition.CENTER,
+  };
 
   beforeEach(() => {
-    onCloseMock = jest.fn();
-    defaultProps = {
-      backButtonLabel: 'Close',
-      children: <div>Modal Content</div>,
-      isOpen: false,
-      onClose: onCloseMock,
-      position: ModalPosition.CENTER,
-    };
+    jest.clearAllMocks();
     (useIsDesktop as jest.Mock).mockReturnValue(true);
   });
 
-  it('does not render modal when isOpen is false', () => {
-    render(<Modal {...defaultProps} />);
-    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
-  });
+  describe('Mounting', () => {
+    it('should create portal element on mount', () => {
+      render(<Modal {...defaultProps} />);
 
-  it('renders modal when isOpen is true', () => {
-    render(<Modal {...defaultProps} isOpen={true} />);
-    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument();
-    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
-  });
-
-  it('renders modal with correct position (CENTER)', () => {
-    render(
-      <Modal {...defaultProps} isOpen={true} position={ModalPosition.CENTER} />
-    );
-    const modalContent = screen.getByTestId('modal-content');
-    expect(modalContent).toHaveClass('w-[792px] h-[624px] rounded-lg');
-  });
-
-  it('renders modal with correct position (RIGHT)', () => {
-    render(
-      <Modal {...defaultProps} isOpen={true} position={ModalPosition.RIGHT} />
-    );
-    const modalContent = screen.getByTestId('modal-content');
-    expect(modalContent).toHaveClass('h-full');
-  });
-
-  it('closes modal when clicking on the overlay', () => {
-    render(<Modal {...defaultProps} isOpen={true} />);
-    fireEvent.click(screen.getByTestId('modal-overlay'));
-    expect(onCloseMock).toHaveBeenCalled();
-  });
-
-  it('closes modal when clicking the back button', () => {
-    render(<Modal {...defaultProps} isOpen={true} />);
-    fireEvent.click(screen.getByText('Close'));
-    expect(onCloseMock).toHaveBeenCalled();
-  });
-
-  it('applies additional className', () => {
-    render(<Modal {...defaultProps} isOpen={true} className='custom-class' />);
-    expect(screen.getByTestId('modal-overlay')).toHaveClass('custom-class');
-  });
-
-  it('handles transition visibility', () => {
-    jest.useFakeTimers();
-    const { rerender } = render(<Modal {...defaultProps} isOpen={false} />);
-
-    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
-
-    rerender(<Modal {...defaultProps} isOpen={true} />);
-    act(() => {
-      jest.advanceTimersByTime(10);
+      expect(document.getElementById('modal-root')).toBeTruthy();
     });
 
-    expect(screen.getByTestId('modal-content')).toHaveClass(
-      'scale-100 opacity-100'
-    );
+    it('should remove portal element on unmount', () => {
+      const { unmount } = render(<Modal {...defaultProps} />);
 
-    rerender(<Modal {...defaultProps} isOpen={false} />);
-    act(() => {
-      jest.advanceTimersByTime(300);
+      unmount();
+      expect(document.getElementById('modal-root')).toBeFalsy();
     });
 
-    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
-    jest.useRealTimers();
+    it('should not render content when not mounted', async () => {
+      render(<Modal {...defaultProps} isOpen={false} />);
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
+    });
   });
 
-  it('removes modal-root from DOM on unmount', () => {
-    const { unmount } = render(<Modal {...defaultProps} isOpen={true} />);
-    unmount();
-    expect(document.getElementById('modal-root')).not.toBeInTheDocument();
+  describe('Opening and Closing', () => {
+    it('should show modal content when isOpen is true', async () => {
+      render(<Modal {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-overlay')).toBeInTheDocument();
+        expect(screen.getByText('Modal Content')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle close animation', async () => {
+      jest.useFakeTimers();
+
+      const { rerender } = render(<Modal {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-content')).toHaveClass('scale-100');
+      });
+
+      rerender(<Modal {...defaultProps} isOpen={false} />);
+      expect(screen.getByTestId('modal-content')).toHaveClass('scale-95');
+
+      act(() => {
+        jest.advanceTimersByTime(300);
+      });
+      expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
+
+      jest.useRealTimers();
+    });
+
+    it('should cleanup timeouts on unmount', async () => {
+      jest.useFakeTimers();
+
+      const spy = jest.spyOn(window, 'setTimeout');
+      const { unmount } = render(<Modal {...defaultProps} />);
+
+      unmount();
+      expect(spy).toHaveBeenCalled();
+
+      spy.mockRestore();
+      jest.useRealTimers();
+    });
   });
 
-  it('renders modal with full width when isDesktop is false', () => {
-    (useIsDesktop as jest.Mock).mockReturnValue(false);
-    render(
-      <Modal {...defaultProps} isOpen={true} position={ModalPosition.RIGHT} />
-    );
+  describe('Click Handlers', () => {
+    it('should call onClose when clicking overlay', async () => {
+      render(<Modal {...defaultProps} />);
 
-    const modalContent = screen.getByTestId('modal-content');
+      await waitFor(() => {
+        fireEvent.click(screen.getByTestId('modal-overlay'));
+        expect(mockOnClose).toHaveBeenCalled();
+      });
+    });
 
-    expect(modalContent).toHaveClass('w-full');
+    it('should not call onClose when clicking modal content', async () => {
+      render(<Modal {...defaultProps} />);
+
+      await waitFor(() => {
+        fireEvent.click(screen.getByTestId('modal-content'));
+        expect(mockOnClose).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should call onClose when clicking close button', async () => {
+      render(<Modal {...defaultProps} />);
+
+      await waitFor(() => {
+        fireEvent.click(screen.getByText('Close Modal'));
+        expect(mockOnClose).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Position Variants', () => {
+    it('should render center position correctly', async () => {
+      render(<Modal {...defaultProps} position={ModalPosition.CENTER} />);
+
+      await waitFor(() => {
+        const overlay = screen.getByTestId('modal-overlay');
+        const content = screen.getByTestId('modal-content');
+
+        expect(overlay).toHaveClass('flex items-center justify-center');
+        expect(content).toHaveClass('w-[792px]', 'h-[624px]', 'rounded-lg');
+      });
+    });
+
+    it('should render right position correctly', async () => {
+      render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
+
+      await waitFor(() => {
+        const overlay = screen.getByTestId('modal-overlay');
+        const content = screen.getByTestId('modal-content');
+
+        expect(overlay).toHaveClass('flex items-center justify-end');
+        expect(content).toHaveClass('h-full');
+      });
+    });
+  });
+
+  describe('Responsive Behavior', () => {
+    it('should use desktop width when isDesktop is true', async () => {
+      (useIsDesktop as jest.Mock).mockReturnValue(true);
+
+      render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-content')).toHaveClass('w-[480px]');
+      });
+    });
+
+    it('should use full width when isDesktop is false', async () => {
+      (useIsDesktop as jest.Mock).mockReturnValue(false);
+
+      render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-content')).toHaveClass('w-full');
+      });
+    });
+  });
+
+  describe('Button Styles', () => {
+    it('should apply correct button styles for center position', async () => {
+      render(<Modal {...defaultProps} position={ModalPosition.CENTER} />);
+
+      await waitFor(() => {
+        const button = screen.getByRole('button');
+        expect(button).toHaveClass('fr-link--sm', 'fr-icon-close-line');
+        expect(button.querySelector('span')).toHaveClass('font-[500]');
+      });
+    });
+
+    it('should apply correct button styles for right position', async () => {
+      render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
+
+      await waitFor(() => {
+        const button = screen.getByRole('button');
+        expect(button).toHaveClass('fr-link--lg', 'fr-icon-arrow-left-line');
+        expect(button.querySelector('span')).toHaveClass(
+          'text-[20px]',
+          'font-bold'
+        );
+      });
+    });
+  });
+
+  describe('Animation States', () => {
+    it('should handle visibility classes correctly', async () => {
+      jest.useFakeTimers();
+
+      render(<Modal {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-content')).toHaveClass(
+          'scale-95',
+          'opacity-0'
+        );
+      });
+
+      act(() => {
+        jest.advanceTimersByTime(10);
+      });
+
+      expect(screen.getByTestId('modal-content')).toHaveClass(
+        'scale-100',
+        'opacity-100'
+      );
+
+      jest.useRealTimers();
+    });
+
+    it('should handle slide animation for right position', async () => {
+      jest.useFakeTimers();
+
+      render(<Modal {...defaultProps} position={ModalPosition.RIGHT} />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-content')).toHaveClass(
+          'translate-x-full'
+        );
+      });
+
+      act(() => {
+        jest.advanceTimersByTime(10);
+      });
+
+      expect(screen.getByTestId('modal-content')).toHaveClass('translate-x-0');
+
+      jest.useRealTimers();
+    });
   });
 });
