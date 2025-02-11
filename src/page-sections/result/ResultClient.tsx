@@ -5,12 +5,7 @@ import { useEffect, useState } from 'react';
 import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
 import { useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import {
-  Status,
-  Rating,
-  Category,
-  QuoteChecksIdEnrichedErrorDetails,
-} from '@/types';
+import { Status, Rating, Category, QuoteChecksId } from '@/types';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
@@ -18,7 +13,7 @@ import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
 interface ResultClientProps {
-  currentDevis: QuoteChecksIdEnrichedErrorDetails | null;
+  currentDevis: QuoteChecksId | null;
   profile: string;
   quoteCheckId: string;
 }
@@ -30,8 +25,9 @@ export default function ResultClient({
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
 
-  const [currentDevis, setCurrentDevis] =
-    useState<QuoteChecksIdEnrichedErrorDetails | null>(initialDevis);
+  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
+    initialDevis
+  );
   const [isLoading, setIsLoading] = useState<boolean>(
     !initialDevis || initialDevis.status === Status.PENDING
   );
@@ -186,6 +182,7 @@ export default function ResultClient({
         ) : (
           <InvalidQuote
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            gestes={currentDevis.gestes}
             list={currentDevis.error_details || []}
             onHelpClick={handleHelpClick}
             uploadedFileName={currentDevis.filename || ''}
