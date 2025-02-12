@@ -41,23 +41,18 @@ describe('ErrorFeedbacksModal', () => {
       />
     );
 
-    // Le bouton devrait être désactivé initialement
     const submitButton = screen.getByRole('button', {
       name: wording.components.error_feedbacks_modal.submit_button,
     });
     expect(submitButton).toBeDisabled();
 
-    // Saisir un commentaire
     const textarea = screen.getByRole('textbox');
     fireEvent.change(textarea, { target: { value: 'Test comment' } });
 
-    // Le bouton devrait être activé
     expect(submitButton).toBeEnabled();
 
-    // Soumettre le feedback
     fireEvent.click(submitButton);
 
-    // Vérifier que onSubmitFeedback a été appelé avec les bons arguments
     expect(mockOnSubmitFeedback).toHaveBeenCalledWith('Test comment', '123');
   });
 
@@ -65,7 +60,6 @@ describe('ErrorFeedbacksModal', () => {
     const mockOnClose = jest.fn();
     render(<ErrorFeedbacksModal {...defaultProps} onClose={mockOnClose} />);
 
-    // Trouver et cliquer sur le bouton de retour
     const backButton = screen.getByText(
       wording.components.error_feedbacks_modal.back_button_label
     );
