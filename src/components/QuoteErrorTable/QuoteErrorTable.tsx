@@ -32,9 +32,38 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
   const filteredAdminErrors = props.errorDetails.filter(
     (error) => error.category === Category.ADMIN
   );
-  const filteredGestesErrors = props.errorDetails.filter(
-    (error) => error.category === Category.GESTES
-  );
+
+  const filteredGestesErrors = isCategoryGestes
+    ? Object.values(
+        props.errorDetails
+          .filter((error) => error.category === Category.GESTES)
+          .reduce<Record<string, ErrorDetails>>((acc, error) => {
+            const key = `${error.geste_id}-${error.provided_value}`; // Create a unique key for each error
+
+            if (Category.GESTES in props) {
+              const matchingGeste = props.gestes.find(
+                (geste) =>
+                  geste.id === error.geste_id && // Match by geste_id + intitule (in gestes) === geste_id + provided_value (in errorDetails)
+                  geste.intitule === error.provided_value
+              );
+
+              // This condition ensures that if there are duplicates, we only keep the ones with `valid: false`
+              // If no duplicate exists, the error is stored no matter its valid status
+              if (
+                !acc[key] ||
+                (matchingGeste && matchingGeste.valid === false)
+              ) {
+                acc[key] = error; // Store the error in the accumulator
+              }
+            } else {
+              // If `gestes` is not in props (meaning it's the "admin" category case), simply add the error
+              acc[key] = error;
+            }
+
+            return acc; // Return the updated accumulator
+          }, {})
+      )
+    : [];
 
   const openModal = (id: string) => setOpenModalId(id);
   const closeModal = () => setOpenModalId(null);
