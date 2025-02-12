@@ -19,7 +19,11 @@ const Tooltip: React.FC<TooltipProps> = ({ className, icon, text }) => {
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <div className={`cursor-pointer ${icon}`} />
+        <div
+          className={`cursor-pointer ${icon}`}
+          data-testid='tooltip-trigger'
+          role='button'
+        />
       </span>
       {showTooltip && (
         <div

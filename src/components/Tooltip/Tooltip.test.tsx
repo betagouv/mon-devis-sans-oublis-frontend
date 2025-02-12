@@ -1,62 +1,77 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import Tooltip from './Tooltip';
 
-describe('Tooltip component', () => {
-  test('renders the icon correctly', () => {
-    const { container } = render(
-      <Tooltip icon='fr-icon-information-fill' text='Tooltip text' />
-    );
+describe('Tooltip Component', () => {
+  const defaultProps = {
+    icon: 'test-icon-class',
+    text: 'Tooltip content',
+    className: 'custom-class',
+  };
 
-    const iconElement = container.querySelector('.fr-icon-information-fill');
-    expect(iconElement).toBeInTheDocument();
-    expect(iconElement).toHaveClass('fr-icon-information-fill');
+  it('should not display tooltip by default', () => {
+    render(<Tooltip {...defaultProps} />);
+
+    expect(screen.queryByText(defaultProps.text)).not.toBeInTheDocument();
   });
 
-  test('shows the tooltip on hover', async () => {
-    const { container } = render(
-      <Tooltip icon='fr-icon-information-fill' text='Tooltip text' />
-    );
+  it('should display tooltip on icon hover', () => {
+    render(<Tooltip {...defaultProps} />);
 
-    const iconElement = container.querySelector('.fr-icon-information-fill');
-    expect(iconElement).toBeInTheDocument();
+    const icon = screen.getByTestId('tooltip-trigger');
 
-    await userEvent.hover(iconElement as Element);
-
-    expect(screen.getByText('Tooltip text')).toBeInTheDocument();
+    fireEvent.mouseEnter(icon);
+    expect(screen.getByText(defaultProps.text)).toBeInTheDocument();
   });
 
-  test('hides the tooltip when mouse leaves', async () => {
-    const { container } = render(
-      <Tooltip icon='fr-icon-information-fill' text='Tooltip text' />
-    );
+  it('should hide tooltip when mouse leaves icon', () => {
+    render(<Tooltip {...defaultProps} />);
 
-    const iconElement = container.querySelector('.fr-icon-information-fill');
-    expect(iconElement).toBeInTheDocument();
+    const icon = screen.getByTestId('tooltip-trigger');
 
-    await userEvent.hover(iconElement as Element);
-    expect(screen.getByText('Tooltip text')).toBeInTheDocument();
+    fireEvent.mouseEnter(icon);
+    expect(screen.getByText(defaultProps.text)).toBeInTheDocument();
 
-    await userEvent.unhover(iconElement as Element);
-    expect(screen.queryByText('Tooltip text')).not.toBeInTheDocument();
+    fireEvent.mouseLeave(icon);
+    expect(screen.queryByText(defaultProps.text)).not.toBeInTheDocument();
   });
 
-  test('applies additional className to the tooltip', async () => {
-    const { container } = render(
-      <Tooltip
-        className='custom-class'
-        icon='fr-icon-information-fill'
-        text='Tooltip text'
-      />
-    );
+  it('should keep tooltip visible when mouse is over it', () => {
+    render(<Tooltip {...defaultProps} />);
 
-    const iconElement = container.querySelector('.fr-icon-information-fill');
-    expect(iconElement).toBeInTheDocument();
+    const icon = screen.getByTestId('tooltip-trigger');
 
-    await userEvent.hover(iconElement as Element);
+    fireEvent.mouseEnter(icon);
+    const tooltip = screen.getByText(defaultProps.text);
 
-    const tooltipElement = screen.getByText('Tooltip text');
-    expect(tooltipElement).toHaveClass('custom-class');
+    fireEvent.mouseEnter(tooltip);
+    expect(tooltip).toBeInTheDocument();
+  });
+
+  it('should hide tooltip when mouse leaves both icon and tooltip', () => {
+    render(<Tooltip {...defaultProps} />);
+
+    const icon = screen.getByTestId('tooltip-trigger');
+
+    fireEvent.mouseEnter(icon);
+    const tooltip = screen.getByText(defaultProps.text);
+
+    fireEvent.mouseEnter(tooltip);
+    fireEvent.mouseLeave(tooltip);
+    fireEvent.mouseLeave(icon);
+
+    expect(screen.queryByText(defaultProps.text)).not.toBeInTheDocument();
+  });
+
+  it('should add custom classes to icon and tooltip', () => {
+    render(<Tooltip {...defaultProps} />);
+
+    const icon = screen.getByTestId('tooltip-trigger');
+
+    expect(icon).toHaveClass(defaultProps.icon);
+    fireEvent.mouseEnter(icon);
+
+    const tooltip = screen.getByText(defaultProps.text);
+    expect(tooltip).toHaveClass(defaultProps.className);
   });
 });

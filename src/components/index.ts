@@ -59,12 +59,9 @@ export type { MultiSelectCheckboxProps } from './MultiSelectCheckbox/MultiSelect
 // Notice
 export { default as Notice, NoticeType } from './Notice/Notice';
 export type { NoticeProps } from './Notice/Notice';
-// QuoteErrorCard
-export { default as QuoteErrorCard } from './QuoteErrorCard/QuoteErrorCard';
-export type { QuoteErrorCardProps } from './QuoteErrorCard/QuoteErrorCard';
-// QuoteErrorItem
-export { default as QuoteErrorItem } from './QuoteErrorItem/QuoteErrorItem';
-export type { QuoteErrorItemProps } from './QuoteErrorItem/QuoteErrorItem';
+// QuoteErrorTable
+export { default as QuoteErrorTable } from './QuoteErrorTable/QuoteErrorTable';
+export type { QuoteErrorTableProps } from './QuoteErrorTable/QuoteErrorTable';
 // QuoteStatusLink
 export {
   default as QuoteStatusLink,

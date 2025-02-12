@@ -24,37 +24,20 @@ export enum Type {
 
 export interface ErrorDetails {
   id: string;
-  geste_id: string;
-  category: Category;
-  type: Type;
   code: string;
+  type: string;
   title: string;
-  problem: string | null;
-  solution: string | null;
-  provided_value: string | null;
-}
-
-export interface EnrichedErrorDetails {
-  id: string;
-  geste_id: string;
-  category: Category;
-  type: Type;
-  code: string;
-  title: string;
-  problem: string | null;
-  solution: string | null;
-  provided_value: string | null;
-  modalContent: {
-    problem: string | null;
-    solution: string | null;
-    isOpen: boolean;
-    title: string;
-  };
+  category: string;
+  geste_id?: string | null;
+  problem?: string | null;
+  solution?: string | null;
+  provided_value?: string | null;
 }
 
 export interface Gestes {
   id: string;
   intitule: string;
+  valid: boolean;
 }
 
 export interface GestesGroup {
@@ -75,22 +58,8 @@ export interface QuoteChecksId {
   finished_at: string;
   metadata: Metadata;
   profile: Profile;
-  valid: boolean;
   gestes: Gestes[];
   errors: string[];
   error_details: ErrorDetails[];
-  error_messages: Record<string, string>;
-}
-
-export interface QuoteChecksIdEnrichedErrorDetails {
-  id: string;
-  parent_id: string;
-  status: Status;
-  filename: string;
-  finished_at: string;
-  profile: Profile;
-  valid: boolean;
-  errors: string[];
-  error_details: EnrichedErrorDetails[];
   error_messages: Record<string, string>;
 }

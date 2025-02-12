@@ -3,18 +3,14 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import Modal from '../Modal';
+import Modal, { ModalPosition } from '../Modal';
 import wording from '@/wording';
-
-export enum ModalPosition {
-  CENTER = 'center',
-  RIGHT = 'right',
-}
 
 export interface ErrorFeedbacksModalProps {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback?: (comment: string) => void;
+  onSubmitFeedback?: (comment: string, errorDetailsId: string) => void;
+  errorDetailsId: string;
   problem: string | null;
   solution: string | null;
   title: string;
@@ -24,6 +20,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   isOpen,
   onClose,
   onSubmitFeedback,
+  errorDetailsId,
   problem,
   solution,
   title,
@@ -32,7 +29,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
 
   const handleSubmit = () => {
     if (onSubmitFeedback) {
-      onSubmitFeedback(comment);
+      onSubmitFeedback(comment, errorDetailsId);
     }
   };
 
@@ -97,7 +94,7 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
           />
           <button
             className='fr-btn fr-btn--primary self-end mt-4!'
-            disabled={comment === null}
+            disabled={!comment}
             onClick={handleSubmit}
           >
             {wording.components.error_feedbacks_modal.submit_button}

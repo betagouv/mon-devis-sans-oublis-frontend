@@ -4,16 +4,17 @@ import {
   Badge,
   BadgeSize,
   BadgeVariant,
-  QuoteErrorCard,
+  QuoteErrorTable,
   QuoteStatusLink,
   QuoteStatusType,
 } from '@/components';
-import { Category, EnrichedErrorDetails } from '@/types';
+import { Category, ErrorDetails, Gestes } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
   analysisDate: string | null;
-  list: EnrichedErrorDetails[];
+  gestes: Gestes[];
+  list: ErrorDetails[];
   onHelpClick: (
     comment: string | null,
     errorDetailsId: string
@@ -23,38 +24,11 @@ interface InvalidQuoteProps {
 
 export default function InvalidQuote({
   analysisDate,
+  gestes,
   list,
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) {
-  const errorDetails = (
-    errors: EnrichedErrorDetails[] | null = [],
-    category: Category
-  ) => {
-    return (errors || [])
-      .filter((error) => error.category === category)
-      .map((error) => ({
-        id: error.id,
-        geste_id: error.geste_id,
-        category: error.category,
-        type: error.type,
-        code: error.code,
-        title: error.title,
-        problem: error.problem || null,
-        solution: error.solution || null,
-        provided_value: error.provided_value || null,
-        modalContent: {
-          problem: error.problem || null,
-          solution: error.solution || null,
-          isOpen: false,
-          title: error.title,
-        },
-      }));
-  };
-
-  const adminErrors = errorDetails(list, Category.ADMIN);
-  const gestesErrors = errorDetails(list, Category.GESTES);
-
   return (
     <>
       <section className='fr-container fr-gap-8'>
@@ -105,12 +79,17 @@ export default function InvalidQuote({
           {wording.page_upload_id.subtitle}
         </h3>
         <div className='flex flex-col gap-8'>
-          {adminErrors.length > 0 && (
-            <QuoteErrorCard list={adminErrors} onHelpClick={onHelpClick} />
-          )}
-          {gestesErrors.length > 0 && (
-            <QuoteErrorCard list={gestesErrors} onHelpClick={onHelpClick} />
-          )}
+          <QuoteErrorTable
+            category={Category.ADMIN}
+            errorDetails={list}
+            onHelpClick={onHelpClick}
+          />
+          <QuoteErrorTable
+            category={Category.GESTES}
+            errorDetails={list}
+            gestes={gestes}
+            onHelpClick={onHelpClick}
+          />
         </div>
       </section>
       <section className='fr-container fr-my-6w'>
