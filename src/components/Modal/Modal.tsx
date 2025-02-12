@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
       setVisibleClass(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
-      }, 300);
+      }, 200);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);

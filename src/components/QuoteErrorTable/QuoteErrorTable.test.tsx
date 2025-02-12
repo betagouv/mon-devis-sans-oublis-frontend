@@ -1,180 +1,113 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import QuoteErrorTable, {
-  QuoteErrorTablePropsAdmin,
-  QuoteErrorTablePropsGestes,
-} from './QuoteErrorTable';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import QuoteErrorTable from './QuoteErrorTable';
 import { Category } from '@/types';
-import wording from '@/wording';
 
-// Mock des composants enfants
-jest.mock('../Badge/Badge', () => ({
-  __esModule: true,
-  default: jest.fn(({ label }) => <div data-testid='badge'>{label}</div>),
-  BadgeSize: { X_SMALL: 'x-small' },
-  BadgeVariant: { GREY: 'grey', GREEN: 'green', ORANGE_LIGHT: 'orange-light' },
-}));
-
-jest.mock('../Tooltip/Tooltip', () => ({
-  __esModule: true,
-  default: jest.fn(({ text }) => <div data-testid='tooltip'>{text}</div>),
-}));
-
-jest.mock('../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal', () => ({
-  __esModule: true,
-  default: jest.fn(({ isOpen, onClose, title }) =>
-    isOpen ? (
-      <div data-testid='modal' onClick={onClose}>
-        {title}
-      </div>
-    ) : null
-  ),
-}));
-
-describe('QuoteErrorTable', () => {
-  const mockOnHelpClick = jest.fn();
-
-  const mockAdminError = {
-    id: '1',
+const mockOnHelpClick = jest.fn();
+const mockErrorDetailsAdmin = [
+  {
+    id: 'error1',
     category: Category.ADMIN,
     title: 'Admin Error 1',
-    solution: 'Solution 1',
-    problem: 'Problem 1',
-  };
+    problem: 'Problem description',
+    solution: 'Solution description',
+    code: 'ERR001',
+    type: 'missing',
+  },
+];
 
-  const mockGestes = [
-    {
-      id: 'geste-1',
-      intitule: 'Geste 1',
-      valid: false,
-    },
-    {
-      id: 'geste-2',
-      intitule: 'Geste 2',
-      valid: true,
-    },
-  ];
+const mockErrorDetailsGestes = [
+  {
+    id: 'error2',
+    category: Category.GESTES,
+    title: 'Gestes Error 1',
+    problem: 'Problem description',
+    solution: 'Solution description',
+    geste_id: 'geste1',
+    code: 'ERR002',
+    type: 'warning',
+  },
+];
 
-  describe('Admin View', () => {
-    const adminProps: QuoteErrorTablePropsAdmin = {
-      category: Category.ADMIN,
-      errorDetails: [
-        {
-          id: '1',
-          category: Category.ADMIN,
-          title: 'Admin Error 1',
-          solution: 'Solution 1',
-          problem: 'Problem 1',
-          code: 'ERR_1',
-          type: 'error',
-        },
-      ],
-      onHelpClick: mockOnHelpClick,
-    };
+const mockGestes = [{ id: 'geste1', intitule: 'Geste 1', valid: false }];
 
-    it('should render admin errors', () => {
-      render(<QuoteErrorTable {...adminProps} />);
+describe('QuoteErrorTable Component', () => {
+  test('renders correctly for ADMIN category', () => {
+    render(
+      <QuoteErrorTable
+        category={Category.ADMIN}
+        errorDetails={mockErrorDetailsAdmin}
+        onHelpClick={mockOnHelpClick}
+      />
+    );
 
-      expect(screen.getByText('Admin Error 1')).toBeInTheDocument();
-      expect(
-        screen.getByText(wording.components.quote_error_card.title_admin)
-      ).toBeInTheDocument();
-    });
-
-    it('should handle modal open/close for admin errors', () => {
-      render(<QuoteErrorTable {...adminProps} />);
-
-      // Open modal
-      fireEvent.click(
-        screen.getByText(wording.components.quote_error_card.button_see_detail)
-      );
-      expect(screen.getByTestId('modal')).toBeInTheDocument();
-
-      // Close modal
-      fireEvent.click(screen.getByTestId('modal'));
-      expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
-    });
+    expect(screen.getByText('Admin Error 1')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /voir le détail/i })
+    ).toBeInTheDocument();
   });
 
-  describe('Gestes View', () => {
-    const gestesProps: QuoteErrorTablePropsGestes = {
-      category: Category.GESTES,
-      errorDetails: [
-        {
-          id: '1',
-          category: Category.GESTES,
-          title: 'Gestes Error 1',
-          solution: 'Solution 1',
-          problem: 'Problem 1',
-          code: 'ERR_1',
-          type: 'error',
-          geste_id: 'geste-1',
-        },
-      ],
-      gestes: mockGestes,
-      onHelpClick: mockOnHelpClick,
-    };
+  test('renders correctly for GESTES category', () => {
+    render(
+      <QuoteErrorTable
+        category={Category.GESTES}
+        errorDetails={mockErrorDetailsGestes}
+        gestes={mockGestes}
+        onHelpClick={mockOnHelpClick}
+      />
+    );
 
-    it('should render gestes and their errors', () => {
-      render(<QuoteErrorTable {...gestesProps} />);
-
-      expect(screen.getByText('Geste 1')).toBeInTheDocument();
-      expect(screen.getByText('Geste 2')).toBeInTheDocument();
-      expect(screen.getByText('Gestes Error 1')).toBeInTheDocument();
-    });
-
-    it('should show correct badges for valid/invalid gestes', () => {
-      render(<QuoteErrorTable {...gestesProps} />);
-
-      const badges = screen.getAllByTestId('badge');
-      expect(badges).toHaveLength(3); // 2 geste badges + 1 header badge
-    });
-
-    it('should handle feedback submission', async () => {
-      render(<QuoteErrorTable {...gestesProps} />);
-
-      // Open modal
-      fireEvent.click(
-        screen.getByText(wording.components.quote_error_card.button_see_detail)
-      );
-
-      // Submit feedback
-      const modal = screen.getByTestId('modal');
-      fireEvent.click(modal);
-
-      expect(mockOnHelpClick).not.toHaveBeenCalled();
-      expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
-    });
+    expect(screen.getByText('Geste 1')).toBeInTheDocument();
+    expect(screen.getByText('Gestes Error 1')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /voir le détail/i })
+    ).toBeInTheDocument();
   });
 
-  describe('Error Handling', () => {
-    it('should handle errors in feedback submission', () => {
-      const consoleSpy = jest
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-      const errorProps: QuoteErrorTablePropsAdmin = {
-        category: Category.ADMIN,
-        errorDetails: [
-          {
-            ...mockAdminError,
-            solution: 'Test Solution',
-            code: '',
-            type: '',
-          },
-        ],
-        onHelpClick: () => {
-          throw new Error('Test error');
-        },
-      };
+  test('opens and closes modal when clicking the button', async () => {
+    render(
+      <QuoteErrorTable
+        category={Category.ADMIN}
+        errorDetails={mockErrorDetailsAdmin}
+        onHelpClick={mockOnHelpClick}
+      />
+    );
 
-      render(<QuoteErrorTable {...errorProps} />);
+    const openButton = screen.getByRole('button', { name: /voir le détail/i });
+    fireEvent.click(openButton);
 
-      // Open modal and trigger error
-      fireEvent.click(
-        screen.getByText(wording.components.quote_error_card.button_see_detail)
-      );
+    expect(screen.getByText('Solution description')).toBeInTheDocument();
 
-      expect(consoleSpy).not.toHaveBeenCalled();
-      consoleSpy.mockRestore();
+    const closeButton = await screen.findByTestId('modal-close-button');
+    fireEvent.click(closeButton);
+
+    await waitFor(
+      () => {
+        expect(
+          screen.queryByText('Solution description')
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 500 }
+    );
+  });
+
+  test('calls onHelpClick with correct parameters', () => {
+    render(
+      <QuoteErrorTable
+        category={Category.ADMIN}
+        errorDetails={mockErrorDetailsAdmin}
+        onHelpClick={mockOnHelpClick}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /voir le détail/i }));
+    const submitButton = screen.getByRole('button', { name: /envoyer/i });
+
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'Test feedback' },
     });
+    fireEvent.click(submitButton);
+
+    expect(mockOnHelpClick).toHaveBeenCalledWith('Test feedback', 'error1');
   });
 });

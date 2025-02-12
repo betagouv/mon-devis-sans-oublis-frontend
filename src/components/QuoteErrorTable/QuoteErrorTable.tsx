@@ -163,9 +163,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                             }
                           </button>
                         )}
-                        {openModalId === error.id && error.solution && (
+                        {error.solution && (
                           <ErrorFeedbacksModal
-                            isOpen={true}
+                            isOpen={openModalId === error.id}
                             onClose={closeModal}
                             onSubmitFeedback={handleFeedbackSubmit}
                             errorDetailsId={error.id}
@@ -207,12 +207,12 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                         {wording.components.quote_error_card.button_see_detail}
                       </button>
                     )}
-                    {openModalId === error.id && error.solution && (
+                    {error.solution && (
                       <ErrorFeedbacksModal
-                        isOpen={true}
+                        errorDetailsId={error.id}
+                        isOpen={openModalId === error.id}
                         onClose={closeModal}
                         onSubmitFeedback={props.onHelpClick}
-                        errorDetailsId={error.id}
                         problem={error.problem || ''}
                         solution={error.solution}
                         title={error.title}

@@ -1,93 +1,94 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
-import ErrorFeedbacksModal, {
-  ErrorFeedbacksModalProps,
-} from './ErrorFeedbacksModal';
-
-const defaultProps: ErrorFeedbacksModalProps = {
-  isOpen: true,
-  onClose: jest.fn(),
-  onSubmitFeedback: jest.fn(),
-  errorDetailsId: 'error-123',
-  problem: 'Problème détecté',
-  solution: 'Solution proposée',
-  title: 'Titre du modal',
-};
+import ErrorFeedbacksModal from './ErrorFeedbacksModal';
+import wording from '@/wording';
 
 describe('ErrorFeedbacksModal', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const defaultProps = {
+    isOpen: true,
+    errorDetailsId: '123',
+    problem: 'Test problem',
+    solution: 'Test solution',
+    title: 'Test title',
+  };
 
-  it('displays the modal with the title, image, and problem/solution sections', () => {
+  it('should render modal content when open', () => {
     render(<ErrorFeedbacksModal {...defaultProps} />);
 
+    expect(screen.getByText('Test title')).toBeInTheDocument();
+    expect(screen.getByText('Test problem')).toBeInTheDocument();
+    expect(screen.getByText('Test solution')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /titre du modal/i })
+      screen.getByRole('button', {
+        name: wording.components.error_feedbacks_modal.submit_button,
+      })
     ).toBeInTheDocument();
-    expect(screen.getByAltText(/Icône de correction/i)).toBeInTheDocument();
-
-    expect(screen.getByText(/problème détecté/i)).toBeInTheDocument();
-    expect(screen.getByText(/solution proposée/i)).toBeInTheDocument();
   });
 
-  it('does not display the problem/solution sections if they are not provided', () => {
+  it('should not render when isOpen is false', () => {
+    render(<ErrorFeedbacksModal {...defaultProps} isOpen={false} />);
+
+    expect(screen.queryByText('Test title')).not.toBeInTheDocument();
+  });
+
+  it('should handle submit feedback', () => {
+    const mockOnSubmitFeedback = jest.fn();
+    render(
+      <ErrorFeedbacksModal
+        {...defaultProps}
+        onSubmitFeedback={mockOnSubmitFeedback}
+      />
+    );
+
+    // Le bouton devrait être désactivé initialement
+    const submitButton = screen.getByRole('button', {
+      name: wording.components.error_feedbacks_modal.submit_button,
+    });
+    expect(submitButton).toBeDisabled();
+
+    // Saisir un commentaire
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: 'Test comment' } });
+
+    // Le bouton devrait être activé
+    expect(submitButton).toBeEnabled();
+
+    // Soumettre le feedback
+    fireEvent.click(submitButton);
+
+    // Vérifier que onSubmitFeedback a été appelé avec les bons arguments
+    expect(mockOnSubmitFeedback).toHaveBeenCalledWith('Test comment', '123');
+  });
+
+  it('should handle close modal', () => {
+    const mockOnClose = jest.fn();
+    render(<ErrorFeedbacksModal {...defaultProps} onClose={mockOnClose} />);
+
+    // Trouver et cliquer sur le bouton de retour
+    const backButton = screen.getByText(
+      wording.components.error_feedbacks_modal.back_button_label
+    );
+    fireEvent.click(backButton);
+
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it('should not show problem/solution sections when null', () => {
     render(
       <ErrorFeedbacksModal {...defaultProps} problem={null} solution={null} />
     );
 
-    expect(screen.queryByText(/problème détecté/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/solution proposée/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Test problem')).not.toBeInTheDocument();
+    expect(screen.queryByText('Test solution')).not.toBeInTheDocument();
   });
 
-  it('updates the textarea value and enables/disables the submit button', () => {
+  it('should update comment state on textarea change', () => {
     render(<ErrorFeedbacksModal {...defaultProps} />);
 
-    const textarea = screen.getByPlaceholderText(
-      /les corrections du devis sont.../i
-    );
-    const submitButton = screen.getByRole('button', {
-      name: /envoyer/i,
-    });
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: 'New comment' } });
 
-    expect(submitButton).toBeDisabled();
-    fireEvent.change(textarea, { target: { value: 'Mon commentaire' } });
-    expect(textarea).toHaveValue('Mon commentaire');
-    expect(submitButton).not.toBeDisabled();
-  });
-
-  it('calls onSubmitFeedback with the correct comment and error identifier upon submission', () => {
-    const onSubmitFeedbackMock = jest.fn();
-    render(
-      <ErrorFeedbacksModal
-        {...defaultProps}
-        onSubmitFeedback={onSubmitFeedbackMock}
-      />
-    );
-
-    const textarea = screen.getByPlaceholderText(
-      /les corrections du devis sont.../i
-    );
-    const submitButton = screen.getByRole('button', {
-      name: /envoyer/i,
-    });
-
-    fireEvent.change(textarea, { target: { value: 'Commentaire test' } });
-    fireEvent.click(submitButton);
-
-    expect(onSubmitFeedbackMock).toHaveBeenCalledTimes(1);
-    expect(onSubmitFeedbackMock).toHaveBeenCalledWith(
-      'Commentaire test',
-      'error-123'
-    );
-  });
-
-  it('calls onClose when the modal is closed (if onClose is provided)', () => {
-    const onCloseMock = jest.fn();
-    render(<ErrorFeedbacksModal {...defaultProps} onClose={onCloseMock} />);
-
-    onCloseMock();
-    expect(onCloseMock).toHaveBeenCalled();
+    expect(textarea).toHaveValue('New comment');
   });
 });
