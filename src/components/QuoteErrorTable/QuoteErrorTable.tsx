@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
+import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import Tooltip from '../Tooltip/Tooltip';
 import { Category, ErrorDetails, Gestes } from '@/types';
 import wording from '@/wording';
-import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 
 export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
@@ -26,6 +27,7 @@ export type QuoteErrorTableProps =
 
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
+
   const isCategoryGestes = props.category === Category.GESTES;
   const gestes =
     isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
@@ -122,7 +124,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
             variant={BadgeVariant.GREY}
           />
         </caption>
-        {isCategoryGestes ? (
+        {isCategoryGestes && gestes.length > 0 ? (
           props.gestes.map((geste, gIndex) => {
             const errorsForGeste = filteredGestesErrors.filter(
               (error) => error.geste_id === geste.id
