@@ -26,12 +26,10 @@ export type QuoteErrorTableProps =
 
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
-
-  const filteredAdminErrors = props.errorDetails.filter(
-    (error) => error.category === Category.ADMIN
-  );
-
   const isCategoryGestes = props.category === Category.GESTES;
+  const gestes =
+    isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
+
   const filteredGestesErrors = isCategoryGestes
     ? Object.values(
         props.errorDetails
@@ -86,13 +84,13 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 ? wording.components.quote_error_card.title_gestes
                 : wording.components.quote_error_card.title_admin}
             </p>
-            {isCategoryGestes && (
+            {isCategoryGestes && gestes.length > 0 && (
               <p className='fr-mb-0 font-normal! text-sm!'>
-                {`${(props.gestes.length > 1
+                {`${(gestes.length > 1
                   ? wording.components.quote_error_card
                       .title_gestes_number_plural
                   : wording.components.quote_error_card.title_gestes_number
-                ).replace('{number}', props.gestes.length.toString())}`}
+                ).replace('{number}', gestes.length.toString())}`}
               </p>
             )}
             <Tooltip
@@ -109,15 +107,16 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
             label={`${((
               isCategoryGestes
                 ? filteredGestesErrors.length > 1
-                : filteredAdminErrors.length > 1
+                : props.errorDetails.length > 1
             )
               ? wording.page_upload_id.badge_correction_plural
               : wording.page_upload_id.badge_correction
             ).replace(
               '{number}',
-              isCategoryGestes
-                ? filteredGestesErrors.length.toString()
-                : filteredAdminErrors.length.toString()
+              (isCategoryGestes
+                ? filteredGestesErrors.length
+                : props.errorDetails.length
+              ).toString()
             )}`}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
@@ -211,45 +210,13 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           })
         ) : (
           <tbody>
-            {filteredAdminErrors.map((error, index) => {
-              const isFirstMention = index === 0;
-
-              return (
-                <tr
-                  className={`font-bold ${
-                    index === filteredAdminErrors.length - 1
-                      ? 'border-b-0'
-                      : `border-bottom-grey ${
-                          isFirstMention ? '' : 'border-top-grey'
-                        }`
-                  }`}
-                  key={error.id}
-                >
-                  <td className='flex justify-between items-center p-4'>
-                    {error.title}
-                    {error.solution && (
-                      <button
-                        className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-                        onClick={() => openModal(error.id)}
-                      >
-                        {wording.components.quote_error_card.button_see_detail}
-                      </button>
-                    )}
-                    {error.solution && (
-                      <ErrorFeedbacksModal
-                        errorDetailsId={error.id}
-                        isOpen={openModalId === error.id}
-                        onClose={closeModal}
-                        onSubmitFeedback={props.onHelpClick}
-                        problem={error.problem || ''}
-                        solution={error.solution}
-                        title={error.title}
-                      />
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+            {props.errorDetails.map((error) => (
+              <tr className='font-bold border-bottom-grey' key={error.id}>
+                <td className='flex justify-between items-center p-4'>
+                  {error.title}
+                </td>
+              </tr>
+            ))}
           </tbody>
         )}
       </table>
