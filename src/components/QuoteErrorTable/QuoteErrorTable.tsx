@@ -27,18 +27,17 @@ export type QuoteErrorTableProps =
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
-  const isCategoryGestes = props.category === Category.GESTES;
-
   const filteredAdminErrors = props.errorDetails.filter(
     (error) => error.category === Category.ADMIN
   );
 
+  const isCategoryGestes = props.category === Category.GESTES;
   const filteredGestesErrors = isCategoryGestes
     ? Object.values(
         props.errorDetails
           .filter((error) => error.category === Category.GESTES)
           .reduce<Record<string, ErrorDetails>>((acc, error) => {
-            const key = `${error.geste_id}-${error.provided_value}`; // Create a unique key for each error
+            const key = `${error.geste_id}-${error.provided_value}-${error.code}`; // Create a unique key for each error
 
             if (Category.GESTES in props) {
               const matchingGeste = props.gestes.find(
