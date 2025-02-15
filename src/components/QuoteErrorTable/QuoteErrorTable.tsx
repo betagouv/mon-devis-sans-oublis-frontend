@@ -63,6 +63,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           }, {})
       )
     : [];
+  const otherErrors = props.errorDetails.filter(
+    (error) => error.category !== Category.GESTES
+  );
 
   const openModal = (id: string) => setOpenModalId(id);
   const closeModal = () => setOpenModalId(null);
@@ -109,7 +112,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
             label={`${((
               isCategoryGestes
                 ? filteredGestesErrors.length > 1
-                : props.errorDetails.length > 1
+                : otherErrors.length > 1
             )
               ? wording.page_upload_id.badge_correction_plural
               : wording.page_upload_id.badge_correction
@@ -117,7 +120,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
               '{number}',
               (isCategoryGestes
                 ? filteredGestesErrors.length
-                : props.errorDetails.length
+                : otherErrors.length
               ).toString()
             )}`}
             size={BadgeSize.X_SMALL}
@@ -212,7 +215,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           })
         ) : (
           <tbody>
-            {props.errorDetails.map((error) => (
+            {otherErrors.map((error) => (
               <tr className='font-bold border-bottom-grey' key={error.id}>
                 <td className='flex justify-between items-center p-4'>
                   {error.title}
