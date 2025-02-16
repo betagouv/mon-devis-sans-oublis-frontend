@@ -34,6 +34,11 @@ export interface ErrorDetails {
   provided_value?: string | null;
 }
 
+export interface ErrorDetailsDeletionReasons {
+  information_not_present: string;
+  not_used: string;
+}
+
 export interface Gestes {
   id: string;
   intitule: string;

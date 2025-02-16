@@ -1,4 +1,4 @@
-import { Profile, Rating } from '@/types';
+import { ErrorDetailsDeletionReasons, Profile, Rating } from '@/types';
 
 const API_CONFIG = {
   headers: {
@@ -8,6 +8,50 @@ const API_CONFIG = {
 };
 
 export const quoteService = {
+  async deleteErrorDetail(
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: keyof ErrorDetailsDeletionReasons | string
+  ) {
+    const deleteUrl =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
+
+    if (!deleteUrl) {
+      console.error('API URL not defined.');
+      return;
+    }
+
+    try {
+      let url = deleteUrl
+        .replace(':quote_check_id', quoteCheckId)
+        .replace(':error_detail_id', errorDetailsId);
+
+      if (reason) {
+        url += `?reason=${encodeURIComponent(reason)}`;
+      }
+
+      console.log('Delete URL:', url);
+
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+      });
+
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete error detail: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return response.status === 204;
+    } catch (error) {
+      console.error('Error deleting error detail:', error);
+      throw error;
+    }
+  },
+
   async getQuote(quoteCheckId: string) {
     const quoteUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
 

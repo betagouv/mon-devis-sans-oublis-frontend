@@ -8,13 +8,25 @@ import {
   QuoteStatusLink,
   QuoteStatusType,
 } from '@/components';
-import { Category, ErrorDetails, Gestes } from '@/types';
+import { useConseillerRoutes } from '@/hooks';
+import {
+  Category,
+  ErrorDetails,
+  ErrorDetailsDeletionReasons,
+  Gestes,
+} from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {
   analysisDate: string | null;
   gestes: Gestes[];
+  id: string;
   list: ErrorDetails[];
+  onDeleteError: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: keyof ErrorDetailsDeletionReasons | string
+  ) => void;
   onHelpClick: (
     comment: string | null,
     errorDetailsId: string
@@ -25,10 +37,13 @@ interface InvalidQuoteProps {
 export default function InvalidQuote({
   analysisDate,
   gestes,
+  id,
   list,
+  onDeleteError,
   onHelpClick,
   uploadedFileName,
 }: InvalidQuoteProps) {
+  const { isConseillerAndNotEdit } = useConseillerRoutes();
   return (
     <>
       <section className='fr-container fr-gap-8'>
@@ -82,24 +97,42 @@ export default function InvalidQuote({
           <QuoteErrorTable
             category={Category.ADMIN}
             errorDetails={list}
+            onDeleteError={onDeleteError}
             onHelpClick={onHelpClick}
+            quoteCheckId={id}
           />
           <QuoteErrorTable
             category={Category.GESTES}
             errorDetails={list}
+            onDeleteError={onDeleteError}
             gestes={gestes}
             onHelpClick={onHelpClick}
+            quoteCheckId={id}
           />
         </div>
       </section>
       <section className='fr-container fr-my-6w'>
-        <div className='flex md:flex-row flex-col gap-4 justify-between'>
-          <QuoteStatusLink type={QuoteStatusType.SHARE} />
-          <QuoteStatusLink
-            className='md:w-[480px]!'
-            type={QuoteStatusType.UPLOAD}
-          />
-        </div>
+        {isConseillerAndNotEdit ? (
+          <>
+            <div className='flex lg:flex-row lg:w-full md:w-[580px] flex-col gap-6 justify-between fr-mb-8w'>
+              <QuoteStatusLink type={QuoteStatusType.EDIT} />
+              <QuoteStatusLink type={QuoteStatusType.SHARE} />
+            </div>
+            <h4>Et après ?</h4>
+            <QuoteStatusLink
+              className='md:w-[480px]!'
+              type={QuoteStatusType.UPLOAD}
+            />
+          </>
+        ) : (
+          <div className='flex md:flex-row flex-col gap-6 justify-between'>
+            <QuoteStatusLink type={QuoteStatusType.SHARE} />
+            <QuoteStatusLink
+              className='md:w-[480px]!'
+              type={QuoteStatusType.UPLOAD}
+            />
+          </div>
+        )}
       </section>
     </>
   );

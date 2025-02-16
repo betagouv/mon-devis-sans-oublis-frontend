@@ -60,6 +60,13 @@
       }
     },
     "quote_status_link": {
+      "edit": {
+        "description": "Possibilité d’ajouter des commentaires et/ou de supprimer des corrections",
+        "image_alt": "Image modifier les corrections",
+        "image_src": "/images/quotation_results/quotation_link_edit.webp",
+        "link_label": "Ouvrir le mode modification",
+        "title": "Personnalisez les retours"
+      },
       "share": {
         "button_copied_url": "Lien copié",
         "button_copy_url": "Copier le lien de la page",
@@ -71,7 +78,7 @@
       "upload": {
         "image_alt": "Image vérifier un devis",
         "image_src": "/images/quotation_results/quotation_link_upload.webp",
-        "title": "Vous souhaitez analyser un nouveau devis ?",
+        "title": "Vous souhaitez analyser un nouveau devis ou vérifier votre devis corrigé ?",
         "link_label": "Vérifier un devis"
       }
     },

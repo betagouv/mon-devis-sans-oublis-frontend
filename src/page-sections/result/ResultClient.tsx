@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from 'react';
 
-import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
-import { useScrollPosition } from '@/hooks';
-import { quoteService } from '@/lib/api';
-import { Status, Rating, Category, QuoteChecksId } from '@/types';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
+import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
+import { useScrollPosition } from '@/hooks';
+import { quoteService } from '@/lib/api';
+import {
+  Status,
+  Rating,
+  Category,
+  QuoteChecksId,
+  ErrorDetailsDeletionReasons,
+} from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -101,6 +107,50 @@ export default function ResultClient({
     }
   }, [shouldRedirectToUpload, profile]);
 
+  const handleDeleteError = async (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: keyof ErrorDetailsDeletionReasons | string
+  ) => {
+    try {
+      console.log('Attempting to delete error:', {
+        quoteCheckId,
+        errorDetailsId,
+        reason,
+      });
+
+      const success = await quoteService.deleteErrorDetail(
+        quoteCheckId,
+        errorDetailsId,
+        reason
+      );
+
+      if (success) {
+        console.log('Error detail deleted successfully:', errorDetailsId);
+
+        setCurrentDevis((prevDevis) => {
+          if (!prevDevis) return prevDevis;
+
+          const updatedErrors = prevDevis.error_details.filter(
+            (error) => error.id !== errorDetailsId
+          );
+
+          console.log('Updated error details:', updatedErrors);
+
+          return {
+            ...prevDevis,
+            error_details: updatedErrors,
+          };
+        });
+      } else {
+        console.warn('Deletion did not return success.');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression :', error);
+      alert('La suppression a échoué.');
+    }
+  };
+
   const handleHelpClick = async (
     comment: string | null,
     errorDetailsId: string
@@ -183,7 +233,9 @@ export default function ResultClient({
           <InvalidQuote
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
             gestes={currentDevis.gestes}
+            id={currentDevis.id}
             list={currentDevis.error_details || []}
+            onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
             uploadedFileName={currentDevis.filename || ''}
           />

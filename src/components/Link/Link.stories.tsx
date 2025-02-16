@@ -53,6 +53,15 @@ export const Secondary: Story = {
   },
 };
 
+export const Teriary: Story = {
+  args: {
+    href: '/example',
+    label: 'Tertiary Link',
+    variant: LinkVariant.TERTIARY,
+    size: LinkSize.MEDIUM,
+  },
+};
+
 export const Disabled: Story = {
   args: {
     href: '/example',

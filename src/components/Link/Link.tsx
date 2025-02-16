@@ -12,9 +12,11 @@ export enum LinkVariant {
   DISABLED = 'disabled',
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
 }
 
 export interface LinkProps {
+  className?: string;
   href: string;
   icon?: string;
   label: string;
@@ -54,35 +56,34 @@ const Link: React.FC<LinkProps> = ({
 
   const classNames = [
     'fr-btn',
-    icon && 'fr-btn--icon-right',
-    icon,
     `fr-btn--${variant}`,
     size === LinkSize.LARGE && 'fr-btn--lg',
     size === LinkSize.SMALL && 'fr-btn--sm',
     variant === LinkVariant.DISABLED &&
-      'bg-(--background-disabled-grey)! text-(--text-disabled-grey)! cursor-not-allowed!',
-    variant === LinkVariant.SECONDARY &&
-      'fr-btn--secondary bg-var(--color-white)!',
+      'bg-gray-300 text-gray-500 cursor-not-allowed',
+    (variant === LinkVariant.SECONDARY || variant === LinkVariant.TERTIARY) &&
+      'bg-white! hover:bg-gray-100! active:bg-gray-200!',
   ]
     .filter(Boolean)
     .join(' ');
-
-  const textClassNames =
-    size === LinkSize.SMALL ? 'fr-text--sm' : 'fr-text--lg';
 
   return (
     <NextLink
       className={classNames}
       href={variant === LinkVariant.DISABLED ? '' : href}
-      onClick={handleClick}
       legacyBehavior={legacyBehavior}
+      onClick={handleClick}
     >
       {legacyBehavior ? (
         <a className={classNames} rel='noopener noreferrer' target='_blank'>
-          {label}
+          <span>{label}</span>
+          {icon && <span className={`fr-btn--icon-right ${icon}`} />}
         </a>
       ) : (
-        <span className={textClassNames}>{label}</span>
+        <span>
+          <span>{label}</span>
+          {icon && <span className={`fr-btn--icon-right ${icon}`} />}
+        </span>
       )}
     </NextLink>
   );

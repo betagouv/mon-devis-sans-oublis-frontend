@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 import Link, { LinkSize, LinkVariant } from '../Link/Link';
 import { useGoBackToUpload } from '@/hooks';
 import wording from '@/wording';
 
 export enum QuoteStatusType {
+  EDIT = 'edit',
   SHARE = 'share',
   UPLOAD = 'upload',
 }
@@ -21,70 +23,111 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   className,
   type,
 }) => {
+  const pathname = usePathname();
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
+
   const goBackToUpload = useGoBackToUpload();
+  const goToEdit = `${pathname}/modifier`;
+
+  const isEditOrShare =
+    type === QuoteStatusType.EDIT || type === QuoteStatusType.SHARE;
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
     setIsUrlCopied(true);
   };
 
+  const edit = type === QuoteStatusType.EDIT && (
+    <div className='flex flex-col'>
+      <h5 className='fr-mb-1w'>
+        {wording.components.quote_status_link.edit.title}
+      </h5>
+      <p className='fr-mb-2w'>
+        {wording.components.quote_status_link.edit.description}
+      </p>
+      <span className='flex flex-row gap-4'>
+        <Link
+          href={goToEdit}
+          icon='fr-icon-edit-line'
+          label={wording.components.quote_status_link.edit.link_label}
+          legacyBehavior
+          size={LinkSize.SMALL}
+          variant={LinkVariant.TERTIARY}
+        />
+      </span>
+    </div>
+  );
+
+  const share = type === QuoteStatusType.SHARE && (
+    <div className='flex flex-col'>
+      <h5 className='fr-mb-1w'>
+        {wording.components.quote_status_link.share.title}
+      </h5>
+      <p className='fr-mb-2w'>
+        {wording.components.quote_status_link.share.description}
+      </p>
+      <span className='flex flex-row gap-4'>
+        <button
+          className={`fr-btn ${
+            isUrlCopied && 'fr-btn--secondary'
+          } fr-btn--sm shrink-0 self-start fr-btn--icon-right ${
+            isUrlCopied ? 'fr-icon-check-line' : 'fr-icon-share-box-line'
+          }`}
+          onClick={copyUrlToClipboard}
+        >
+          {isUrlCopied
+            ? wording.components.quote_status_link.share.button_copied_url
+            : wording.components.quote_status_link.share.button_copy_url}
+        </button>
+      </span>
+    </div>
+  );
+
+  const upload = type === QuoteStatusType.UPLOAD && (
+    <div className='flex flex-col'>
+      <h6 className='fr-mb-1w'>
+        {wording.components.quote_status_link.upload.title}
+      </h6>
+      <Link
+        href={goBackToUpload}
+        label={wording.components.quote_status_link.upload.link_label}
+        legacyBehavior
+        size={LinkSize.SMALL}
+        variant={LinkVariant.SECONDARY}
+      />
+    </div>
+  );
+
   return (
     <div
-      className={`bg-[var(--background-default-grey-hover)] border-shadow flex items-center gap-6 px-4 py-6 rounded-lg w-fit ${className}`}
+      className={`${
+        isEditOrShare
+          ? 'bg-[var(--background-alt-blue-france)]'
+          : 'bg-[var(--background-default-grey-hover)]'
+      } border-shadow flex items-center gap-6 px-4 py-6 rounded-lg w-fit ${className}`}
     >
       <Image
         alt={
-          type === QuoteStatusType.SHARE
+          type === QuoteStatusType.EDIT
+            ? wording.components.quote_status_link.share.image_alt
+            : type === QuoteStatusType.SHARE
             ? wording.components.quote_status_link.share.image_alt
             : wording.components.quote_status_link.upload.image_alt
         }
         className='shrink-0'
         height={80}
         src={
-          type === QuoteStatusType.SHARE
+          type === QuoteStatusType.EDIT
+            ? wording.components.quote_status_link.edit.image_src
+            : type === QuoteStatusType.SHARE
             ? wording.components.quote_status_link.share.image_src
             : wording.components.quote_status_link.upload.image_src
         }
         width={80}
       />
-      {type === QuoteStatusType.SHARE ? (
-        <div className='flex flex-col'>
-          <h5 className='fr-mb-1w'>
-            {wording.components.quote_status_link.share.title}
-          </h5>
-          <p className='fr-mb-2w'>
-            {wording.components.quote_status_link.share.description}
-          </p>
-          <span className='flex flex-row gap-4'>
-            <button
-              className={`fr-btn ${
-                isUrlCopied && 'fr-btn--secondary'
-              } fr-btn--sm shrink-0 self-start fr-btn--icon-right ${
-                isUrlCopied ? 'fr-icon-check-line' : 'fr-icon-share-box-line'
-              }`}
-              onClick={copyUrlToClipboard}
-            >
-              {isUrlCopied
-                ? wording.components.quote_status_link.share.button_copied_url
-                : wording.components.quote_status_link.share.button_copy_url}
-            </button>
-          </span>
-        </div>
-      ) : (
-        <div className='flex flex-col'>
-          <h6 className='fr-mb-1w'>
-            {wording.components.quote_status_link.upload.title}
-          </h6>
-          <Link
-            href={goBackToUpload}
-            label={wording.components.quote_status_link.upload.link_label}
-            legacyBehavior
-            size={LinkSize.SMALL}
-            variant={LinkVariant.SECONDARY}
-          />
-        </div>
-      )}
+      {edit}
+      {share}
+      {upload}
     </div>
   );
 };
