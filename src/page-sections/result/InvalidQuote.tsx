@@ -19,10 +19,11 @@ import wording from '@/wording';
 
 interface InvalidQuoteProps {
   analysisDate: string | null;
+  deleteErrorReasons?: { id: string; label: string }[];
   gestes: Gestes[];
   id: string;
   list: ErrorDetails[];
-  onDeleteError: (
+  onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason?: keyof ErrorDetailsDeletionReasons | string
@@ -36,6 +37,7 @@ interface InvalidQuoteProps {
 
 export default function InvalidQuote({
   analysisDate,
+  deleteErrorReasons,
   gestes,
   id,
   list,
@@ -96,6 +98,7 @@ export default function InvalidQuote({
         <div className='flex flex-col gap-8'>
           <QuoteErrorTable
             category={Category.ADMIN}
+            deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
             onDeleteError={onDeleteError}
             onHelpClick={onHelpClick}
@@ -103,9 +106,10 @@ export default function InvalidQuote({
           />
           <QuoteErrorTable
             category={Category.GESTES}
+            deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
-            onDeleteError={onDeleteError}
             gestes={gestes}
+            onDeleteError={onDeleteError}
             onHelpClick={onHelpClick}
             quoteCheckId={id}
           />

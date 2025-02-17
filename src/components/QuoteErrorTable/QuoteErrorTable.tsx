@@ -13,8 +13,9 @@ import wording from '@/wording';
 
 export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
+  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
-  onDeleteError: (
+  onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason?: keyof ErrorDetailsDeletionReasons | string
@@ -25,13 +26,14 @@ export interface QuoteErrorTablePropsAdmin {
 
 export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
+  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
-  onDeleteError: (
+  gestes: Gestes[];
+  onDeleteError?: (
     errorDetailsId: string,
     quoteCheckId: string,
     reason?: keyof ErrorDetailsDeletionReasons | string
   ) => void;
-  gestes: Gestes[];
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   quoteCheckId: string;
 }
@@ -75,6 +77,11 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           }, {})
       )
     : [];
+
+  console.log(
+    '🖥️ Liste des erreurs mises à jour après suppression:',
+    props.errorDetails
+  );
 
   return (
     <div className='overflow-hidden rounded-lg border-shadow'>
@@ -178,6 +185,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                   </tr>
                   {errorsForGeste.map((error, index) => (
                     <QuoteErrorLine
+                      deleteErrorReasons={props.deleteErrorReasons}
                       error={error}
                       isLastErrorInTable={
                         isLastGeste && index === errorsForGeste.length - 1
@@ -198,6 +206,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
               .filter((error) => error.category === Category.ADMIN)
               .map((error) => (
                 <QuoteErrorLine
+                  deleteErrorReasons={props.deleteErrorReasons}
                   error={error}
                   key={error.id}
                   onDeleteError={props.onDeleteError}

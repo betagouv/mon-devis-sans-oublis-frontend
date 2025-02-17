@@ -7,7 +7,7 @@ import CheckboxGroup from '../CheckboxGroup/CheckboxGroup';
 export type Option = {
   id: string;
   label: string;
-  group: string;
+  group?: string;
 };
 
 export interface MultiSelectCheckboxProps {
@@ -70,14 +70,16 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
 
   const groupedOptions = isGroupedOptions(options)
     ? options.reduce((acc, option) => {
-        if (!acc[option.group]) {
-          acc[option.group] = [];
+        if (option.group) {
+          if (!acc[option.group]) {
+            acc[option.group] = [];
+          }
+          acc[option.group].push({
+            id: option.id,
+            label: option.label,
+            checked: localSelectedValues.includes(option.id),
+          });
         }
-        acc[option.group].push({
-          id: option.id,
-          label: option.label,
-          checked: localSelectedValues.includes(option.id),
-        });
         return acc;
       }, {} as { [key: string]: { id: string; label: string; checked: boolean }[] })
     : {};

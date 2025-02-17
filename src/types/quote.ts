@@ -25,6 +25,7 @@ export enum Type {
 export interface ErrorDetails {
   id: string;
   code: string;
+  deleted: boolean;
   type: string;
   title: string;
   category: string;

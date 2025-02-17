@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-
+import DeleteErrorModal from '../Modal/DeleteErrorModal/DeleteErrorModal';
 import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+
 import { useConseillerRoutes } from '@/hooks';
 import { ErrorDetails, ErrorDetailsDeletionReasons } from '@/types';
 import wording from '@/wording';
 
 interface QuoteErrorLineProps {
-  deletionReason?: keyof ErrorDetailsDeletionReasons | string;
+  deleteErrorReasons?: { id: string; label: string }[];
   error: ErrorDetails;
   quoteCheckId: string;
   isLastErrorInTable?: boolean;
@@ -21,40 +22,46 @@ interface QuoteErrorLineProps {
 }
 
 const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
-  deletionReason,
+  deleteErrorReasons,
   error,
   isLastErrorInTable = false,
   quoteCheckId,
   onDeleteError,
   onFeedbackSubmit,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
   const handleFeedbackSubmit = (comment: string) => {
     onFeedbackSubmit(comment, error.id);
     closeModal();
   };
 
-  const handleDeleteClick = async () => {
+  const handleDeleteConfirm = async (reason: string) => {
     if (!onDeleteError) return;
 
     setIsDeleting(true);
     try {
       console.log(
-        'Deleting error with ID:',
+        '🛑 Tentative de suppression avec ID:',
         error.id,
-        'and quoteCheckId:',
-        quoteCheckId
+        'et raison:',
+        reason
       );
-      await onDeleteError(quoteCheckId, error.id, deletionReason);
+
+      await onDeleteError(quoteCheckId, error.id);
+      closeDeleteModal();
     } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
+      console.error('❌ Erreur lors de la suppression:', error);
     }
     setIsDeleting(false);
   };
@@ -85,12 +92,14 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
                   isDeleting ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 disabled={isDeleting}
-                onClick={handleDeleteClick}
+                onClick={openDeleteModal} // ⚡️ Ouvre `DeleteErrorModal`
               />
             )}
           </span>
         </td>
       </tr>
+
+      {/* Modal de feedback sur l'erreur */}
       {error.solution && (
         <ErrorFeedbacksModal
           errorDetailsId={error.id}
@@ -102,6 +111,17 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
           title={error.title}
         />
       )}
+
+      {/* ⚡️ Modal de confirmation `DeleteErrorModal` */}
+      <DeleteErrorModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onDeleteError={handleDeleteConfirm}
+        quoteCheckId={quoteCheckId}
+        errorDetailsId={error.id}
+        errorTitle={error.title} // ⚡️ On passe l'erreur pour affichage
+        deleteErrorReasons={deleteErrorReasons}
+      />
     </>
   );
 };

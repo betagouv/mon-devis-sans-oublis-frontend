@@ -11,43 +11,74 @@ export const quoteService = {
   async deleteErrorDetail(
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason?: string
   ) {
-    const deleteUrl =
-      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
+    console.log('🛠 Envoi API DELETE avec :', {
+      quoteCheckId,
+      errorDetailsId,
+      reason,
+    });
 
-    if (!deleteUrl) {
-      console.error('API URL not defined.');
-      return;
+    try {
+      const response = await fetch(
+        `https://api.staging.mon-devis-sans-oublis.beta.gouv.fr/api/v1/quote_checks/${quoteCheckId}/error_details/${errorDetailsId}?reason=${reason}`,
+        {
+          method: 'DELETE',
+          headers: {
+            ...API_CONFIG.headers,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('📤 Réponse API :', response.status);
+
+      if (!response.ok) {
+        throw new Error(`❌ Erreur API: ${response.status}`);
+      }
+
+      return response;
+    } catch (error) {
+      console.error('🚨 Erreur suppression API :', error);
+      throw error;
+    }
+  },
+
+  async getDeleteErrorDetailReasons(): Promise<
+    { id: string; label: string }[]
+  > {
+    const deleteErrorDetailReasonsUrl =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_DELETE_ERROR_DETAIL_REASONS;
+
+    if (!deleteErrorDetailReasonsUrl) {
+      throw new Error(
+        'NEXT_PUBLIC_API_QUOTE_CHECKS_DELETE_ERROR_DETAIL_REASONS is not defined.'
+      );
     }
 
     try {
-      let url = deleteUrl
-        .replace(':quote_check_id', quoteCheckId)
-        .replace(':error_detail_id', errorDetailsId);
-
-      if (reason) {
-        url += `?reason=${encodeURIComponent(reason)}`;
-      }
-
-      console.log('Delete URL:', url);
-
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+      const response = await fetch(deleteErrorDetailReasonsUrl, {
+        headers: API_CONFIG.headers,
       });
-
-      console.log('Response status:', response.status);
 
       if (!response.ok) {
         throw new Error(
-          `Failed to delete error detail: ${response.status} ${response.statusText}`
+          `Failed to fetch delete error detail reasons: ${response.status} ${response.statusText}`
         );
       }
 
-      return response.status === 204;
+      const responseData = await response.json();
+
+      if (!responseData.data) {
+        throw new Error("Invalid response format: 'data' field is missing.");
+      }
+
+      return Object.entries(responseData.data).map(([key, value]) => ({
+        id: key,
+        label: value as string,
+      }));
     } catch (error) {
-      console.error('Error deleting error detail:', error);
+      console.error('Error fetching delete error detail reasons:', error);
       throw error;
     }
   },
@@ -176,6 +207,38 @@ export const quoteService = {
       return await response.json();
     } catch (error) {
       console.error('Error sending feedbacks:', error);
+      throw error;
+    }
+  },
+
+  async updateQuote(quoteCheckId: string, updatedData: any) {
+    const quoteUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
+
+    if (!quoteUrl) {
+      throw new Error('NEXT_PUBLIC_API_QUOTE_CHECKS_ID is not defined.');
+    }
+
+    try {
+      const url = quoteUrl.replace(':quote_check_id', quoteCheckId);
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          ...API_CONFIG.headers,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update quote: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating quote:', error);
       throw error;
     }
   },

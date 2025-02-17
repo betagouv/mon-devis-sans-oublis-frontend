@@ -20,14 +20,24 @@ import wording from '@/wording';
 
 interface ResultClientProps {
   currentDevis: QuoteChecksId | null;
+  deleteErrorReasons?: { id: string; label: string }[];
   profile: string;
   quoteCheckId: string;
+  canDelete?: boolean;
+  onDeleteErrorDetail?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: string
+  ) => void;
 }
 
 export default function ResultClient({
   currentDevis: initialDevis,
+  deleteErrorReasons,
   profile,
   quoteCheckId,
+  canDelete = false,
+  onDeleteErrorDetail,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
 
@@ -113,37 +123,21 @@ export default function ResultClient({
     reason?: keyof ErrorDetailsDeletionReasons | string
   ) => {
     try {
-      console.log('Attempting to delete error:', {
-        quoteCheckId,
-        errorDetailsId,
-        reason,
-      });
+      if (onDeleteErrorDetail) {
+        await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
+      }
 
-      const success = await quoteService.deleteErrorDetail(
-        quoteCheckId,
-        errorDetailsId,
-        reason
-      );
-
-      if (success) {
-        console.log('Error detail deleted successfully:', errorDetailsId);
-
+      if (canDelete) {
         setCurrentDevis((prevDevis) => {
           if (!prevDevis) return prevDevis;
 
-          const updatedErrors = prevDevis.error_details.filter(
-            (error) => error.id !== errorDetailsId
-          );
-
-          console.log('Updated error details:', updatedErrors);
-
           return {
             ...prevDevis,
-            error_details: updatedErrors,
+            error_details: prevDevis.error_details.filter(
+              (error) => error.id !== errorDetailsId
+            ),
           };
         });
-      } else {
-        console.warn('Deletion did not return success.');
       }
     } catch (error) {
       console.error('Erreur lors de la suppression :', error);
@@ -231,10 +225,12 @@ export default function ResultClient({
           />
         ) : (
           <InvalidQuote
+            key={canDelete ? currentDevis?.error_details.length : undefined}
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
-            list={currentDevis.error_details || []}
+            list={currentDevis.error_details}
             onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
             uploadedFileName={currentDevis.filename || ''}

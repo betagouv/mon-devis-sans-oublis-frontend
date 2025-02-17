@@ -26,7 +26,7 @@ const meta = {
 
 export default meta;
 
-export const ToggleableModals: React.FC = () => {
+export const Default: React.FC = () => {
   const [openModal, setOpenModal] = useState<null | 'center' | 'right'>(null);
 
   return (

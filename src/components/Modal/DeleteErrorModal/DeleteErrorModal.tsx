@@ -1,41 +1,100 @@
 'use client';
 
 import { useState } from 'react';
-
 import Modal, { ModalPosition } from '../Modal';
-import { RoundCheckboxGroup } from '@/components';
-import { Rating } from '@/types';
+import { MultiSelectCheckbox } from '@/components';
 import wording from '@/wording';
 
 export interface DeleteErrorModalProps {
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback: (
-    comment: string,
-    email: string | null,
-    rating: Rating
+  onDeleteError: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason: string
   ) => void;
+  quoteCheckId: string;
+  errorDetailsId: string;
+  deleteErrorReasons?: { id: string; label: string }[];
+  errorTitle: string;
 }
 
 const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
   isOpen,
   onClose,
-  onSubmitFeedback,
+  onDeleteError,
+  quoteCheckId,
+  errorDetailsId,
+  deleteErrorReasons,
+  errorTitle,
 }) => {
-  const [comment, setComment] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [rating, setRating] = useState<Rating | null>(null);
+  const [selectedReason, setSelectedReason] = useState<string | null>(null);
+  const [customReason, setCustomReason] = useState<string>('');
 
-  const options: Rating[] = [0, 1, 2, 3, 4, 5];
+  const options = [
+    ...(deleteErrorReasons ?? []).map((option) => ({
+      id: option.id,
+      label: option.label,
+      key: `reason-${option.id}`,
+    })),
+    {
+      id: 'free_text',
+      label: 'Autre (veuillez préciser...)',
+      key: 'reason-free_text',
+    },
+  ];
 
-  const handleSelect = (value: Rating) => {
-    setRating(value);
+  // ✅ Correction : S'assure que selectedReason reçoit bien une valeur correcte
+  const handleReasonChange = (value: string | string[]) => {
+    console.log('➡️ Valeur reçue dans handleReasonChange:', value);
+
+    if (Array.isArray(value)) {
+      value = value[0] || ''; // Sélectionne le premier élément si c’est un tableau
+    }
+
+    if (value === 'free_text') {
+      setSelectedReason('free_text');
+    } else {
+      setSelectedReason(value);
+      setCustomReason('');
+    }
+
+    console.log('✅ selectedReason mis à jour :', value);
   };
 
+  // ✅ Correction : Vérifie et génère correctement reasonLabel
   const handleSubmit = () => {
-    if (comment !== null && rating !== null) {
-      onSubmitFeedback(comment, email, rating);
+    console.log('🔍 handleSubmit appelé !');
+
+    console.log(`➡️ selectedReason: ${selectedReason}`);
+    console.log(`➡️ customReason: ${customReason}`);
+    console.log(`➡️ quoteCheckId: ${quoteCheckId}`);
+    console.log(`➡️ errorDetailsId avant validation: ${errorDetailsId}`);
+
+    // ✅ Vérification de l'ID de l'erreur avant de soumettre
+    if (!errorDetailsId || errorDetailsId === quoteCheckId) {
+      console.error("❌ L'ID de l'erreur est incorrect !", errorDetailsId);
+      return;
     }
+
+    // ✅ Vérification du format de la raison envoyée
+    let reasonLabel: string | undefined = selectedReason ?? undefined;
+    if (selectedReason === 'free_text') {
+      reasonLabel = customReason.trim() || undefined;
+    }
+
+    if (!reasonLabel) {
+      console.warn(
+        "⚠️ Aucune raison valide sélectionnée, l'appel API ne se fait pas !"
+      );
+      return;
+    }
+
+    console.log(
+      `📤 Envoi de la suppression avec quoteCheckId=${quoteCheckId}, errorDetailsId=${errorDetailsId}, raison=${reasonLabel}`
+    );
+
+    onDeleteError(quoteCheckId, errorDetailsId, reasonLabel);
   };
 
   return (
@@ -47,78 +106,48 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
       onClose={onClose}
       position={ModalPosition.CENTER}
     >
-      <h4 className='text-[var(--text-title-blue-france)]! fr-mb-1w flex items-center gap-2'>
-        <span className='fr-icon-questionnaire-fill mt-1!' aria-hidden='true' />
-        {wording.components.global_error_feedbacks_modal.title}
+      <h4 className='fr-mb-1w flex items-center gap-2'>
+        <span
+          className='fr-icon-questionnaire-fill mt-1! fr-icon-delete-fill'
+          aria-hidden='true'
+        />
+        Supprimer la correction proposée
       </h4>
-      <p className='fr-text--sm text-[var(--text-mention-grey)]'>
-        Ajouter un commentaire
-      </p>
-      <p className='text-[var(--text-title-blue-france)] font-bold fr-mb-2w'>
-        {wording.components.global_error_feedbacks_modal.rating_title}
-      </p>
-      <RoundCheckboxGroup
-        onChange={handleSelect}
-        options={options.map((value) => ({ value }))}
-      />
-      <div className='fr-input-group' id='input-group-72'>
-        <label className='fr-label' htmlFor='global-error-feedbacks-input'>
-          <p className='text-[var(--text-title-blue-france)] font-bold fr-mb-1w fr-mt-3w'>
-            {wording.components.global_error_feedbacks_modal.comment_title}
-          </p>
-        </label>
+
+      <div className='fr-alert fr-alert--warning fr-mt-2w'>
+        <p className='font-bold'>{errorTitle}</p>
+      </div>
+
+      {options.map((option) => (
+        <div key={option.key}>
+          <input
+            type='radio'
+            name='deleteReason'
+            value={option.id}
+            checked={selectedReason === option.id}
+            onChange={(e) => handleReasonChange(e.target.value)}
+          />
+          {option.label}
+        </div>
+      ))}
+
+      {selectedReason === 'free_text' && (
         <textarea
-          className='fr-input'
-          aria-describedby='global-error-feedbacks-input-messages'
-          id='global-error-feedbacks-input'
-          value={comment || ''}
-          onChange={(e) => setComment(e.target.value)}
+          className='fr-input fr-mt-2w w-full'
+          placeholder='Veuillez préciser la raison...'
+          value={customReason}
+          onChange={(e) => setCustomReason(e.target.value)}
         />
-        <div
-          className='fr-messages-group'
-          id='global-error-feedbacks-input-messages'
-          aria-live='polite'
-        />
+      )}
+
+      <div className='flex justify-end gap-4 mt-4'>
+        <button className='fr-btn fr-btn--secondary' onClick={onClose}>
+          Annuler
+        </button>
+        <button className='fr-btn fr-btn--danger' onClick={handleSubmit}>
+          Confirmer la suppression
+        </button>
       </div>
-      <p className='text-[var(--text-title-blue-france)] font-bold fr-mb-1w'>
-        {wording.components.global_error_feedbacks_modal.contact_title}
-      </p>
-      <div className='fr-input-group' id='input-group-152'>
-        <label
-          className='fr-label fr-mt-0'
-          htmlFor='global-error-feedbacks-input'
-        >
-          <p className='fr-text--xs fr-mb-1w fr-mt-0 text-[var(--text-mention-grey)]'>
-            {
-              wording.components.global_error_feedbacks_modal
-                .contact_title_optional
-            }
-          </p>
-        </label>
-        <input
-          aria-describedby='global-error-feedbacks-input-messages'
-          className='fr-input'
-          id='global-error-feedbacks-input'
-          placeholder={
-            wording.components.global_error_feedbacks_modal.email_placeholder
-          }
-          type='email'
-          value={email || ''}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <div
-          aria-live='polite'
-          className='fr-messages-group'
-          id='storybook-input-messages'
-        />
-      </div>
-      <button
-        className='fr-btn fr-btn--primary fr-mt-3w self-end'
-        onClick={handleSubmit}
-        disabled={comment === null || rating === null}
-      >
-        Enregistrer
-      </button>
     </Modal>
   );
 };

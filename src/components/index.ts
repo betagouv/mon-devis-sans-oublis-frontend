@@ -47,6 +47,8 @@ export { default as Matomo } from './Matomo/Matomo';
 // Modal
 export { default as Modal, ModalPosition } from './Modal/Modal';
 export type { ModalProps } from './Modal/Modal';
+// Moda - DeleteErrorModal
+export { default as DeleteErrorModal } from './Modal/DeleteErrorModal/DeleteErrorModal';
 // Modal - ErrorFeedbacksModal
 export { default as ErrorFeedbacksModal } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
