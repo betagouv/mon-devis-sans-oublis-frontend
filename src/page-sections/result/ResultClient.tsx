@@ -27,7 +27,7 @@ interface ResultClientProps {
   onDeleteErrorDetail?: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: string
+    reason: string
   ) => void;
 }
 
@@ -131,24 +131,28 @@ export default function ResultClient({
   const handleDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: string
+    reason: string
   ) => {
-    if (onDeleteErrorDetail) {
-      try {
-        await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
+    console.log('🔍 Reason in ResultClient (avant conversion) :', reason);
 
-        // ✅ Mise à jour de l'état local après suppression réussie
-        if (currentDevis) {
-          setCurrentDevis({
-            ...currentDevis,
-            error_details: currentDevis.error_details.map((error) =>
-              error.id === errorDetailsId ? { ...error, deleted: true } : error
-            ),
-          });
-        }
-      } catch (error) {
-        console.error('Error deleting error detail:', error);
-      }
+    if (!reason) {
+      console.error('🚨 ERREUR: reason est vide dans ResultClient !');
+      return;
+    }
+
+    const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
+    const finalReason = foundReason ? foundReason.label : reason;
+
+    console.log('🔍 Reason in ResultClient (après conversion) :', finalReason);
+    if (!finalReason) {
+      console.error(
+        '🚨 ERREUR: finalReason est vide après conversion dans ResultClient !'
+      );
+      return;
+    }
+
+    if (onDeleteErrorDetail) {
+      await onDeleteErrorDetail(quoteCheckId, errorDetailsId, finalReason);
     }
   };
 

@@ -26,12 +26,9 @@ interface InvalidQuoteProps {
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason: string
   ) => void;
-  onHelpClick: (
-    comment: string | null,
-    errorDetailsId: string
-  ) => Promise<void>;
+  onHelpClick: (comment: string, errorDetailsId: string) => void;
   uploadedFileName: string;
 }
 
@@ -46,6 +43,7 @@ export default function InvalidQuote({
   uploadedFileName,
 }: InvalidQuoteProps) {
   const { isConseillerAndNotEdit } = useConseillerRoutes();
+
   return (
     <>
       <section className='fr-container fr-gap-8'>

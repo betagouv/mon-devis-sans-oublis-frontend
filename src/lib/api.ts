@@ -11,39 +11,39 @@ export const quoteService = {
   async deleteErrorDetail(
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: string
-  ) {
-    console.log('🛠 Envoi API DELETE avec :', {
-      quoteCheckId,
-      errorDetailsId,
-      reason,
+    reason: string
+  ): Promise<Response> {
+    console.log('🔍 DEBUG API - deleteErrorDetail:');
+    console.log('reason reçue:', reason);
+
+    const deleteUrl =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
+
+    if (!deleteUrl) {
+      throw new Error(
+        'NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID is not defined.'
+      );
+    }
+
+    const url = deleteUrl
+      .replace(':quote_check_id', quoteCheckId)
+      .replace(':error_detail_id', errorDetailsId);
+
+    const finalUrl = `${url}?reason=${reason}`;
+    // ?reason=${encodeURIComponent(reason)}
+
+    console.log('URL finale:', finalUrl);
+
+    const response = await fetch(finalUrl, {
+      method: 'DELETE',
+      headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
     });
 
-    try {
-      let url = `https://api.staging.mon-devis-sans-oublis.beta.gouv.fr/api/v1/quote_checks/${quoteCheckId}/error_details/${errorDetailsId}`;
-      if (reason) {
-        url += `?reason=${encodeURIComponent(reason)}`;
-      }
-
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          ...API_CONFIG.headers,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('📤 Réponse API :', response.status);
-
-      if (!response.ok) {
-        throw new Error(`❌ Erreur API: ${response.status}`);
-      }
-
-      return response;
-    } catch (error) {
-      console.error('🚨 Erreur suppression API :', error);
-      throw error;
+    if (!response.ok) {
+      throw new Error(`❌ Erreur API: ${response.status}`);
     }
+
+    return response;
   },
 
   async getDeleteErrorDetailReasons(): Promise<

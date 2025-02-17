@@ -16,7 +16,7 @@ interface QuoteErrorLineProps {
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason: string
   ) => void;
   onFeedbackSubmit: (comment: string, id: string) => void;
 }
@@ -46,24 +46,42 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     closeModal();
   };
 
-  const handleDeleteConfirm = async (reason: string) => {
-    if (!onDeleteError) return;
+  // const handleDeleteConfirm = (
+  //   quoteCheckId: string,
+  //   errorDetailsId: string,
+  //   reason: string
+  // ) => {
+  //   const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
+  //   const finalReason = foundReason ? foundReason.label : reason;
 
-    setIsDeleting(true);
-    try {
-      console.log(
-        '🛑 Tentative de suppression avec ID:',
-        error.id,
-        'et raison:',
-        reason
-      );
+  //   console.log('🔍 DEBUG QuoteErrorLine - handleDeleteConfirm:');
+  //   console.log('reason reçue:', finalReason);
+  //   onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
+  // };
 
-      await onDeleteError(quoteCheckId, error.id, reason);
-      closeDeleteModal();
-    } catch (error) {
-      console.error('❌ Erreur lors de la suppression:', error);
+  const handleDeleteConfirm = (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason: string
+  ) => {
+    console.log(
+      '🔍 DEBUG QuoteErrorLine - handleDeleteConfirm: reason reçue avant conversion:',
+      reason
+    );
+
+    if (!reason) {
+      console.error('🚨 ERREUR: reason est vide dans QuoteErrorLine !');
+      return;
     }
-    setIsDeleting(false);
+
+    const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
+    const finalReason = foundReason ? foundReason.label : reason;
+
+    console.log(
+      '🔍 DEBUG QuoteErrorLine - handleDeleteConfirm: reason après conversion:',
+      finalReason
+    );
+    onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
   };
 
   return (
@@ -114,13 +132,13 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
 
       {/* ⚡️ Modal de confirmation `DeleteErrorModal` */}
       <DeleteErrorModal
+        deleteErrorReasons={deleteErrorReasons}
+        errorDetailsId={error.id}
+        errorTitle={error.title}
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
         onDeleteError={handleDeleteConfirm}
         quoteCheckId={quoteCheckId}
-        errorDetailsId={error.id}
-        errorTitle={error.title} // ⚡️ On passe l'erreur pour affichage
-        deleteErrorReasons={deleteErrorReasons}
       />
     </>
   );

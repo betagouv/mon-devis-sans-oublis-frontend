@@ -17,10 +17,11 @@ export interface QuoteErrorTablePropsAdmin {
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason: string
   ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   quoteCheckId: string;
+  deleteErrorReasons?: { id: string; label: string }[];
 }
 
 export interface QuoteErrorTablePropsGestes {
@@ -29,11 +30,12 @@ export interface QuoteErrorTablePropsGestes {
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason: string
   ) => void;
   gestes: Gestes[];
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   quoteCheckId: string;
+  deleteErrorReasons?: { id: string; label: string }[];
 }
 
 export type QuoteErrorTableProps =
@@ -164,6 +166,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       onDeleteError={props.onDeleteError}
                       onFeedbackSubmit={props.onHelpClick}
                       quoteCheckId={props.quoteCheckId}
+                      deleteErrorReasons={props.deleteErrorReasons}
                     />
                   ))}
                 </tbody>
@@ -179,6 +182,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 onDeleteError={props.onDeleteError}
                 onFeedbackSubmit={props.onHelpClick}
                 quoteCheckId={props.quoteCheckId}
+                deleteErrorReasons={props.deleteErrorReasons}
               />
             ))}
           </tbody>

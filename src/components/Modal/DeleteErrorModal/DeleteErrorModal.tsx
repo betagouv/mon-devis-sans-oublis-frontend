@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Modal, { ModalPosition } from '../Modal';
-import { MultiSelectCheckbox } from '@/components';
 import wording from '@/wording';
 
 export interface DeleteErrorModalProps {
@@ -30,71 +29,40 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
 }) => {
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
   const [customReason, setCustomReason] = useState<string>('');
+  const [isCustom, setIsCustom] = useState<boolean>(false);
 
-  const options = [
-    ...(deleteErrorReasons ?? []).map((option) => ({
-      id: option.id,
-      label: option.label,
-      key: `reason-${option.id}`,
-    })),
-    {
-      id: 'free_text',
-      label: 'Autre (veuillez préciser...)',
-      key: 'reason-free_text',
-    },
-  ];
-
-  // ✅ Correction : S'assure que selectedReason reçoit bien une valeur correcte
-  const handleReasonChange = (value: string | string[]) => {
-    console.log('➡️ Valeur reçue dans handleReasonChange:', value);
-
-    if (Array.isArray(value)) {
-      value = value[0] || ''; // Sélectionne le premier élément si c’est un tableau
-    }
-
-    if (value === 'free_text') {
-      setSelectedReason('free_text');
+  const handleReasonChange = (value: string) => {
+    if (value === 'custom') {
+      setIsCustom(true);
+      setSelectedReason(null);
     } else {
+      setIsCustom(false);
       setSelectedReason(value);
-      setCustomReason('');
     }
-
-    console.log('✅ selectedReason mis à jour :', value);
   };
 
-  // ✅ Correction : Vérifie et génère correctement reasonLabel
   const handleSubmit = () => {
-    console.log('🔍 handleSubmit appelé !');
-
-    console.log(`➡️ selectedReason: ${selectedReason}`);
-    console.log(`➡️ customReason: ${customReason}`);
-    console.log(`➡️ quoteCheckId: ${quoteCheckId}`);
-    console.log(`➡️ errorDetailsId avant validation: ${errorDetailsId}`);
-
-    // ✅ Vérification de l'ID de l'erreur avant de soumettre
-    if (!errorDetailsId || errorDetailsId === quoteCheckId) {
-      console.error("❌ L'ID de l'erreur est incorrect !", errorDetailsId);
+    if (isCustom && !customReason.trim()) {
+      console.warn('⚠️ Raison personnalisée vide !');
       return;
     }
 
-    // ✅ Vérification du format de la raison envoyée
-    let reasonLabel: string | undefined = selectedReason ?? undefined;
-    if (selectedReason === 'free_text') {
-      reasonLabel = customReason.trim() || undefined;
-    }
-
-    if (!reasonLabel) {
-      console.warn(
-        "⚠️ Aucune raison valide sélectionnée, l'appel API ne se fait pas !"
-      );
+    if (!isCustom && !selectedReason) {
+      console.warn('⚠️ Aucune raison sélectionnée !');
       return;
     }
 
-    console.log(
-      `📤 Envoi de la suppression avec quoteCheckId=${quoteCheckId}, errorDetailsId=${errorDetailsId}, raison=${reasonLabel}`
-    );
+    const finalReason = isCustom ? customReason.trim() : selectedReason;
 
-    onDeleteError(quoteCheckId, errorDetailsId, reasonLabel);
+    // 🔥 Vérification que finalReason n'est JAMAIS vide
+    if (!finalReason) {
+      console.error("🚨 ERREUR: finalReason est vide avant l'envoi !");
+      return;
+    }
+
+    console.log('🛠 Avant appel à onDeleteError:', finalReason);
+    onDeleteError(quoteCheckId, errorDetailsId, finalReason);
+    onClose?.();
   };
 
   return (
@@ -107,10 +75,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
       position={ModalPosition.CENTER}
     >
       <h4 className='fr-mb-1w flex items-center gap-2'>
-        <span
-          className='fr-icon-questionnaire-fill mt-1! fr-icon-delete-fill'
-          aria-hidden='true'
-        />
+        <span className='fr-icon-delete-fill mt-1!' aria-hidden='true' />
         Supprimer la correction proposée
       </h4>
 
@@ -118,33 +83,72 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
         <p className='font-bold'>{errorTitle}</p>
       </div>
 
-      {options.map((option) => (
-        <div key={option.key}>
-          <input
-            type='radio'
-            name='deleteReason'
-            value={option.id}
-            checked={selectedReason === option.id}
-            onChange={(e) => handleReasonChange(e.target.value)}
-          />
-          {option.label}
-        </div>
-      ))}
+      <div className='fr-form-group'>
+        <fieldset className='fr-fieldset'>
+          <legend className='fr-fieldset__legend'>
+            Raison de la suppression
+          </legend>
 
-      {selectedReason === 'free_text' && (
-        <textarea
-          className='fr-input fr-mt-2w w-full'
-          placeholder='Veuillez préciser la raison...'
-          value={customReason}
-          onChange={(e) => setCustomReason(e.target.value)}
-        />
-      )}
+          {/* Raisons prédéfinies */}
+          {deleteErrorReasons && deleteErrorReasons.length > 0 && (
+            <>
+              {deleteErrorReasons.map((reason) => (
+                <div className='fr-radio-group' key={reason.id}>
+                  <input
+                    type='radio'
+                    id={reason.id}
+                    name='deleteReason'
+                    value={reason.id}
+                    checked={!isCustom && selectedReason === reason.id}
+                    onChange={(e) => handleReasonChange(e.target.value)}
+                  />
+                  <label className='fr-label' htmlFor={reason.id}>
+                    {reason.label}
+                  </label>
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* Option raison personnalisée */}
+          <div className='fr-radio-group'>
+            <input
+              type='radio'
+              id='custom'
+              name='deleteReason'
+              value='custom'
+              checked={isCustom}
+              onChange={(e) => handleReasonChange(e.target.value)}
+            />
+            <label className='fr-label' htmlFor='custom'>
+              Autre raison
+            </label>
+          </div>
+
+          {/* Champ de texte pour raison personnalisée */}
+          {isCustom && (
+            <div className='fr-input-group'>
+              <input
+                type='text'
+                className='fr-input'
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+                placeholder='Saisissez votre raison'
+              />
+            </div>
+          )}
+        </fieldset>
+      </div>
 
       <div className='flex justify-end gap-4 mt-4'>
         <button className='fr-btn fr-btn--secondary' onClick={onClose}>
           Annuler
         </button>
-        <button className='fr-btn fr-btn--danger' onClick={handleSubmit}>
+        <button
+          className='fr-btn fr-btn--danger'
+          onClick={handleSubmit}
+          disabled={isCustom ? !customReason.trim() : !selectedReason}
+        >
           Confirmer la suppression
         </button>
       </div>
