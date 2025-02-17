@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+
 import DeleteErrorModal from '../Modal/DeleteErrorModal/DeleteErrorModal';
 import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
-
 import { useConseillerRoutes } from '@/hooks';
-import { ErrorDetails, ErrorDetailsDeletionReasons } from '@/types';
+import { ErrorDetails } from '@/types';
 import wording from '@/wording';
 
-interface QuoteErrorLineProps {
+export interface QuoteErrorLineProps {
   deleteErrorReasons?: { id: string; label: string }[];
   error: ErrorDetails;
   quoteCheckId: string;
@@ -52,7 +52,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     reason: string
   ) => {
     if (!reason) {
-      console.error('🚨 ERREUR: reason est vide dans QuoteErrorLine !');
+      console.error('reason est vide dans QuoteErrorLine !');
       return;
     }
 
@@ -88,14 +88,12 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
                   isDeleting ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 disabled={isDeleting}
-                onClick={openDeleteModal} // ⚡️ Ouvre `DeleteErrorModal`
+                onClick={openDeleteModal}
               />
             )}
           </span>
         </td>
       </tr>
-
-      {/* Modal de feedback sur l'erreur */}
       {error.solution && (
         <ErrorFeedbacksModal
           errorDetailsId={error.id}
@@ -107,8 +105,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
           title={error.title}
         />
       )}
-
-      {/* ⚡️ Modal de confirmation `DeleteErrorModal` */}
       <DeleteErrorModal
         deleteErrorReasons={deleteErrorReasons}
         errorDetailsId={error.id}

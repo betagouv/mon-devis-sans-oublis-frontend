@@ -1,16 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
-import { ErrorDetails, QuoteChecksId } from '@/types';
+import { QuoteChecksId } from '@/types';
 
 export default function EditClient({
-  params,
   deleteErrorReasons,
+  params,
 }: {
-  params: { profile: string; quoteCheckId: string };
   deleteErrorReasons?: { id: string; label: string }[];
+  params: { profile: string; quoteCheckId: string };
 }) {
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ export default function EditClient({
         const data = await quoteService.getQuote(params.quoteCheckId);
         setCurrentDevis(data);
       } catch (error) {
-        console.error('❌ Error fetching devis:', error);
+        console.error('Error fetching devis:', error);
       } finally {
         setIsLoading(false);
       }
@@ -54,13 +55,13 @@ export default function EditClient({
         reason
       );
       if (!response.ok) {
-        throw new Error(`❌ Suppression échouée côté API: ${response.status}`);
+        throw new Error(`Suppression échouée côté API: ${response.status}`);
       }
 
       const updatedData = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(updatedData);
     } catch (error) {
-      console.error("❌ Erreur lors de la suppression de l'erreur:", error);
+      console.error("Erreur lors de la suppression de l'erreur:", error);
 
       const data = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(data);
@@ -76,9 +77,9 @@ export default function EditClient({
       canDelete={true}
       currentDevis={currentDevis}
       deleteErrorReasons={deleteErrorReasons}
+      onDeleteErrorDetail={handleDeleteErrorDetail}
       profile={params.profile}
       quoteCheckId={params.quoteCheckId}
-      onDeleteErrorDetail={handleDeleteErrorDetail}
     />
   );
 }

@@ -9,12 +9,7 @@ import {
   QuoteStatusType,
 } from '@/components';
 import { useConseillerRoutes } from '@/hooks';
-import {
-  Category,
-  ErrorDetails,
-  ErrorDetailsDeletionReasons,
-  Gestes,
-} from '@/types';
+import { Category, ErrorDetails, Gestes } from '@/types';
 import wording from '@/wording';
 
 interface InvalidQuoteProps {

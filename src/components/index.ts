@@ -49,6 +49,7 @@ export { default as Modal, ModalPosition } from './Modal/Modal';
 export type { ModalProps } from './Modal/Modal';
 // Moda - DeleteErrorModal
 export { default as DeleteErrorModal } from './Modal/DeleteErrorModal/DeleteErrorModal';
+export type { DeleteErrorModalProps } from './Modal/DeleteErrorModal/DeleteErrorModal';
 // Modal - ErrorFeedbacksModal
 export { default as ErrorFeedbacksModal } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
@@ -61,6 +62,9 @@ export type { MultiSelectCheckboxProps } from './MultiSelectCheckbox/MultiSelect
 // Notice
 export { default as Notice, NoticeType } from './Notice/Notice';
 export type { NoticeProps } from './Notice/Notice';
+// QuoteErrorLine
+export { default as QuoteErrorLine } from './QuoteErrorLine/QuoteErrorLine';
+export type { QuoteErrorLineProps } from './QuoteErrorLine/QuoteErrorLine';
 // QuoteErrorTable
 export { default as QuoteErrorTable } from './QuoteErrorTable/QuoteErrorTable';
 export type { QuoteErrorTableProps } from './QuoteErrorTable/QuoteErrorTable';

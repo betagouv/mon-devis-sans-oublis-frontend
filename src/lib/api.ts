@@ -1,4 +1,4 @@
-import { ErrorDetailsDeletionReasons, Profile, Rating } from '@/types';
+import { Profile, Rating } from '@/types';
 
 const API_CONFIG = {
   headers: {

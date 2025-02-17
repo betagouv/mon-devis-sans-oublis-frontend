@@ -3,12 +3,7 @@
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
 import QuoteErrorLine from '../QuoteErrorLine/QuoteErrorLine';
 import Tooltip from '../Tooltip/Tooltip';
-import {
-  Category,
-  ErrorDetails,
-  ErrorDetailsDeletionReasons,
-  Gestes,
-} from '@/types';
+import { Category, ErrorDetails, Gestes } from '@/types';
 import wording from '@/wording';
 
 export interface QuoteErrorTablePropsAdmin {
