@@ -32,7 +32,7 @@ interface ResultClientProps {
 }
 
 export default function ResultClient({
-  currentDevis,
+  currentDevis: initialDevis,
   deleteErrorReasons,
   profile,
   quoteCheckId,
@@ -40,7 +40,9 @@ export default function ResultClient({
   onDeleteErrorDetail,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
-
+  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
+    initialDevis
+  );
   const [isLoading, setIsLoading] = useState<boolean>(
     !currentDevis || currentDevis.status === Status.PENDING
   );
@@ -48,11 +50,6 @@ export default function ResultClient({
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  const [selectedError, setSelectedError] = useState<{
-    comment: string | null;
-    id: string;
-  } | null>(null);
 
   // Polling logic to update `currentDevis` if status is PENDING
   useEffect(() => {
@@ -137,7 +134,21 @@ export default function ResultClient({
     reason?: string
   ) => {
     if (onDeleteErrorDetail) {
-      await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
+      try {
+        await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
+
+        // ✅ Mise à jour de l'état local après suppression réussie
+        if (currentDevis) {
+          setCurrentDevis({
+            ...currentDevis,
+            error_details: currentDevis.error_details.map((error) =>
+              error.id === errorDetailsId ? { ...error, deleted: true } : error
+            ),
+          });
+        }
+      } catch (error) {
+        console.error('Error deleting error detail:', error);
+      }
     }
   };
 
@@ -185,7 +196,7 @@ export default function ResultClient({
     );
   }
 
-  if (!currentDevis) {
+  if (!devisToDisplay) {
     return (
       <section className='fr-container-fluid fr-py-10w'>
         <p>{wording.page_upload_id.analysis_error}</p>
@@ -214,14 +225,14 @@ export default function ResultClient({
         </div>
       )}
       <div className='fr-container-fluid fr-py-10w'>
-        {devisToDisplay?.status === Status.VALID ? (
+        {devisToDisplay.status === Status.VALID ? (
           <ValidQuote
             analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
             uploadedFileName={devisToDisplay.filename}
           />
         ) : (
           <InvalidQuote
-            key={canDelete ? devisToDisplay?.error_details.length : undefined}
+            key={canDelete ? devisToDisplay.error_details.length : undefined}
             analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
             deleteErrorReasons={deleteErrorReasons}
             gestes={devisToDisplay.gestes}

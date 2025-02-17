@@ -1,24 +1,39 @@
 'use client';
 
-import { useState } from 'react';
-
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+import QuoteErrorLine from '../QuoteErrorLine/QuoteErrorLine';
 import Tooltip from '../Tooltip/Tooltip';
-import { Category, ErrorDetails, Gestes } from '@/types';
+import {
+  Category,
+  ErrorDetails,
+  ErrorDetailsDeletionReasons,
+  Gestes,
+} from '@/types';
 import wording from '@/wording';
 
 export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
   errorDetails: ErrorDetails[];
+  onDeleteError: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: keyof ErrorDetailsDeletionReasons | string
+  ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
+  quoteCheckId: string;
 }
 
 export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
   errorDetails: ErrorDetails[];
+  onDeleteError: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason?: keyof ErrorDetailsDeletionReasons | string
+  ) => void;
   gestes: Gestes[];
   onHelpClick: (comment: string, errorDetailsId: string) => void;
+  quoteCheckId: string;
 }
 
 export type QuoteErrorTableProps =
@@ -26,8 +41,6 @@ export type QuoteErrorTableProps =
   | QuoteErrorTablePropsGestes;
 
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
-  const [openModalId, setOpenModalId] = useState<string | null>(null);
-
   const isCategoryAdmin = props.category === Category.ADMIN;
   const isCategoryGestes = props.category === Category.GESTES;
 
@@ -41,18 +54,6 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
 
   const gestes =
     isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
-
-  const openModal = (id: string) => setOpenModalId(id);
-  const closeModal = () => setOpenModalId(null);
-
-  const handleFeedbackSubmit = (comment: string, id: string) => {
-    try {
-      props.onHelpClick(comment, id);
-      closeModal();
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-    }
-  };
 
   const getErrorBadgeLabel = () => {
     const count = getErrorCount();
@@ -80,9 +81,10 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
         <caption className='bg-[var(--background-action-low-blue-france)] font-bold text-left p-4 flex items-center justify-between'>
           <span className='flex gap-2 items-center'>
             <p className='fr-mb-0 text-[var(--text-default-grey)]!'>
-              {isCategoryGestes
-                ? wording.components.quote_error_card.title_gestes
-                : wording.components.quote_error_card.title_admin}
+              {isCategoryGestes &&
+                wording.components.quote_error_card.title_gestes}
+              {isCategoryAdmin &&
+                wording.components.quote_error_card.title_admin}
             </p>
             {isCategoryGestes && gestes.length > 0 && (
               <p className='fr-mb-0 font-normal! text-sm!'>
@@ -98,7 +100,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
               text={
                 isCategoryGestes
                   ? wording.components.quote_error_card.tooltip.gestes
-                  : wording.components.quote_error_card.tooltip.admin
+                  : isCategoryAdmin
+                  ? wording.components.quote_error_card.tooltip.admin
+                  : ''
               }
             />
           </span>
@@ -109,104 +113,76 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
             variant={BadgeVariant.GREY}
           />
         </caption>
-        {isCategoryGestes &&
-          gestes.length > 0 &&
-          props.gestes.map((geste, gIndex) => {
-            const errorsForGeste = filteredGestesErrors.filter(
-              (error) => error.geste_id === geste.id
-            );
-            const isFirstGeste = gIndex === 0;
-            const isLastGeste = gIndex === props.gestes.length - 1;
+        {isCategoryGestes && gestes.length > 0
+          ? gestes.map((geste, gIndex) => {
+              const errorsForGeste = filteredGestesErrors.filter(
+                (error) => error.geste_id === geste.id
+              );
+              const isLastGeste = gIndex === gestes.length - 1;
 
-            return (
-              <tbody key={geste.id}>
-                <tr
-                  className={`bg-[var(--background-default-grey-hover)] ${
-                    isLastGeste && errorsForGeste.length === 0
-                      ? 'border-b-0'
-                      : `border-bottom-grey ${
-                          isFirstGeste ? '' : 'border-top-grey'
-                        }`
-                  }`}
-                >
-                  <th
-                    className='flex gap-4 justify-between items-center p-4 text-[var(--text-action-high-blue-france)] text-left'
-                    scope='row'
-                    style={{ fontWeight: 500 }}
+              return (
+                <tbody key={geste.id}>
+                  <tr
+                    className={`bg-[var(--background-default-grey-hover)] ${
+                      isLastGeste && errorsForGeste.length === 0
+                        ? 'border-b-0'
+                        : `border-bottom-grey ${
+                            gIndex === 0 ? '' : 'border-top-grey'
+                          }`
+                    }`}
                   >
-                    {geste.intitule}
-                    {geste.valid ? (
-                      <Badge
-                        icon='fr-icon-success-fill'
-                        label={'OK'}
-                        size={BadgeSize.X_SMALL}
-                        variant={BadgeVariant.GREEN}
-                      />
-                    ) : (
-                      <Badge
-                        icon='fr-icon-alert-fill'
-                        label={`${errorsForGeste.length}`}
-                        size={BadgeSize.X_SMALL}
-                        variant={BadgeVariant.ORANGE_LIGHT}
-                      />
-                    )}
-                  </th>
-                </tr>
-                {errorsForGeste.map((error, index) => {
-                  const isLastErrorInTable =
-                    isLastGeste && index === errorsForGeste.length - 1;
-
-                  return (
-                    <tr
-                      className={`font-bold ${
-                        isLastErrorInTable
-                          ? 'border-b-0'
-                          : 'border-bottom-grey border-top-grey'
-                      }`}
-                      key={error.id}
+                    <th
+                      className='flex gap-4 justify-between items-center p-4 text-[var(--text-action-high-blue-france)] text-left'
+                      scope='row'
+                      style={{ fontWeight: 500 }}
                     >
-                      <td className='flex flex-col md:flex-row justify-between items-start md:items:center gap-4 p-4'>
-                        {error.title}
-                        {error.solution && (
-                          <button
-                            className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-                            onClick={() => openModal(error.id)}
-                          >
-                            {
-                              wording.components.quote_error_card
-                                .button_see_detail
-                            }
-                          </button>
-                        )}
-                        {error.solution && (
-                          <ErrorFeedbacksModal
-                            isOpen={openModalId === error.id}
-                            onClose={closeModal}
-                            onSubmitFeedback={handleFeedbackSubmit}
-                            errorDetailsId={error.id}
-                            problem={error.problem || ''}
-                            solution={error.solution}
-                            title={error.title}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            );
-          })}
-        {isCategoryAdmin && (
+                      {geste.intitule}
+                      {geste.valid ? (
+                        <Badge
+                          icon='fr-icon-success-fill'
+                          label={'OK'}
+                          size={BadgeSize.X_SMALL}
+                          variant={BadgeVariant.GREEN}
+                        />
+                      ) : (
+                        <Badge
+                          icon='fr-icon-alert-fill'
+                          label={`${errorsForGeste.length}`}
+                          size={BadgeSize.X_SMALL}
+                          variant={BadgeVariant.ORANGE_LIGHT}
+                        />
+                      )}
+                    </th>
+                  </tr>
+                  {errorsForGeste.map((error, index) => (
+                    <QuoteErrorLine
+                      error={error}
+                      isLastErrorInTable={
+                        isLastGeste && index === errorsForGeste.length - 1
+                      }
+                      key={error.id}
+                      onDeleteError={props.onDeleteError}
+                      onFeedbackSubmit={props.onHelpClick}
+                      quoteCheckId={props.quoteCheckId}
+                    />
+                  ))}
+                </tbody>
+              );
+            })
+          : null}
+        {isCategoryAdmin ? (
           <tbody>
             {filteredAdminErrors.map((error) => (
-              <tr className='font-bold border-bottom-grey' key={error.id}>
-                <td className='flex justify-between items-center p-4'>
-                  {error.title}
-                </td>
-              </tr>
+              <QuoteErrorLine
+                error={error}
+                key={error.id}
+                onDeleteError={props.onDeleteError}
+                onFeedbackSubmit={props.onHelpClick}
+                quoteCheckId={props.quoteCheckId}
+              />
             ))}
           </tbody>
-        )}
+        ) : null}
       </table>
     </div>
   );
