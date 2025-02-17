@@ -13,9 +13,6 @@ export const quoteService = {
     errorDetailsId: string,
     reason: string
   ): Promise<Response> {
-    console.log('🔍 DEBUG API - deleteErrorDetail:');
-    console.log('reason reçue:', reason);
-
     const deleteUrl =
       process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
 
@@ -31,8 +28,6 @@ export const quoteService = {
 
     const finalUrl = `${url}?reason=${reason}`;
     // ?reason=${encodeURIComponent(reason)}
-
-    console.log('URL finale:', finalUrl);
 
     const response = await fetch(finalUrl, {
       method: 'DELETE',

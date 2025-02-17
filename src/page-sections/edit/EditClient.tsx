@@ -35,13 +35,8 @@ export default function EditClient({
     errorDetailId: string,
     reason: string
   ) => {
-    console.log(
-      '🔍 DEBUG handleDeleteErrorDetail - Avant suppression:',
-      errorDetailId
-    );
     if (!currentDevis) return;
 
-    // Mise à jour immédiate de l'état : suppression locale de l'erreur
     setCurrentDevis((prevDevis) => {
       if (!prevDevis) return null;
       return {
@@ -53,7 +48,6 @@ export default function EditClient({
     });
 
     try {
-      console.log('🔄 Suppression en cours...');
       const response = await quoteService.deleteErrorDetail(
         quoteCheckId,
         errorDetailId,
@@ -62,14 +56,12 @@ export default function EditClient({
       if (!response.ok) {
         throw new Error(`❌ Suppression échouée côté API: ${response.status}`);
       }
-      console.log('✅ Suppression confirmée par API');
-      // Recharger les données pour être sûr que l'état est cohérent
+
       const updatedData = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(updatedData);
-      console.log('✅ État mis à jour avec les nouvelles données depuis API');
     } catch (error) {
       console.error("❌ Erreur lors de la suppression de l'erreur:", error);
-      // En cas d'erreur, refetch les données
+
       const data = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(data);
     }

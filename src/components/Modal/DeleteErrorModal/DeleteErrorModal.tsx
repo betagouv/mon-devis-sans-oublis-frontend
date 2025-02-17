@@ -54,13 +54,11 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
 
     const finalReason = isCustom ? customReason.trim() : selectedReason;
 
-    // 🔥 Vérification que finalReason n'est JAMAIS vide
     if (!finalReason) {
       console.error("🚨 ERREUR: finalReason est vide avant l'envoi !");
       return;
     }
 
-    console.log('🛠 Avant appel à onDeleteError:', finalReason);
     onDeleteError(quoteCheckId, errorDetailsId, finalReason);
     onClose?.();
   };

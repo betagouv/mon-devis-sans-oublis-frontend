@@ -46,38 +46,19 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     closeModal();
   };
 
-  // const handleDeleteConfirm = (
-  //   quoteCheckId: string,
-  //   errorDetailsId: string,
-  //   reason: string
-  // ) => {
-  //   const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
-  //   const finalReason = foundReason ? foundReason.label : reason;
-
-  //   console.log('🔍 DEBUG QuoteErrorLine - handleDeleteConfirm:');
-  //   console.log('reason reçue:', finalReason);
-  //   onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
-  // };
-
   const handleDeleteConfirm = (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => {
-    console.log('🔍 DEBUG QuoteErrorLine - Avant conversion:', reason);
-
     if (!reason) {
       console.error('🚨 ERREUR: reason est vide dans QuoteErrorLine !');
       return;
     }
 
-    // Vérification et conversion de la raison
     const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
     const finalReason = foundReason ? foundReason.label : reason;
 
-    console.log('🔍 DEBUG QuoteErrorLine - Après conversion:', finalReason);
-
-    // 🔥 Appel immédiat à la suppression pour mettre à jour l'UI
     onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
   };
 

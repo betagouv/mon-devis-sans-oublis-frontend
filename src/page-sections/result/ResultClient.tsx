@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
@@ -126,14 +127,13 @@ export default function ResultClient({
     errorDetailsId: string,
     reason: string
   ) => {
-    console.log('🔍 Reason in ResultClient (avant conversion) :', reason);
     if (!reason) {
       console.error('🚨 ERREUR: reason est vide dans ResultClient !');
       return;
     }
     const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
     const finalReason = foundReason ? foundReason.label : reason;
-    console.log('🔍 Reason in ResultClient (après conversion) :', finalReason);
+
     if (!finalReason) {
       console.error(
         '🚨 ERREUR: finalReason est vide après conversion dans ResultClient !'
