@@ -1,20 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
 import { useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import {
-  Status,
-  Rating,
-  Category,
-  QuoteChecksId,
-  ErrorDetailsDeletionReasons,
-} from '@/types';
+import { Status, Rating, Category, QuoteChecksId } from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -40,22 +33,28 @@ export default function ResultClient({
   onDeleteErrorDetail,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
+  // On initialise le state avec la prop initiale...
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
   const [isLoading, setIsLoading] = useState<boolean>(
-    !currentDevis || currentDevis.status === Status.PENDING
+    !initialDevis || initialDevis.status === Status.PENDING
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
 
-  // Polling logic to update `currentDevis` if status is PENDING
+  // Synchroniser le state local à chaque fois que la prop change
+  useEffect(() => {
+    setCurrentDevis(initialDevis);
+  }, [initialDevis]);
+
+  // Polling pour mettre à jour currentDevis si le statut est PENDING
   useEffect(() => {
     if (shouldRedirectToUpload) {
       setIsLoading(false);
-      return; // Stop polling if redirection is needed or status is final
+      return;
     }
 
     let isPollingActive = true;
@@ -70,25 +69,21 @@ export default function ResultClient({
         const data = await quoteService.getQuote(quoteCheckId);
         setCurrentDevis(data);
 
-        // Redirection condition
         const isInvalidStatus = data.status === Status.INVALID;
         const hasFileError =
           data.error_details?.[0]?.category === Category.FILE;
-
         if (isInvalidStatus && hasFileError) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
         }
 
-        // Stop polling if status is final
         if (data.status === Status.VALID || data.status === Status.INVALID) {
           setIsLoading(false);
           isPollingActive = false;
           return;
         }
 
-        // Continue polling if status is still PENDING
         if (data.status === Status.PENDING && retryCount < maxRetries) {
           retryCount++;
           setTimeout(pollQuote, pollingInterval);
@@ -109,14 +104,12 @@ export default function ResultClient({
     };
   }, [quoteCheckId, shouldRedirectToUpload]);
 
-  // Trigger redirection when shouldRedirectToUpload changes
   useEffect(() => {
     if (shouldRedirectToUpload) {
       window.location.href = `/${profile}/televersement?error=${FILE_ERROR}`;
     }
   }, [shouldRedirectToUpload, profile]);
 
-  // ✅ Gérer le cas où currentDevis est null
   const devisToDisplay = currentDevis
     ? canDelete
       ? {
@@ -134,15 +127,12 @@ export default function ResultClient({
     reason: string
   ) => {
     console.log('🔍 Reason in ResultClient (avant conversion) :', reason);
-
     if (!reason) {
       console.error('🚨 ERREUR: reason est vide dans ResultClient !');
       return;
     }
-
     const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
     const finalReason = foundReason ? foundReason.label : reason;
-
     console.log('🔍 Reason in ResultClient (après conversion) :', finalReason);
     if (!finalReason) {
       console.error(
@@ -150,7 +140,6 @@ export default function ResultClient({
       );
       return;
     }
-
     if (onDeleteErrorDetail) {
       await onDeleteErrorDetail(quoteCheckId, errorDetailsId, finalReason);
     }

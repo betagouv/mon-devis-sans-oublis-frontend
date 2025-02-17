@@ -64,23 +64,20 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     errorDetailsId: string,
     reason: string
   ) => {
-    console.log(
-      '🔍 DEBUG QuoteErrorLine - handleDeleteConfirm: reason reçue avant conversion:',
-      reason
-    );
+    console.log('🔍 DEBUG QuoteErrorLine - Avant conversion:', reason);
 
     if (!reason) {
       console.error('🚨 ERREUR: reason est vide dans QuoteErrorLine !');
       return;
     }
 
+    // Vérification et conversion de la raison
     const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
     const finalReason = foundReason ? foundReason.label : reason;
 
-    console.log(
-      '🔍 DEBUG QuoteErrorLine - handleDeleteConfirm: reason après conversion:',
-      finalReason
-    );
+    console.log('🔍 DEBUG QuoteErrorLine - Après conversion:', finalReason);
+
+    // 🔥 Appel immédiat à la suppression pour mettre à jour l'UI
     onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
   };
 
