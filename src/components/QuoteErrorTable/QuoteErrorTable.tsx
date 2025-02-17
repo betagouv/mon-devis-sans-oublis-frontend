@@ -1,41 +1,24 @@
 'use client';
 
+import { useState } from 'react';
+
 import Badge, { BadgeSize, BadgeVariant } from '../Badge/Badge';
-import QuoteErrorLine from '../QuoteErrorLine/QuoteErrorLine';
+import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
 import Tooltip from '../Tooltip/Tooltip';
-import {
-  Category,
-  ErrorDetails,
-  ErrorDetailsDeletionReasons,
-  Gestes,
-} from '@/types';
+import { Category, ErrorDetails, Gestes } from '@/types';
 import wording from '@/wording';
 
 export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
-  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
-  onDeleteError?: (
-    quoteCheckId: string,
-    errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
-  ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
-  quoteCheckId: string;
 }
 
 export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
-  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
   gestes: Gestes[];
-  onDeleteError?: (
-    errorDetailsId: string,
-    quoteCheckId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
-  ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
-  quoteCheckId: string;
 }
 
 export type QuoteErrorTableProps =
@@ -43,45 +26,53 @@ export type QuoteErrorTableProps =
   | QuoteErrorTablePropsGestes;
 
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
-  const isCategoryAdmin = props.category === Category.ADMIN;
+  const [openModalId, setOpenModalId] = useState<string | null>(null);
 
+  const isCategoryAdmin = props.category === Category.ADMIN;
   const isCategoryGestes = props.category === Category.GESTES;
+
+  const filteredAdminErrors = isCategoryAdmin
+    ? props.errorDetails.filter((error) => error.category === Category.ADMIN)
+    : [];
+
+  const filteredGestesErrors = isCategoryGestes
+    ? props.errorDetails.filter((error) => error.category === Category.GESTES)
+    : [];
+
   const gestes =
     isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
 
-  const filteredGestesErrors = isCategoryGestes
-    ? Object.values(
-        props.errorDetails
-          .filter((error) => error.category === Category.GESTES)
-          .reduce<Record<string, ErrorDetails>>((acc, error) => {
-            const key = `${error.geste_id}-${error.provided_value}-${error.code}`;
+  const openModal = (id: string) => setOpenModalId(id);
+  const closeModal = () => setOpenModalId(null);
 
-            if (Category.GESTES in props) {
-              const matchingGeste = props.gestes.find(
-                (geste) =>
-                  geste.id === error.geste_id &&
-                  geste.intitule === error.provided_value
-              );
+  const handleFeedbackSubmit = (comment: string, id: string) => {
+    try {
+      props.onHelpClick(comment, id);
+      closeModal();
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
+  };
 
-              if (
-                !acc[key] ||
-                (matchingGeste && matchingGeste.valid === false)
-              ) {
-                acc[key] = error;
-              }
-            } else {
-              acc[key] = error;
-            }
+  const getErrorBadgeLabel = () => {
+    const count = getErrorCount();
+    const template =
+      count > 1
+        ? wording.page_upload_id.badge_correction_plural
+        : wording.page_upload_id.badge_correction;
 
-            return acc;
-          }, {})
-      )
-    : [];
+    return template.replace('{number}', count.toString());
+  };
 
-  console.log(
-    '🖥️ Liste des erreurs mises à jour après suppression:',
-    props.errorDetails
-  );
+  const getErrorCount = () => {
+    if (isCategoryGestes) {
+      return filteredGestesErrors.length;
+    }
+    if (isCategoryAdmin) {
+      return filteredAdminErrors.length;
+    }
+    return 0;
+  };
 
   return (
     <div className='overflow-hidden rounded-lg border-shadow'>
@@ -89,10 +80,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
         <caption className='bg-[var(--background-action-low-blue-france)] font-bold text-left p-4 flex items-center justify-between'>
           <span className='flex gap-2 items-center'>
             <p className='fr-mb-0 text-[var(--text-default-grey)]!'>
-              {isCategoryGestes &&
-                wording.components.quote_error_card.title_gestes}
-              {isCategoryAdmin &&
-                wording.components.quote_error_card.title_admin}
+              {isCategoryGestes
+                ? wording.components.quote_error_card.title_gestes
+                : wording.components.quote_error_card.title_admin}
             </p>
             {isCategoryGestes && gestes.length > 0 && (
               <p className='fr-mb-0 font-normal! text-sm!'>
@@ -108,114 +98,115 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
               text={
                 isCategoryGestes
                   ? wording.components.quote_error_card.tooltip.gestes
-                  : isCategoryAdmin
-                  ? wording.components.quote_error_card.tooltip.admin
-                  : ''
+                  : wording.components.quote_error_card.tooltip.admin
               }
             />
           </span>
           <Badge
             className='self-center inline-block'
-            label={`${((
-              isCategoryGestes
-                ? filteredGestesErrors.filter((error) =>
-                    gestes.some(
-                      (geste) => geste.id === error.geste_id && !geste.valid
-                    )
-                  ).length > 1
-                : props.errorDetails.length > 1
-            )
-              ? wording.page_upload_id.badge_correction_plural
-              : wording.page_upload_id.badge_correction
-            ).replace(
-              '{number}',
-              (isCategoryGestes
-                ? filteredGestesErrors.filter((error) =>
-                    gestes.some(
-                      (geste) => geste.id === error.geste_id && !geste.valid
-                    )
-                  ).length
-                : props.errorDetails.length
-              ).toString()
-            )}`}
+            label={getErrorBadgeLabel()}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
           />
         </caption>
-        {isCategoryGestes && gestes.length > 0
-          ? props.gestes.map((geste, gIndex) => {
-              const errorsForGeste = filteredGestesErrors.filter(
-                (error) => error.geste_id === geste.id
-              );
-              const isLastGeste = gIndex === props.gestes.length - 1;
+        {isCategoryGestes &&
+          gestes.length > 0 &&
+          props.gestes.map((geste, gIndex) => {
+            const errorsForGeste = filteredGestesErrors.filter(
+              (error) => error.geste_id === geste.id
+            );
+            const isFirstGeste = gIndex === 0;
+            const isLastGeste = gIndex === props.gestes.length - 1;
 
-              return (
-                <tbody key={geste.id}>
-                  <tr
-                    className={`bg-[var(--background-default-grey-hover)] ${
-                      isLastGeste && errorsForGeste.length === 0
-                        ? 'border-b-0'
-                        : `border-bottom-grey ${
-                            gIndex === 0 ? '' : 'border-top-grey'
-                          }`
-                    }`}
+            return (
+              <tbody key={geste.id}>
+                <tr
+                  className={`bg-[var(--background-default-grey-hover)] ${
+                    isLastGeste && errorsForGeste.length === 0
+                      ? 'border-b-0'
+                      : `border-bottom-grey ${
+                          isFirstGeste ? '' : 'border-top-grey'
+                        }`
+                  }`}
+                >
+                  <th
+                    className='flex gap-4 justify-between items-center p-4 text-[var(--text-action-high-blue-france)] text-left'
+                    scope='row'
+                    style={{ fontWeight: 500 }}
                   >
-                    <th
-                      className='flex gap-4 justify-between items-center p-4 text-[var(--text-action-high-blue-france)] text-left'
-                      scope='row'
-                      style={{ fontWeight: 500 }}
-                    >
-                      {geste.intitule}
-                      {geste.valid ? (
-                        <Badge
-                          icon='fr-icon-success-fill'
-                          label={'OK'}
-                          size={BadgeSize.X_SMALL}
-                          variant={BadgeVariant.GREEN}
-                        />
-                      ) : (
-                        <Badge
-                          icon='fr-icon-alert-fill'
-                          label={`${errorsForGeste.length}`}
-                          size={BadgeSize.X_SMALL}
-                          variant={BadgeVariant.ORANGE_LIGHT}
-                        />
-                      )}
-                    </th>
-                  </tr>
-                  {errorsForGeste.map((error, index) => (
-                    <QuoteErrorLine
-                      deleteErrorReasons={props.deleteErrorReasons}
-                      error={error}
-                      isLastErrorInTable={
-                        isLastGeste && index === errorsForGeste.length - 1
-                      }
+                    {geste.intitule}
+                    {geste.valid ? (
+                      <Badge
+                        icon='fr-icon-success-fill'
+                        label={'OK'}
+                        size={BadgeSize.X_SMALL}
+                        variant={BadgeVariant.GREEN}
+                      />
+                    ) : (
+                      <Badge
+                        icon='fr-icon-alert-fill'
+                        label={`${errorsForGeste.length}`}
+                        size={BadgeSize.X_SMALL}
+                        variant={BadgeVariant.ORANGE_LIGHT}
+                      />
+                    )}
+                  </th>
+                </tr>
+                {errorsForGeste.map((error, index) => {
+                  const isLastErrorInTable =
+                    isLastGeste && index === errorsForGeste.length - 1;
+
+                  return (
+                    <tr
+                      className={`font-bold ${
+                        isLastErrorInTable
+                          ? 'border-b-0'
+                          : 'border-bottom-grey border-top-grey'
+                      }`}
                       key={error.id}
-                      onDeleteError={props.onDeleteError}
-                      onFeedbackSubmit={props.onHelpClick}
-                      quoteCheckId={props.quoteCheckId}
-                    />
-                  ))}
-                </tbody>
-              );
-            })
-          : null}
-        {isCategoryAdmin ? (
+                    >
+                      <td className='flex flex-col md:flex-row justify-between items-start md:items:center gap-4 p-4'>
+                        {error.title}
+                        {error.solution && (
+                          <button
+                            className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+                            onClick={() => openModal(error.id)}
+                          >
+                            {
+                              wording.components.quote_error_card
+                                .button_see_detail
+                            }
+                          </button>
+                        )}
+                        {error.solution && (
+                          <ErrorFeedbacksModal
+                            isOpen={openModalId === error.id}
+                            onClose={closeModal}
+                            onSubmitFeedback={handleFeedbackSubmit}
+                            errorDetailsId={error.id}
+                            problem={error.problem || ''}
+                            solution={error.solution}
+                            title={error.title}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            );
+          })}
+        {isCategoryAdmin && (
           <tbody>
-            {props.errorDetails
-              .filter((error) => error.category === Category.ADMIN)
-              .map((error) => (
-                <QuoteErrorLine
-                  deleteErrorReasons={props.deleteErrorReasons}
-                  error={error}
-                  key={error.id}
-                  onDeleteError={props.onDeleteError}
-                  onFeedbackSubmit={props.onHelpClick}
-                  quoteCheckId={props.quoteCheckId}
-                />
-              ))}
+            {filteredAdminErrors.map((error) => (
+              <tr className='font-bold border-bottom-grey' key={error.id}>
+                <td className='flex justify-between items-center p-4'>
+                  {error.title}
+                </td>
+              </tr>
+            ))}
           </tbody>
-        ) : null}
+        )}
       </table>
     </div>
   );
