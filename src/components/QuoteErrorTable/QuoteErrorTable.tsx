@@ -28,41 +28,19 @@ export type QuoteErrorTableProps =
 const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
 
+  const isCategoryAdmin = props.category === Category.ADMIN;
   const isCategoryGestes = props.category === Category.GESTES;
-  const gestes =
-    isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
+
+  const filteredAdminErrors = isCategoryAdmin
+    ? props.errorDetails.filter((error) => error.category === Category.ADMIN)
+    : [];
 
   const filteredGestesErrors = isCategoryGestes
-    ? Object.values(
-        props.errorDetails
-          .filter((error) => error.category === Category.GESTES)
-          .reduce<Record<string, ErrorDetails>>((acc, error) => {
-            const key = `${error.geste_id}-${error.provided_value}-${error.code}`; // Create a unique key for each error
-
-            if (Category.GESTES in props) {
-              const matchingGeste = props.gestes.find(
-                (geste) =>
-                  geste.id === error.geste_id && // Match by geste_id + intitule (in gestes) === geste_id + provided_value (in errorDetails)
-                  geste.intitule === error.provided_value
-              );
-
-              // This condition ensures that if there are duplicates, we only keep the ones with `valid: false`
-              // If no duplicate exists, the error is stored no matter its valid status
-              if (
-                !acc[key] ||
-                (matchingGeste && matchingGeste.valid === false)
-              ) {
-                acc[key] = error; // Store the error in the accumulator
-              }
-            } else {
-              // If `gestes` is not in props (meaning it's the "admin" category case), simply add the error
-              acc[key] = error;
-            }
-
-            return acc; // Return the updated accumulator
-          }, {})
-      )
+    ? props.errorDetails.filter((error) => error.category === Category.GESTES)
     : [];
+
+  const gestes =
+    isCategoryGestes && 'gestes' in props ? props.gestes ?? [] : [];
 
   const openModal = (id: string) => setOpenModalId(id);
   const closeModal = () => setOpenModalId(null);
@@ -74,6 +52,26 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
+  };
+
+  const getErrorBadgeLabel = () => {
+    const count = getErrorCount();
+    const template =
+      count > 1
+        ? wording.page_upload_id.badge_correction_plural
+        : wording.page_upload_id.badge_correction;
+
+    return template.replace('{number}', count.toString());
+  };
+
+  const getErrorCount = () => {
+    if (isCategoryGestes) {
+      return filteredGestesErrors.length;
+    }
+    if (isCategoryAdmin) {
+      return filteredAdminErrors.length;
+    }
+    return 0;
   };
 
   return (
@@ -106,25 +104,13 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           </span>
           <Badge
             className='self-center inline-block'
-            label={`${((
-              isCategoryGestes
-                ? filteredGestesErrors.length > 1
-                : props.errorDetails.length > 1
-            )
-              ? wording.page_upload_id.badge_correction_plural
-              : wording.page_upload_id.badge_correction
-            ).replace(
-              '{number}',
-              (isCategoryGestes
-                ? filteredGestesErrors.length
-                : props.errorDetails.length
-              ).toString()
-            )}`}
+            label={getErrorBadgeLabel()}
             size={BadgeSize.X_SMALL}
             variant={BadgeVariant.GREY}
           />
         </caption>
-        {isCategoryGestes && gestes.length > 0 ? (
+        {isCategoryGestes &&
+          gestes.length > 0 &&
           props.gestes.map((geste, gIndex) => {
             const errorsForGeste = filteredGestesErrors.filter(
               (error) => error.geste_id === geste.id
@@ -209,10 +195,10 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 })}
               </tbody>
             );
-          })
-        ) : (
+          })}
+        {isCategoryAdmin && (
           <tbody>
-            {props.errorDetails.map((error) => (
+            {filteredAdminErrors.map((error) => (
               <tr className='font-bold border-bottom-grey' key={error.id}>
                 <td className='flex justify-between items-center p-4'>
                   {error.title}
