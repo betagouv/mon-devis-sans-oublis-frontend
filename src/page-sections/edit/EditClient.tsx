@@ -49,7 +49,7 @@
 import { useEffect, useState } from 'react';
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
-import { QuoteChecksId } from '@/types';
+import { ErrorDetails, QuoteChecksId } from '@/types';
 
 export default function EditClient({
   params,
@@ -76,7 +76,6 @@ export default function EditClient({
     fetchCurrentDevis();
   }, [params.quoteCheckId]);
 
-  // ✅ Fonction pour supprimer une erreur
   const handleDeleteErrorDetail = async (
     quoteCheckId: string,
     errorDetailId: string,
@@ -90,41 +89,43 @@ export default function EditClient({
       reason,
     });
 
-    // Mise à jour optimiste de l'UI
-    setCurrentDevis((prevDevis) =>
-      prevDevis
-        ? {
-            ...prevDevis,
-            error_details: prevDevis.error_details.filter(
-              (error) => error.id !== errorDetailId
-            ),
-          }
-        : null
-    );
-
     try {
-      // Attendre la réponse de l'API avant de continuer
-      console.log('📡 Appel API deleteErrorDetail avec:', {
-        quoteCheckId,
-        errorDetailId,
-        reason,
-      });
-
-      const success = await quoteService.deleteErrorDetail(
+      // 1. Appel API pour la suppression
+      console.log('📤 Envoi de la requête DELETE...');
+      const response = await quoteService.deleteErrorDetail(
         quoteCheckId,
         errorDetailId,
         reason
       );
 
-      if (!success) {
-        throw new Error('❌ Suppression échouée côté API');
+      console.log('📥 Réponse de la suppression:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`❌ Suppression échouée côté API: ${response.status}`);
       }
 
-      console.log('✅ Suppression réussie côté API');
+      // 2. Attendre un peu avant de recharger (pour laisser le temps à l'API)
+      console.log('⏳ Attente avant rechargement...');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // 3. Recharger le devis
+      console.log('🔄 Rechargement du devis...');
+      const updatedData = await quoteService.getQuote(quoteCheckId);
+      console.log('📥 Données du devis reçues:', {
+        errorCount: updatedData.error_details.length,
+        deletedError: updatedData.error_details.find(
+          (e: ErrorDetails) => e.id === errorDetailId
+        ),
+      });
+
+      // 4. Mettre à jour l'état
+      setCurrentDevis(updatedData);
+      console.log('✅ État mis à jour avec les nouvelles données');
     } catch (error) {
       console.error("❌ Erreur lors de la suppression de l'erreur:", error);
 
-      console.log('🔄 Rechargement des données...');
+      // En cas d'erreur, recharger quand même les données
+      console.log('🔄 Rechargement des données après erreur...');
       const data = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(data);
     }
@@ -141,7 +142,7 @@ export default function EditClient({
       deleteErrorReasons={deleteErrorReasons}
       profile={params.profile}
       quoteCheckId={params.quoteCheckId}
-      onDeleteErrorDetail={handleDeleteErrorDetail} // 🔥 Passer la fonction au composant enfant
+      onDeleteErrorDetail={handleDeleteErrorDetail}
     />
   );
 }

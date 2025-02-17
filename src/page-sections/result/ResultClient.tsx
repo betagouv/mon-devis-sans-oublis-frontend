@@ -32,7 +32,7 @@ interface ResultClientProps {
 }
 
 export default function ResultClient({
-  currentDevis: initialDevis,
+  currentDevis,
   deleteErrorReasons,
   profile,
   quoteCheckId,
@@ -41,16 +41,18 @@ export default function ResultClient({
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
 
-  const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
-    initialDevis
-  );
   const [isLoading, setIsLoading] = useState<boolean>(
-    !initialDevis || initialDevis.status === Status.PENDING
+    !currentDevis || currentDevis.status === Status.PENDING
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [selectedError, setSelectedError] = useState<{
+    comment: string | null;
+    id: string;
+  } | null>(null);
 
   // Polling logic to update `currentDevis` if status is PENDING
   useEffect(() => {
@@ -117,31 +119,25 @@ export default function ResultClient({
     }
   }, [shouldRedirectToUpload, profile]);
 
+  // ✅ Gérer le cas où currentDevis est null
+  const devisToDisplay = currentDevis
+    ? canDelete
+      ? {
+          ...currentDevis,
+          error_details: currentDevis.error_details.filter(
+            (error) => !error.deleted
+          ),
+        }
+      : currentDevis
+    : null;
+
   const handleDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason?: keyof ErrorDetailsDeletionReasons | string
+    reason?: string
   ) => {
-    try {
-      if (onDeleteErrorDetail) {
-        await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
-      }
-
-      if (canDelete) {
-        setCurrentDevis((prevDevis) => {
-          if (!prevDevis) return prevDevis;
-
-          return {
-            ...prevDevis,
-            error_details: prevDevis.error_details.filter(
-              (error) => error.id !== errorDetailsId
-            ),
-          };
-        });
-      }
-    } catch (error) {
-      console.error('Erreur lors de la suppression :', error);
-      alert('La suppression a échoué.');
+    if (onDeleteErrorDetail) {
+      await onDeleteErrorDetail(quoteCheckId, errorDetailsId, reason);
     }
   };
 
@@ -218,28 +214,28 @@ export default function ResultClient({
         </div>
       )}
       <div className='fr-container-fluid fr-py-10w'>
-        {currentDevis.status === Status.VALID ? (
+        {devisToDisplay?.status === Status.VALID ? (
           <ValidQuote
-            analysisDate={formatDateToFrench(currentDevis.finished_at)}
-            uploadedFileName={currentDevis.filename}
+            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
+            uploadedFileName={devisToDisplay.filename}
           />
         ) : (
           <InvalidQuote
-            key={canDelete ? currentDevis?.error_details.length : undefined}
-            analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            key={canDelete ? devisToDisplay?.error_details.length : undefined}
+            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
             deleteErrorReasons={deleteErrorReasons}
-            gestes={currentDevis.gestes}
-            id={currentDevis.id}
-            list={currentDevis.error_details}
+            gestes={devisToDisplay.gestes}
+            id={devisToDisplay.id}
+            list={devisToDisplay.error_details}
             onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
-            uploadedFileName={currentDevis.filename || ''}
+            uploadedFileName={devisToDisplay.filename || ''}
           />
         )}
         <div className='fr-container flex flex-col relative'>
           <div
             className={`${
-              currentDevis.status === Status.VALID
+              devisToDisplay.status === Status.VALID
                 ? 'fixed bottom-14 md:right-37 right-4'
                 : isButtonSticky
                 ? 'fixed bottom-84 md:right-37 right-4'

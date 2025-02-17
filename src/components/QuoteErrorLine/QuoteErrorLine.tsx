@@ -58,7 +58,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
         reason
       );
 
-      await onDeleteError(quoteCheckId, error.id);
+      await onDeleteError(quoteCheckId, error.id, reason);
       closeDeleteModal();
     } catch (error) {
       console.error('❌ Erreur lors de la suppression:', error);

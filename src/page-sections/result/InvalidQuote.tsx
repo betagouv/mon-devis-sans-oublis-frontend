@@ -100,7 +100,9 @@ export default function InvalidQuote({
             category={Category.ADMIN}
             deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
-            onDeleteError={onDeleteError}
+            onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
+              onDeleteError?.(quoteCheckId, errorDetailsId, reason)
+            }
             onHelpClick={onHelpClick}
             quoteCheckId={id}
           />
@@ -109,7 +111,9 @@ export default function InvalidQuote({
             deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
             gestes={gestes}
-            onDeleteError={onDeleteError}
+            onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
+              onDeleteError?.(quoteCheckId, errorDetailsId, reason)
+            }
             onHelpClick={onHelpClick}
             quoteCheckId={id}
           />

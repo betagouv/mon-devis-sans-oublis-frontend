@@ -20,16 +20,18 @@ export const quoteService = {
     });
 
     try {
-      const response = await fetch(
-        `https://api.staging.mon-devis-sans-oublis.beta.gouv.fr/api/v1/quote_checks/${quoteCheckId}/error_details/${errorDetailsId}?reason=${reason}`,
-        {
-          method: 'DELETE',
-          headers: {
-            ...API_CONFIG.headers,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      let url = `https://api.staging.mon-devis-sans-oublis.beta.gouv.fr/api/v1/quote_checks/${quoteCheckId}/error_details/${errorDetailsId}`;
+      if (reason) {
+        url += `?reason=${encodeURIComponent(reason)}`;
+      }
+
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          ...API_CONFIG.headers,
+          'Content-Type': 'application/json',
+        },
+      });
 
       console.log('📤 Réponse API :', response.status);
 
