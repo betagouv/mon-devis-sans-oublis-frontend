@@ -3,14 +3,11 @@ import { Suspense } from 'react';
 import { EditClient } from '@/page-sections';
 import { quoteService } from '@/lib/api';
 
-interface ModifierParams {
-  params: {
-    profile: string;
-    quoteCheckId: string;
-  };
-}
-
-export default async function Modifier({ params }: ModifierParams) {
+export default async function Modifier({
+  params,
+}: {
+  params: { profile: string; quoteCheckId: string };
+}) {
   if (!params.quoteCheckId) {
     return <p className='text-red-500'>Erreur : ID du devis manquant.</p>;
   }
