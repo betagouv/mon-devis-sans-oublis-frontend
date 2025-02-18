@@ -10,7 +10,7 @@ import wording from '@/wording';
 import { Profile } from '@/types';
 
 export enum QuoteStatusType {
-  EDIT = 'edit',
+  NO_EDIT = 'no edit',
   SHARE = 'share',
   UPLOAD = 'upload',
 }
@@ -28,33 +28,34 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   const [isUrlCopied, setIsUrlCopied] = useState<boolean>(false);
 
   const goBackToUpload = useGoBackToUpload();
-  const goToEdit = `${pathname}/modifier`;
-  const isConseiller = pathname.includes(Profile.CONSEILLER);
+  const goToNonEdition = pathname.replace(/\/modifier$/, '');
 
-  const isEditOrShare =
-    type === QuoteStatusType.EDIT || type === QuoteStatusType.SHARE;
+  const isConseillerAndEdit =
+    pathname.includes(Profile.CONSEILLER) && pathname.includes('/modifier');
+
+  const isNotEditOrShare =
+    type === QuoteStatusType.NO_EDIT || type === QuoteStatusType.SHARE;
 
   const copyUrlToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
     setIsUrlCopied(true);
   };
 
-  const edit = type === QuoteStatusType.EDIT && (
+  const noEdit = type === QuoteStatusType.NO_EDIT && (
     <div className='flex flex-col'>
       <h5 className='fr-mb-1w'>
-        {wording.components.quote_status_link.edit.title}
+        {wording.components.quote_status_link.not_edit.title}
       </h5>
       <p className='fr-mb-2w'>
-        {wording.components.quote_status_link.edit.description}
+        {wording.components.quote_status_link.not_edit.description}
       </p>
       <span className='flex flex-row gap-4'>
         <Link
-          href={goToEdit}
-          icon='fr-icon-edit-line'
-          label={wording.components.quote_status_link.edit.link_label}
+          href={goToNonEdition}
+          label={wording.components.quote_status_link.not_edit.link_label}
           legacyBehavior
           size={LinkSize.SMALL}
-          variant={LinkVariant.TERTIARY}
+          variant={LinkVariant.PRIMARY}
         />
       </span>
     </div>
@@ -88,7 +89,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   const upload = type === QuoteStatusType.UPLOAD && (
     <div className='flex flex-col'>
       <h6 className='fr-mb-1w'>
-        {isConseiller
+        {isConseillerAndEdit
           ? wording.components.quote_status_link.upload.title_conseiller
           : wording.components.quote_status_link.upload.title}
       </h6>
@@ -105,15 +106,15 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   return (
     <div
       className={`${
-        isEditOrShare
+        isNotEditOrShare
           ? 'bg-[var(--background-alt-blue-france)]'
           : 'bg-[var(--background-default-grey-hover)]'
       } border-shadow flex items-center gap-6 px-4 py-6 rounded-lg w-fit ${className}`}
     >
       <Image
         alt={
-          type === QuoteStatusType.EDIT
-            ? wording.components.quote_status_link.share.image_alt
+          type === QuoteStatusType.NO_EDIT
+            ? wording.components.quote_status_link.not_edit.image_alt
             : type === QuoteStatusType.SHARE
             ? wording.components.quote_status_link.share.image_alt
             : wording.components.quote_status_link.upload.image_alt
@@ -121,15 +122,15 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
         className='shrink-0'
         height={80}
         src={
-          type === QuoteStatusType.EDIT
-            ? wording.components.quote_status_link.edit.image_src
+          type === QuoteStatusType.NO_EDIT
+            ? wording.components.quote_status_link.not_edit.image_src
             : type === QuoteStatusType.SHARE
             ? wording.components.quote_status_link.share.image_src
             : wording.components.quote_status_link.upload.image_src
         }
         width={80}
       />
-      {edit}
+      {noEdit}
       {share}
       {upload}
     </div>

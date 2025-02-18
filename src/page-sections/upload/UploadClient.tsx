@@ -72,7 +72,11 @@ export default function UploadClient({
       );
 
       startTransition(() => {
-        router.push(`/${profile}/televersement/${data.id}`);
+        if (profile === Profile.CONSEILLER) {
+          router.push(`/${profile}/televersement/${data.id}/modifier`);
+        } else {
+          router.push(`/${profile}/televersement/${data.id}`);
+        }
       });
     } catch (error) {
       console.error('Error during upload:', error);

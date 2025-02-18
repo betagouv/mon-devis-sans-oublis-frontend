@@ -39,7 +39,7 @@ export default function InvalidQuote({
   onUndoDeleteError,
   uploadedFileName,
 }: InvalidQuoteProps) {
-  const { isConseillerAndNotEdit } = useConseillerRoutes();
+  const { isConseillerAndEdit } = useConseillerRoutes();
 
   return (
     <>
@@ -117,27 +117,17 @@ export default function InvalidQuote({
         </div>
       </section>
       <section className='fr-container fr-my-6w'>
-        {isConseillerAndNotEdit ? (
-          <>
-            <div className='flex lg:flex-row lg:w-full md:w-[580px] flex-col gap-6 justify-between fr-mb-8w'>
-              <QuoteStatusLink type={QuoteStatusType.EDIT} />
-              <QuoteStatusLink type={QuoteStatusType.SHARE} />
-            </div>
-            <h4>Et après ?</h4>
-            <QuoteStatusLink
-              className='md:w-[480px]!'
-              type={QuoteStatusType.UPLOAD}
-            />
-          </>
-        ) : (
-          <div className='flex md:flex-row flex-col gap-6 justify-between'>
+        <div className='flex md:flex-row flex-col gap-6 justify-between'>
+          {isConseillerAndEdit ? (
+            <QuoteStatusLink type={QuoteStatusType.NO_EDIT} />
+          ) : (
             <QuoteStatusLink type={QuoteStatusType.SHARE} />
-            <QuoteStatusLink
-              className='md:w-[480px]!'
-              type={QuoteStatusType.UPLOAD}
-            />
-          </div>
-        )}
+          )}
+          <QuoteStatusLink
+            className='md:w-[480px]!'
+            type={QuoteStatusType.UPLOAD}
+          />
+        </div>
       </section>
     </>
   );

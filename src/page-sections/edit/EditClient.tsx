@@ -42,7 +42,7 @@ export default function EditClient({
 
     const updatedDevis = {
       ...currentDevis,
-      error_details: currentDevis.error_details.map((error) => ({
+      error_details: (currentDevis.error_details || []).map((error) => ({
         ...error,
         deleted: error.id === errorDetailId ? true : error.deleted,
       })),
