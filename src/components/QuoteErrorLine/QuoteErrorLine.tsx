@@ -100,7 +100,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
               <button
                 className='fr-btn fr-btn--tertiary fr-btn--sm'
                 onClick={() => {
-                  console.log('Clicking undo for:', quoteCheckId, error.id);
                   onUndoDeleteError(quoteCheckId, error.id);
                 }}
               >

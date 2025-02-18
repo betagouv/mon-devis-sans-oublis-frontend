@@ -141,10 +141,12 @@ export default function ResultClient({
     }
   };
 
-  const handleUndoDeleteError = (
+  const handleUndoDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string
   ) => {
+    if (!currentDevis) return;
+
     setCurrentDevis((prevDevis) => {
       if (!prevDevis) return null;
       return {
@@ -154,6 +156,33 @@ export default function ResultClient({
         ),
       };
     });
+
+    try {
+      const response = await quoteService.undoDeleteErrorDetail(
+        quoteCheckId,
+        errorDetailsId,
+        'Annulation de la suppression'
+      );
+
+      if (response === null) {
+        return;
+      }
+
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error("Erreur lors de l'annulation de la suppression:", error);
+
+      setCurrentDevis((prevDevis) => {
+        if (!prevDevis) return null;
+        return {
+          ...prevDevis,
+          error_details: prevDevis.error_details.map((error) =>
+            error.id === errorDetailsId ? { ...error, deleted: true } : error
+          ),
+        };
+      });
+    }
   };
 
   const handleHelpClick = async (comment: string, errorDetailsId: string) => {
@@ -168,6 +197,24 @@ export default function ResultClient({
     }
   };
 
+  const handleSubmitFeedback = async (
+    comment: string,
+    email: string | null,
+    rating: Rating
+  ) => {
+    try {
+      await quoteService.sendGlobalFeedback(quoteCheckId, {
+        comment,
+        email,
+        rating,
+      });
+      setIsModalOpen(false);
+      setShowToast(true);
+    } catch (error) {
+      console.error('Error sending feedback:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -175,6 +222,15 @@ export default function ResultClient({
           title={wording.page_upload_id.analysis_in_progress_title}
         />
         <p>{wording.page_upload_id.analysis_in_progress}</p>
+      </section>
+    );
+  }
+
+  if (shouldRedirectToUpload) {
+    return (
+      <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
+        <LoadingDots title={wording.page_upload_id.analysis_redirect_title} />
+        <p>{wording.page_upload_id.analysis_redirect}</p>
       </section>
     );
   }
@@ -217,6 +273,31 @@ export default function ResultClient({
             uploadedFileName={currentDevis.filename || ''}
           />
         ) : null}
+        <div className='fr-container flex flex-col relative'>
+          <div
+            className={`${
+              currentDevis?.status === Status.VALID
+                ? 'fixed bottom-14 md:right-37 right-4'
+                : isButtonSticky
+                ? 'fixed bottom-84 md:right-37 right-4'
+                : 'absolute bottom-[-40px] md:right-6 right-4'
+            } self-end z-20`}
+          >
+            <button
+              className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              Donner mon avis
+            </button>
+          </div>
+          {isModalOpen && (
+            <GlobalErrorFeedbacksModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSubmitFeedback={handleSubmitFeedback}
+            />
+          )}
+        </div>
       </div>
     </>
   );
