@@ -20,9 +20,9 @@ export default meta;
 
 type Story = StoryObj<typeof QuoteStatusLink>;
 
-export const QuoteLinkEdit: Story = {
+export const QuoteLinkNotEdit: Story = {
   args: {
-    type: QuoteStatusType.EDIT,
+    type: QuoteStatusType.NO_EDIT,
   },
 };
 

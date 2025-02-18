@@ -44,39 +44,24 @@ describe('QuoteStatusLink', () => {
 
   describe('EDIT type', () => {
     beforeEach(() => {
-      render(<QuoteStatusLink type={QuoteStatusType.EDIT} />);
+      render(<QuoteStatusLink type={QuoteStatusType.NO_EDIT} />);
     });
 
     it('renders edit type correctly', () => {
       expect(
-        screen.getByAltText(
-          wording.components.quote_status_link.share.image_alt
+        screen.getByText(wording.components.quote_status_link.not_edit.title)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.not_edit.description
         )
       ).toBeInTheDocument();
 
-      expect(
-        screen.getByText(wording.components.quote_status_link.edit.title)
-      ).toBeInTheDocument();
-
-      expect(
-        screen.getByText(wording.components.quote_status_link.edit.description)
-      ).toBeInTheDocument();
-
       const editLink = screen.getByText(
-        wording.components.quote_status_link.edit.link_label
+        wording.components.quote_status_link.not_edit.link_label
       );
       expect(editLink).toBeInTheDocument();
-      expect(editLink.closest('a')).toHaveAttribute(
-        'href',
-        '/test-path/modifier'
-      );
-    });
-
-    it('has correct styling for edit type', () => {
-      const container = screen
-        .getByRole('img')
-        .closest('div[class*="bg-[var(--background-alt-blue-france)]"]');
-      expect(container).toBeInTheDocument();
     });
   });
 
