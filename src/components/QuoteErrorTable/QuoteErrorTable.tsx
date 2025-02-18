@@ -136,7 +136,8 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       style={{ fontWeight: 500 }}
                     >
                       {geste.intitule}
-                      {geste.valid ? (
+                      {geste.valid ||
+                      errorsForGeste.every((error) => error.deleted) ? (
                         <Badge
                           icon='fr-icon-success-fill'
                           label={'OK'}
@@ -146,7 +147,10 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       ) : (
                         <Badge
                           icon='fr-icon-alert-fill'
-                          label={`${errorsForGeste.length}`}
+                          label={`${
+                            errorsForGeste.filter((error) => !error.deleted)
+                              .length
+                          }`}
                           size={BadgeSize.X_SMALL}
                           variant={BadgeVariant.ORANGE_LIGHT}
                         />
