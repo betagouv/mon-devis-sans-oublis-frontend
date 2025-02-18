@@ -60,12 +60,12 @@
       }
     },
     "quote_status_link": {
-      "edit": {
-        "description": "Possibilité d’ajouter des commentaires et/ou de supprimer des corrections",
-        "image_alt": "Image modifier les corrections",
-        "image_src": "/images/quotation_results/quotation_link_edit.webp",
-        "link_label": "Ouvrir le mode modification",
-        "title": "Personnalisez les retours"
+      "not_edit": {
+        "description": "Retrouver le résultat avec vos modifications et/ou vos suppressions",
+        "image_alt": "Image partagez le résultat avec vos corrections",
+        "image_src": "/images/quotation_results/quotation_link_share.webp",
+        "link_label": "Partager le lien",
+        "title": "Partagez le résultat avec vos corrections"
       },
       "share": {
         "button_copied_url": "Lien copié",

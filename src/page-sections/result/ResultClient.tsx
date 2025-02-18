@@ -260,7 +260,7 @@ export default function ResultClient({
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
-            list={currentDevis.error_details
+            list={(currentDevis.error_details || [])
               .filter((error) => showDeletedErrors || !error.deleted)
               .map((error) => ({
                 ...error,
