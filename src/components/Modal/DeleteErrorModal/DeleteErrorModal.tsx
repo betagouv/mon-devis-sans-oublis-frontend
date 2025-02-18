@@ -122,6 +122,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
               }}
               data-testid='delete-reasons-multiselect'
               label='Raison de la suppression'
+              multiple={false}
               onChange={handleReasonChange}
               options={[
                 ...deleteErrorReasons,

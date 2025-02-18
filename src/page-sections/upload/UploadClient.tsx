@@ -125,6 +125,7 @@ export default function UploadClient({
         {metadata.gestes && (
           <MultiSelectCheckbox
             label={wording.upload.select_gestes}
+            multiple={true}
             onChange={handleGestesChange}
             optionnal={true}
             options={metadata.gestes.flatMap((group) =>
@@ -139,6 +140,7 @@ export default function UploadClient({
         {metadata.aides && (
           <MultiSelectCheckbox
             label={wording.upload.select_aides}
+            multiple={true}
             onChange={handleAidesChange}
             optionnal={true}
             options={metadata.aides}

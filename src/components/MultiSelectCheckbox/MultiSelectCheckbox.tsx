@@ -23,6 +23,7 @@ export interface MultiSelectCheckboxProps {
     onChange: (value: string) => void;
   };
   label: string;
+  multiple: boolean;
   onChange: (values: string[]) => void;
   optionnal?: boolean;
   options: string[] | Option[];
@@ -43,12 +44,14 @@ interface GroupedOptions {
 export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   customInput,
   label,
+  multiple,
   onChange,
   optionnal,
   options,
   selectedValues = [],
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const customInputRef = useRef<HTMLInputElement>(null);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [localSelectedValues, setLocalSelectedValues] =
@@ -78,7 +81,15 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   const handleCheckboxChange = (id: string, checked: boolean) => {
     let newValues: string[];
     if (checked) {
-      newValues = [...localSelectedValues, id];
+      newValues = multiple ? [...localSelectedValues, id] : [id];
+
+      if (id === 'custom') {
+        setTimeout(() => {
+          customInputRef.current?.focus();
+        }, 0);
+      } else if (!multiple) {
+        setIsOpen(false);
+      }
     } else {
       newValues = localSelectedValues.filter((value) => value !== id);
       if (id === 'custom' && customInput) {
@@ -124,10 +135,10 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   const displayValue = localSelectedValues.length
-    ? localSelectedValues.length > 1
+    ? multiple && localSelectedValues.length > 1
       ? `${localSelectedValues.length} sélections`
       : getDisplayLabel(localSelectedValues[0])
-    : 'Sélectionner une ou plusieurs options';
+    : 'Sélectionner une option';
 
   const normalizedOptions = isGroupedOptions(options)
     ? options
@@ -145,6 +156,7 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
             onChange={(e) => handleCustomInputChange(e.target.value)}
             placeholder='Autre raison'
             value={customInput?.value || ''}
+            ref={customInputRef}
             type='text'
           />
         </div>

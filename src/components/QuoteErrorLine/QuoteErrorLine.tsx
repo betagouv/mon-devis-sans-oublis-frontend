@@ -82,7 +82,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
             {error.title}
           </span>
           <span className='flex gap-2'>
-            {error.solution && (
+            {error.solution && !error.deleted && (
               <button
                 className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
                 onClick={openModal}
