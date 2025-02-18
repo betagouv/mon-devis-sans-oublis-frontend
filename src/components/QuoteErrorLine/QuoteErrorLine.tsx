@@ -107,6 +107,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
       )}
       <DeleteErrorModal
         deleteErrorReasons={deleteErrorReasons}
+        errorCategory={error.category}
         errorDetailsId={error.id}
         errorTitle={error.title}
         isOpen={isDeleteModalOpen}
