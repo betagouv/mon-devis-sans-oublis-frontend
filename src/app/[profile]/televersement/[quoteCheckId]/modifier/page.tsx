@@ -1,31 +1,33 @@
-import { Suspense } from 'react';
+import { use, Suspense } from 'react';
 
 import { EditClient } from '@/page-sections';
 import { quoteService } from '@/lib/api';
 
-export default async function Modifier({
-  params,
+export default function Modifier({
+  params: initialParams,
 }: {
-  params: { profile: string; quoteCheckId: string };
+  params: Promise<{ profile: string; quoteCheckId: string }>;
 }) {
+  const params = use(initialParams);
+
   if (!params.quoteCheckId) {
     return <p className='text-red-500'>Erreur : ID du devis manquant.</p>;
   }
 
-  try {
-    const deleteErrorReasons = await quoteService.getDeleteErrorDetailReasons();
+  const fetchDeleteErrorReasons = async () => {
+    try {
+      return await quoteService.getDeleteErrorDetailReasons();
+    } catch (error) {
+      console.error('Error fetching delete error reasons:', error);
+      return [];
+    }
+  };
 
-    return (
-      <Suspense fallback={<p>Chargement...</p>}>
-        <EditClient deleteErrorReasons={deleteErrorReasons} params={params} />
-      </Suspense>
-    );
-  } catch (error) {
-    console.error('Error in Modifier page:', error);
-    return (
-      <p className='text-red-500'>
-        Une erreur est survenue lors du chargement de la page.
-      </p>
-    );
-  }
+  const deleteErrorReasons = use(fetchDeleteErrorReasons());
+
+  return (
+    <Suspense fallback={<p>Chargement...</p>}>
+      <EditClient deleteErrorReasons={deleteErrorReasons} params={params} />
+    </Suspense>
+  );
 }
