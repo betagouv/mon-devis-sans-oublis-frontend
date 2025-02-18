@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export function useIsDesktop(breakpoint = 768) {
+export const useIsDesktop = (breakpoint = 768) => {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -17,4 +17,4 @@ export function useIsDesktop(breakpoint = 768) {
   }, [breakpoint]);
 
   return isDesktop;
-}
+};

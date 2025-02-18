@@ -21,6 +21,7 @@ const errorDetails = [
     title:
       "La date prévue de début de chantier n'est pas présente, elle est cependant recommandée",
     category: 'admin',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-1',
@@ -29,6 +30,7 @@ const errorDetails = [
     title:
       "La date prévue de début de chantier n'est pas présente, elle est cependant recommandée",
     category: 'admin',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-1',
@@ -37,6 +39,7 @@ const errorDetails = [
     title:
       "La date prévue de début de chantier n'est pas présente, elle est cependant recommandée",
     category: 'admin',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-2',
@@ -47,6 +50,7 @@ const errorDetails = [
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-8',
     solution: 'Le vitrage est-il un simple ou un double vitrage ?',
     provided_value: 'Châssis composé - entree',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-3',
@@ -57,6 +61,7 @@ const errorDetails = [
     category: 'gestes',
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-8',
     provided_value: 'Châssis composé - entree',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-4',
@@ -67,6 +72,7 @@ const errorDetails = [
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-9',
     solution: 'Les montants peuvent être par exemple en bois, alu,pvc ...',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - sdb',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-5',
@@ -76,6 +82,7 @@ const errorDetails = [
     category: 'gestes',
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-9',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - sdb',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-6',
@@ -86,6 +93,7 @@ const errorDetails = [
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-10',
     solution: 'Les montants peuvent être par exemple en bois, alu,pvc ...',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - ch1',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-7',
@@ -95,6 +103,7 @@ const errorDetails = [
     category: 'gestes',
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-10',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - ch1',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-8',
@@ -105,6 +114,7 @@ const errorDetails = [
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-11',
     solution: 'Les montants peuvent être par exemple en bois, alu,pvc ...',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - ch2',
+    deleted: false,
   },
   {
     id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-9',
@@ -114,6 +124,7 @@ const errorDetails = [
     category: 'gestes',
     geste_id: 'fe465a99-5a7e-406e-bc7d-c8a0baff7385-geste-11',
     provided_value: 'VR ext. DECO, lame ALU 37mm, manœuvre solaire - ch2',
+    deleted: false,
   },
 ];
 
@@ -179,12 +190,24 @@ const mockOnHelpClick = (comment: string | null, errorDetailsId: string) => {
   console.log('Help clicked:', { comment, errorDetailsId });
 };
 
+const mockOnDeleteError = (
+  quoteCheckId: string,
+  errorDetailsId: string,
+  reason: string
+) => {
+  console.log('Delete error:', { quoteCheckId, errorDetailsId, reason });
+};
+
+const mockQuoteCheckId = 'mock-quote-check-id';
+
 export const Admin: Story = {
   render: () => (
     <QuoteErrorTable
       category={Category.ADMIN}
       errorDetails={errorDetails}
       onHelpClick={mockOnHelpClick}
+      onDeleteError={mockOnDeleteError}
+      quoteCheckId={mockQuoteCheckId}
     />
   ),
 };
@@ -196,6 +219,8 @@ export const Gestes: Story = {
       errorDetails={errorDetails}
       gestes={gestes}
       onHelpClick={mockOnHelpClick}
+      onDeleteError={mockOnDeleteError}
+      quoteCheckId={mockQuoteCheckId}
     />
   ),
 };

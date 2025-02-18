@@ -2,29 +2,39 @@
 
 import { useEffect, useState } from 'react';
 
+import InvalidQuote from './InvalidQuote';
+import ValidQuote from './ValidQuote';
+import { FILE_ERROR } from '../upload/UploadClient';
 import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
 import { useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
 import { Status, Rating, Category, QuoteChecksId } from '@/types';
-import InvalidQuote from './InvalidQuote';
-import ValidQuote from './ValidQuote';
-import { FILE_ERROR } from '../upload/UploadClient';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
 interface ResultClientProps {
   currentDevis: QuoteChecksId | null;
+  deleteErrorReasons?: { id: string; label: string }[];
   profile: string;
   quoteCheckId: string;
+  canDelete?: boolean;
+  onDeleteErrorDetail?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason: string
+  ) => void;
 }
 
 export default function ResultClient({
   currentDevis: initialDevis,
+  deleteErrorReasons,
   profile,
   quoteCheckId,
+  canDelete = false,
+  onDeleteErrorDetail,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
-
+  // On initialise le state avec la prop initiale...
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
@@ -36,11 +46,16 @@ export default function ResultClient({
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
 
-  // Polling logic to update `currentDevis` if status is PENDING
+  // Synchroniser le state local à chaque fois que la prop change
+  useEffect(() => {
+    setCurrentDevis(initialDevis);
+  }, [initialDevis]);
+
+  // Polling pour mettre à jour currentDevis si le statut est PENDING
   useEffect(() => {
     if (shouldRedirectToUpload) {
       setIsLoading(false);
-      return; // Stop polling if redirection is needed or status is final
+      return;
     }
 
     let isPollingActive = true;
@@ -55,25 +70,21 @@ export default function ResultClient({
         const data = await quoteService.getQuote(quoteCheckId);
         setCurrentDevis(data);
 
-        // Redirection condition
         const isInvalidStatus = data.status === Status.INVALID;
         const hasFileError =
           data.error_details?.[0]?.category === Category.FILE;
-
         if (isInvalidStatus && hasFileError) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
         }
 
-        // Stop polling if status is final
         if (data.status === Status.VALID || data.status === Status.INVALID) {
           setIsLoading(false);
           isPollingActive = false;
           return;
         }
 
-        // Continue polling if status is still PENDING
         if (data.status === Status.PENDING && retryCount < maxRetries) {
           retryCount++;
           setTimeout(pollQuote, pollingInterval);
@@ -94,12 +105,45 @@ export default function ResultClient({
     };
   }, [quoteCheckId, shouldRedirectToUpload]);
 
-  // Trigger redirection when shouldRedirectToUpload changes
   useEffect(() => {
     if (shouldRedirectToUpload) {
       window.location.href = `/${profile}/televersement?error=${FILE_ERROR}`;
     }
   }, [shouldRedirectToUpload, profile]);
+
+  const devisToDisplay = currentDevis
+    ? canDelete
+      ? {
+          ...currentDevis,
+          error_details: currentDevis.error_details.filter(
+            (error) => !error.deleted
+          ),
+        }
+      : currentDevis
+    : null;
+
+  const handleDeleteError = async (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    reason: string
+  ) => {
+    if (!reason) {
+      console.error('🚨 ERREUR: reason est vide dans ResultClient !');
+      return;
+    }
+    const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
+    const finalReason = foundReason ? foundReason.label : reason;
+
+    if (!finalReason) {
+      console.error(
+        '🚨 ERREUR: finalReason est vide après conversion dans ResultClient !'
+      );
+      return;
+    }
+    if (onDeleteErrorDetail) {
+      await onDeleteErrorDetail(quoteCheckId, errorDetailsId, finalReason);
+    }
+  };
 
   const handleHelpClick = async (
     comment: string | null,
@@ -145,7 +189,7 @@ export default function ResultClient({
     );
   }
 
-  if (!currentDevis) {
+  if (!devisToDisplay) {
     return (
       <section className='fr-container-fluid fr-py-10w'>
         <p>{wording.page_upload_id.analysis_error}</p>
@@ -174,24 +218,28 @@ export default function ResultClient({
         </div>
       )}
       <div className='fr-container-fluid fr-py-10w'>
-        {currentDevis.status === Status.VALID ? (
+        {devisToDisplay.status === Status.VALID ? (
           <ValidQuote
-            analysisDate={formatDateToFrench(currentDevis.finished_at)}
-            uploadedFileName={currentDevis.filename}
+            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
+            uploadedFileName={devisToDisplay.filename}
           />
         ) : (
           <InvalidQuote
-            analysisDate={formatDateToFrench(currentDevis.finished_at)}
-            gestes={currentDevis.gestes}
-            list={currentDevis.error_details || []}
+            key={canDelete ? devisToDisplay.error_details.length : undefined}
+            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
+            deleteErrorReasons={deleteErrorReasons}
+            gestes={devisToDisplay.gestes}
+            id={devisToDisplay.id}
+            list={devisToDisplay.error_details}
+            onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
-            uploadedFileName={currentDevis.filename || ''}
+            uploadedFileName={devisToDisplay.filename || ''}
           />
         )}
         <div className='fr-container flex flex-col relative'>
           <div
             className={`${
-              currentDevis.status === Status.VALID
+              devisToDisplay.status === Status.VALID
                 ? 'fixed bottom-14 md:right-37 right-4'
                 : isButtonSticky
                 ? 'fixed bottom-84 md:right-37 right-4'

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
-import { RoundCheckboxGroup } from '@/components';
+import RoundCheckboxGroup from '../../RoundCheckboxGroup/RoundCheckboxGroup';
 import { Rating } from '@/types';
 import wording from '@/wording';
 

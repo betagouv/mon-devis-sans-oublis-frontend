@@ -20,13 +20,19 @@ export default meta;
 
 type Story = StoryObj<typeof QuoteStatusLink>;
 
+export const QuoteLinkEdit: Story = {
+  args: {
+    type: QuoteStatusType.EDIT,
+  },
+};
+
 export const QuoteLinkShare: Story = {
   args: {
     type: QuoteStatusType.SHARE,
   },
 };
 
-export const QuoteLinkOK: Story = {
+export const QuoteLinkUpload: Story = {
   args: {
     type: QuoteStatusType.UPLOAD,
   },

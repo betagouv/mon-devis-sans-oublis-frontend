@@ -1,14 +1,28 @@
+import { ImageProps } from 'next/image';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
 import wording from '@/wording';
 
-/* eslint-disable @next/next/no-img-element */
+jest.mock('next/navigation', () => ({
+  usePathname: () => '/test-path',
+}));
+
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ComponentPropsWithoutRef<'img'>) => (
-    <img alt={props.alt || 'Mocked image'} {...props} />
+  default: (props: ImageProps) => (
+    /* eslint-disable @next/next/no-img-element */
+    <img
+      alt={props.alt}
+      height={props.height}
+      src={props.src as string}
+      width={props.width}
+    />
   ),
+}));
+
+jest.mock('@/hooks', () => ({
+  useGoBackToUpload: () => '/upload',
 }));
 
 Object.assign(navigator, {
@@ -17,13 +31,55 @@ Object.assign(navigator, {
   },
 });
 
-const mockLocation = new URL('http://test.com');
-Object.defineProperty(window, 'location', {
-  value: mockLocation,
-  writable: true,
-});
-
 describe('QuoteStatusLink', () => {
+  const mockLocation = new URL('http://test.com');
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+      writable: true,
+    });
+  });
+
+  describe('EDIT type', () => {
+    beforeEach(() => {
+      render(<QuoteStatusLink type={QuoteStatusType.EDIT} />);
+    });
+
+    it('renders edit type correctly', () => {
+      expect(
+        screen.getByAltText(
+          wording.components.quote_status_link.share.image_alt
+        )
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(wording.components.quote_status_link.edit.title)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(wording.components.quote_status_link.edit.description)
+      ).toBeInTheDocument();
+
+      const editLink = screen.getByText(
+        wording.components.quote_status_link.edit.link_label
+      );
+      expect(editLink).toBeInTheDocument();
+      expect(editLink.closest('a')).toHaveAttribute(
+        'href',
+        '/test-path/modifier'
+      );
+    });
+
+    it('has correct styling for edit type', () => {
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="bg-[var(--background-alt-blue-france)]"]');
+      expect(container).toBeInTheDocument();
+    });
+  });
+
   describe('SHARE type', () => {
     beforeEach(() => {
       render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
@@ -39,6 +95,7 @@ describe('QuoteStatusLink', () => {
       expect(
         screen.getByText(wording.components.quote_status_link.share.title)
       ).toBeInTheDocument();
+
       expect(
         screen.getByText(wording.components.quote_status_link.share.description)
       ).toBeInTheDocument();
@@ -50,7 +107,7 @@ describe('QuoteStatusLink', () => {
       ).toBeInTheDocument();
     });
 
-    it('handles copy url button click', async () => {
+    it('handles copy url button click', () => {
       const copyButton = screen.getByText(
         wording.components.quote_status_link.share.button_copy_url
       );
@@ -68,8 +125,14 @@ describe('QuoteStatusLink', () => {
       ).toBeInTheDocument();
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('fr-btn--secondary');
-      expect(button).toHaveClass('fr-icon-check-line');
+      expect(button).toHaveClass('fr-btn--secondary', 'fr-icon-check-line');
+    });
+
+    it('has correct styling for share type', () => {
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="bg-[var(--background-alt-blue-france)]"]');
+      expect(container).toBeInTheDocument();
     });
   });
 
@@ -89,11 +152,18 @@ describe('QuoteStatusLink', () => {
         screen.getByText(wording.components.quote_status_link.upload.title)
       ).toBeInTheDocument();
 
-      const link = screen.getByText(
-        wording.components.quote_status_link.upload.link_label
-      );
+      const link = screen
+        .getByText(wording.components.quote_status_link.upload.link_label)
+        .closest('a');
       expect(link).toBeInTheDocument();
-      expect(link.closest('a')).toHaveAttribute('href', expect.any(String));
+      expect(link).toHaveAttribute('href', '/upload');
+    });
+
+    it('has correct styling for upload type', () => {
+      const container = screen
+        .getByRole('img')
+        .closest('div[class*="bg-[var(--background-default-grey-hover)]"]');
+      expect(container).toBeInTheDocument();
     });
   });
 
@@ -103,11 +173,7 @@ describe('QuoteStatusLink', () => {
       <QuoteStatusLink type={QuoteStatusType.SHARE} className={customClass} />
     );
 
-    const container = screen
-      .getByRole('img', {
-        name: wording.components.quote_status_link.share.image_alt,
-      })
-      .closest('div');
+    const container = screen.getByRole('img').closest('div');
     expect(container).toHaveClass(customClass);
   });
 });

@@ -4,13 +4,24 @@ import { useState, useRef, useEffect } from 'react';
 
 import CheckboxGroup from '../CheckboxGroup/CheckboxGroup';
 
-export type Option = {
+export interface Option {
   id: string;
   label: string;
-  group: string;
-};
+  group?: string;
+}
+
+export interface CustomInput {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+}
 
 export interface MultiSelectCheckboxProps {
+  customInput?: {
+    id: string;
+    value: string;
+    onChange: (value: string) => void;
+  };
   label: string;
   onChange: (values: string[]) => void;
   optionnal?: boolean;
@@ -18,7 +29,19 @@ export interface MultiSelectCheckboxProps {
   selectedValues?: string[];
 }
 
+interface GroupedOption {
+  id: string;
+  label: string | JSX.Element;
+  checked: boolean;
+  group?: string;
+}
+
+interface GroupedOptions {
+  [key: string]: GroupedOption[];
+}
+
 export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
+  customInput,
   label,
   onChange,
   optionnal,
@@ -53,50 +76,96 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   const handleCheckboxChange = (id: string, checked: boolean) => {
-    const newValues = checked
-      ? [...localSelectedValues, id]
-      : localSelectedValues.filter((value) => value !== id);
+    let newValues: string[];
+    if (checked) {
+      newValues = [...localSelectedValues, id];
+    } else {
+      newValues = localSelectedValues.filter((value) => value !== id);
+      if (id === 'custom' && customInput) {
+        customInput.onChange('');
+      }
+    }
     setLocalSelectedValues(newValues);
     onChange(newValues);
   };
 
-  const simpleOptions = !isGroupedOptions(options)
-    ? options.map((opt) => ({
+  const handleCustomInputChange = (value: string) => {
+    customInput?.onChange(value);
+    if (value.trim() && !localSelectedValues.includes('custom')) {
+      const newValues = [...localSelectedValues, 'custom'];
+      setLocalSelectedValues(newValues);
+      onChange(newValues);
+    } else if (!value.trim() && localSelectedValues.includes('custom')) {
+      const newValues = localSelectedValues.filter((v) => v !== 'custom');
+      setLocalSelectedValues(newValues);
+      onChange(newValues);
+    }
+  };
+
+  const normalizeOptions = (opts: string[] | Option[]): Option[] => {
+    if (opts.length === 0) return [];
+    if (typeof opts[0] === 'string') {
+      return (opts as string[]).map((opt) => ({
         id: opt,
         label: opt,
-        checked: localSelectedValues.includes(opt),
-      }))
-    : [];
-
-  const groupedOptions = isGroupedOptions(options)
-    ? options.reduce((acc, option) => {
-        if (!acc[option.group]) {
-          acc[option.group] = [];
-        }
-        acc[option.group].push({
-          id: option.id,
-          label: option.label,
-          checked: localSelectedValues.includes(option.id),
-        });
-        return acc;
-      }, {} as { [key: string]: { id: string; label: string; checked: boolean }[] })
-    : {};
+      }));
+    }
+    return opts as Option[];
+  };
 
   const getDisplayLabel = (id: string): string => {
     if (isGroupedOptions(options)) {
       const option = options.find((opt) => opt.id === id);
       return option?.label || id;
     }
-    return id;
+    const normalizedOpts = normalizeOptions(options);
+    const option = normalizedOpts.find((opt) => opt.id === id);
+    return option?.label?.toString() || id;
   };
 
   const displayValue = localSelectedValues.length
-    ? `${
-        localSelectedValues.length > 1
-          ? `${localSelectedValues.length} sélections`
-          : getDisplayLabel(localSelectedValues[0])
-      }`
+    ? localSelectedValues.length > 1
+      ? `${localSelectedValues.length} sélections`
+      : getDisplayLabel(localSelectedValues[0])
     : 'Sélectionner une ou plusieurs options';
+
+  const normalizedOptions = isGroupedOptions(options)
+    ? options
+    : normalizeOptions(options);
+
+  const checkboxOptions = normalizedOptions.map((option) => ({
+    id: option.id,
+    label:
+      option.id === 'custom' ? (
+        <div className='flex-grow'>
+          <input
+            className='fr-input w-full'
+            data-testid='custom-reason-input'
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => handleCustomInputChange(e.target.value)}
+            placeholder='Autre raison'
+            value={customInput?.value || ''}
+            type='text'
+          />
+        </div>
+      ) : (
+        option.label
+      ),
+    checked: localSelectedValues.includes(option.id),
+    group: option.group,
+  }));
+
+  const groupedOptions = checkboxOptions.reduce<GroupedOptions>(
+    (acc, option) => {
+      const group = option.group || 'default';
+      if (!acc[group]) {
+        acc[group] = [];
+      }
+      acc[group].push(option);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className='fr-select-group relative fr-mb-4w' ref={containerRef}>
@@ -115,28 +184,19 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         {displayValue}
       </button>
       {isOpen && (
-        <>
-          {!isGroupedOptions(options) ? (
-            <div className='fr-select-checkbox border-shadow pt-5 pb-2 pl-2 h-[180px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
+        <div className='fr-select-checkbox border-shadow pt-5 pb-2 pl-2 h-[180px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
+          {Object.entries(groupedOptions).map(([group, groupOpts]) => (
+            <div key={group}>
+              {group !== 'default' && (
+                <legend className='fr-fieldset__legend'>{group}</legend>
+              )}
               <CheckboxGroup
+                options={groupOpts}
                 onChange={handleCheckboxChange}
-                options={simpleOptions}
               />
             </div>
-          ) : (
-            <div className='fr-select-checkbox border-shadow p-4 pb-0 h-[300px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
-              {Object.entries(groupedOptions).map(([group, groupOptions]) => (
-                <div key={group} className='fr-fieldset'>
-                  <legend className='fr-fieldset__legend'>{group}</legend>
-                  <CheckboxGroup
-                    onChange={handleCheckboxChange}
-                    options={groupOptions}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </>
+          ))}
+        </div>
       )}
     </div>
   );

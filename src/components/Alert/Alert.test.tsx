@@ -1,56 +1,105 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import Alert from './Alert';
+import Alert, { AlertType } from './Alert';
+import wording from '@/wording';
 
 describe('Alert Component', () => {
   const defaultProps = {
-    description: 'This is an alert message.',
-    moreDescription: 'Here is some more information about the alert.',
+    description: 'This is an alert message',
+    moreDescription: 'Here is some more information about the alert',
+    type: AlertType.INFO,
   };
 
-  test('renders the alert with description', () => {
-    render(<Alert {...defaultProps} />);
+  describe('Rendering', () => {
+    it('renders info alert with correct styling', () => {
+      render(<Alert {...defaultProps} />);
+      const alertElement = screen
+        .getByText(/this is an alert message/i)
+        .closest('div');
+      expect(alertElement).toHaveClass('fr-alert', 'fr-alert--info');
+    });
 
-    const descriptionElement = screen.getByText(/this is an alert message/i);
-    expect(descriptionElement).toBeInTheDocument();
+    it('renders success alert with correct styling', () => {
+      render(<Alert {...defaultProps} type={AlertType.SUCCESS} />);
+      const alertElement = screen
+        .getByText(/this is an alert message/i)
+        .closest('div');
+      expect(alertElement).toHaveClass('fr-alert', 'fr-alert--success');
+    });
+
+    it('renders description text', () => {
+      render(<Alert {...defaultProps} />);
+      expect(screen.getByText(/this is an alert message/i)).toBeInTheDocument();
+    });
+
+    it('applies custom className if provided', () => {
+      const customClass = 'custom-alert-class';
+      render(<Alert {...defaultProps} className={customClass} />);
+      const alertElement = screen
+        .getByText(/this is an alert message/i)
+        .closest('div');
+      expect(alertElement).toHaveClass(customClass);
+    });
   });
 
-  test('renders the alert with more info hidden by default', () => {
-    render(<Alert {...defaultProps} />);
+  describe('More Description Toggle', () => {
+    it('does not show more description toggle when moreDescription is not provided', () => {
+      render(<Alert {...defaultProps} moreDescription={undefined} />);
+      expect(
+        screen.queryByText(wording.components.alert.see_more)
+      ).not.toBeInTheDocument();
+    });
 
-    const moreInfoElement = screen.queryByText(
-      /here is some more information about the alert/i
-    );
-    expect(moreInfoElement).not.toBeInTheDocument();
-  });
+    it('shows more description toggle when moreDescription is provided', () => {
+      render(<Alert {...defaultProps} />);
+      expect(
+        screen.getByText(wording.components.alert.see_more)
+      ).toBeInTheDocument();
+    });
 
-  test('toggles more info visibility when clicked', () => {
-    render(<Alert {...defaultProps} />);
+    it('hides more description by default', () => {
+      render(<Alert {...defaultProps} />);
+      expect(
+        screen.queryByText(/here is some more information/i)
+      ).not.toBeInTheDocument();
+    });
 
-    const toggleButton = screen.getByText(/voir plus/i);
-    expect(toggleButton).toBeInTheDocument();
+    it('toggles more description visibility when clicked', () => {
+      render(<Alert {...defaultProps} />);
 
-    fireEvent.click(toggleButton);
+      // Initial state - more description is hidden
+      const toggleButton = screen.getByText(wording.components.alert.see_more);
+      expect(
+        screen.queryByText(/here is some more information/i)
+      ).not.toBeInTheDocument();
 
-    const moreDescriptionElement = screen.getByText(
-      /here is some more information about the alert/i
-    );
-    expect(moreDescriptionElement).toBeInTheDocument();
-    expect(toggleButton).toHaveTextContent('Voir moins');
+      // Click to show more
+      fireEvent.click(toggleButton);
+      expect(
+        screen.getByText(/here is some more information/i)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(wording.components.alert.see_less)
+      ).toBeInTheDocument();
 
-    fireEvent.click(toggleButton);
+      // Click to hide
+      fireEvent.click(screen.getByText(wording.components.alert.see_less));
+      expect(
+        screen.queryByText(/here is some more information/i)
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByText(wording.components.alert.see_more)
+      ).toBeInTheDocument();
+    });
 
-    expect(moreDescriptionElement).not.toBeInTheDocument();
-    expect(toggleButton).toHaveTextContent('Voir plus');
-  });
-
-  test('applies custom className if provided', () => {
-    const customClass = 'custom-alert-class';
-    render(<Alert {...defaultProps} className={customClass} />);
-
-    const alertElement = screen
-      .getByText(/this is an alert message/i)
-      .closest('div');
-    expect(alertElement).toHaveClass(customClass);
+    it('has correct styling for toggle button', () => {
+      render(<Alert {...defaultProps} />);
+      const toggleButton = screen.getByText(wording.components.alert.see_more);
+      expect(toggleButton).toHaveClass(
+        'text-[var(--text-default-grey)]',
+        'cursor-pointer',
+        'underline'
+      );
+    });
   });
 });

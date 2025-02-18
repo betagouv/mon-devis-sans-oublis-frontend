@@ -12,21 +12,27 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const defaultOptions = [
-  { id: 'checkbox-1', label: 'Option 1' },
-  { id: 'checkbox-2', label: 'Option 2' },
-  { id: 'checkbox-3', label: 'Option 3' },
+  { id: 'checkbox-1', label: 'Option 1', checked: false },
+  { id: 'checkbox-2', label: 'Option 2', checked: false },
+  { id: 'checkbox-3', label: 'Option 3', checked: false },
 ];
 
 export const Default: Story = {
   args: {
     legend: 'Select your options',
     options: defaultOptions,
+    onChange: (id: string, checked: boolean) => {
+      console.log(`Checkbox ${id} changed to ${checked}`);
+    },
   },
 };
 
 export const SingleOption: Story = {
   args: {
     legend: 'Single checkbox group',
-    options: [{ id: 'single', label: 'Single option' }],
+    options: [{ id: 'single', label: 'Single option', checked: false }],
+    onChange: (id: string, checked: boolean) => {
+      console.log(`Checkbox ${id} changed to ${checked}`);
+    },
   },
 };

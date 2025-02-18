@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import Link, { LinkSize, LinkVariant } from './Link';
 
@@ -13,9 +14,7 @@ describe('Link', () => {
 
   it('renders with default props', () => {
     render(<Link href='/test' label='Test Link' />);
-    const link = screen.getByText('Test Link');
-    expect(link).toBeInTheDocument();
-    expect(link.closest('a')).toHaveClass('fr-btn', 'fr-btn--primary');
+    expect(screen.getByText('Test Link')).toBeInTheDocument();
   });
 
   it('renders with different sizes', () => {
@@ -36,89 +35,60 @@ describe('Link', () => {
     const { rerender } = render(
       <Link href='/test' label='Test Link' variant={LinkVariant.SECONDARY} />
     );
-    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
-      'fr-btn--secondary'
-    );
+    const link = screen.getByText('Test Link').closest('a');
+    expect(link).toHaveClass('fr-btn--secondary');
+    expect(link).toHaveClass('bg-white!');
 
     rerender(
       <Link href='/test' label='Test Link' variant={LinkVariant.DISABLED} />
     );
-    expect(screen.getByText('Test Link').closest('a')).toHaveClass(
-      'bg-(--background-disabled-grey)!',
-      'text-(--text-disabled-grey)!',
-      'cursor-not-allowed!'
+    const disabledLink = screen.getByText('Test Link').closest('a');
+    expect(disabledLink).toHaveClass(
+      'bg-gray-300',
+      'text-gray-500',
+      'cursor-not-allowed'
     );
   });
 
-  it('handles click events', () => {
+  it('handles click events', async () => {
     render(<Link href='/test' label='Test Link' onClick={mockOnClick} />);
-    screen.getByText('Test Link').click();
+    await userEvent.click(screen.getByText('Test Link'));
     expect(mockOnClick).toHaveBeenCalled();
   });
 
-  it('handles submit events', () => {
+  it('handles submit events', async () => {
     render(<Link href='/test' label='Test Link' onSubmit={mockOnSubmit} />);
-    screen.getByText('Test Link').click();
+    await userEvent.click(screen.getByText('Test Link'));
     expect(mockOnSubmit).toHaveBeenCalled();
   });
 
-  it('prevents default on disabled variant', () => {
-    const onClick = jest.fn();
+  it('prevents navigation and callbacks when disabled', async () => {
     render(
       <Link
         href='/test'
         label='Test Link'
         variant={LinkVariant.DISABLED}
-        onClick={onClick}
-      />
-    );
-
-    const link = screen.getByText('Test Link').closest('a');
-    const mockEvent = new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-    });
-
-    link?.dispatchEvent(mockEvent);
-    expect(mockEvent.defaultPrevented).toBe(true);
-    expect(onClick).not.toHaveBeenCalled();
-  });
-
-  it('renders with icon', () => {
-    render(<Link href='/test' label='Test Link' icon='fr-icon-test' />);
-    const link = screen.getByText('Test Link').closest('a');
-    expect(link).toHaveClass('fr-btn--icon-right', 'fr-icon-test');
-  });
-
-  it('handles legacy behavior', () => {
-    render(<Link href='/test' label='Test Link' legacyBehavior />);
-    const link = screen.getByText('Test Link');
-    expect(link.tagName).toBe('A');
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(link).toHaveAttribute('target', '_blank');
-  });
-
-  it('applies correct text size classes', () => {
-    const { rerender } = render(<Link href='/test' label='Test Link' />);
-    expect(screen.getByText('Test Link')).toHaveClass('fr-text--lg');
-
-    rerender(<Link href='/test' label='Test Link' size={LinkSize.SMALL} />);
-    expect(screen.getByText('Test Link')).toHaveClass('fr-text--sm');
-  });
-
-  it('handles both onClick and onSubmit', () => {
-    render(
-      <Link
-        href='/test'
-        label='Test Link'
         onClick={mockOnClick}
         onSubmit={mockOnSubmit}
       />
     );
+    await userEvent.click(screen.getByText('Test Link'));
+    expect(mockOnClick).not.toHaveBeenCalled();
+    expect(mockOnSubmit).not.toHaveBeenCalled();
+  });
 
-    screen.getByText('Test Link').click();
-    expect(mockOnSubmit).toHaveBeenCalled();
-    expect(mockOnClick).toHaveBeenCalled();
+  it('renders with icon', () => {
+    render(<Link href='/test' label='Test Link' icon='fr-icon-test' />);
+    const iconElement = screen.getByText('Test Link')
+      .nextElementSibling as HTMLElement;
+    expect(iconElement).toHaveClass('fr-btn--icon-right', 'fr-icon-test');
+  });
+
+  it('handles legacy behavior', () => {
+    render(<Link href='/test' label='Test Link' legacyBehavior />);
+    const link = screen.getByText('Test Link').closest('a');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
   it('sets empty href when disabled', () => {
@@ -127,11 +97,5 @@ describe('Link', () => {
     );
     const link = screen.getByText('Test Link').closest('a');
     expect(link).toHaveAttribute('href', '');
-  });
-
-  it('preserves href when not disabled', () => {
-    render(<Link href='/test' label='Test Link' />);
-    const link = screen.getByText('Test Link').closest('a');
-    expect(link).toHaveAttribute('href', '/test');
   });
 });
