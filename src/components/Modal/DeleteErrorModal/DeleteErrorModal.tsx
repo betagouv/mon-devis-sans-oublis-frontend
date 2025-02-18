@@ -3,9 +3,9 @@
 import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
-import MultiSelectCheckbox from '@/components/MultiSelectCheckbox/MultiSelectCheckbox';
-import wording from '@/wording';
+import { DropdownCheckboxList } from '@/components';
 import { Category } from '@/types';
+import wording from '@/wording';
 
 export interface DeleteErrorModalProps {
   deleteErrorReasons?: { id: string; label: string }[];
@@ -114,7 +114,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
         </div>
         <div className='flex-grow'>
           {deleteErrorReasons && (
-            <MultiSelectCheckbox
+            <DropdownCheckboxList
               customInput={{
                 id: 'custom',
                 value: customReason,

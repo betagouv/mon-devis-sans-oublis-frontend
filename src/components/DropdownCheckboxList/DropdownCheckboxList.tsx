@@ -16,7 +16,7 @@ export interface CustomInput {
   onChange: (value: string) => void;
 }
 
-export interface MultiSelectCheckboxProps {
+export interface DropdownCheckboxListProps {
   customInput?: {
     id: string;
     value: string;
@@ -41,7 +41,7 @@ interface GroupedOptions {
   [key: string]: GroupedOption[];
 }
 
-export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
+export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
   customInput,
   label,
   multiple,
@@ -113,6 +113,17 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
     }
   };
 
+  const handleCustomInputClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!localSelectedValues.includes('custom')) {
+      const newValues = multiple
+        ? [...localSelectedValues, 'custom']
+        : ['custom'];
+      setLocalSelectedValues(newValues);
+      onChange(newValues);
+    }
+  };
+
   const normalizeOptions = (opts: string[] | Option[]): Option[] => {
     if (opts.length === 0) return [];
     if (typeof opts[0] === 'string') {
@@ -152,7 +163,7 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
           <input
             className='fr-input w-full'
             data-testid='custom-reason-input'
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleCustomInputClick}
             onChange={(e) => handleCustomInputChange(e.target.value)}
             placeholder='Autre raison'
             value={customInput?.value || ''}
@@ -214,4 +225,4 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   );
 };
 
-export default MultiSelectCheckbox;
+export default DropdownCheckboxList;
