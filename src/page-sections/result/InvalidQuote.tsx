@@ -24,6 +24,7 @@ interface InvalidQuoteProps {
     reason: string
   ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
+  onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   uploadedFileName: string;
 }
 
@@ -35,6 +36,7 @@ export default function InvalidQuote({
   list,
   onDeleteError,
   onHelpClick,
+  onUndoDeleteError,
   uploadedFileName,
 }: InvalidQuoteProps) {
   const { isConseillerAndNotEdit } = useConseillerRoutes();
@@ -97,6 +99,7 @@ export default function InvalidQuote({
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
             onHelpClick={onHelpClick}
+            onUndoDeleteError={onUndoDeleteError}
             quoteCheckId={id}
           />
           <QuoteErrorTable
@@ -108,6 +111,7 @@ export default function InvalidQuote({
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
             onHelpClick={onHelpClick}
+            onUndoDeleteError={onUndoDeleteError}
             quoteCheckId={id}
           />
         </div>

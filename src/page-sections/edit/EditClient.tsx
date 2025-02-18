@@ -33,6 +33,43 @@ export default function EditClient({
     fetchCurrentDevis();
   }, [params.quoteCheckId]);
 
+  // const handleDeleteErrorDetail = async (
+  //   quoteCheckId: string,
+  //   errorDetailId: string,
+  //   reason: string
+  // ) => {
+  //   if (!currentDevis) return;
+
+  //   setCurrentDevis((prevDevis) => {
+  //     if (!prevDevis) return null;
+  //     return {
+  //       ...prevDevis,
+  //       error_details: prevDevis.error_details.filter(
+  //         (error) => error.id !== errorDetailId
+  //       ),
+  //     };
+  //   });
+
+  //   try {
+  //     const response = await quoteService.deleteErrorDetail(
+  //       quoteCheckId,
+  //       errorDetailId,
+  //       reason
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`Suppression échouée côté API: ${response.status}`);
+  //     }
+
+  //     const updatedData = await quoteService.getQuote(quoteCheckId);
+  //     setCurrentDevis(updatedData);
+  //   } catch (error) {
+  //     console.error("Erreur lors de la suppression de l'erreur:", error);
+
+  //     const data = await quoteService.getQuote(quoteCheckId);
+  //     setCurrentDevis(data);
+  //   }
+  // };
+
   const handleDeleteErrorDetail = async (
     quoteCheckId: string,
     errorDetailId: string,
@@ -40,33 +77,24 @@ export default function EditClient({
   ) => {
     if (!currentDevis) return;
 
-    setCurrentDevis((prevDevis) => {
-      if (!prevDevis) return null;
-      return {
-        ...prevDevis,
-        error_details: prevDevis.error_details.filter(
-          (error) => error.id !== errorDetailId
-        ),
-      };
-    });
+    // Créer une nouvelle référence de l'objet pour forcer le re-render
+    const updatedDevis = {
+      ...currentDevis,
+      error_details: currentDevis.error_details.map((error) => ({
+        ...error,
+        deleted: error.id === errorDetailId ? true : error.deleted,
+      })),
+    };
+
+    // Mettre à jour l'état avec la nouvelle référence
+    setCurrentDevis(updatedDevis);
 
     try {
-      const response = await quoteService.deleteErrorDetail(
-        quoteCheckId,
-        errorDetailId,
-        reason
-      );
-      if (!response.ok) {
-        throw new Error(`Suppression échouée côté API: ${response.status}`);
-      }
-
-      const updatedData = await quoteService.getQuote(quoteCheckId);
-      setCurrentDevis(updatedData);
+      await quoteService.deleteErrorDetail(quoteCheckId, errorDetailId, reason);
     } catch (error) {
       console.error("Erreur lors de la suppression de l'erreur:", error);
-
-      const data = await quoteService.getQuote(quoteCheckId);
-      setCurrentDevis(data);
+      // En cas d'erreur, annuler la modification
+      setCurrentDevis(currentDevis);
     }
   };
 

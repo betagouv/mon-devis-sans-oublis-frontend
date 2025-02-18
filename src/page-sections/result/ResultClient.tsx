@@ -34,7 +34,6 @@ export default function ResultClient({
   onDeleteErrorDetail,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
-  // On initialise le state avec la prop initiale...
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
@@ -46,12 +45,10 @@ export default function ResultClient({
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
 
-  // Synchroniser le state local à chaque fois que la prop change
   useEffect(() => {
     setCurrentDevis(initialDevis);
   }, [initialDevis]);
 
-  // Polling pour mettre à jour currentDevis si le statut est PENDING
   useEffect(() => {
     if (shouldRedirectToUpload) {
       setIsLoading(false);
@@ -111,17 +108,6 @@ export default function ResultClient({
     }
   }, [shouldRedirectToUpload, profile]);
 
-  const devisToDisplay = currentDevis
-    ? canDelete
-      ? {
-          ...currentDevis,
-          error_details: currentDevis.error_details.filter(
-            (error) => !error.deleted
-          ),
-        }
-      : currentDevis
-    : null;
-
   const handleDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string,
@@ -131,24 +117,46 @@ export default function ResultClient({
       console.error('🚨 ERREUR: reason est vide dans ResultClient !');
       return;
     }
+
+    if (!currentDevis) {
+      console.error('🚨 ERREUR: currentDevis est null dans ResultClient !');
+      return;
+    }
+
     const foundReason = deleteErrorReasons?.find((r) => r.id === reason);
     const finalReason = foundReason ? foundReason.label : reason;
 
-    if (!finalReason) {
-      console.error(
-        '🚨 ERREUR: finalReason est vide après conversion dans ResultClient !'
-      );
-      return;
-    }
+    setCurrentDevis((prevDevis) => {
+      if (!prevDevis) return null;
+      return {
+        ...prevDevis,
+        error_details: prevDevis.error_details.map((error) =>
+          error.id === errorDetailsId ? { ...error, deleted: true } : error
+        ),
+      };
+    });
+
     if (onDeleteErrorDetail) {
       await onDeleteErrorDetail(quoteCheckId, errorDetailsId, finalReason);
     }
   };
 
-  const handleHelpClick = async (
-    comment: string | null,
+  const handleUndoDeleteError = (
+    quoteCheckId: string,
     errorDetailsId: string
   ) => {
+    setCurrentDevis((prevDevis) => {
+      if (!prevDevis) return null;
+      return {
+        ...prevDevis,
+        error_details: prevDevis.error_details.map((error) =>
+          error.id === errorDetailsId ? { ...error, deleted: false } : error
+        ),
+      };
+    });
+  };
+
+  const handleHelpClick = async (comment: string, errorDetailsId: string) => {
     try {
       await quoteService.sendErrorFeedback(
         comment,
@@ -160,24 +168,6 @@ export default function ResultClient({
     }
   };
 
-  const handleSubmitFeedback = async (
-    comment: string,
-    email: string | null,
-    rating: Rating
-  ) => {
-    try {
-      await quoteService.sendGlobalFeedback(quoteCheckId, {
-        comment,
-        email,
-        rating,
-      });
-      setIsModalOpen(false);
-      setShowToast(true);
-    } catch (error) {
-      console.error('Error sending feedback:', error);
-    }
-  };
-
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -185,23 +175,6 @@ export default function ResultClient({
           title={wording.page_upload_id.analysis_in_progress_title}
         />
         <p>{wording.page_upload_id.analysis_in_progress}</p>
-      </section>
-    );
-  }
-
-  if (!devisToDisplay) {
-    return (
-      <section className='fr-container-fluid fr-py-10w'>
-        <p>{wording.page_upload_id.analysis_error}</p>
-      </section>
-    );
-  }
-
-  if (shouldRedirectToUpload) {
-    return (
-      <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
-        <LoadingDots title={wording.page_upload_id.analysis_redirect_title} />
-        <p>{wording.page_upload_id.analysis_redirect}</p>
       </section>
     );
   }
@@ -218,49 +191,32 @@ export default function ResultClient({
         </div>
       )}
       <div className='fr-container-fluid fr-py-10w'>
-        {devisToDisplay.status === Status.VALID ? (
+        {currentDevis?.status === Status.VALID ? (
           <ValidQuote
-            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
-            uploadedFileName={devisToDisplay.filename}
+            analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            uploadedFileName={currentDevis.filename}
           />
-        ) : (
+        ) : currentDevis ? (
           <InvalidQuote
-            key={canDelete ? devisToDisplay.error_details.length : undefined}
-            analysisDate={formatDateToFrench(devisToDisplay.finished_at)}
+            key={`${currentDevis.id}-${JSON.stringify(
+              currentDevis.error_details
+            )}`}
+            analysisDate={formatDateToFrench(currentDevis.finished_at)}
             deleteErrorReasons={deleteErrorReasons}
-            gestes={devisToDisplay.gestes}
-            id={devisToDisplay.id}
-            list={devisToDisplay.error_details}
+            gestes={currentDevis.gestes}
+            id={currentDevis.id}
+            list={currentDevis.error_details.map((error) => ({
+              ...error,
+              className: error.deleted
+                ? 'line-through text-gray-500 opacity-50'
+                : '',
+            }))}
             onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
-            uploadedFileName={devisToDisplay.filename || ''}
+            onUndoDeleteError={handleUndoDeleteError}
+            uploadedFileName={currentDevis.filename || ''}
           />
-        )}
-        <div className='fr-container flex flex-col relative'>
-          <div
-            className={`${
-              devisToDisplay.status === Status.VALID
-                ? 'fixed bottom-14 md:right-37 right-4'
-                : isButtonSticky
-                ? 'fixed bottom-84 md:right-37 right-4'
-                : 'absolute bottom-[-40px] md:right-6 right-4'
-            } self-end z-20`}
-          >
-            <button
-              className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
-              onClick={() => setIsModalOpen(!isModalOpen)}
-            >
-              Donner mon avis
-            </button>
-          </div>
-          {isModalOpen && (
-            <GlobalErrorFeedbacksModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              onSubmitFeedback={handleSubmitFeedback}
-            />
-          )}
-        </div>
+        ) : null}
       </div>
     </>
   );

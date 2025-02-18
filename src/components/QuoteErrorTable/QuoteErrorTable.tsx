@@ -8,6 +8,7 @@ import wording from '@/wording';
 
 export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
+  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
   onDeleteError: (
     quoteCheckId: string,
@@ -15,12 +16,13 @@ export interface QuoteErrorTablePropsAdmin {
     reason: string
   ) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
+  onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
-  deleteErrorReasons?: { id: string; label: string }[];
 }
 
 export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
+  deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
   onDeleteError: (
     quoteCheckId: string,
@@ -29,8 +31,8 @@ export interface QuoteErrorTablePropsGestes {
   ) => void;
   gestes: Gestes[];
   onHelpClick: (comment: string, errorDetailsId: string) => void;
+  onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
-  deleteErrorReasons?: { id: string; label: string }[];
 }
 
 export type QuoteErrorTableProps =
@@ -160,6 +162,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       key={error.id}
                       onDeleteError={props.onDeleteError}
                       onFeedbackSubmit={props.onHelpClick}
+                      onUndoDeleteError={props.onUndoDeleteError}
                       quoteCheckId={props.quoteCheckId}
                       deleteErrorReasons={props.deleteErrorReasons}
                     />
@@ -172,12 +175,13 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           <tbody>
             {filteredAdminErrors.map((error) => (
               <QuoteErrorLine
+                deleteErrorReasons={props.deleteErrorReasons}
                 error={error}
                 key={error.id}
                 onDeleteError={props.onDeleteError}
                 onFeedbackSubmit={props.onHelpClick}
+                onUndoDeleteError={props.onUndoDeleteError}
                 quoteCheckId={props.quoteCheckId}
-                deleteErrorReasons={props.deleteErrorReasons}
               />
             ))}
           </tbody>
