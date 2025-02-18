@@ -6,9 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Alert,
   AlertType,
+  DropdownCheckboxList,
   Link,
   LinkVariant,
-  MultiSelectCheckbox,
   Notice,
   NoticeType,
   Upload,
@@ -123,8 +123,9 @@ export default function UploadClient({
         />
         <h2>{wording.upload.subtitle}</h2>
         {metadata.gestes && (
-          <MultiSelectCheckbox
+          <DropdownCheckboxList
             label={wording.upload.select_gestes}
+            multiple={true}
             onChange={handleGestesChange}
             optionnal={true}
             options={metadata.gestes.flatMap((group) =>
@@ -137,8 +138,9 @@ export default function UploadClient({
           />
         )}
         {metadata.aides && (
-          <MultiSelectCheckbox
+          <DropdownCheckboxList
             label={wording.upload.select_aides}
+            multiple={true}
             onChange={handleAidesChange}
             optionnal={true}
             options={metadata.aides}

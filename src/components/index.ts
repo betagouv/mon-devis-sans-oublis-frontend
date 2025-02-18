@@ -24,6 +24,9 @@ export { default as CheckboxGroup } from './CheckboxGroup/CheckboxGroup';
 export type { CheckboxGroupProps } from './CheckboxGroup/CheckboxGroup';
 // Confetti
 export { default as Confetti } from './Confetti/Confetti';
+// DropdownCheckboxList
+export { default as DropdownCheckboxList } from './DropdownCheckboxList/DropdownCheckboxList';
+export type { DropdownCheckboxListProps } from './DropdownCheckboxList/DropdownCheckboxList';
 // Footer
 export { default as Footer } from './Footer/Footer';
 export type { FooterProps } from './Footer/Footer';
@@ -56,9 +59,6 @@ export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/Error
 // Modal - GlobalErrorFeedbacksModal
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
-// MultiSelectCheckbox
-export { default as MultiSelectCheckbox } from './MultiSelectCheckbox/MultiSelectCheckbox';
-export type { MultiSelectCheckboxProps } from './MultiSelectCheckbox/MultiSelectCheckbox';
 // Notice
 export { default as Notice, NoticeType } from './Notice/Notice';
 export type { NoticeProps } from './Notice/Notice';

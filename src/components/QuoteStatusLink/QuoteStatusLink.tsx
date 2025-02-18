@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Link, { LinkSize, LinkVariant } from '../Link/Link';
 import { useGoBackToUpload } from '@/hooks';
 import wording from '@/wording';
+import { Profile } from '@/types';
 
 export enum QuoteStatusType {
   EDIT = 'edit',
@@ -28,6 +29,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
 
   const goBackToUpload = useGoBackToUpload();
   const goToEdit = `${pathname}/modifier`;
+  const isConseiller = pathname.includes(Profile.CONSEILLER);
 
   const isEditOrShare =
     type === QuoteStatusType.EDIT || type === QuoteStatusType.SHARE;
@@ -86,7 +88,9 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   const upload = type === QuoteStatusType.UPLOAD && (
     <div className='flex flex-col'>
       <h6 className='fr-mb-1w'>
-        {wording.components.quote_status_link.upload.title}
+        {isConseiller
+          ? wording.components.quote_status_link.upload.title_conseiller
+          : wording.components.quote_status_link.upload.title}
       </h6>
       <Link
         href={goBackToUpload}

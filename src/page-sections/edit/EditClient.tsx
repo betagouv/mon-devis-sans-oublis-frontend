@@ -40,33 +40,21 @@ export default function EditClient({
   ) => {
     if (!currentDevis) return;
 
-    setCurrentDevis((prevDevis) => {
-      if (!prevDevis) return null;
-      return {
-        ...prevDevis,
-        error_details: prevDevis.error_details.filter(
-          (error) => error.id !== errorDetailId
-        ),
-      };
-    });
+    const updatedDevis = {
+      ...currentDevis,
+      error_details: currentDevis.error_details.map((error) => ({
+        ...error,
+        deleted: error.id === errorDetailId ? true : error.deleted,
+      })),
+    };
+
+    setCurrentDevis(updatedDevis);
 
     try {
-      const response = await quoteService.deleteErrorDetail(
-        quoteCheckId,
-        errorDetailId,
-        reason
-      );
-      if (!response.ok) {
-        throw new Error(`Suppression échouée côté API: ${response.status}`);
-      }
-
-      const updatedData = await quoteService.getQuote(quoteCheckId);
-      setCurrentDevis(updatedData);
+      await quoteService.deleteErrorDetail(quoteCheckId, errorDetailId, reason);
     } catch (error) {
       console.error("Erreur lors de la suppression de l'erreur:", error);
-
-      const data = await quoteService.getQuote(quoteCheckId);
-      setCurrentDevis(data);
+      setCurrentDevis(currentDevis);
     }
   };
 
@@ -81,12 +69,12 @@ export default function EditClient({
 
   return (
     <ResultClient
-      canDelete={true}
       currentDevis={currentDevis}
       deleteErrorReasons={deleteErrorReasons}
       onDeleteErrorDetail={handleDeleteErrorDetail}
       profile={params.profile}
       quoteCheckId={params.quoteCheckId}
+      showDeletedErrors
     />
   );
 }

@@ -16,13 +16,14 @@ export interface CustomInput {
   onChange: (value: string) => void;
 }
 
-export interface MultiSelectCheckboxProps {
+export interface DropdownCheckboxListProps {
   customInput?: {
     id: string;
     value: string;
     onChange: (value: string) => void;
   };
   label: string;
+  multiple: boolean;
   onChange: (values: string[]) => void;
   optionnal?: boolean;
   options: string[] | Option[];
@@ -40,15 +41,17 @@ interface GroupedOptions {
   [key: string]: GroupedOption[];
 }
 
-export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
+export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
   customInput,
   label,
+  multiple,
   onChange,
   optionnal,
   options,
   selectedValues = [],
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const customInputRef = useRef<HTMLInputElement>(null);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [localSelectedValues, setLocalSelectedValues] =
@@ -78,7 +81,15 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   const handleCheckboxChange = (id: string, checked: boolean) => {
     let newValues: string[];
     if (checked) {
-      newValues = [...localSelectedValues, id];
+      newValues = multiple ? [...localSelectedValues, id] : [id];
+
+      if (id === 'custom') {
+        setTimeout(() => {
+          customInputRef.current?.focus();
+        }, 0);
+      } else if (!multiple) {
+        setIsOpen(false);
+      }
     } else {
       newValues = localSelectedValues.filter((value) => value !== id);
       if (id === 'custom' && customInput) {
@@ -97,6 +108,17 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       onChange(newValues);
     } else if (!value.trim() && localSelectedValues.includes('custom')) {
       const newValues = localSelectedValues.filter((v) => v !== 'custom');
+      setLocalSelectedValues(newValues);
+      onChange(newValues);
+    }
+  };
+
+  const handleCustomInputClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!localSelectedValues.includes('custom')) {
+      const newValues = multiple
+        ? [...localSelectedValues, 'custom']
+        : ['custom'];
       setLocalSelectedValues(newValues);
       onChange(newValues);
     }
@@ -124,10 +146,10 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   };
 
   const displayValue = localSelectedValues.length
-    ? localSelectedValues.length > 1
+    ? multiple && localSelectedValues.length > 1
       ? `${localSelectedValues.length} sélections`
       : getDisplayLabel(localSelectedValues[0])
-    : 'Sélectionner une ou plusieurs options';
+    : 'Sélectionner une option';
 
   const normalizedOptions = isGroupedOptions(options)
     ? options
@@ -141,10 +163,11 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
           <input
             className='fr-input w-full'
             data-testid='custom-reason-input'
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleCustomInputClick}
             onChange={(e) => handleCustomInputChange(e.target.value)}
             placeholder='Autre raison'
             value={customInput?.value || ''}
+            ref={customInputRef}
             type='text'
           />
         </div>
@@ -202,4 +225,4 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
   );
 };
 
-export default MultiSelectCheckbox;
+export default DropdownCheckboxList;

@@ -1,7 +1,7 @@
 import { use, Suspense } from 'react';
 
-import { EditClient } from '@/page-sections';
 import { quoteService } from '@/lib/api';
+import { EditClient } from '@/page-sections';
 
 export default function Modifier({
   params: initialParams,

@@ -34,11 +34,6 @@ export const quoteService = {
     const deleteUrl =
       process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
 
-    console.log(
-      'Scalingo - NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID:',
-      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID
-    );
-
     if (!deleteUrl) {
       throw new Error(
         'NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID is not defined.'
@@ -51,8 +46,6 @@ export const quoteService = {
 
     const finalUrl = `${url}?reason=${reason}`;
     // ?reason=${encodeURIComponent(reason)}
-
-    console.log(finalUrl);
 
     const response = await fetch(finalUrl, {
       method: 'DELETE',
@@ -265,6 +258,44 @@ export const quoteService = {
       return await response.json();
     } catch (error) {
       console.error('Error updating quote:', error);
+      throw error;
+    }
+  },
+
+  async undoDeleteErrorDetail(quoteCheckId: string, errorDetailsId: string) {
+    const undoDeleteUrl =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
+
+    if (!undoDeleteUrl) {
+      throw new Error(
+        'NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID is not defined.'
+      );
+    }
+
+    try {
+      const url = undoDeleteUrl
+        .replace(':quote_check_id', quoteCheckId)
+        .replace(':error_detail_id', errorDetailsId);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Erreur API lors de l'annulation de la suppression: ${response.status}`
+        );
+      }
+
+      if (response.status === 204) {
+        return null;
+      }
+
+      const text = await response.text();
+      return text ? JSON.parse(text) : null;
+    } catch (error) {
+      console.error("Erreur lors de l'annulation de la suppression:", error);
       throw error;
     }
   },
