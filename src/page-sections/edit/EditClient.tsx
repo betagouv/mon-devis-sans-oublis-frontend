@@ -52,6 +52,8 @@ export default function EditClient({
 
     try {
       await quoteService.deleteErrorDetail(quoteCheckId, errorDetailId, reason);
+      const refreshedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(refreshedDevis);
     } catch (error) {
       console.error("Erreur lors de la suppression de l'erreur:", error);
       setCurrentDevis(currentDevis);
