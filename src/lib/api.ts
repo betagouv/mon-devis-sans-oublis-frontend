@@ -262,11 +262,7 @@ export const quoteService = {
     }
   },
 
-  async undoDeleteErrorDetail(
-    quoteCheckId: string,
-    errorDetailsId: string,
-    comment: string
-  ) {
+  async undoDeleteErrorDetail(quoteCheckId: string, errorDetailsId: string) {
     const undoDeleteUrl =
       process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
 
@@ -284,9 +280,6 @@ export const quoteService = {
       const response = await fetch(url, {
         method: 'POST',
         headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          comment: comment || 'Annulation de la suppression',
-        }),
       });
 
       if (!response.ok) {

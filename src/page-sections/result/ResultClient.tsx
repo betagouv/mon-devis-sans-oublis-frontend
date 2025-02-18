@@ -160,8 +160,7 @@ export default function ResultClient({
     try {
       const response = await quoteService.undoDeleteErrorDetail(
         quoteCheckId,
-        errorDetailsId,
-        'Annulation de la suppression'
+        errorDetailsId
       );
 
       if (response === null) {
