@@ -34,6 +34,11 @@ export const quoteService = {
     const deleteUrl =
       process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
 
+    console.log(
+      'Scalingo - NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID:',
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID
+    );
+
     if (!deleteUrl) {
       throw new Error(
         'NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID is not defined.'
@@ -47,9 +52,12 @@ export const quoteService = {
     const finalUrl = `${url}?reason=${reason}`;
     // ?reason=${encodeURIComponent(reason)}
 
+    console.log(finalUrl);
+
     const response = await fetch(finalUrl, {
       method: 'DELETE',
       headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+      cache: 'no-store',
     });
 
     if (!response.ok) {
