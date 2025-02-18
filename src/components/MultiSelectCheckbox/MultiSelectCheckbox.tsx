@@ -139,12 +139,13 @@ export const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       option.id === 'custom' ? (
         <div className='flex-grow'>
           <input
-            type='text'
             className='fr-input w-full'
+            data-testid='custom-reason-input'
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => handleCustomInputChange(e.target.value)}
             placeholder='Autre raison'
             value={customInput?.value || ''}
-            onChange={(e) => handleCustomInputChange(e.target.value)}
-            onClick={(e) => e.stopPropagation()}
+            type='text'
           />
         </div>
       ) : (

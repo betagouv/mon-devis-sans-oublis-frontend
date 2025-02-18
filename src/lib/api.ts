@@ -1,4 +1,22 @@
-import { Profile, Rating } from '@/types';
+import { ErrorDetails, Profile, Rating } from '@/types';
+
+interface QuoteUpdateData {
+  status?: string;
+  metadata?: {
+    aides?: string[];
+    gestes?: string[];
+  };
+}
+
+interface QuoteResponse {
+  id: string;
+  status: string;
+  metadata: {
+    aides: string[];
+    gestes: string[];
+  };
+  error_details?: ErrorDetails[];
+}
 
 const API_CONFIG = {
   headers: {
@@ -208,7 +226,10 @@ export const quoteService = {
     }
   },
 
-  async updateQuote(quoteCheckId: string, updatedData: any) {
+  async updateQuote(
+    quoteCheckId: string,
+    updatedData: QuoteUpdateData
+  ): Promise<QuoteResponse> {
     const quoteUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
 
     if (!quoteUrl) {

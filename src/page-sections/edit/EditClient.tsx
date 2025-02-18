@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
 import { QuoteChecksId } from '@/types';
+import { LoadingDots } from '@/components';
+import wording from '@/wording';
 
 export default function EditClient({
   deleteErrorReasons,
@@ -69,7 +71,12 @@ export default function EditClient({
   };
 
   if (isLoading) {
-    return <p>📥 Chargement en cours...</p>;
+    return (
+      <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
+        <LoadingDots title={wording.page_upload_id.analysis_redirect_title} />
+        <p>{wording.page_upload_id.analysis_redirect}</p>
+      </section>
+    );
   }
 
   return (

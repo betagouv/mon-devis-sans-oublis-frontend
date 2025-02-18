@@ -1,4 +1,6 @@
+import { ImageProps } from 'next/image';
 import { render, screen, fireEvent } from '@testing-library/react';
+
 import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
 import wording from '@/wording';
 
@@ -8,8 +10,14 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: React.ComponentPropsWithoutRef<'img'>) => (
-    <img alt={props.alt || 'Mocked image'} {...props} />
+  default: (props: ImageProps) => (
+    /* eslint-disable @next/next/no-img-element */
+    <img
+      alt={props.alt}
+      height={props.height}
+      src={props.src as string}
+      width={props.width}
+    />
   ),
 }));
 

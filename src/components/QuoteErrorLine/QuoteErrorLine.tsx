@@ -30,7 +30,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
   onFeedbackSubmit,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
@@ -84,10 +83,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
             )}
             {isConseillerAndEdit && (
               <button
-                className={`fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm ${
-                  isDeleting ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-                disabled={isDeleting}
+                className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
                 onClick={openDeleteModal}
               />
             )}

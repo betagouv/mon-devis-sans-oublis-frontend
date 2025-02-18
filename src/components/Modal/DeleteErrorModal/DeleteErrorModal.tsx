@@ -47,14 +47,6 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
     }
   };
 
-  const handleCustomReasonChange = (value: string) => {
-    setCustomReason(value);
-    if (!isCustom) {
-      setIsCustom(true);
-      setSelectedReason('custom');
-    }
-  };
-
   const handleSubmit = () => {
     if (isCustom && !customReason.trim()) {
       console.warn('Raison personnalisée vide !');
@@ -82,12 +74,16 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
       backButtonLabel={
         wording.components.global_error_feedbacks_modal.back_button_label
       }
+      data-testid='delete-error-modal'
       isOpen={isOpen}
       onClose={onClose}
       position={ModalPosition.CENTER}
     >
       <div className='flex flex-col h-full'>
-        <h4 className='fr-mb-1w flex items-center gap-2'>
+        <h4
+          className='fr-mb-1w flex items-center gap-2'
+          data-testid='delete-error-title'
+        >
           <span
             className='fr-icon-delete-fill fr-icon--lg mt-1!'
             aria-hidden='true'
@@ -116,26 +112,33 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
             </tbody>
           </table>
         </div>
-        {deleteErrorReasons && (
-          <MultiSelectCheckbox
-            customInput={{
-              id: 'custom',
-              value: customReason,
-              onChange: handleCustomReasonChange,
-            }}
-            label='Raison de la suppression'
-            onChange={handleReasonChange}
-            options={[
-              ...deleteErrorReasons,
-              { id: 'custom', label: 'Autre raison' },
-            ]}
-            selectedValues={
-              isCustom ? ['custom'] : selectedReason ? [selectedReason] : []
-            }
-          />
-        )}
-        <div className='mt-auto flex justify-end gap-4'>
-          <button className='fr-btn fr-btn--secondary' onClick={onClose}>
+        <div className='flex-grow'>
+          {deleteErrorReasons && (
+            <MultiSelectCheckbox
+              customInput={{
+                id: 'custom',
+                value: customReason,
+                onChange: setCustomReason,
+              }}
+              data-testid='delete-reasons-multiselect'
+              label='Raison de la suppression'
+              onChange={handleReasonChange}
+              options={[
+                ...deleteErrorReasons,
+                { id: 'custom', label: 'Autre raison' },
+              ]}
+              selectedValues={
+                isCustom ? ['custom'] : selectedReason ? [selectedReason] : []
+              }
+            />
+          )}
+        </div>
+        <div className='mt-8 flex justify-end gap-4'>
+          <button
+            className='fr-btn fr-btn--secondary'
+            onClick={onClose}
+            data-testid='cancel-delete-button'
+          >
             Annuler
           </button>
           <button
@@ -145,6 +148,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
               (!selectedReason && !customReason.trim()) ||
               (isCustom && !customReason.trim())
             }
+            data-testid='confirm-delete-button'
           >
             Confirmer la suppression
           </button>
