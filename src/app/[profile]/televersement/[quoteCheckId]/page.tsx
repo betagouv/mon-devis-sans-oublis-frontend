@@ -26,6 +26,7 @@ export default function Result({
       currentDevis={currentDevis}
       profile={params.profile}
       quoteCheckId={params.quoteCheckId}
+      showDeletedErrors={false}
     />
   );
 }

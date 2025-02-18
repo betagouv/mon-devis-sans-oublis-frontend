@@ -15,23 +15,23 @@ import wording from '@/wording';
 interface ResultClientProps {
   currentDevis: QuoteChecksId | null;
   deleteErrorReasons?: { id: string; label: string }[];
-  profile: string;
-  quoteCheckId: string;
-  canDelete?: boolean;
   onDeleteErrorDetail?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
+  profile: string;
+  quoteCheckId: string;
+  showDeletedErrors: boolean;
 }
 
 export default function ResultClient({
   currentDevis: initialDevis,
   deleteErrorReasons,
+  onDeleteErrorDetail,
   profile,
   quoteCheckId,
-  canDelete = false,
-  onDeleteErrorDetail,
+  showDeletedErrors,
 }: ResultClientProps) {
   const isButtonSticky = useScrollPosition();
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
@@ -260,12 +260,14 @@ export default function ResultClient({
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
-            list={currentDevis.error_details.map((error) => ({
-              ...error,
-              className: error.deleted
-                ? 'line-through text-gray-500 opacity-50'
-                : '',
-            }))}
+            list={currentDevis.error_details
+              .filter((error) => showDeletedErrors || !error.deleted)
+              .map((error) => ({
+                ...error,
+                className: error.deleted
+                  ? 'line-through text-gray-500 opacity-50'
+                  : '',
+              }))}
             onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
             onUndoDeleteError={handleUndoDeleteError}
