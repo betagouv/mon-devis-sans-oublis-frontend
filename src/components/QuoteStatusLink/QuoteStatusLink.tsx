@@ -71,9 +71,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   const upload = type === QuoteStatusType.UPLOAD && (
     <div className='flex flex-col'>
       <h6 className='fr-mb-1w'>
-        {isConseillerAndEdit
-          ? wording.components.quote_status_link.upload.title_conseiller
-          : wording.components.quote_status_link.upload.title}
+        {wording.components.quote_status_link.upload.title}
       </h6>
       <Link
         href={goBackToUpload}

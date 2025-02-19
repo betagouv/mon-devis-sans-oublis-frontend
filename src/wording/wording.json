@@ -79,8 +79,7 @@
       "upload": {
         "image_alt": "Image vérifier un devis",
         "image_src": "/images/quotation_results/quotation_link_upload.webp",
-        "title": "Vous souhaitez analyser un nouveau devis ou vérifier votre devis corrigé ?",
-        "title_conseiller": "Vous souhaitez analyser un nouveau devis ?",
+        "title": "Vous souhaitez analyser un nouveau devis ?",
         "link_label": "Vérifier un devis"
       }
     },
