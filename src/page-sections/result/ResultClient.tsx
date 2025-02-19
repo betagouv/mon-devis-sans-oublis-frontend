@@ -5,8 +5,13 @@ import { useEffect, useState } from 'react';
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
-import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
-import { useScrollPosition } from '@/hooks';
+import {
+  LoadingDots,
+  Toast,
+  GlobalErrorFeedbacksModal,
+  Notice,
+} from '@/components';
+import { useConseillerRoutes, useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
 import { Status, Rating, Category, QuoteChecksId } from '@/types';
 import { formatDateToFrench } from '@/utils';
@@ -44,6 +49,8 @@ export default function ResultClient({
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
+
+  const { isConseillerAndEdit } = useConseillerRoutes();
 
   useEffect(() => {
     setCurrentDevis(initialDevis);
@@ -236,6 +243,13 @@ export default function ResultClient({
 
   return (
     <>
+      {showDeletedErrors && currentDevis && isConseillerAndEdit && (
+        <Notice
+          className='fr-notice--warning'
+          description='Vous pouvez supprimer des corrections.'
+          title='Mode personnalisation activé'
+        />
+      )}
       {showToast && (
         <div className='fixed top-10 right-20 z-50'>
           <Toast

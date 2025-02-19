@@ -244,9 +244,7 @@ describe('QuoteStatusLink', () => {
 
       expect(mockUseConseillerRoutes).toHaveBeenCalled();
       expect(
-        screen.getByText(
-          wording.components.quote_status_link.upload.title_conseiller
-        )
+        screen.getByText(wording.components.quote_status_link.upload.title)
       ).toBeInTheDocument();
     });
   });

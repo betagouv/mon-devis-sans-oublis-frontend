@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
+import { LoadingDots } from '@/components';
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
 import { QuoteChecksId } from '@/types';
-import { LoadingDots } from '@/components';
 import wording from '@/wording';
 
 export default function EditClient({
