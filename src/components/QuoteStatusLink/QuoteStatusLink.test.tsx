@@ -1,11 +1,12 @@
 import { ImageProps } from 'next/image';
 import { render, screen, fireEvent } from '@testing-library/react';
+import * as hooks from '@/hooks';
+import * as nextNavigation from 'next/navigation';
 
 import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
-import wording from '@/wording';
 
 jest.mock('next/navigation', () => ({
-  usePathname: () => '/test-path',
+  usePathname: jest.fn(() => '/test-path'),
 }));
 
 jest.mock('next/image', () => ({
@@ -21,10 +22,47 @@ jest.mock('next/image', () => ({
   ),
 }));
 
-jest.mock('@/hooks', () => ({
-  useGoBackToUpload: () => '/upload',
+jest.mock('@/wording', () => ({
+  __esModule: true,
+  default: {
+    components: {
+      quote_status_link: {
+        share: {
+          image_alt: 'Image partagez les corrections',
+          title: 'Partagez les corrections',
+          description:
+            'Retrouvez cette page et les corrections à apporter sur le devis.',
+          description_conseiller:
+            'Retrouvez cette page et les corrections à apporter sur le devis.',
+          button_copy_url: 'Copier le lien de la page',
+          button_copied_url: 'Lien copié',
+        },
+        upload: {
+          image_alt: 'Image vérifier un devis',
+          title: 'Vous souhaitez analyser un nouveau devis ?',
+          title_conseiller:
+            'Vous souhaitez analyser un nouveau devis ou vérifier votre devis corrigé ?',
+          link_label: 'Vérifier un devis',
+        },
+      },
+    },
+  },
 }));
 
+import wording from '@/wording';
+
+const mockGoBackToUpload = '/upload';
+const mockUseConseillerRoutes = jest.fn(() => ({
+  isConseillerAndEdit: false,
+  isConseillerAndNotEdit: false,
+}));
+
+jest.mock('@/hooks', () => ({
+  useGoBackToUpload: () => mockGoBackToUpload,
+  useConseillerRoutes: () => mockUseConseillerRoutes(),
+}));
+
+// Mock du clipboard
 Object.assign(navigator, {
   clipboard: {
     writeText: jest.fn(),
@@ -33,6 +71,7 @@ Object.assign(navigator, {
 
 describe('QuoteStatusLink', () => {
   const mockLocation = new URL('http://test.com');
+  const usePathname = jest.mocked(nextNavigation.usePathname);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -40,37 +79,17 @@ describe('QuoteStatusLink', () => {
       value: mockLocation,
       writable: true,
     });
-  });
-
-  describe('EDIT type', () => {
-    beforeEach(() => {
-      render(<QuoteStatusLink type={QuoteStatusType.NO_EDIT} />);
-    });
-
-    it('renders edit type correctly', () => {
-      expect(
-        screen.getByText(wording.components.quote_status_link.not_edit.title)
-      ).toBeInTheDocument();
-
-      expect(
-        screen.getByText(
-          wording.components.quote_status_link.not_edit.description
-        )
-      ).toBeInTheDocument();
-
-      const editLink = screen.getByText(
-        wording.components.quote_status_link.not_edit.link_label
-      );
-      expect(editLink).toBeInTheDocument();
-    });
+    usePathname.mockReturnValue('/test-path');
+    jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+      isConseillerAndEdit: false,
+      isConseillerAndNotEdit: false,
+    }));
   });
 
   describe('SHARE type', () => {
-    beforeEach(() => {
-      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
-    });
-
     it('renders share type correctly', () => {
+      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
+
       expect(
         screen.getByAltText(
           wording.components.quote_status_link.share.image_alt
@@ -92,7 +111,54 @@ describe('QuoteStatusLink', () => {
       ).toBeInTheDocument();
     });
 
-    it('handles copy url button click', () => {
+    it('shows different description for conseiller edit mode', () => {
+      usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
+      jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      }));
+
+      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
+
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.share.description_conseiller
+        )
+      ).toBeInTheDocument();
+    });
+
+    it('shows normal description when not in conseiller edit mode', () => {
+      usePathname.mockReturnValue('/conseiller/televersement/123');
+      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
+
+      expect(
+        screen.getByText(wording.components.quote_status_link.share.description)
+      ).toBeInTheDocument();
+    });
+
+    it('copies non-edition URL when in conseiller edit mode', () => {
+      usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
+
+      jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      }));
+
+      const { rerender } = render(
+        <QuoteStatusLink
+          type={QuoteStatusType.SHARE}
+          baseUrl='http://test.com'
+        />
+      );
+
+      usePathname.mockReturnValue('/conseiller/televersement/123');
+      rerender(
+        <QuoteStatusLink
+          type={QuoteStatusType.SHARE}
+          baseUrl='http://test.com'
+        />
+      );
+
       const copyButton = screen.getByText(
         wording.components.quote_status_link.share.button_copy_url
       );
@@ -100,20 +166,33 @@ describe('QuoteStatusLink', () => {
       fireEvent.click(copyButton);
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        'http://test.com/'
+        'http://test.com/conseiller/televersement/123'
+      );
+    });
+
+    it('copies current URL when not in conseiller edit mode', () => {
+      usePathname.mockReturnValue('/conseiller/televersement/123');
+      render(
+        <QuoteStatusLink
+          type={QuoteStatusType.SHARE}
+          baseUrl='http://test.com'
+        />
       );
 
-      expect(
-        screen.getByText(
-          wording.components.quote_status_link.share.button_copied_url
-        )
-      ).toBeInTheDocument();
+      const copyButton = screen.getByText(
+        wording.components.quote_status_link.share.button_copy_url
+      );
 
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('fr-btn--secondary', 'fr-icon-check-line');
+      fireEvent.click(copyButton);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        'http://test.com/conseiller/televersement/123'
+      );
     });
 
     it('has correct styling for share type', () => {
+      render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
+
       const container = screen
         .getByRole('img')
         .closest('div[class*="bg-[var(--background-alt-blue-france)]"]');
@@ -122,11 +201,9 @@ describe('QuoteStatusLink', () => {
   });
 
   describe('UPLOAD type', () => {
-    beforeEach(() => {
-      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
-    });
-
     it('renders upload type correctly', () => {
+      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
+
       expect(
         screen.getByAltText(
           wording.components.quote_status_link.upload.image_alt
@@ -145,10 +222,32 @@ describe('QuoteStatusLink', () => {
     });
 
     it('has correct styling for upload type', () => {
+      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
+
       const container = screen
         .getByRole('img')
         .closest('div[class*="bg-[var(--background-default-grey-hover)]"]');
       expect(container).toBeInTheDocument();
+    });
+
+    it('renders conseiller title when path includes /modifier', () => {
+      jest.clearAllMocks();
+
+      usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
+
+      mockUseConseillerRoutes.mockReturnValue({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      });
+
+      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
+
+      expect(mockUseConseillerRoutes).toHaveBeenCalled();
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.upload.title_conseiller
+        )
+      ).toBeInTheDocument();
     });
   });
 

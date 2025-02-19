@@ -35,7 +35,13 @@ const richTextParser: RichTextParserFunction = (keyTranslation) => {
           : undefined;
 
         parts.push(
-          <a key={offset} href={aHref} rel={rel} target={target}>
+          <a
+            className='[&::after]:hidden!'
+            href={aHref}
+            key={offset}
+            rel={rel}
+            target={target}
+          >
             {aText}
           </a>
         );
