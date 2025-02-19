@@ -10,7 +10,6 @@ import {
   Link,
   LinkVariant,
   Notice,
-  NoticeType,
   Upload,
 } from '@/components';
 import { quoteService } from '@/lib/api';
@@ -107,9 +106,9 @@ export default function UploadClient({
         <div className='absolute top-[186px] left-0 right-0 z-50'>
           <Notice
             buttonClose={true}
+            className='fr-notice--alert'
             description={fileUploadedError}
             title={wording.upload.error.notice.title}
-            type={NoticeType.ALERT}
           />
         </div>
       )}

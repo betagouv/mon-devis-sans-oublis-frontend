@@ -56,6 +56,11 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
 
   const getErrorBadgeLabel = () => {
     const count = getErrorCount();
+
+    if (count === 0) {
+      return 'Tout est bon';
+    }
+
     const template =
       count > 1
         ? wording.page_upload_id.badge_correction_plural
@@ -66,10 +71,10 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
 
   const getErrorCount = () => {
     if (isCategoryGestes) {
-      return filteredGestesErrors.length;
+      return filteredGestesErrors.filter((error) => !error.deleted).length;
     }
     if (isCategoryAdmin) {
-      return filteredAdminErrors.length;
+      return filteredAdminErrors.filter((error) => !error.deleted).length;
     }
     return 0;
   };
@@ -107,9 +112,14 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
           </span>
           <Badge
             className='self-center inline-block'
+            icon={getErrorCount() === 0 ? 'fr-icon-success-fill' : undefined}
             label={getErrorBadgeLabel()}
             size={BadgeSize.X_SMALL}
-            variant={BadgeVariant.GREY}
+            variant={
+              getErrorCount() === 0
+                ? BadgeVariant.GREEN_LIGHT
+                : BadgeVariant.GREY
+            }
           />
         </caption>
         {isCategoryGestes && gestes.length > 0
@@ -159,6 +169,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                   </tr>
                   {errorsForGeste.map((error, index) => (
                     <QuoteErrorLine
+                      deleteErrorReasons={props.deleteErrorReasons}
                       error={error}
                       isLastErrorInTable={
                         isLastGeste && index === errorsForGeste.length - 1
@@ -168,7 +179,6 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       onFeedbackSubmit={props.onHelpClick}
                       onUndoDeleteError={props.onUndoDeleteError}
                       quoteCheckId={props.quoteCheckId}
-                      deleteErrorReasons={props.deleteErrorReasons}
                     />
                   ))}
                 </tbody>

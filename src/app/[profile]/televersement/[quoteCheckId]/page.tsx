@@ -1,7 +1,9 @@
 import { use } from 'react';
 
+import { Notice } from '@/components';
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
+import wording from '@/wording';
 
 export default function Result({
   params: initialParams,
@@ -22,11 +24,18 @@ export default function Result({
   const currentDevis = use(fetchCurrentDevis());
 
   return (
-    <ResultClient
-      currentDevis={currentDevis}
-      profile={params.profile}
-      quoteCheckId={params.quoteCheckId}
-      showDeletedErrors={false}
-    />
+    <>
+      <Notice
+        className='fr-notice--info'
+        description={wording.layout.notice.description}
+        title={wording.layout.notice.title}
+      />
+      <ResultClient
+        currentDevis={currentDevis}
+        profile={params.profile}
+        quoteCheckId={params.quoteCheckId}
+        showDeletedErrors={false}
+      />
+    </>
   );
 }

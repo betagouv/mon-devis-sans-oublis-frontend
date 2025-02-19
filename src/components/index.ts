@@ -60,7 +60,7 @@ export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/Error
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 // Notice
-export { default as Notice, NoticeType } from './Notice/Notice';
+export { default as Notice } from './Notice/Notice';
 export type { NoticeProps } from './Notice/Notice';
 // QuoteErrorLine
 export { default as QuoteErrorLine } from './QuoteErrorLine/QuoteErrorLine';

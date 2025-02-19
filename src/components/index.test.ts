@@ -31,7 +31,6 @@ describe('Components exports', () => {
       'ErrorFeedbacksModal',
       'GlobalErrorFeedbacksModal',
       'Notice',
-      'NoticeType',
       'QuoteErrorLine',
       'QuoteErrorTable',
       'QuoteStatusLink',
@@ -105,7 +104,6 @@ describe('Components exports', () => {
     expect(Components.LinkSize).toBeDefined();
     expect(Components.LinkVariant).toBeDefined();
     expect(Components.ModalPosition).toBeDefined();
-    expect(Components.NoticeType).toBeDefined();
     expect(Components.QuoteStatusType).toBeDefined();
   });
 });
