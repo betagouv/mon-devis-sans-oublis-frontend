@@ -1,20 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-
 import wording from '@/wording';
-
-export enum NoticeType {
-  ALERT = 'alert',
-  INFO = 'info',
-}
 
 export interface NoticeProps {
   buttonClose?: boolean;
-  className?: string;
+  className: string;
   description: string;
   title?: string;
-  type?: NoticeType;
 }
 
 export default function Notice({
@@ -22,23 +15,27 @@ export default function Notice({
   className,
   description,
   title,
-  type,
 }: NoticeProps) {
   const [isCloseButtonVisible, setIsCloseButtonVisible] =
     useState<boolean>(true);
 
   if (!isCloseButtonVisible) return null;
 
+  const isWarning = className.includes('fr-notice--warning');
+
   return (
-    <div
-      className={`fr-notice ${type ? `fr-notice--${type}` : className} ${
-        buttonClose && 'fr-py-1w'
-      }`}
-    >
+    <div className={`fr-notice ${className}`}>
       <div className='fr-container'>
         <div className='fr-notice__body'>
           <span>
-            <span className='fr-notice__title'>{title}</span>
+            <span
+              className={`fr-notice__title ${
+                isWarning ? 'fr-icon-edit-box-fill' : ''
+              }`}
+              data-testid='warning-icon'
+            >
+              {title}
+            </span>
             <span className='ml-0 md:ml-2 text-sm md:text-base'>
               {description}
             </span>

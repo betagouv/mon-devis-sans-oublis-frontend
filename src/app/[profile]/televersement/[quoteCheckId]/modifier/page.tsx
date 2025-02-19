@@ -1,5 +1,6 @@
-import { use, Suspense } from 'react';
+import { use } from 'react';
 
+import { Notice } from '@/components';
 import { quoteService } from '@/lib/api';
 import { EditClient } from '@/page-sections';
 
@@ -9,10 +10,6 @@ export default function Modifier({
   params: Promise<{ profile: string; quoteCheckId: string }>;
 }) {
   const params = use(initialParams);
-
-  if (!params.quoteCheckId) {
-    return <p className='text-red-500'>Erreur : ID du devis manquant.</p>;
-  }
 
   const fetchDeleteErrorReasons = async () => {
     try {
@@ -26,8 +23,13 @@ export default function Modifier({
   const deleteErrorReasons = use(fetchDeleteErrorReasons());
 
   return (
-    <Suspense fallback={<p>Chargement...</p>}>
+    <>
+      <Notice
+        className='fr-notice--warning'
+        description='Vous pouvez supprimer des corrections.'
+        title='Mode personnalisation activé'
+      />
       <EditClient deleteErrorReasons={deleteErrorReasons} params={params} />
-    </Suspense>
+    </>
   );
 }

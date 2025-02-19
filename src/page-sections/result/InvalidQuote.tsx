@@ -71,12 +71,30 @@ export default function InvalidQuote({
               />
             )}
             <Badge
-              label={(list.length > 1
-                ? wording.page_upload_id.badge_correction_plural
-                : wording.page_upload_id.badge_correction
-              ).replace('{number}', list.length.toString())}
+              label={(() => {
+                const activeErrors = list.filter(
+                  (error) => !error.deleted
+                ).length;
+                if (activeErrors === 0) {
+                  return 'Tout est bon';
+                }
+                return (
+                  activeErrors > 1
+                    ? wording.page_upload_id.badge_correction_plural
+                    : wording.page_upload_id.badge_correction
+                ).replace('{number}', activeErrors.toString());
+              })()}
+              icon={
+                list.filter((error) => !error.deleted).length === 0
+                  ? 'fr-icon-success-fill'
+                  : undefined
+              }
               size={BadgeSize.SMALL}
-              variant={BadgeVariant.GREY}
+              variant={
+                list.filter((error) => !error.deleted).length === 0
+                  ? BadgeVariant.GREEN_LIGHT
+                  : BadgeVariant.GREY
+              }
             />
           </div>
         </div>

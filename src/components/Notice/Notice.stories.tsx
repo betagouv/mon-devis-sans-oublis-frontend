@@ -1,16 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Notice, { NoticeProps, NoticeType } from './Notice';
+import Notice, { NoticeProps } from './Notice';
 
 const meta: Meta<typeof Notice> = {
   title: 'Components/Notice',
   component: Notice,
   tags: ['autodocs'],
   argTypes: {
-    type: {
-      control: 'radio',
-      options: Object.values(NoticeType),
-    },
     buttonClose: {
       control: 'boolean',
     },
@@ -23,7 +19,7 @@ type Story = StoryObj<NoticeProps>;
 
 export const Alert: Story = {
   args: {
-    type: NoticeType.ALERT,
+    className: 'fr-notice--alert',
     title: 'Attention',
     description: "Ceci est un message d'alerte important",
     buttonClose: true,
@@ -32,7 +28,16 @@ export const Alert: Story = {
 
 export const Info: Story = {
   args: {
-    type: NoticeType.INFO,
+    className: 'fr-notice--info',
+    title: 'Information',
+    description: "Ceci est un message d'information",
+    buttonClose: false,
+  },
+};
+
+export const Warning: Story = {
+  args: {
+    className: 'fr-notice--warning',
     title: 'Information',
     description: "Ceci est un message d'information",
     buttonClose: false,
