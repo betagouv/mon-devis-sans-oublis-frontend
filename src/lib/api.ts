@@ -227,6 +227,60 @@ export const quoteService = {
     }
   },
 
+  async updateErrorDetail(
+    comment: string | null,
+    errorDetailsId: string,
+    quoteCheckId: string
+  ) {
+    const feedbackUrl =
+      process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
+
+    if (!feedbackUrl) {
+      throw new Error(
+        'NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID is not defined.'
+      );
+    }
+
+    try {
+      const url = feedbackUrl
+        .replace(':quote_check_id', quoteCheckId)
+        .replace(':error_detail_id', errorDetailsId);
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update comment error detail: ${response.status} ${response.statusText}`
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      throw error;
+    }
+  },
+
+  async addErrorDetailComment(
+    comment: string,
+    errorDetailsId: string,
+    quoteCheckId: string
+  ) {
+    if (!comment.trim()) {
+      throw new Error('Comment cannot be empty');
+    }
+
+    return this.updateErrorDetail(comment, errorDetailsId, quoteCheckId);
+  },
+
+  async removeErrorDetailComment(errorDetailsId: string, quoteCheckId: string) {
+    return this.updateErrorDetail(null, errorDetailsId, quoteCheckId);
+  },
+
   async updateQuote(
     quoteCheckId: string,
     updatedData: QuoteUpdateData

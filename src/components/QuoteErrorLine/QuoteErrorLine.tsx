@@ -20,6 +20,7 @@ export interface QuoteErrorLineProps {
   ) => void;
   onFeedbackSubmit: (comment: string, id: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
+  onUpdateError?: (quoteCheckId: string, errorDetailsId: string) => void;
 }
 
 const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
