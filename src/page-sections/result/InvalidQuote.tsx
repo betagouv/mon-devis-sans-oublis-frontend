@@ -136,13 +136,9 @@ export default function InvalidQuote({
       </section>
       <section className='fr-container fr-my-6w'>
         <div className='flex md:flex-row flex-col gap-6 justify-between'>
-          {isConseillerAndEdit ? (
-            <QuoteStatusLink type={QuoteStatusType.NO_EDIT} />
-          ) : (
-            <QuoteStatusLink type={QuoteStatusType.SHARE} />
-          )}
+          <QuoteStatusLink type={QuoteStatusType.SHARE} />
           <QuoteStatusLink
-            className='md:w-[480px]!'
+            className={isConseillerAndEdit ? 'md:w-[700px]!' : 'md:w-[480px]!'}
             type={QuoteStatusType.UPLOAD}
           />
         </div>
