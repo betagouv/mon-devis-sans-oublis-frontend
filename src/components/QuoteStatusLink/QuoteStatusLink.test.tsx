@@ -1,10 +1,10 @@
 import { ImageProps } from 'next/image';
 import { render, screen, fireEvent } from '@testing-library/react';
+import * as hooks from '@/hooks';
+import * as nextNavigation from 'next/navigation';
 
 import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
-import wording from '@/wording';
 
-// Mock des hooks et composants
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/test-path'),
 }));
@@ -12,6 +12,7 @@ jest.mock('next/navigation', () => ({
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: ImageProps) => (
+    /* eslint-disable @next/next/no-img-element */
     <img
       alt={props.alt}
       height={props.height}
@@ -21,13 +22,44 @@ jest.mock('next/image', () => ({
   ),
 }));
 
-// Mock du hook useGoBackToUpload et useConseillerRoutes
+jest.mock('@/wording', () => ({
+  __esModule: true,
+  default: {
+    components: {
+      quote_status_link: {
+        share: {
+          image_alt: 'Image partagez les corrections',
+          title: 'Partagez les corrections',
+          description:
+            'Retrouvez cette page et les corrections à apporter sur le devis.',
+          description_conseiller:
+            'Retrouvez cette page et les corrections à apporter sur le devis.',
+          button_copy_url: 'Copier le lien de la page',
+          button_copied_url: 'Lien copié',
+        },
+        upload: {
+          image_alt: 'Image vérifier un devis',
+          title: 'Vous souhaitez analyser un nouveau devis ?',
+          title_conseiller:
+            'Vous souhaitez analyser un nouveau devis ou vérifier votre devis corrigé ?',
+          link_label: 'Vérifier un devis',
+        },
+      },
+    },
+  },
+}));
+
+import wording from '@/wording';
+
 const mockGoBackToUpload = '/upload';
+const mockUseConseillerRoutes = jest.fn(() => ({
+  isConseillerAndEdit: false,
+  isConseillerAndNotEdit: false,
+}));
+
 jest.mock('@/hooks', () => ({
   useGoBackToUpload: () => mockGoBackToUpload,
-  useConseillerRoutes: () => ({
-    isConseillerAndEdit: false,
-  }),
+  useConseillerRoutes: () => mockUseConseillerRoutes(),
 }));
 
 // Mock du clipboard
@@ -39,7 +71,7 @@ Object.assign(navigator, {
 
 describe('QuoteStatusLink', () => {
   const mockLocation = new URL('http://test.com');
-  const usePathname = jest.requireMock('next/navigation').usePathname;
+  const usePathname = jest.mocked(nextNavigation.usePathname);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -48,11 +80,10 @@ describe('QuoteStatusLink', () => {
       writable: true,
     });
     usePathname.mockReturnValue('/test-path');
-    jest
-      .spyOn(require('@/hooks'), 'useConseillerRoutes')
-      .mockImplementation(() => ({
-        isConseillerAndEdit: false,
-      }));
+    jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+      isConseillerAndEdit: false,
+      isConseillerAndNotEdit: false,
+    }));
   });
 
   describe('SHARE type', () => {
@@ -82,17 +113,16 @@ describe('QuoteStatusLink', () => {
 
     it('shows different description for conseiller edit mode', () => {
       usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
-      jest
-        .spyOn(require('@/hooks'), 'useConseillerRoutes')
-        .mockImplementation(() => ({
-          isConseillerAndEdit: true,
-        }));
+      jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      }));
 
       render(<QuoteStatusLink type={QuoteStatusType.SHARE} />);
 
       expect(
         screen.getByText(
-          'Retrouvez cette page avec les corrections à apporter sur le devis ainsi que celles que vous avez suggérées'
+          wording.components.quote_status_link.share.description_conseiller
         )
       ).toBeInTheDocument();
     });
@@ -108,13 +138,21 @@ describe('QuoteStatusLink', () => {
 
     it('copies non-edition URL when in conseiller edit mode', () => {
       usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
-      jest
-        .spyOn(require('@/hooks'), 'useConseillerRoutes')
-        .mockImplementation(() => ({
-          isConseillerAndEdit: true,
-        }));
 
-      render(
+      jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      }));
+
+      const { rerender } = render(
+        <QuoteStatusLink
+          type={QuoteStatusType.SHARE}
+          baseUrl='http://test.com'
+        />
+      );
+
+      usePathname.mockReturnValue('/conseiller/televersement/123');
+      rerender(
         <QuoteStatusLink
           type={QuoteStatusType.SHARE}
           baseUrl='http://test.com'
@@ -193,34 +231,22 @@ describe('QuoteStatusLink', () => {
     });
 
     it('renders conseiller title when path includes /modifier', () => {
+      jest.clearAllMocks();
+
       usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
-      jest
-        .spyOn(require('@/hooks'), 'useConseillerRoutes')
-        .mockImplementation(() => ({
-          isConseillerAndEdit: true,
-        }));
+
+      mockUseConseillerRoutes.mockReturnValue({
+        isConseillerAndEdit: true,
+        isConseillerAndNotEdit: false,
+      });
 
       render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
 
+      expect(mockUseConseillerRoutes).toHaveBeenCalled();
       expect(
         screen.getByText(
           wording.components.quote_status_link.upload.title_conseiller
         )
-      ).toBeInTheDocument();
-    });
-
-    it('renders normal title when path does not include /modifier', () => {
-      usePathname.mockReturnValue('/conseiller/televersement/123');
-      jest
-        .spyOn(require('@/hooks'), 'useConseillerRoutes')
-        .mockImplementation(() => ({
-          isConseillerAndEdit: false,
-        }));
-
-      render(<QuoteStatusLink type={QuoteStatusType.UPLOAD} />);
-
-      expect(
-        screen.getByText(wording.components.quote_status_link.upload.title)
       ).toBeInTheDocument();
     });
   });

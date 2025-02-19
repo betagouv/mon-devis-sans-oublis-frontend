@@ -48,7 +48,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
       </h5>
       <p className='fr-mb-2w'>
         {isConseillerAndEdit
-          ? 'Retrouvez cette page avec les corrections à apporter sur le devis ainsi que celles que vous avez suggérées'
+          ? wording.components.quote_status_link.share.description_conseiller
           : wording.components.quote_status_link.share.description}
       </p>
       <span className='flex flex-row gap-4'>

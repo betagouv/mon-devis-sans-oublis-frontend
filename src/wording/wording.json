@@ -71,6 +71,7 @@
         "button_copied_url": "Lien copié",
         "button_copy_url": "Copier le lien de la page",
         "description": "Retrouvez cette page et les corrections à apporter sur le devis.",
+        "description_conseiller": "Retrouvez cette page avec les corrections à apporter sur le devis ainsi que celles que vous avez suggérées",
         "image_alt": "Image partagez les corrections",
         "image_src": "/images/quotation_results/quotation_link_share.webp",
         "title": "Partagez les corrections"
