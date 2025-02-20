@@ -94,26 +94,49 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
             {error.title}
           </span>
           <span className='flex gap-2'>
-            {(error.solution || error.comment) && !error.deleted && (
-              <button
-                className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
-                onClick={openModal}
-              >
-                {wording.components.quote_error_card.button_see_detail}
-                {error.comment && (
-                  <span className='fr-icon-message-2-fill fr-icon--sm ml-2' />
+            {!isConseillerAndEdit &&
+              (error.solution || error.comment) &&
+              !error.deleted && (
+                <button
+                  className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+                  onClick={openModal}
+                >
+                  {wording.components.quote_error_card.button_see_detail}
+                  {error.comment && (
+                    <span className='fr-icon-message-2-fill fr-icon--sm ml-2' />
+                  )}
+                </button>
+              )}
+            {isConseillerAndEdit && !error.deleted && (
+              <>
+                {error.solution && error.comment && (
+                  <button
+                    className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+                    onClick={openModal}
+                  >
+                    {wording.components.quote_error_card.button_see_detail}
+                    <span className='fr-icon-message-2-fill fr-icon--sm ml-2' />
+                  </button>
                 )}
-              </button>
+                {error.solution && !error.comment && (
+                  <button
+                    className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
+                    onClick={openModal}
+                  >
+                    {wording.components.quote_error_card.button_see_detail}
+                  </button>
+                )}
+                {!error.solution && error.comment && (
+                  <button
+                    className='fr-btn fr-btn--tertiary fr-icon-message-2-fill fr-btn--sm'
+                    onClick={openModal}
+                  />
+                )}
+              </>
             )}
             {isConseillerAndEdit && !error.comment && !error.deleted && (
               <button
                 className='fr-btn fr-btn--tertiary fr-icon-chat-new-line fr-btn--sm'
-                onClick={() => setIsCommentModalOpen(true)}
-              />
-            )}
-            {isConseillerAndEdit && error.comment && !error.solution && (
-              <button
-                className='fr-btn fr-btn--tertiary fr-icon-message-2-fill fr-btn--sm'
                 onClick={() => setIsCommentModalOpen(true)}
               />
             )}
