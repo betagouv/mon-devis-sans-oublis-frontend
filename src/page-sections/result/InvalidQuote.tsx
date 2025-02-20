@@ -121,6 +121,9 @@ export default function InvalidQuote({
             category={Category.ADMIN}
             deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
+            onAddErrorComment={(quoteCheckId, errorDetailsId, comment) =>
+              onAddErrorComment?.(quoteCheckId, errorDetailsId, comment)
+            }
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
