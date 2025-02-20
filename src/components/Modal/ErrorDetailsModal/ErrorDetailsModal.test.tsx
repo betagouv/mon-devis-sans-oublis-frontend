@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import ErrorFeedbacksModal from './ErrorFeedbacksModal';
+import ErrorFeedbacksModal from './ErrorDetailsModal';
 import wording from '@/wording';
 
 describe('ErrorFeedbacksModal', () => {

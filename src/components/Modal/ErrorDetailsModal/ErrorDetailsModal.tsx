@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Modal, { ModalPosition } from '../Modal';
 import wording from '@/wording';
 
-export interface ErrorFeedbacksModalProps {
+export interface ErrorDetailsModalProps {
   errorDetailsId: string;
   initialComment?: string;
   isOpen: boolean;
@@ -17,7 +17,7 @@ export interface ErrorFeedbacksModalProps {
   title: string;
 }
 
-const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
+const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
   errorDetailsId,
   initialComment = '',
   isOpen,
@@ -147,4 +147,4 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   );
 };
 
-export default ErrorFeedbacksModal;
+export default ErrorDetailsModal;

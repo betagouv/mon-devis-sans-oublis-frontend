@@ -29,10 +29,10 @@ const meta = {
       control: 'text',
       description: "Titre de l'erreur",
     },
-    // initialComment: {
-    //   control: 'text',
-    //   description: 'Commentaire initial (optionnel)',
-    // },
+    initialComment: {
+      control: 'text',
+      description: 'Commentaire initial',
+    },
   },
 } satisfies Meta<typeof CommentErrorModal>;
 
@@ -43,22 +43,30 @@ export const Default: Story = {
   args: {
     errorCategory: Category.ADMIN,
     errorDetailsId: '123',
-    errorSolution: "Solution de l'erreur",
     errorTitle: 'Erreur dans le calcul de la TVA',
-    quoteCheckId: '456',
+    errorSolution: 'La solution proposée pour cette erreur',
+    initialComment: '',
     isOpen: false,
-    // initialComment: '',
+    quoteCheckId: '456',
   },
   render: (args) => {
     const [isOpen, setIsOpen] = useState(args.isOpen);
 
     const handleClose = () => setIsOpen(false);
-    const handleCommentSubmit = (
-      comment: string,
+    const handleAddErrorComment = (
+      quoteCheckId: string,
       errorDetailsId: string,
-      quoteCheckId: string
+      comment: string
     ) => {
-      console.log('Submit comment:', { comment, errorDetailsId, quoteCheckId });
+      console.log('Add comment:', { quoteCheckId, errorDetailsId, comment });
+      setIsOpen(false);
+    };
+
+    const handleDeleteErrorComment = (
+      quoteCheckId: string,
+      errorDetailsId: string
+    ) => {
+      console.log('Delete comment:', { quoteCheckId, errorDetailsId });
       setIsOpen(false);
     };
 
@@ -74,7 +82,8 @@ export const Default: Story = {
           {...args}
           isOpen={isOpen}
           onClose={handleClose}
-          //   onSubmit={handleCommentSubmit}
+          onAddErrorComment={handleAddErrorComment}
+          onDeleteErrorComment={handleDeleteErrorComment}
         />
       </>
     );
@@ -85,6 +94,6 @@ export const WithInitialComment: Story = {
   ...Default,
   args: {
     ...Default.args,
-    // initialComment: 'Commentaire existant à modifier',
+    initialComment: 'Ceci est un commentaire existant',
   },
 };

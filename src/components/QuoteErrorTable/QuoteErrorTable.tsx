@@ -190,7 +190,6 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       onAddErrorComment={props.onAddErrorComment}
                       onDeleteError={props.onDeleteError}
                       onDeleteErrorComment={props.onDeleteErrorComment}
-                      onFeedbackSubmit={props.onHelpClick}
                       onUndoDeleteError={props.onUndoDeleteError}
                       quoteCheckId={props.quoteCheckId}
                     />
@@ -209,7 +208,6 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 onAddErrorComment={props.onAddErrorComment}
                 onDeleteError={props.onDeleteError}
                 onDeleteErrorComment={props.onDeleteErrorComment}
-                onFeedbackSubmit={props.onHelpClick}
                 onUndoDeleteError={props.onUndoDeleteError}
                 quoteCheckId={props.quoteCheckId}
               />

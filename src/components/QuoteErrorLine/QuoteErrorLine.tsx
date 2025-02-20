@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import CommentErrorModal from '../Modal/CommentErrorModal/CommentErrorModal';
 import DeleteErrorModal from '../Modal/DeleteErrorModal/DeleteErrorModal';
-import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+import ErrorFeedbacksModal from '../Modal/ErrorDetailsModal/ErrorDetailsModal';
 import { useConseillerRoutes } from '@/hooks';
 import { ErrorDetails } from '@/types';
 import wording from '@/wording';
@@ -24,7 +24,6 @@ export interface QuoteErrorLineProps {
     reason: string
   ) => void;
   onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
-  onFeedbackSubmit: (comment: string, id: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
 }
@@ -36,7 +35,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
   onAddErrorComment,
   onDeleteError,
   onDeleteErrorComment,
-  onFeedbackSubmit,
   onUndoDeleteError,
   quoteCheckId,
 }) => {
@@ -51,11 +49,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
 
   const openDeleteModal = () => setIsDeleteModalOpen(true);
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
-
-  const handleFeedbackSubmit = (comment: string) => {
-    onFeedbackSubmit(comment, error.id);
-    closeModal();
-  };
 
   const handleDeleteConfirm = (
     quoteCheckId: string,

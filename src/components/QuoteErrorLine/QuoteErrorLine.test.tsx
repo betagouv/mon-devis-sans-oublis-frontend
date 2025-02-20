@@ -32,7 +32,6 @@ describe('QuoteErrorLine', () => {
     error: mockError,
     quoteCheckId: '456',
     onDeleteError: jest.fn(),
-    onFeedbackSubmit: jest.fn(),
     deleteErrorReasons: mockDeleteErrorReasons,
   };
 
