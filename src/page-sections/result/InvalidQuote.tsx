@@ -28,6 +28,7 @@ interface InvalidQuoteProps {
     errorDetailsId: string,
     reason: string
   ) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   uploadedFileName: string;
@@ -41,6 +42,7 @@ export default function InvalidQuote({
   list,
   onAddErrorComment,
   onDeleteError,
+  onDeleteErrorComment,
   onHelpClick,
   onUndoDeleteError,
   uploadedFileName,
@@ -122,6 +124,9 @@ export default function InvalidQuote({
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
+            onDeleteErrorComment={(quoteCheckId, errorDetailsId) =>
+              onDeleteErrorComment?.(quoteCheckId, errorDetailsId)
+            }
             onHelpClick={onHelpClick}
             onUndoDeleteError={onUndoDeleteError}
             quoteCheckId={id}
@@ -136,6 +141,9 @@ export default function InvalidQuote({
             }
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
+            }
+            onDeleteErrorComment={(quoteCheckId, errorDetailsId) =>
+              onDeleteErrorComment?.(quoteCheckId, errorDetailsId)
             }
             onHelpClick={onHelpClick}
             onUndoDeleteError={onUndoDeleteError}

@@ -245,6 +245,32 @@ export default function ResultClient({
     }
   };
 
+  const handleDeleteErrorComment = async (
+    quoteCheckId: string,
+    errorDetailsId: string
+  ) => {
+    if (!currentDevis) return;
+
+    try {
+      await quoteService.removeErrorDetailComment(quoteCheckId, errorDetailsId);
+
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error('Erreur lors de la suppression du commentaire:', error);
+
+      try {
+        const refreshedDevis = await quoteService.getQuote(quoteCheckId);
+        setCurrentDevis(refreshedDevis);
+      } catch (refreshError) {
+        console.error(
+          'Erreur lors du rafraîchissement des données:',
+          refreshError
+        );
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -270,7 +296,7 @@ export default function ResultClient({
       {showDeletedErrors && currentDevis && isConseillerAndEdit && (
         <Notice
           className='fr-notice--warning'
-          description='Vous pouvez supprimer des corrections.'
+          description='Vous pouvez ajouter des commentaires et/ou supprimer des corrections.'
           title='Mode personnalisation activé'
         />
       )}
@@ -308,6 +334,7 @@ export default function ResultClient({
               }))}
             onAddErrorComment={handleAddErrorComment}
             onDeleteError={handleDeleteError}
+            onDeleteErrorComment={handleDeleteErrorComment}
             onHelpClick={handleHelpClick}
             onUndoDeleteError={handleUndoDeleteError}
             uploadedFileName={currentDevis.filename || ''}

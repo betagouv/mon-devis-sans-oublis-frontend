@@ -20,6 +20,7 @@ export interface QuoteErrorTablePropsAdmin {
     errorDetailsId: string,
     reason: string
   ) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
@@ -40,6 +41,7 @@ export interface QuoteErrorTablePropsGestes {
     errorDetailsId: string,
     reason: string
   ) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
@@ -187,6 +189,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                       key={error.id}
                       onAddErrorComment={props.onAddErrorComment}
                       onDeleteError={props.onDeleteError}
+                      onDeleteErrorComment={props.onDeleteErrorComment}
                       onFeedbackSubmit={props.onHelpClick}
                       onUndoDeleteError={props.onUndoDeleteError}
                       quoteCheckId={props.quoteCheckId}
@@ -205,6 +208,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 key={error.id}
                 onAddErrorComment={props.onAddErrorComment}
                 onDeleteError={props.onDeleteError}
+                onDeleteErrorComment={props.onDeleteErrorComment}
                 onFeedbackSubmit={props.onHelpClick}
                 onUndoDeleteError={props.onUndoDeleteError}
                 quoteCheckId={props.quoteCheckId}

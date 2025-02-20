@@ -33,8 +33,9 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setIsCommentModified(false);
+      setComment(initialComment || '');
     }
-  }, [isOpen]);
+  }, [isOpen, initialComment]);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newComment = e.target.value;
@@ -43,9 +44,12 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
   };
 
   const handleSubmit = () => {
-    if (onSubmitFeedback) {
-      onSubmitFeedback(comment, errorDetailsId);
+    if (comment === '' && initialComment) {
+      onSubmitFeedback?.('', errorDetailsId);
+    } else if (comment.trim()) {
+      onSubmitFeedback?.(comment.trim(), errorDetailsId);
     }
+    onClose?.();
   };
 
   return (
@@ -92,10 +96,16 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
               src='/images/quotation_results/quotation_correction_comment.webp'
               width={40}
             />
-            <button
-              className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
-              onClick={() => setComment('')}
-            />
+            {initialComment && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
+                onClick={() => {
+                  setComment('');
+                  setIsCommentModified(true);
+                }}
+                title='Supprimer le commentaire'
+              />
+            )}
           </span>
           <label
             className='text-[var(--text-default-grey)] font-bold mb-2!'
@@ -108,7 +118,6 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
             className='fr-input h-24'
             id='textarea-input'
             onChange={handleCommentChange}
-            placeholder='Les corrections du devis sont...'
             value={comment}
           />
           <div
@@ -116,14 +125,21 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
             id='textarea-input-messages'
             aria-live='polite'
           />
+        </div>
+        <div className='mt-4! flex justify-end gap-4'>
           <button
-            className='fr-btn fr-btn--primary self-end mt-4!'
-            disabled={
-              !comment.trim() || (!isCommentModified && Boolean(initialComment))
-            }
+            className='fr-btn fr-btn--secondary'
+            onClick={onClose}
+            type='button'
+          >
+            Annuler
+          </button>
+          <button
+            className='fr-btn fr-btn--primary'
+            disabled={!isCommentModified}
             onClick={handleSubmit}
           >
-            {wording.components.error_feedbacks_modal.submit_button}
+            {comment === '' && initialComment ? 'Supprimer' : 'Enregistrer'}
           </button>
         </div>
       </div>

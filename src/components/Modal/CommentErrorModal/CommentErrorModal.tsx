@@ -19,6 +19,7 @@ export interface CommentErrorModalProps {
     comment: string
   ) => void;
   onClose?: () => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
 }
 
@@ -31,6 +32,7 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
   isOpen,
   onAddErrorComment,
   onClose,
+  onDeleteErrorComment,
   quoteCheckId,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -42,8 +44,9 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
     if (isOpen) {
       textareaRef.current?.focus();
       setIsCommentModified(false);
+      setComment(initialComment || '');
     }
-  }, [isOpen]);
+  }, [isOpen, initialComment]);
 
   const handleCommentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -54,12 +57,11 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!comment.trim()) {
-      console.warn('Le commentaire ne peut pas être vide !');
-      return;
+    if (comment.trim() === '') {
+      onDeleteErrorComment?.(quoteCheckId, errorDetailsId);
+    } else {
+      onAddErrorComment(quoteCheckId, errorDetailsId, comment.trim());
     }
-
-    onAddErrorComment(quoteCheckId, errorDetailsId, comment.trim());
     onClose?.();
   };
 
@@ -140,15 +142,26 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
             </table>
           </div>
         )}
-
         <p className='fr-text--lg font-bold text-[var(--background-action-high-blue-france)] fr-mb-2w fr-mt-4w'>
           Commenter la correction proposée
           <span className='fr-icon-arrow-down-fill ml-1' />
         </p>
         <div className='fr-input-group'>
-          <label className='fr-label' htmlFor='comment-error-input'>
-            Commentaire
-          </label>
+          <div className='flex justify-between items-center mb-2'>
+            <label className='fr-label' htmlFor='comment-error-input'>
+              Commentaire
+            </label>
+            {initialComment && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
+                onClick={() => {
+                  setComment('');
+                  setIsCommentModified(true);
+                }}
+                title='Supprimer le commentaire'
+              />
+            )}
+          </div>
           <textarea
             aria-describedby='comment-error-input-messages'
             className='fr-input h-24'
@@ -176,13 +189,11 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
           <button
             className='fr-btn fr-btn--danger'
             data-testid='confirm-comment-button'
-            disabled={
-              !comment.trim() || (!isCommentModified && Boolean(initialComment))
-            }
+            disabled={!isCommentModified}
             onClick={handleSubmit}
             type='button'
           >
-            Enregistrer
+            {comment === '' && initialComment ? 'Supprimer' : 'Enregistrer'}
           </button>
         </div>
       </div>
