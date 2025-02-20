@@ -271,9 +271,9 @@ export const quoteService = {
 
   // Error Details Comments
   async updateErrorDetail(
-    comment: string | null,
+    quoteCheckId: string,
     errorDetailsId: string,
-    quoteCheckId: string
+    comment: string | null
   ) {
     const feedbackUrl =
       process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID;
@@ -309,19 +309,19 @@ export const quoteService = {
   },
 
   async addErrorDetailComment(
-    comment: string,
+    quoteCheckId: string,
     errorDetailsId: string,
-    quoteCheckId: string
+    comment: string
   ) {
     if (!comment.trim()) {
       throw new Error('Comment cannot be empty');
     }
 
-    return this.updateErrorDetail(comment, errorDetailsId, quoteCheckId);
+    return this.updateErrorDetail(quoteCheckId, errorDetailsId, comment);
   },
 
-  async removeErrorDetailComment(errorDetailsId: string, quoteCheckId: string) {
-    return this.updateErrorDetail(null, errorDetailsId, quoteCheckId);
+  async removeErrorDetailComment(quoteCheckId: string, errorDetailsId: string) {
+    return this.updateErrorDetail(quoteCheckId, errorDetailsId, null);
   },
 
   // Feedback Management

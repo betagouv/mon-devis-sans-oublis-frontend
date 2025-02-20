@@ -77,7 +77,7 @@ const Modal: React.FC<ModalProps> = ({
       <div
         className={`flex flex-col px-6 md:px-8 py-4 bg-[var(--background-default-grey)] transform transition-transform duration-300 ease-in-out ${
           position === ModalPosition.CENTER
-            ? 'w-[792px] h-[624px]'
+            ? 'w-[792px] h-fit'
             : `${isDesktop ? 'w-[480px]' : 'w-full'}`
         } 
             ${

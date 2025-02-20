@@ -20,7 +20,11 @@ export interface QuoteErrorLineProps {
   ) => void;
   onFeedbackSubmit: (comment: string, id: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
-  onUpdateError?: (quoteCheckId: string, errorDetailsId: string) => void;
+  onAddErrorDetailComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
 }
 
 const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
@@ -31,7 +35,9 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
   onDeleteError,
   onFeedbackSubmit,
   onUndoDeleteError,
+  onAddErrorDetailComment,
 }) => {
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -64,6 +70,11 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
   };
 
+  const handleCommentSubmit = (comment: string) => {
+    onAddErrorDetailComment?.(quoteCheckId, error.id, comment);
+    setIsCommentModalOpen(false);
+  };
+
   return (
     <>
       <tr
@@ -90,6 +101,12 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
               >
                 {wording.components.quote_error_card.button_see_detail}
               </button>
+            )}
+            {isConseillerAndEdit && !error.comment && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-chat-new-line fr-btn--sm'
+                onClick={() => setIsCommentModalOpen(true)}
+              />
             )}
             {isConseillerAndEdit && !error.deleted && (
               <button
