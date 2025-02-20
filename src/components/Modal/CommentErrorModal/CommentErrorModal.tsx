@@ -33,19 +33,24 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
   onClose,
   quoteCheckId,
 }) => {
-  const [comment, setComment] = useState<string>(initialComment || '');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [comment, setComment] = useState<string>(initialComment || '');
+  const [isCommentModified, setIsCommentModified] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       textareaRef.current?.focus();
+      setIsCommentModified(false);
     }
   }, [isOpen]);
 
   const handleCommentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setComment(event.target.value);
+    const newComment = event.target.value;
+    setComment(newComment);
+    setIsCommentModified(newComment !== initialComment);
   };
 
   const handleSubmit = () => {
@@ -171,7 +176,9 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
           <button
             className='fr-btn fr-btn--danger'
             data-testid='confirm-comment-button'
-            disabled={!comment.trim()}
+            disabled={
+              !comment.trim() || (!isCommentModified && Boolean(initialComment))
+            }
             onClick={handleSubmit}
             type='button'
           >

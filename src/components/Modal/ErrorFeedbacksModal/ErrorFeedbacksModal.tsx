@@ -1,31 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import Modal, { ModalPosition } from '../Modal';
 import wording from '@/wording';
 
 export interface ErrorFeedbacksModalProps {
+  errorDetailsId: string;
+  initialComment?: string;
   isOpen: boolean;
   onClose?: () => void;
   onSubmitFeedback?: (comment: string, errorDetailsId: string) => void;
-  errorDetailsId: string;
   problem: string | null;
   solution: string | null;
   title: string;
 }
 
 const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
+  errorDetailsId,
+  initialComment = '',
   isOpen,
   onClose,
   onSubmitFeedback,
-  errorDetailsId,
   problem,
   solution,
   title,
 }) => {
-  const [comment, setComment] = useState<string>('');
+  const [comment, setComment] = useState<string>(initialComment);
+  const [isCommentModified, setIsCommentModified] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsCommentModified(false);
+    }
+  }, [isOpen]);
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newComment = e.target.value;
+    setComment(newComment);
+    setIsCommentModified(newComment !== initialComment);
+  };
 
   const handleSubmit = () => {
     if (onSubmitFeedback) {
@@ -69,23 +84,32 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
         )}
       </div>
       <div className='mb-8!'>
-        <div className='fr-input-group mt-4! flex flex-col border-grey p-6 rounded-lg'>
+        <div className='fr-input-group mt-4! flex flex-col p-4 rounded-lg bg-[var(--background-alt-grey)]'>
+          <span className='flex items-center justify-between fr-mb-1w'>
+            <Image
+              alt='delete'
+              height={40}
+              src='/images/quotation_results/quotation_correction_comment.webp'
+              width={40}
+            />
+            <button
+              className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
+              onClick={() => setComment('')}
+            />
+          </span>
           <label
             className='text-[var(--text-default-grey)] font-bold mb-2!'
             htmlFor='textarea-input'
           >
-            {
-              wording.components.error_feedbacks_modal
-                .correction_helpful_optional
-            }
+            Votre commentaire
           </label>
           <textarea
             aria-describedby='textarea-input-messages'
-            className='fr-input'
+            className='fr-input h-24'
             id='textarea-input'
-            onChange={(e) => setComment(e.target.value)}
+            onChange={handleCommentChange}
             placeholder='Les corrections du devis sont...'
-            value={comment || ''}
+            value={comment}
           />
           <div
             className='fr-messages-group'
@@ -94,7 +118,9 @@ const ErrorFeedbacksModal: React.FC<ErrorFeedbacksModalProps> = ({
           />
           <button
             className='fr-btn fr-btn--primary self-end mt-4!'
-            disabled={!comment}
+            disabled={
+              !comment.trim() || (!isCommentModified && Boolean(initialComment))
+            }
             onClick={handleSubmit}
           >
             {wording.components.error_feedbacks_modal.submit_button}

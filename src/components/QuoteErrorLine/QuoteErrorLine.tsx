@@ -105,11 +105,20 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
                 onClick={openModal}
               >
                 {wording.components.quote_error_card.button_see_detail}
+                {error.comment && (
+                  <span className='fr-icon-message-2-fill fr-icon--sm ml-2' />
+                )}
               </button>
             )}
             {isConseillerAndEdit && !error.comment && (
               <button
                 className='fr-btn fr-btn--tertiary fr-icon-chat-new-line fr-btn--sm'
+                onClick={() => setIsCommentModalOpen(true)}
+              />
+            )}
+            {isConseillerAndEdit && error.comment && !error.solution && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-message-2-fill fr-btn--sm'
                 onClick={() => setIsCommentModalOpen(true)}
               />
             )}
@@ -156,9 +165,13 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
       {error.solution && (
         <ErrorFeedbacksModal
           errorDetailsId={error.id}
+          initialComment={error.comment || ''}
           isOpen={isModalOpen}
           onClose={closeModal}
-          onSubmitFeedback={handleFeedbackSubmit}
+          onSubmitFeedback={(comment) => {
+            onAddErrorComment?.(quoteCheckId, error.id, comment);
+            closeModal();
+          }}
           problem={error.problem || ''}
           solution={error.solution}
           title={error.title}
