@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 import { Category } from '@/types';
@@ -34,6 +34,13 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
   quoteCheckId,
 }) => {
   const [comment, setComment] = useState<string>(initialComment || '');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      textareaRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const handleCommentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -51,6 +58,15 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
     onClose?.();
   };
 
+  const handleTextareaKeyDown = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <Modal
       backButtonLabel={
@@ -61,19 +77,28 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
       onClose={onClose}
       position={ModalPosition.CENTER}
     >
-      <div className='flex flex-col h-full'>
+      <div
+        aria-describedby='comment-modal-description'
+        aria-labelledby='comment-modal-title'
+        className='flex flex-col h-full'
+        role='dialog'
+      >
         <h4
           className='fr-mb-1w flex items-center gap-2'
           data-testid='comment-error-title'
+          id='comment-modal-title'
         >
           <span
-            className='fr-icon-chat-3-fill fr-icon--lg mt-1!'
             aria-hidden='true'
+            className='fr-icon-chat-3-fill fr-icon--lg mt-1!'
           />
           Ajouter un commentaire
         </h4>
 
-        <div className='overflow-hidden rounded-lg border-shadow fr-mb-1w fr-mt-2w'>
+        <div
+          className='overflow-hidden rounded-lg border-shadow fr-mb-1w fr-mt-2w'
+          id='comment-modal-description'
+        >
           <table className='w-full'>
             <caption className='bg-[var(--background-action-low-blue-france)] font-bold text-left p-4 flex items-center justify-between'>
               <span className='flex gap-2 items-center'>
@@ -115,7 +140,7 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
           Commenter la correction proposée
           <span className='fr-icon-arrow-down-fill ml-1' />
         </p>
-        <div className='fr-input-group' id='input-group-72'>
+        <div className='fr-input-group'>
           <label className='fr-label' htmlFor='comment-error-input'>
             Commentaire
           </label>
@@ -124,6 +149,8 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
             className='fr-input h-24'
             id='comment-error-input'
             onChange={handleCommentChange}
+            onKeyDown={handleTextareaKeyDown}
+            ref={textareaRef}
             value={comment}
           />
           <div
@@ -137,6 +164,7 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
             className='fr-btn fr-btn--secondary'
             data-testid='cancel-comment-button'
             onClick={onClose}
+            type='button'
           >
             Annuler
           </button>
@@ -145,6 +173,7 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
             data-testid='confirm-comment-button'
             disabled={!comment.trim()}
             onClick={handleSubmit}
+            type='button'
           >
             Enregistrer
           </button>

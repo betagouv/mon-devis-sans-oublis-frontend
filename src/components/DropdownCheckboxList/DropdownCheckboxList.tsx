@@ -52,6 +52,7 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const customInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [localSelectedValues, setLocalSelectedValues] =
@@ -67,12 +68,47 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      switch (event.key) {
+        case 'Escape':
+          setIsOpen(false);
+          break;
+        case 'Tab':
+          if (!event.shiftKey && isLastItemFocused()) {
+            setIsOpen(false);
+          }
+          if (event.shiftKey && isFirstItemFocused()) {
+            setIsOpen(false);
+          }
+          break;
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isOpen]);
+
+  const isFirstItemFocused = () => {
+    const firstCheckbox = dropdownRef.current?.querySelector(
+      'input[type="checkbox"]'
+    );
+    return document.activeElement === firstCheckbox;
+  };
+
+  const isLastItemFocused = () => {
+    const checkboxes = dropdownRef.current?.querySelectorAll(
+      'input[type="checkbox"]'
+    );
+    if (!checkboxes?.length) return false;
+    return document.activeElement === checkboxes[checkboxes.length - 1];
+  };
 
   const isGroupedOptions = (opt: string[] | Option[]): opt is Option[] => {
     return opt.length > 0 && typeof opt[0] === 'object' && 'group' in opt[0];
@@ -194,22 +230,42 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
     <div className='fr-select-group relative fr-mb-4w' ref={containerRef}>
       <label className='fr-label' htmlFor='multiselect'>
         {label}
+        {optionnal && <span className='fr-hint-text'> - Optionnel</span>}
       </label>
-      {optionnal && <div className='fr-hint-text my-2'>Optionnel</div>}
       <button
+        aria-controls='dropdown-content'
         aria-expanded={isOpen}
         aria-haspopup='listbox'
         className='fr-select text-left'
         id='multiselect'
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+          if (e.key === 'Escape' && isOpen) {
+            setIsOpen(false);
+          }
+        }}
         type='button'
       >
         {displayValue}
       </button>
       {isOpen && (
-        <div className='fr-select-checkbox border-shadow pt-5 pb-2 pl-2 h-[180px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'>
+        <div
+          id='dropdown-content'
+          ref={dropdownRef}
+          className='fr-select-checkbox border-shadow pt-5 pb-2 pl-2 h-[180px] overflow-x-hidden overflow-y-auto absolute w-full bg-white z-10'
+          role='listbox'
+          aria-labelledby='multiselect'
+        >
           {Object.entries(groupedOptions).map(([group, groupOpts]) => (
-            <div key={group}>
+            <div
+              aria-label={group !== 'default' ? group : undefined}
+              key={group}
+              role='group'
+            >
               {group !== 'default' && (
                 <legend className='fr-fieldset__legend'>{group}</legend>
               )}

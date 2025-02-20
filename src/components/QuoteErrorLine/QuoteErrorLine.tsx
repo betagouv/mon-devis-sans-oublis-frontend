@@ -71,8 +71,12 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
   };
 
-  const handleCommentSubmit = (comment: string) => {
-    onAddErrorComment?.(quoteCheckId, error.id, comment);
+  const handleCommentSubmit = (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => {
+    onAddErrorComment?.(quoteCheckId, errorDetailsId, comment);
     setIsCommentModalOpen(false);
   };
 

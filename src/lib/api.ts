@@ -301,14 +301,27 @@ export const quoteService = {
         );
       }
 
-      return await response.json();
+      if (
+        response.status === 204 ||
+        response.headers.get('content-length') === '0'
+      ) {
+        return null;
+      }
+
+      const responseText = await response.text();
+
+      if (!responseText.trim()) {
+        return null;
+      }
+
+      return JSON.parse(responseText);
     } catch (error) {
       console.error('Error updating comment:', error);
       throw error;
     }
   },
 
-  async addErrorDetailComment(
+  async addErrorComment(
     quoteCheckId: string,
     errorDetailsId: string,
     comment: string

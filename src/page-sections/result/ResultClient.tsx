@@ -123,11 +123,7 @@ export default function ResultClient({
     if (!currentDevis) return;
 
     try {
-      await quoteService.addErrorDetailComment(
-        comment,
-        errorDetailsId,
-        quoteCheckId
-      );
+      await quoteService.addErrorComment(quoteCheckId, errorDetailsId, comment);
 
       setCurrentDevis((prevDevis) => {
         if (!prevDevis) return null;
