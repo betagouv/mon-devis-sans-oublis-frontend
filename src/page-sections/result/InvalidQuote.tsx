@@ -18,11 +18,17 @@ interface InvalidQuoteProps {
   gestes: Gestes[];
   id: string;
   list: ErrorDetails[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   uploadedFileName: string;
@@ -34,7 +40,9 @@ export default function InvalidQuote({
   gestes,
   id,
   list,
+  onAddErrorComment,
   onDeleteError,
+  onDeleteErrorComment,
   onHelpClick,
   onUndoDeleteError,
   uploadedFileName,
@@ -116,6 +124,9 @@ export default function InvalidQuote({
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
+            onDeleteErrorComment={(quoteCheckId, errorDetailsId) =>
+              onDeleteErrorComment?.(quoteCheckId, errorDetailsId)
+            }
             onHelpClick={onHelpClick}
             onUndoDeleteError={onUndoDeleteError}
             quoteCheckId={id}
@@ -125,8 +136,14 @@ export default function InvalidQuote({
             deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
             gestes={gestes}
+            onAddErrorComment={(quoteCheckId, errorDetailsId, comment) =>
+              onAddErrorComment?.(quoteCheckId, errorDetailsId, comment)
+            }
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
+            }
+            onDeleteErrorComment={(quoteCheckId, errorDetailsId) =>
+              onDeleteErrorComment?.(quoteCheckId, errorDetailsId)
             }
             onHelpClick={onHelpClick}
             onUndoDeleteError={onUndoDeleteError}

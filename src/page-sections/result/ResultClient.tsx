@@ -115,6 +115,30 @@ export default function ResultClient({
     }
   }, [shouldRedirectToUpload, profile]);
 
+  const handleAddErrorComment = async (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => {
+    if (!currentDevis) return;
+
+    try {
+      await quoteService.addErrorComment(quoteCheckId, errorDetailsId, comment);
+
+      setCurrentDevis((prevDevis) => {
+        if (!prevDevis) return null;
+        return {
+          ...prevDevis,
+          error_details: prevDevis.error_details.map((error) =>
+            error.id === errorDetailsId ? { ...error, comment } : error
+          ),
+        };
+      });
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire:", error);
+    }
+  };
+
   const handleDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string,
@@ -221,6 +245,32 @@ export default function ResultClient({
     }
   };
 
+  const handleDeleteErrorComment = async (
+    quoteCheckId: string,
+    errorDetailsId: string
+  ) => {
+    if (!currentDevis) return;
+
+    try {
+      await quoteService.removeErrorDetailComment(quoteCheckId, errorDetailsId);
+
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error('Erreur lors de la suppression du commentaire:', error);
+
+      try {
+        const refreshedDevis = await quoteService.getQuote(quoteCheckId);
+        setCurrentDevis(refreshedDevis);
+      } catch (refreshError) {
+        console.error(
+          'Erreur lors du rafraîchissement des données:',
+          refreshError
+        );
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -246,7 +296,7 @@ export default function ResultClient({
       {showDeletedErrors && currentDevis && isConseillerAndEdit && (
         <Notice
           className='fr-notice--warning'
-          description='Vous pouvez supprimer des corrections.'
+          description='Vous pouvez ajouter des commentaires et/ou supprimer des corrections.'
           title='Mode personnalisation activé'
         />
       )}
@@ -282,7 +332,9 @@ export default function ResultClient({
                   ? 'line-through text-gray-500 opacity-50'
                   : '',
               }))}
+            onAddErrorComment={handleAddErrorComment}
             onDeleteError={handleDeleteError}
+            onDeleteErrorComment={handleDeleteErrorComment}
             onHelpClick={handleHelpClick}
             onUndoDeleteError={handleUndoDeleteError}
             uploadedFileName={currentDevis.filename || ''}

@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 
+import CommentErrorModal from '../Modal/CommentErrorModal/CommentErrorModal';
 import DeleteErrorModal from '../Modal/DeleteErrorModal/DeleteErrorModal';
-import ErrorFeedbacksModal from '../Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+import ErrorFeedbacksModal from '../Modal/ErrorDetailsModal/ErrorDetailsModal';
 import { useConseillerRoutes } from '@/hooks';
 import { ErrorDetails } from '@/types';
 import wording from '@/wording';
@@ -11,26 +12,33 @@ import wording from '@/wording';
 export interface QuoteErrorLineProps {
   deleteErrorReasons?: { id: string; label: string }[];
   error: ErrorDetails;
-  quoteCheckId: string;
   isLastErrorInTable?: boolean;
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
-  onFeedbackSubmit: (comment: string, id: string) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
+  quoteCheckId: string;
 }
 
 const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
   deleteErrorReasons,
   error,
   isLastErrorInTable = false,
-  quoteCheckId,
+  onAddErrorComment,
   onDeleteError,
-  onFeedbackSubmit,
+  onDeleteErrorComment,
   onUndoDeleteError,
+  quoteCheckId,
 }) => {
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,11 +49,6 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
 
   const openDeleteModal = () => setIsDeleteModalOpen(true);
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
-
-  const handleFeedbackSubmit = (comment: string) => {
-    onFeedbackSubmit(comment, error.id);
-    closeModal();
-  };
 
   const handleDeleteConfirm = (
     quoteCheckId: string,
@@ -61,6 +64,15 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
     const finalReason = foundReason ? foundReason.label : reason;
 
     onDeleteError?.(quoteCheckId, errorDetailsId, finalReason);
+  };
+
+  const handleCommentSubmit = (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => {
+    onAddErrorComment?.(quoteCheckId, errorDetailsId, comment);
+    setIsCommentModalOpen(false);
   };
 
   return (
@@ -88,7 +100,22 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
                 onClick={openModal}
               >
                 {wording.components.quote_error_card.button_see_detail}
+                {error.comment && (
+                  <span className='fr-icon-message-2-fill fr-icon--sm ml-2' />
+                )}
               </button>
+            )}
+            {isConseillerAndEdit && !error.comment && !error.deleted && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-chat-new-line fr-btn--sm'
+                onClick={() => setIsCommentModalOpen(true)}
+              />
+            )}
+            {isConseillerAndEdit && error.comment && !error.solution && (
+              <button
+                className='fr-btn fr-btn--tertiary fr-icon-message-2-fill fr-btn--sm'
+                onClick={() => setIsCommentModalOpen(true)}
+              />
             )}
             {isConseillerAndEdit && !error.deleted && (
               <button
@@ -109,17 +136,18 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
           </span>
         </td>
       </tr>
-      {error.solution && (
-        <ErrorFeedbacksModal
-          errorDetailsId={error.id}
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSubmitFeedback={handleFeedbackSubmit}
-          problem={error.problem || ''}
-          solution={error.solution}
-          title={error.title}
-        />
-      )}
+      <CommentErrorModal
+        errorCategory={error.category}
+        errorDetailsId={error.id}
+        errorSolution={error.solution || undefined}
+        errorTitle={error.title}
+        initialComment={error.comment}
+        isOpen={isCommentModalOpen}
+        onAddErrorComment={handleCommentSubmit}
+        onDeleteErrorComment={onDeleteErrorComment}
+        onClose={() => setIsCommentModalOpen(false)}
+        quoteCheckId={quoteCheckId}
+      />
       <DeleteErrorModal
         deleteErrorReasons={deleteErrorReasons}
         errorCategory={error.category}
@@ -130,6 +158,25 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
         onDeleteError={handleDeleteConfirm}
         quoteCheckId={quoteCheckId}
       />
+      {error.solution && (
+        <ErrorFeedbacksModal
+          errorDetailsId={error.id}
+          initialComment={error.comment || ''}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSubmitFeedback={(comment) => {
+            if (comment === '') {
+              onDeleteErrorComment?.(quoteCheckId, error.id);
+            } else {
+              onAddErrorComment?.(quoteCheckId, error.id, comment);
+            }
+            closeModal();
+          }}
+          problem={error.problem || ''}
+          solution={error.solution}
+          title={error.title}
+        />
+      )}
     </>
   );
 };

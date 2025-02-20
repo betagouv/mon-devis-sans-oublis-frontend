@@ -50,12 +50,15 @@ export { default as Matomo } from './Matomo/Matomo';
 // Modal
 export { default as Modal, ModalPosition } from './Modal/Modal';
 export type { ModalProps } from './Modal/Modal';
-// Moda - DeleteErrorModal
+// Modal - CommentErrorModal
+export { default as CommentErrorModal } from './Modal/CommentErrorModal/CommentErrorModal';
+export type { CommentErrorModalProps } from './Modal/CommentErrorModal/CommentErrorModal';
+// Modal - DeleteErrorModal
 export { default as DeleteErrorModal } from './Modal/DeleteErrorModal/DeleteErrorModal';
 export type { DeleteErrorModalProps } from './Modal/DeleteErrorModal/DeleteErrorModal';
-// Modal - ErrorFeedbacksModal
-export { default as ErrorFeedbacksModal } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
-export type { ErrorFeedbacksModalProps } from './Modal/ErrorFeedbacksModal/ErrorFeedbacksModal';
+// Modal - ErrorDetailsModal
+export { default as ErrorDetailsModal } from './Modal/ErrorDetailsModal/ErrorDetailsModal';
+export type { ErrorDetailsModalProps } from './Modal/ErrorDetailsModal/ErrorDetailsModal';
 // Modal - GlobalErrorFeedbacksModal
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';

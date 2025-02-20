@@ -26,6 +26,7 @@ export interface ErrorDetails {
   id: string;
   code: string;
   deleted: boolean;
+  comment: string | null;
   type: string;
   title: string;
   category: string;

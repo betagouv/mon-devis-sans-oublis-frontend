@@ -139,6 +139,13 @@ h2 {
   -webkit-mask-image: url('../../public/svg/business/shake-hands-fill.svg');
 }
 
+/* Communication */
+.fr-icon-chat-new-line::after,
+.fr-icon-chat-new-line::before {
+  mask-image: url('../../public/svg/communication/chat-new-line.svg');
+  -webkit-mask-image: url('../../public/svg/communication/chat-new-line.svg');
+}
+
 /* Device */
 .fr-icon-restart-line::after,
 .fr-icon-restart-line::before {

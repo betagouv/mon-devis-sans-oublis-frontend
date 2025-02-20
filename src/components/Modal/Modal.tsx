@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useIsDesktop } from '@/hooks';
@@ -27,6 +27,8 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   position,
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const [mounted, setMounted] = useState(false);
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
   const [shouldRender, setShouldRender] = useState<boolean>(false);
@@ -54,14 +56,108 @@ const Modal: React.FC<ModalProps> = ({
       setTimeout(() => {
         setVisibleClass(true);
       }, 10);
+      document.body.style.overflow = 'hidden';
     } else {
       setVisibleClass(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
       }, 200);
+      document.body.style.overflow = 'unset';
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeButton = modalRef.current?.querySelector(
+      '[data-testid="modal-close-button"]'
+    ) as HTMLElement;
+    if (closeButton) {
+      closeButton.focus();
+    }
+
+    const focusableElements = modalRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusableElement = focusableElements?.[0] as HTMLElement;
+    const lastFocusableElement = focusableElements?.[
+      focusableElements.length - 1
+    ] as HTMLElement;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusableElement) {
+          lastFocusableElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastFocusableElement) {
+          firstFocusableElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && onClose) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('keydown', handleTabKey);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const rootElements = document.querySelectorAll(
+        'body > *:not(#modal-root)'
+      );
+
+      const originalValues = new Map();
+      rootElements.forEach((element) => {
+        originalValues.set(element, element.getAttribute('aria-hidden'));
+        element.setAttribute('aria-hidden', 'true');
+      });
+
+      return () => {
+        rootElements.forEach((element) => {
+          const originalValue = originalValues.get(element);
+          if (originalValue === null) {
+            element.removeAttribute('aria-hidden');
+          } else {
+            element.setAttribute('aria-hidden', originalValue);
+          }
+        });
+      };
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && portalElement) {
+      const siblingElements = Array.from(document.body.children).filter(
+        (child) => child !== portalElement
+      );
+
+      siblingElements.forEach((element) => {
+        element.setAttribute('inert', '');
+      });
+
+      return () => {
+        siblingElements.forEach((element) => {
+          element.removeAttribute('inert');
+        });
+      };
+    }
+  }, [isOpen, portalElement]);
 
   const modalContent = shouldRender && (
     <div
@@ -75,9 +171,11 @@ const Modal: React.FC<ModalProps> = ({
       style={{ zIndex: 9999 }}
     >
       <div
+        aria-modal='true'
+        data-testid='modal-content'
         className={`flex flex-col px-6 md:px-8 py-4 bg-[var(--background-default-grey)] transform transition-transform duration-300 ease-in-out ${
           position === ModalPosition.CENTER
-            ? 'w-[792px] h-[624px]'
+            ? 'w-[792px] h-fit'
             : `${isDesktop ? 'w-[480px]' : 'w-full'}`
         } 
             ${
@@ -91,9 +189,10 @@ const Modal: React.FC<ModalProps> = ({
                     visibleClass ? 'translate-x-0' : 'translate-x-full'
                   }`
             }`}
-        data-testid='modal-content'
         onClick={(e) => e.stopPropagation()}
+        ref={modalRef}
         role='dialog'
+        tabIndex={-1}
       >
         <div
           className={

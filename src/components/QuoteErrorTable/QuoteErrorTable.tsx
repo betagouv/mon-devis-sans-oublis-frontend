@@ -10,11 +10,17 @@ export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
   deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
@@ -24,12 +30,18 @@ export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
   deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
+  gestes: Gestes[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
-  gestes: Gestes[];
+  onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
@@ -175,8 +187,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                         isLastGeste && index === errorsForGeste.length - 1
                       }
                       key={error.id}
+                      onAddErrorComment={props.onAddErrorComment}
                       onDeleteError={props.onDeleteError}
-                      onFeedbackSubmit={props.onHelpClick}
+                      onDeleteErrorComment={props.onDeleteErrorComment}
                       onUndoDeleteError={props.onUndoDeleteError}
                       quoteCheckId={props.quoteCheckId}
                     />
@@ -192,8 +205,9 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 deleteErrorReasons={props.deleteErrorReasons}
                 error={error}
                 key={error.id}
+                onAddErrorComment={props.onAddErrorComment}
                 onDeleteError={props.onDeleteError}
-                onFeedbackSubmit={props.onHelpClick}
+                onDeleteErrorComment={props.onDeleteErrorComment}
                 onUndoDeleteError={props.onUndoDeleteError}
                 quoteCheckId={props.quoteCheckId}
               />
