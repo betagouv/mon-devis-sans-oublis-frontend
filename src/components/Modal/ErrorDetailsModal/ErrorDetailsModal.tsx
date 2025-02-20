@@ -96,14 +96,12 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
         <div className='mb-8!'>
           <div className='fr-input-group mt-4! flex flex-col p-4 rounded-lg bg-[var(--background-alt-grey)]'>
             <span className='flex items-center justify-between fr-mb-1w'>
-              {isConseillerAndEdit && (
-                <Image
-                  alt='delete'
-                  height={40}
-                  src='/images/quotation_results/quotation_correction_comment.webp'
-                  width={40}
-                />
-              )}
+              <Image
+                alt='delete'
+                height={40}
+                src='/images/quotation_results/quotation_correction_comment.webp'
+                width={40}
+              />
               {initialComment && isConseillerAndEdit && (
                 <button
                   className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
@@ -125,9 +123,12 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
             </label>
             <textarea
               aria-describedby='textarea-input-messages'
-              className='fr-input h-24'
+              className={`fr-input h-24 ${
+                !isConseillerAndEdit ? 'pointer-events-none bg-gray-100' : ''
+              }`}
               id='textarea-input'
-              onChange={handleCommentChange}
+              onChange={isConseillerAndEdit ? handleCommentChange : undefined}
+              readOnly={!isConseillerAndEdit}
               value={comment}
             />
             <div
