@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import CommentErrorModal from '../Modal/CommentErrorModal/CommentErrorModal';
 import DeleteErrorModal from '../Modal/DeleteErrorModal/DeleteErrorModal';
-import ErrorFeedbacksModal from '../Modal/ErrorDetailsModal/ErrorDetailsModal';
+import ErrorDetailsModal from '../Modal/ErrorDetailsModal/ErrorDetailsModal';
 import { useConseillerRoutes } from '@/hooks';
 import { ErrorDetails } from '@/types';
 import wording from '@/wording';
@@ -94,7 +94,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
             {error.title}
           </span>
           <span className='flex gap-2'>
-            {error.solution && !error.deleted && (
+            {(error.solution || error.comment) && !error.deleted && (
               <button
                 className='fr-btn fr-btn--tertiary fr-btn--sm shrink-0'
                 onClick={openModal}
@@ -158,8 +158,8 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
         onDeleteError={handleDeleteConfirm}
         quoteCheckId={quoteCheckId}
       />
-      {error.solution && (
-        <ErrorFeedbacksModal
+      {(error.solution || error.comment) && (
+        <ErrorDetailsModal
           errorDetailsId={error.id}
           initialComment={error.comment || ''}
           isOpen={isModalOpen}
@@ -173,7 +173,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
             closeModal();
           }}
           problem={error.problem || ''}
-          solution={error.solution}
+          solution={error.solution || ''}
           title={error.title}
         />
       )}

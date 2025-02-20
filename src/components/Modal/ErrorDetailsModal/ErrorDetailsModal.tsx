@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import Modal, { ModalPosition } from '../Modal';
+import { useConseillerRoutes } from '@/hooks';
 import wording from '@/wording';
 
 export interface ErrorDetailsModalProps {
@@ -29,6 +30,8 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
 }) => {
   const [comment, setComment] = useState<string>(initialComment);
   const [isCommentModified, setIsCommentModified] = useState(false);
+
+  const { isConseillerAndEdit } = useConseillerRoutes();
 
   useEffect(() => {
     if (isOpen) {
@@ -90,13 +93,15 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
       <div className='mb-8!'>
         <div className='fr-input-group mt-4! flex flex-col p-4 rounded-lg bg-[var(--background-alt-grey)]'>
           <span className='flex items-center justify-between fr-mb-1w'>
-            <Image
-              alt='delete'
-              height={40}
-              src='/images/quotation_results/quotation_correction_comment.webp'
-              width={40}
-            />
-            {initialComment && (
+            {isConseillerAndEdit && (
+              <Image
+                alt='delete'
+                height={40}
+                src='/images/quotation_results/quotation_correction_comment.webp'
+                width={40}
+              />
+            )}
+            {initialComment && isConseillerAndEdit && (
               <button
                 className='fr-btn fr-btn--tertiary fr-icon-delete-line fr-btn--sm'
                 onClick={() => {
@@ -111,7 +116,9 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
             className='text-[var(--text-default-grey)] font-bold mb-2!'
             htmlFor='textarea-input'
           >
-            Votre commentaire
+            {isConseillerAndEdit
+              ? 'Votre commentaire'
+              : 'Commentaire de votre conseiller'}
           </label>
           <textarea
             aria-describedby='textarea-input-messages'
@@ -126,22 +133,24 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
             aria-live='polite'
           />
         </div>
-        <div className='mt-4! flex justify-end gap-4'>
-          <button
-            className='fr-btn fr-btn--secondary'
-            onClick={onClose}
-            type='button'
-          >
-            Annuler
-          </button>
-          <button
-            className='fr-btn fr-btn--primary'
-            disabled={!isCommentModified}
-            onClick={handleSubmit}
-          >
-            {comment === '' && initialComment ? 'Supprimer' : 'Enregistrer'}
-          </button>
-        </div>
+        {isConseillerAndEdit && (
+          <div className='mt-4! flex justify-end gap-4'>
+            <button
+              className='fr-btn fr-btn--secondary'
+              onClick={onClose}
+              type='button'
+            >
+              Annuler
+            </button>
+            <button
+              className='fr-btn fr-btn--primary'
+              disabled={!isCommentModified}
+              onClick={handleSubmit}
+            >
+              {comment === '' && initialComment ? 'Supprimer' : 'Enregistrer'}
+            </button>
+          </div>
+        )}
       </div>
     </Modal>
   );
