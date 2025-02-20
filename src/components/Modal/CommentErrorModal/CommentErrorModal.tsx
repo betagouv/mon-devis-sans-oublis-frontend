@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
-import { DropdownCheckboxList } from '@/components';
 import { Category } from '@/types';
 import wording from '@/wording';
 
@@ -12,13 +11,14 @@ export interface CommentErrorModalProps {
   errorDetailsId: string;
   errorSolution?: string;
   errorTitle: string;
+  initialComment: string | null;
   isOpen: boolean;
-  onClose?: () => void;
-  onDeleteError: (
+  onAddErrorComment: (
     quoteCheckId: string,
     errorDetailsId: string,
-    reason: string
+    comment: string
   ) => void;
+  onClose?: () => void;
   quoteCheckId: string;
 }
 
@@ -27,45 +27,27 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
   errorDetailsId,
   errorSolution,
   errorTitle,
+  initialComment,
   isOpen,
+  onAddErrorComment,
   onClose,
-  onDeleteError,
   quoteCheckId,
 }) => {
-  const [selectedReason, setSelectedReason] = useState<string | null>(null);
-  const [customReason, setCustomReason] = useState<string>('');
-  const [isCustom, setIsCustom] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>(initialComment || '');
 
-  const handleReasonChange = (values: string[]) => {
-    if (values.includes('custom')) {
-      setIsCustom(true);
-      setSelectedReason('custom');
-    } else {
-      setIsCustom(false);
-      const lastValue = values[values.length - 1];
-      setSelectedReason(lastValue || null);
-    }
+  const handleCommentChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setComment(event.target.value);
   };
 
   const handleSubmit = () => {
-    if (isCustom && !customReason.trim()) {
-      console.warn('Raison personnalisée vide !');
+    if (!comment.trim()) {
+      console.warn('Le commentaire ne peut pas être vide !');
       return;
     }
 
-    if (!isCustom && !selectedReason) {
-      console.warn('Aucune raison sélectionnée !');
-      return;
-    }
-
-    const finalReason = isCustom ? customReason.trim() : selectedReason;
-
-    if (!finalReason) {
-      console.error("finalReason est vide avant l'envoi !");
-      return;
-    }
-
-    onDeleteError(quoteCheckId, errorDetailsId, finalReason);
+    onAddErrorComment(quoteCheckId, errorDetailsId, comment.trim());
     onClose?.();
   };
 
@@ -134,38 +116,35 @@ const CommentErrorModal: React.FC<CommentErrorModalProps> = ({
           <span className='fr-icon-arrow-down-fill ml-1' />
         </p>
         <div className='fr-input-group' id='input-group-72'>
-          <label className='fr-label' htmlFor='global-error-feedbacks-input'>
+          <label className='fr-label' htmlFor='comment-error-input'>
             Commentaire
           </label>
           <textarea
+            aria-describedby='comment-error-input-messages'
             className='fr-input h-24'
-            aria-describedby='global-error-feedbacks-input-messages'
-            id='global-error-feedbacks-input'
-            value={''}
-            onChange={() => {}}
+            id='comment-error-input'
+            onChange={handleCommentChange}
+            value={comment}
           />
           <div
-            className='fr-messages-group'
-            id='global-error-feedbacks-input-messages'
             aria-live='polite'
+            className='fr-messages-group'
+            id='comment-error-input-messages'
           />
         </div>
         <div className='mt-8 flex justify-end gap-4'>
           <button
             className='fr-btn fr-btn--secondary'
-            onClick={onClose}
             data-testid='cancel-comment-button'
+            onClick={onClose}
           >
             Annuler
           </button>
           <button
             className='fr-btn fr-btn--danger'
-            onClick={handleSubmit}
-            disabled={
-              (!selectedReason && !customReason.trim()) ||
-              (isCustom && !customReason.trim())
-            }
             data-testid='confirm-comment-button'
+            disabled={!comment.trim()}
+            onClick={handleSubmit}
           >
             Enregistrer
           </button>

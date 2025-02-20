@@ -115,6 +115,34 @@ export default function ResultClient({
     }
   }, [shouldRedirectToUpload, profile]);
 
+  const handleAddErrorComment = async (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => {
+    if (!currentDevis) return;
+
+    try {
+      await quoteService.addErrorDetailComment(
+        comment,
+        errorDetailsId,
+        quoteCheckId
+      );
+
+      setCurrentDevis((prevDevis) => {
+        if (!prevDevis) return null;
+        return {
+          ...prevDevis,
+          error_details: prevDevis.error_details.map((error) =>
+            error.id === errorDetailsId ? { ...error, comment } : error
+          ),
+        };
+      });
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire:", error);
+    }
+  };
+
   const handleDeleteError = async (
     quoteCheckId: string,
     errorDetailsId: string,
@@ -282,6 +310,7 @@ export default function ResultClient({
                   ? 'line-through text-gray-500 opacity-50'
                   : '',
               }))}
+            onAddErrorComment={handleAddErrorComment}
             onDeleteError={handleDeleteError}
             onHelpClick={handleHelpClick}
             onUndoDeleteError={handleUndoDeleteError}

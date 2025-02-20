@@ -10,6 +10,11 @@ export interface QuoteErrorTablePropsAdmin {
   category: Category.ADMIN;
   deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
@@ -24,12 +29,17 @@ export interface QuoteErrorTablePropsGestes {
   category: Category.GESTES;
   deleteErrorReasons?: { id: string; label: string }[];
   errorDetails: ErrorDetails[];
+  gestes: Gestes[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
-  gestes: Gestes[];
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
   quoteCheckId: string;
@@ -175,6 +185,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                         isLastGeste && index === errorsForGeste.length - 1
                       }
                       key={error.id}
+                      onAddErrorComment={props.onAddErrorComment}
                       onDeleteError={props.onDeleteError}
                       onFeedbackSubmit={props.onHelpClick}
                       onUndoDeleteError={props.onUndoDeleteError}
@@ -192,6 +203,7 @@ const QuoteErrorTable: React.FC<QuoteErrorTableProps> = (props) => {
                 deleteErrorReasons={props.deleteErrorReasons}
                 error={error}
                 key={error.id}
+                onAddErrorComment={props.onAddErrorComment}
                 onDeleteError={props.onDeleteError}
                 onFeedbackSubmit={props.onHelpClick}
                 onUndoDeleteError={props.onUndoDeleteError}

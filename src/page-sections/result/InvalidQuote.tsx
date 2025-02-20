@@ -18,6 +18,11 @@ interface InvalidQuoteProps {
   gestes: Gestes[];
   id: string;
   list: ErrorDetails[];
+  onAddErrorComment?: (
+    quoteCheckId: string,
+    errorDetailsId: string,
+    comment: string
+  ) => void;
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
@@ -34,6 +39,7 @@ export default function InvalidQuote({
   gestes,
   id,
   list,
+  onAddErrorComment,
   onDeleteError,
   onHelpClick,
   onUndoDeleteError,
@@ -125,6 +131,9 @@ export default function InvalidQuote({
             deleteErrorReasons={deleteErrorReasons}
             errorDetails={list}
             gestes={gestes}
+            onAddErrorComment={(quoteCheckId, errorDetailsId, comment) =>
+              onAddErrorComment?.(quoteCheckId, errorDetailsId, comment)
+            }
             onDeleteError={(quoteCheckId, errorDetailsId, reason) =>
               onDeleteError?.(quoteCheckId, errorDetailsId, reason)
             }
