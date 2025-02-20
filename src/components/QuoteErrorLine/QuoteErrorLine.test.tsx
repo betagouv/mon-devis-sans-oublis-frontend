@@ -21,6 +21,7 @@ describe('QuoteErrorLine', () => {
     code: '',
     deleted: false,
     type: '',
+    comment: null,
   };
 
   const mockDeleteErrorReasons = [
@@ -63,86 +64,43 @@ describe('QuoteErrorLine', () => {
     (useConseillerRoutes as jest.Mock).mockReturnValue({
       isConseillerAndEdit: true,
     });
+
     render(<QuoteErrorLine {...defaultProps} />);
-    const deleteButton = screen.getByRole('button', { name: '' });
-    expect(deleteButton).toHaveClass('fr-icon-delete-line');
+
+    const deleteButtons = screen.getAllByRole('button');
+    const deleteButton = deleteButtons.find((button) =>
+      button.classList.contains('fr-icon-delete-line')
+    );
+
+    expect(deleteButton).toBeInTheDocument();
   });
-
-  //   it('handles delete confirmation with predefined reason', async () => {
-  //     (useConseillerRoutes as jest.Mock).mockReturnValue({
-  //       isConseillerAndEdit: true,
-  //     });
-  //     render(<QuoteErrorLine {...defaultProps} />);
-
-  //     // Ouvrir la modale de suppression
-  //     const deleteButton = screen.getByRole('button', { name: '' });
-  //     await userEvent.click(deleteButton);
-
-  //     // Attendre que la modale soit ouverte et sélectionner une raison
-  //     const reasonOption = await screen.findByLabelText('Reason 1');
-  //     await userEvent.click(reasonOption);
-
-  //     // Confirmer la suppression
-  //     const confirmButton = screen.getByRole('button', {
-  //       name: /confirmer la suppression/i,
-  //     });
-  //     await userEvent.click(confirmButton);
-
-  //     expect(defaultProps.onDeleteError).toHaveBeenCalledWith(
-  //       '456',
-  //       '123',
-  //       'Reason 1'
-  //     );
-  //   });
-
-  //   it('handles delete confirmation with custom reason', async () => {
-  //     (useConseillerRoutes as jest.Mock).mockReturnValue({
-  //       isConseillerAndEdit: true,
-  //     });
-  //     render(<QuoteErrorLine {...defaultProps} />);
-
-  //     // Ouvrir la modale de suppression
-  //     const deleteButton = screen.getByRole('button', { name: '' });
-  //     await userEvent.click(deleteButton);
-
-  //     // Sélectionner l'option personnalisée
-  //     const customOption = await screen.findByLabelText('Autre raison');
-  //     await userEvent.click(customOption);
-
-  //     // Remplir l'input personnalisé
-  //     const customInput = screen.getByPlaceholderText('Autre raison');
-  //     await userEvent.type(customInput, 'Custom reason');
-
-  //     // Confirmer la suppression
-  //     const confirmButton = screen.getByRole('button', {
-  //       name: /confirmer la suppression/i,
-  //     });
-  //     await userEvent.click(confirmButton);
-
-  //     expect(defaultProps.onDeleteError).toHaveBeenCalledWith(
-  //       '456',
-  //       '123',
-  //       'Custom reason'
-  //     );
-  //   });
 
   it('handles empty reason error case', async () => {
     const consoleSpy = jest
       .spyOn(console, 'error')
       .mockImplementation(() => {});
+
     (useConseillerRoutes as jest.Mock).mockReturnValue({
       isConseillerAndEdit: true,
     });
+
     render(<QuoteErrorLine {...defaultProps} />);
 
-    // Ouvrir la modale de suppression
-    const deleteButton = screen.getByRole('button', { name: '' });
-    await userEvent.click(deleteButton);
+    const deleteButtons = screen.getAllByRole('button');
+    const deleteButton = deleteButtons.find((button) =>
+      button.classList.contains('fr-icon-delete-line')
+    );
 
-    // Le bouton de confirmation devrait être désactivé
+    expect(deleteButton).toBeInTheDocument();
+
+    if (deleteButton) {
+      await userEvent.click(deleteButton);
+    }
+
     const confirmButton = screen.getByRole('button', {
       name: /confirmer la suppression/i,
     });
+
     expect(confirmButton).toBeDisabled();
 
     consoleSpy.mockRestore();
