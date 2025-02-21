@@ -8,7 +8,7 @@ import { FILE_ERROR } from '../upload/UploadClient';
 import { LoadingDots, Toast, GlobalErrorFeedbacksModal } from '@/components';
 import { useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import { Status, Rating, Category, QuoteChecksId } from '@/types';
+import { Status, Rating, Category, QuoteChecksId, ErrorDetails } from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -71,9 +71,10 @@ export default function ResultClient({
         setCurrentDevis(data);
 
         const isInvalidStatus = data.status === Status.INVALID;
-        const hasFileError =
-          data.error_details?.[0]?.category === Category.FILE;
-        if (isInvalidStatus && hasFileError) {
+        const fileErrors = data.error_details.filter(
+          (error: ErrorDetails) => error.category === Category.FILE
+        );
+        if (isInvalidStatus && fileErrors.length > 0) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
