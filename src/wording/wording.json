@@ -231,17 +231,10 @@
           "url": "/particulier/televersement"
         },
         {
-          "alt": "Mandataire qui souhaite faire le lien",
-          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "image": "/images/who_are_you/card_agent.webp",
-          "title": "Je suis mandataire",
-          "url": "/mandataire/televersement"
-        },
-        {
           "alt": "Conseiller qui souhaite accompagner ses clients",
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "image": "/images/who_are_you/card_advisor.webp",
-          "title": "Je suis conseiller",
+          "title": "J'accompagne un projet de rénovation",
           "url": "/conseiller/televersement"
         }
       ],
@@ -373,16 +366,10 @@
           "title": "Je suis particulier"
         },
         {
-          "description": "Je souhaite faire le lien entre les différentes parties prenantes",
-          "href": "/mandataire/televersement",
-          "icon": "compasses-2-fill",
-          "title": "Je suis mandataire"
-        },
-        {
           "description": "Je souhaite accompagner mes clients dans leurs démarches",
           "href": "/conseiller/televersement",
           "icon": "customer-service-fill",
-          "title": "Je suis conseiller"
+          "title": "J'accompagne un projet de rénovation"
         }
       ],
       "subtitle": "Pouvez-vous nous en dire plus sur vous ?",
