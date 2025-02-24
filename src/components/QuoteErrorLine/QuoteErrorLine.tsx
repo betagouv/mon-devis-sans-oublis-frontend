@@ -187,7 +187,7 @@ const QuoteErrorLine: React.FC<QuoteErrorLineProps> = ({
           initialComment={error.comment || ''}
           isOpen={isModalOpen}
           onClose={closeModal}
-          onSubmitFeedback={(comment) => {
+          onSubmitComment={(comment) => {
             if (comment === '') {
               onDeleteErrorComment?.(quoteCheckId, error.id);
             } else {

@@ -7,14 +7,15 @@ import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 import {
-  LoadingDots,
-  Toast,
+  GlobalCommentModal,
   GlobalErrorFeedbacksModal,
+  LoadingDots,
   Notice,
+  Toast,
 } from '@/components';
 import { useConseillerRoutes, useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import { Status, Rating, Category, QuoteChecksId, ErrorDetails } from '@/types';
+import { Category, ErrorDetails, QuoteChecksId, Rating, Status } from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -51,6 +52,8 @@ export default function ResultClient({
     !initialDevis || initialDevis.status === Status.PENDING
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isGlobalCommentModalOpen, setIsGlobalCommentModalOpen] =
+    useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
@@ -298,6 +301,17 @@ export default function ResultClient({
     }
   };
 
+  const handleSubmitGlobalComment = async (comment: string) => {
+    try {
+      await quoteService.addQuoteComment(quoteCheckId, comment);
+      setIsGlobalCommentModalOpen(false);
+      // Optionnel : Ajouter un toast de confirmation
+      setShowToast(true);
+    } catch (error) {
+      console.error('Error adding global comment:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -344,13 +358,14 @@ export default function ResultClient({
           />
         ) : currentDevis ? (
           <InvalidQuote
-            key={`${currentDevis.id}-${JSON.stringify(
-              currentDevis.error_details
-            )}`}
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            comment={currentDevis.comment}
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
+            key={`${currentDevis.id}-${JSON.stringify(
+              currentDevis.error_details
+            )}`}
             list={(currentDevis.error_details || [])
               .filter((error) => showDeletedErrors || !error.deleted)
               .map((error) => ({
@@ -363,10 +378,16 @@ export default function ResultClient({
             onDeleteError={handleDeleteError}
             onDeleteErrorComment={handleDeleteErrorComment}
             onHelpClick={handleHelpClick}
+            onOpenGlobalCommentModal={() => setIsGlobalCommentModalOpen(true)}
             onUndoDeleteError={handleUndoDeleteError}
             uploadedFileName={currentDevis.filename || ''}
           />
         ) : null}
+        <GlobalCommentModal
+          isOpen={isGlobalCommentModalOpen}
+          onClose={() => setIsGlobalCommentModalOpen(false)}
+          onSubmitComment={handleSubmitGlobalComment}
+        />
         <div className='fr-container flex flex-col relative'>
           {!hasFeedbackBeenSubmitted && (
             <div

@@ -12,7 +12,7 @@ export interface ErrorDetailsModalProps {
   initialComment?: string;
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback?: (comment: string, errorDetailsId: string) => void;
+  onSubmitComment?: (comment: string, errorDetailsId: string) => void;
   problem: string | null;
   solution: string | null;
   title: string;
@@ -23,7 +23,7 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
   initialComment = '',
   isOpen,
   onClose,
-  onSubmitFeedback,
+  onSubmitComment,
   problem,
   solution,
   title,
@@ -48,9 +48,9 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
 
   const handleSubmit = () => {
     if (comment === '' && initialComment) {
-      onSubmitFeedback?.('', errorDetailsId);
+      onSubmitComment?.('', errorDetailsId);
     } else if (comment.trim()) {
-      onSubmitFeedback?.(comment.trim(), errorDetailsId);
+      onSubmitComment?.(comment.trim(), errorDetailsId);
     }
     onClose?.();
   };
@@ -90,7 +90,6 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
           </>
         )}
       </div>
-
       {((isConseillerAndEdit && initialComment) ||
         (!isConseillerAndEdit && initialComment)) && (
         <div className='mb-8!'>

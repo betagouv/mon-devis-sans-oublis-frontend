@@ -132,6 +132,43 @@ export const quoteService = {
     }
   },
 
+  async addQuoteComment(quoteCheckId: string, comment: string) {
+    const quoteUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
+
+    if (!quoteUrl) {
+      throw new Error('NEXT_PUBLIC_API_QUOTE_CHECKS_ID is not defined.');
+    }
+
+    try {
+      const url = quoteUrl.replace(':quote_check_id', quoteCheckId);
+
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          ...API_CONFIG.headers,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to add quote comment: ${response.status} ${response.statusText}`
+        );
+      }
+
+      if (response.status === 204) {
+        return null;
+      }
+
+      const responseText = await response.text();
+      return responseText ? JSON.parse(responseText) : null;
+    } catch (error) {
+      console.error('Error adding quote comment:', error);
+      throw error;
+    }
+  },
+
   async getQuoteMetadata() {
     const metadataUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA;
 
