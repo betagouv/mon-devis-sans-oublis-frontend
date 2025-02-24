@@ -45,13 +45,18 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
     }
   };
 
+  const handleClose = () => {
+    document.body.style.overflow = 'unset';
+    onClose?.();
+  };
+
   return (
     <Modal
       backButtonLabel={
         wording.components.global_error_feedbacks_modal.back_button_label
       }
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       position={ModalPosition.CENTER}
     >
       <div onKeyDown={handleKeyDown} className='flex flex-col'>

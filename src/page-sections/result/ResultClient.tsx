@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
@@ -38,7 +39,9 @@ export default function ResultClient({
   quoteCheckId,
   showDeletedErrors,
 }: ResultClientProps) {
+  const pathname = usePathname();
   const isButtonSticky = useScrollPosition();
+
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
@@ -51,6 +54,10 @@ export default function ResultClient({
     useState<boolean>(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     setCurrentDevis(initialDevis);
