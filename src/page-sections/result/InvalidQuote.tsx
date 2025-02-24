@@ -86,6 +86,10 @@ export default function InvalidQuote({
     };
   }, []);
 
+  useEffect(() => {
+    setEditedComment(comment || '');
+  }, [comment]);
+
   return (
     <>
       <section className='fr-container fr-gap-8'>
