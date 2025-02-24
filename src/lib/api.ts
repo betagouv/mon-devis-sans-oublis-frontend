@@ -132,7 +132,7 @@ export const quoteService = {
     }
   },
 
-  async addQuoteComment(quoteCheckId: string, comment: string) {
+  async updateQuoteComment(quoteCheckId: string, comment: string | null) {
     const quoteUrl = process.env.NEXT_PUBLIC_API_QUOTE_CHECKS_ID;
 
     if (!quoteUrl) {
@@ -153,7 +153,7 @@ export const quoteService = {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to add quote comment: ${response.status} ${response.statusText}`
+          `Failed to update quote comment: ${response.status} ${response.statusText}`
         );
       }
 
@@ -164,9 +164,22 @@ export const quoteService = {
       const responseText = await response.text();
       return responseText ? JSON.parse(responseText) : null;
     } catch (error) {
-      console.error('Error adding quote comment:', error);
+      console.error('Error updating quote comment:', error);
       throw error;
     }
+  },
+
+  async addQuoteComment(quoteCheckId: string, comment: string) {
+    if (!comment.trim()) {
+      throw new Error('Comment cannot be empty');
+    }
+
+    await this.updateQuoteComment(quoteCheckId, comment);
+    return this.getQuote(quoteCheckId);
+  },
+
+  async removeQuoteComment(quoteCheckId: string) {
+    return this.updateQuoteComment(quoteCheckId, null);
   },
 
   async getQuoteMetadata() {

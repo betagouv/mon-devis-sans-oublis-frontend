@@ -301,14 +301,27 @@ export default function ResultClient({
     }
   };
 
-  const handleSubmitGlobalComment = async (comment: string) => {
+  const handleSubmitGlobalComment = async (
+    quoteCheckId: string,
+    comment: string
+  ) => {
     try {
       await quoteService.addQuoteComment(quoteCheckId, comment);
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
       setIsGlobalCommentModalOpen(false);
-      // Optionnel : Ajouter un toast de confirmation
-      setShowToast(true);
     } catch (error) {
       console.error('Error adding global comment:', error);
+    }
+  };
+
+  const handleDeleteGlobalComment = async (quoteCheckId: string) => {
+    try {
+      await quoteService.removeQuoteComment(quoteCheckId);
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error('Error deleting global comment:', error);
     }
   };
 
@@ -359,7 +372,7 @@ export default function ResultClient({
         ) : currentDevis ? (
           <InvalidQuote
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
-            comment={currentDevis.comment}
+            comment={currentDevis.comment || ''}
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
@@ -375,8 +388,10 @@ export default function ResultClient({
                   : '',
               }))}
             onAddErrorComment={handleAddErrorComment}
+            onAddGlobalComment={handleSubmitGlobalComment}
             onDeleteError={handleDeleteError}
             onDeleteErrorComment={handleDeleteErrorComment}
+            onDeleteGlobalComment={handleDeleteGlobalComment}
             onHelpClick={handleHelpClick}
             onOpenGlobalCommentModal={() => setIsGlobalCommentModalOpen(true)}
             onUndoDeleteError={handleUndoDeleteError}
@@ -386,7 +401,10 @@ export default function ResultClient({
         <GlobalCommentModal
           isOpen={isGlobalCommentModalOpen}
           onClose={() => setIsGlobalCommentModalOpen(false)}
-          onSubmitComment={handleSubmitGlobalComment}
+          onSubmitComment={(comment) =>
+            handleSubmitGlobalComment(quoteCheckId, comment)
+          }
+          quoteCheckId={quoteCheckId}
         />
         <div className='fr-container flex flex-col relative'>
           {!hasFeedbackBeenSubmitted && (

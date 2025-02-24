@@ -120,21 +120,24 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
                 ? 'Votre commentaire'
                 : 'Commentaire de votre conseiller'}
             </label>
-            <textarea
-              aria-describedby='textarea-input-messages'
-              className={`fr-input h-24 ${
-                !isConseillerAndEdit ? 'pointer-events-none bg-gray-100' : ''
-              }`}
-              id='textarea-input'
-              onChange={isConseillerAndEdit ? handleCommentChange : undefined}
-              readOnly={!isConseillerAndEdit}
-              value={comment}
-            />
-            <div
-              className='fr-messages-group'
-              id='textarea-input-messages'
-              aria-live='polite'
-            />
+            {isConseillerAndEdit ? (
+              <>
+                <textarea
+                  aria-describedby='textarea-input-messages'
+                  className='fr-input h-24'
+                  id='textarea-input'
+                  onChange={handleCommentChange}
+                  value={comment}
+                />
+                <div
+                  className='fr-messages-group'
+                  id='textarea-input-messages'
+                  aria-live='polite'
+                />
+              </>
+            ) : (
+              <p className='h-20 overflow-y-auto'>{comment}</p>
+            )}
           </div>
           {isConseillerAndEdit && (
             <div className='mt-4! flex justify-end gap-4'>

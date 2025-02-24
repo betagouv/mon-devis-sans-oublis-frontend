@@ -4,24 +4,25 @@ import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 
-export interface GlobalCommentModalProps {
+interface GlobalCommentModalProps {
+  initialComment?: string;
   isOpen: boolean;
   onClose?: () => void;
   onSubmitComment: (comment: string) => void;
+  quoteCheckId: string;
 }
 
 const GlobalCommentModal: React.FC<GlobalCommentModalProps> = ({
+  initialComment = '',
   isOpen,
   onClose,
   onSubmitComment,
 }) => {
-  const [comment, setComment] = useState<string>('');
+  const [comment, setComment] = useState(initialComment);
 
   const handleSubmit = () => {
-    if (comment.trim()) {
-      onSubmitComment(comment);
-      setComment('');
-    }
+    onSubmitComment(comment);
+    onClose?.();
   };
 
   return (

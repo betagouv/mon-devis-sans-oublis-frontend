@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 import {
@@ -26,12 +29,14 @@ interface InvalidQuoteProps {
     errorDetailsId: string,
     comment: string
   ) => void;
+  onAddGlobalComment?: (quoteCheckId: string, comment: string) => void;
   onDeleteError?: (
     quoteCheckId: string,
     errorDetailsId: string,
     reason: string
   ) => void;
   onDeleteErrorComment?: (quoteCheckId: string, errorDetailsId: string) => void;
+  onDeleteGlobalComment?: (quoteCheckId: string) => void;
   onHelpClick: (comment: string, errorDetailsId: string) => void;
   onOpenGlobalCommentModal: () => void;
   onUndoDeleteError?: (quoteCheckId: string, errorDetailsId: string) => void;
@@ -46,14 +51,40 @@ export default function InvalidQuote({
   id,
   list,
   onAddErrorComment,
+  onAddGlobalComment,
   onDeleteError,
   onDeleteErrorComment,
+  onDeleteGlobalComment,
   onHelpClick,
   onOpenGlobalCommentModal,
   onUndoDeleteError,
   uploadedFileName,
 }: InvalidQuoteProps) {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedComment, setEditedComment] = useState(comment || '');
+
   const { isConseillerAndEdit } = useConseillerRoutes();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        buttonRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -129,23 +160,77 @@ export default function InvalidQuote({
                   width={64}
                 />
               </div>
-              <div className='pl-6 pr-2 w-full'>
-                <span className='flex justify-between fr-mb-1w'>
-                  <h6 className='fr-mb-1w'>Votre commentaire général</h6>
-                  <button
-                    className='fr-btn fr-btn--tertiary fr-btn--sm fr-icon-edit-line'
-                    onClick={() => {
-                      /* handler pour activer l'édition */
-                    }}
-                  />
-                </span>
-
+              <div className='px-6 w-full'>
+                <h6 className='fr-mb-1w'>Votre commentaire général</h6>
                 <textarea
-                  className='h-[96px] w-full'
-                  defaultValue={comment}
-                  disabled
-                  id='global-comment'
+                  className='fr-input h-[150px] w-full'
+                  disabled={!isEditing}
+                  onChange={(e) => setEditedComment(e.target.value)}
+                  value={editedComment}
                 />
+                {isEditing && (
+                  <div className='flex justify-end gap-2 mt-2'>
+                    <button
+                      className='fr-btn fr-btn--secondary'
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditedComment(comment || '');
+                      }}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      className='fr-btn fr-btn--primary'
+                      onClick={() => {
+                        onAddGlobalComment?.(id, editedComment);
+                        setIsEditing(false);
+                      }}
+                    >
+                      Enregistrer
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className='relative'>
+                <button
+                  ref={buttonRef}
+                  className='fr-btn fr-btn--tertiary fr-btn--sm fr-icon-edit-line'
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                />
+                {isMenuOpen && (
+                  <div
+                    ref={menuRef}
+                    className='absolute right-0 mt-2 w-fit bg-white rounded-md shadow-lg z-10'
+                  >
+                    <ul className='m-0! p-0!'>
+                      <li className='list-none whitespace-nowrap'>
+                        <button
+                          className='w-full px-4 py-3 text-left hover:bg-[var(--background-default-grey)] flex items-center gap-2'
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            setIsEditing(true);
+                          }}
+                        >
+                          <span className='fr-icon-edit-line fr-icon--sm' />
+                          Modifier le commentaire
+                        </button>
+                      </li>
+                      <div className='border-t border-[var(--border-default-grey)]' />
+                      <li className='list-none whitespace-nowrap'>
+                        <button
+                          className='w-full px-4 py-3 text-left hover:bg-[var(--background-default-grey)] text-[var(--text-default-error)] flex items-center gap-2'
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            onDeleteGlobalComment?.(id);
+                          }}
+                        >
+                          <span className='fr-icon-delete-line fr-icon--sm' />
+                          Supprimer le commentaire
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
