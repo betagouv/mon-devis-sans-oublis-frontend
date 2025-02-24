@@ -48,12 +48,19 @@ const GlobalCommentModal: React.FC<GlobalCommentModalProps> = ({
           <p className='fr-mb-4w'>
             Votre commentaire sera visible lors du partage de la page.
           </p>
-          <label className='fr-label' htmlFor='global-comment'>
+          <label
+            className='fr-label flex! flex-col gap-2'
+            htmlFor='global-comment'
+          >
             Commentaire
+            <span className='fr-text--xs fr-mb-1w fr-mt-0 text-[var(--text-mention-grey)]'>
+              Limité à 1000 caractères
+            </span>
           </label>
           <textarea
             className='fr-input fr-mt-1v h-[88px]'
             id='global-comment'
+            maxLength={1000}
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />

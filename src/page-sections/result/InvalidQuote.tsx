@@ -166,6 +166,7 @@ export default function InvalidQuote({
                   <textarea
                     className='fr-input h-[150px] w-full'
                     disabled={!isEditing}
+                    maxLength={1000}
                     onChange={(e) => setEditedComment(e.target.value)}
                     value={editedComment}
                   />
@@ -193,6 +194,11 @@ export default function InvalidQuote({
                     >
                       Enregistrer
                     </button>
+                  </div>
+                )}
+                {isEditing && (
+                  <div className='fr-hint-text text-right'>
+                    {editedComment.length}/1000 caractères
                   </div>
                 )}
               </div>
