@@ -73,7 +73,7 @@ const Modal: React.FC<ModalProps> = ({
     const closeButton = modalRef.current?.querySelector(
       '[data-testid="modal-close-button"]'
     ) as HTMLElement;
-    if (closeButton) {
+    if (closeButton && !document.activeElement?.closest('[role="dialog"]')) {
       closeButton.focus();
     }
 
