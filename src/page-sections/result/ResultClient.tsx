@@ -45,6 +45,8 @@ export default function ResultClient({
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
+  const [hasFeedbackBeenSubmitted, setHasFeedbackBeenSubmitted] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(
     !initialDevis || initialDevis.status === Status.PENDING
   );
@@ -79,34 +81,49 @@ export default function ResultClient({
 
       try {
         const data = await quoteService.getQuote(quoteCheckId);
-        setCurrentDevis(data);
+
+        if (!data || !data.status) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(pollQuote, pollingInterval);
+          } else {
+            setIsLoading(false);
+          }
+          return;
+        }
 
         const isInvalidStatus = data.status === Status.INVALID;
-        const fileErrors = data.error_details.filter(
-          (error: ErrorDetails) => error.category === Category.FILE
-        );
+        const fileErrors =
+          data.error_details?.filter(
+            (error: ErrorDetails) => error.category === Category.FILE
+          ) || [];
         if (isInvalidStatus && fileErrors.length > 0) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
         }
 
+        setCurrentDevis(data);
+
         if (data.status === Status.VALID || data.status === Status.INVALID) {
           setIsLoading(false);
           isPollingActive = false;
-          return;
+        } else if (data.status === Status.PENDING) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(pollQuote, pollingInterval);
+          } else {
+            setIsLoading(false);
+          }
         }
-
-        if (data.status === Status.PENDING && retryCount < maxRetries) {
+      } catch (error) {
+        console.error('Error polling quote:', error);
+        if (retryCount < maxRetries) {
           retryCount++;
           setTimeout(pollQuote, pollingInterval);
         } else {
           setIsLoading(false);
-          isPollingActive = false;
         }
-      } catch {
-        setIsLoading(false);
-        isPollingActive = false;
       }
     };
 
@@ -246,8 +263,10 @@ export default function ResultClient({
         email,
         rating,
       });
+      document.body.style.overflow = 'unset';
       setIsModalOpen(false);
       setShowToast(true);
+      setHasFeedbackBeenSubmitted(true);
     } catch (error) {
       console.error('Error sending feedback:', error);
     }
@@ -349,22 +368,24 @@ export default function ResultClient({
           />
         ) : null}
         <div className='fr-container flex flex-col relative'>
-          <div
-            className={`${
-              currentDevis?.status === Status.VALID
-                ? 'fixed bottom-14 md:right-37 right-4'
-                : isButtonSticky
-                ? 'fixed bottom-84 md:right-37 right-4'
-                : 'absolute bottom-[-40px] md:right-6 right-4'
-            } self-end z-20`}
-          >
-            <button
-              className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
-              onClick={() => setIsModalOpen(!isModalOpen)}
+          {!hasFeedbackBeenSubmitted && (
+            <div
+              className={`${
+                currentDevis?.status === Status.VALID
+                  ? 'fixed bottom-14 md:right-37 right-4'
+                  : isButtonSticky
+                  ? 'fixed bottom-84 md:right-37 right-4'
+                  : 'absolute bottom-[-40px] md:right-6 right-4'
+              } self-end z-20`}
             >
-              Donner mon avis
-            </button>
-          </div>
+              <button
+                className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
+                onClick={() => setIsModalOpen(!isModalOpen)}
+              >
+                Donner mon avis
+              </button>
+            </div>
+          )}
           {isModalOpen && (
             <GlobalErrorFeedbacksModal
               isOpen={isModalOpen}
