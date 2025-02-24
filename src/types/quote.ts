@@ -7,7 +7,6 @@ export enum Category {
 export enum Profile {
   ARTISAN = 'artisan',
   CONSEILLER = 'conseiller',
-  MANDATAIRE = 'mandataire',
   PARTICULIER = 'particulier',
 }
 
