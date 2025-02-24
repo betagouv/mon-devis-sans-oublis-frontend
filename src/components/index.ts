@@ -59,6 +59,9 @@ export type { DeleteErrorModalProps } from './Modal/DeleteErrorModal/DeleteError
 // Modal - ErrorDetailsModal
 export { default as ErrorDetailsModal } from './Modal/ErrorDetailsModal/ErrorDetailsModal';
 export type { ErrorDetailsModalProps } from './Modal/ErrorDetailsModal/ErrorDetailsModal';
+// Modal - GlobalCommentModal
+export { default as GlobalCommentModal } from './Modal/GlobalCommentModal/GlobalCommentModal';
+export type { GlobalCommentModalProps } from './Modal/GlobalCommentModal/GlobalCommentModal';
 // Modal - GlobalErrorFeedbacksModal
 export { default as GlobalErrorFeedbacksModal } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';
 export type { GlobalErrorFeedbacksModalProps } from './Modal/GlobalErrorFeedbacksModal/GlobalErrorFeedbacksModal';

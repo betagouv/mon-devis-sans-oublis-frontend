@@ -7,14 +7,15 @@ import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 import {
-  LoadingDots,
-  Toast,
+  GlobalCommentModal,
   GlobalErrorFeedbacksModal,
+  LoadingDots,
   Notice,
+  Toast,
 } from '@/components';
 import { useConseillerRoutes, useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import { Status, Rating, Category, QuoteChecksId, ErrorDetails } from '@/types';
+import { Category, ErrorDetails, QuoteChecksId, Rating, Status } from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -51,6 +52,8 @@ export default function ResultClient({
     !initialDevis || initialDevis.status === Status.PENDING
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isGlobalCommentModalOpen, setIsGlobalCommentModalOpen] =
+    useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
@@ -298,6 +301,30 @@ export default function ResultClient({
     }
   };
 
+  const handleSubmitGlobalComment = async (
+    quoteCheckId: string,
+    comment: string
+  ) => {
+    try {
+      await quoteService.addQuoteComment(quoteCheckId, comment);
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+      setIsGlobalCommentModalOpen(false);
+    } catch (error) {
+      console.error('Error adding global comment:', error);
+    }
+  };
+
+  const handleDeleteGlobalComment = async (quoteCheckId: string) => {
+    try {
+      await quoteService.removeQuoteComment(quoteCheckId);
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error('Error deleting global comment:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <section className='fr-container-fluid fr-py-10w h-[500px] flex flex-col items-center justify-center'>
@@ -344,13 +371,14 @@ export default function ResultClient({
           />
         ) : currentDevis ? (
           <InvalidQuote
-            key={`${currentDevis.id}-${JSON.stringify(
-              currentDevis.error_details
-            )}`}
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            comment={currentDevis.comment || ''}
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
+            key={`${currentDevis.id}-${JSON.stringify(
+              currentDevis.error_details
+            )}`}
             list={(currentDevis.error_details || [])
               .filter((error) => showDeletedErrors || !error.deleted)
               .map((error) => ({
@@ -360,13 +388,24 @@ export default function ResultClient({
                   : '',
               }))}
             onAddErrorComment={handleAddErrorComment}
+            onAddGlobalComment={handleSubmitGlobalComment}
             onDeleteError={handleDeleteError}
             onDeleteErrorComment={handleDeleteErrorComment}
+            onDeleteGlobalComment={handleDeleteGlobalComment}
             onHelpClick={handleHelpClick}
+            onOpenGlobalCommentModal={() => setIsGlobalCommentModalOpen(true)}
             onUndoDeleteError={handleUndoDeleteError}
             uploadedFileName={currentDevis.filename || ''}
           />
         ) : null}
+        <GlobalCommentModal
+          isOpen={isGlobalCommentModalOpen}
+          onClose={() => setIsGlobalCommentModalOpen(false)}
+          onSubmitComment={(comment) =>
+            handleSubmitGlobalComment(quoteCheckId, comment)
+          }
+          quoteCheckId={quoteCheckId}
+        />
         <div className='fr-container flex flex-col relative'>
           {!hasFeedbackBeenSubmitted && (
             <div
@@ -374,7 +413,7 @@ export default function ResultClient({
                 currentDevis?.status === Status.VALID
                   ? 'fixed bottom-14 md:right-37 right-4'
                   : isButtonSticky
-                  ? 'fixed bottom-84 md:right-37 right-4'
+                  ? 'fixed bottom-14 md:right-37 right-4'
                   : 'absolute bottom-[-40px] md:right-6 right-4'
               } self-end z-20`}
             >

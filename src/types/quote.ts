@@ -57,6 +57,7 @@ export interface QuoteChecksId {
   status: Status;
   filename: string;
   finished_at: string;
+  comment: string | null;
   metadata: Metadata;
   profile: Profile;
   gestes: Gestes[];
