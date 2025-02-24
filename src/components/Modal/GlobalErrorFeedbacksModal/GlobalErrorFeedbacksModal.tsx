@@ -101,8 +101,8 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
           />
         </div>
 
-        <div className='fr-input-group'>
-          <label className='fr-label' htmlFor='feedback-email'>
+        <div className='fr-input-group '>
+          <label className='fr-label flex! flex-col' htmlFor='feedback-email'>
             <span className='text-[var(--text-title-blue-france)] font-bold fr-mb-1w'>
               {wording.components.global_error_feedbacks_modal.contact_title}
             </span>

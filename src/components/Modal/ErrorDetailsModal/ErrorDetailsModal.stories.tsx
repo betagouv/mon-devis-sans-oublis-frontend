@@ -49,7 +49,7 @@ export const Default: Story = {
     const [isOpen, setIsOpen] = useState(args.isOpen);
 
     const handleClose = () => setIsOpen(false);
-    const handleSubmitFeedback = (comment: string, errorDetailsId: string) => {
+    const handleSubmitComment = (comment: string, errorDetailsId: string) => {
       console.log('Feedback submitted:', { comment, errorDetailsId });
       setIsOpen(false);
     };
@@ -66,7 +66,7 @@ export const Default: Story = {
           {...args}
           isOpen={isOpen}
           onClose={handleClose}
-          onSubmitFeedback={handleSubmitFeedback}
+          onSubmitComment={handleSubmitComment}
         />
       </>
     );

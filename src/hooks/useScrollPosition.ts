@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 
-// scroll 88%
-export const useScrollPosition = (threshold = 0.95) => {
+// scroll 90%
+export const useScrollPosition = (threshold = 0.9) => {
   const [isButtonSticky, setIsButtonSticky] = useState<boolean>(true);
 
   useEffect(() => {
