@@ -413,7 +413,7 @@ export default function ResultClient({
                 currentDevis?.status === Status.VALID
                   ? 'fixed bottom-14 md:right-37 right-4'
                   : isButtonSticky
-                  ? 'fixed bottom-84 md:right-37 right-4'
+                  ? 'fixed bottom-14 md:right-37 right-4'
                   : 'absolute bottom-[-40px] md:right-6 right-4'
               } self-end z-20`}
             >
