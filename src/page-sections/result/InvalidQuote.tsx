@@ -162,12 +162,16 @@ export default function InvalidQuote({
               </div>
               <div className='px-6 w-full'>
                 <h6 className='fr-mb-1w'>Votre commentaire général</h6>
-                <textarea
-                  className='fr-input h-[150px] w-full'
-                  disabled={!isEditing}
-                  onChange={(e) => setEditedComment(e.target.value)}
-                  value={editedComment}
-                />
+                {isEditing ? (
+                  <textarea
+                    className='fr-input h-[150px] w-full'
+                    disabled={!isEditing}
+                    onChange={(e) => setEditedComment(e.target.value)}
+                    value={editedComment}
+                  />
+                ) : (
+                  <p>{comment}</p>
+                )}
                 {isEditing && (
                   <div className='flex justify-end gap-2 mt-2'>
                     <button
@@ -181,6 +185,7 @@ export default function InvalidQuote({
                     </button>
                     <button
                       className='fr-btn fr-btn--primary'
+                      disabled={editedComment === comment}
                       onClick={() => {
                         onAddGlobalComment?.(id, editedComment);
                         setIsEditing(false);
@@ -211,11 +216,10 @@ export default function InvalidQuote({
                             setIsEditing(true);
                           }}
                         >
-                          <span className='fr-icon-edit-line fr-icon--sm' />
                           Modifier le commentaire
                         </button>
                       </li>
-                      <div className='border-t border-[var(--border-default-grey)]' />
+                      <div className='border-t border-[var(--border-default-grey)] mx-3' />
                       <li className='list-none whitespace-nowrap'>
                         <button
                           className='w-full px-4 py-3 text-left hover:bg-[var(--background-default-grey)] text-[var(--text-default-error)] flex items-center gap-2'
@@ -224,7 +228,6 @@ export default function InvalidQuote({
                             onDeleteGlobalComment?.(id);
                           }}
                         >
-                          <span className='fr-icon-delete-line fr-icon--sm' />
                           Supprimer le commentaire
                         </button>
                       </li>

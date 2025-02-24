@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 
-interface GlobalCommentModalProps {
+export interface GlobalCommentModalProps {
   initialComment?: string;
   isOpen: boolean;
   onClose?: () => void;
