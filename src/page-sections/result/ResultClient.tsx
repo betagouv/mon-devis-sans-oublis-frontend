@@ -82,10 +82,10 @@ export default function ResultClient({
         setCurrentDevis(data);
 
         const isInvalidStatus = data.status === Status.INVALID;
-        const fileErrors = data.error_details.filter(
+        const fileErrors = data.error_details?.filter(
           (error: ErrorDetails) => error.category === Category.FILE
         );
-        if (isInvalidStatus && fileErrors.length > 0) {
+        if (isInvalidStatus && fileErrors?.length) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
