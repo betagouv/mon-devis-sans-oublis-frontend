@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
 export default withSentryConfig(nextConfig, {
   automaticVercelMonitors: false,
   disableLogger: true,
-  hideSourceMaps: true,
   org: process.env.NEXT_PUBLIC_SENTRY_ORG,
   project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
   sentryUrl: process.env.NEXT_PUBLIC_SENTRY_URL,

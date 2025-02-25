@@ -116,7 +116,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
             </tbody>
           </table>
         </div>
-        <div className='flex-grow'>
+        <div className='mb-38'>
           {deleteErrorReasons && (
             <DropdownCheckboxList
               customInput={{
