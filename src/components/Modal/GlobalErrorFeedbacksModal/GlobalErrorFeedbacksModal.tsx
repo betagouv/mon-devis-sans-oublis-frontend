@@ -45,13 +45,18 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
     }
   };
 
+  const handleClose = () => {
+    document.body.style.overflow = 'unset';
+    onClose?.();
+  };
+
   return (
     <Modal
       backButtonLabel={
         wording.components.global_error_feedbacks_modal.back_button_label
       }
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       position={ModalPosition.CENTER}
     >
       <div onKeyDown={handleKeyDown} className='flex flex-col'>
@@ -96,8 +101,8 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
           />
         </div>
 
-        <div className='fr-input-group'>
-          <label className='fr-label' htmlFor='feedback-email'>
+        <div className='fr-input-group '>
+          <label className='fr-label flex! flex-col' htmlFor='feedback-email'>
             <span className='text-[var(--text-title-blue-france)] font-bold fr-mb-1w'>
               {wording.components.global_error_feedbacks_modal.contact_title}
             </span>

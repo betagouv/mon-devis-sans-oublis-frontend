@@ -12,7 +12,7 @@ export interface ErrorDetailsModalProps {
   initialComment?: string;
   isOpen: boolean;
   onClose?: () => void;
-  onSubmitFeedback?: (comment: string, errorDetailsId: string) => void;
+  onSubmitComment?: (comment: string, errorDetailsId: string) => void;
   problem: string | null;
   solution: string | null;
   title: string;
@@ -23,7 +23,7 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
   initialComment = '',
   isOpen,
   onClose,
-  onSubmitFeedback,
+  onSubmitComment,
   problem,
   solution,
   title,
@@ -48,9 +48,9 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
 
   const handleSubmit = () => {
     if (comment === '' && initialComment) {
-      onSubmitFeedback?.('', errorDetailsId);
+      onSubmitComment?.('', errorDetailsId);
     } else if (comment.trim()) {
-      onSubmitFeedback?.(comment.trim(), errorDetailsId);
+      onSubmitComment?.(comment.trim(), errorDetailsId);
     }
     onClose?.();
   };
@@ -90,7 +90,6 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
           </>
         )}
       </div>
-
       {((isConseillerAndEdit && initialComment) ||
         (!isConseillerAndEdit && initialComment)) && (
         <div className='mb-8!'>
@@ -121,21 +120,26 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
                 ? 'Votre commentaire'
                 : 'Commentaire de votre conseiller'}
             </label>
-            <textarea
-              aria-describedby='textarea-input-messages'
-              className={`fr-input h-24 ${
-                !isConseillerAndEdit ? 'pointer-events-none bg-gray-100' : ''
-              }`}
-              id='textarea-input'
-              onChange={isConseillerAndEdit ? handleCommentChange : undefined}
-              readOnly={!isConseillerAndEdit}
-              value={comment}
-            />
-            <div
-              className='fr-messages-group'
-              id='textarea-input-messages'
-              aria-live='polite'
-            />
+            {isConseillerAndEdit ? (
+              <>
+                <textarea
+                  aria-describedby='textarea-input-messages'
+                  className='fr-input h-40 whitespace-pre-wrap'
+                  id='textarea-input'
+                  onChange={handleCommentChange}
+                  value={comment}
+                />
+                <div
+                  className='fr-messages-group'
+                  id='textarea-input-messages'
+                  aria-live='polite'
+                />
+              </>
+            ) : (
+              <p className='whitespace-pre-wrap h-40 overflow-y-auto'>
+                {comment}
+              </p>
+            )}
           </div>
           {isConseillerAndEdit && (
             <div className='mt-4! flex justify-end gap-4'>

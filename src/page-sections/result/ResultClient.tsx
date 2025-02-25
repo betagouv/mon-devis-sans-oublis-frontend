@@ -1,19 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
 import { FILE_ERROR } from '../upload/UploadClient';
 import {
-  LoadingDots,
-  Toast,
+  GlobalCommentModal,
   GlobalErrorFeedbacksModal,
+  LoadingDots,
   Notice,
+  Toast,
 } from '@/components';
 import { useConseillerRoutes, useScrollPosition } from '@/hooks';
 import { quoteService } from '@/lib/api';
-import { Status, Rating, Category, QuoteChecksId } from '@/types';
+import { Category, ErrorDetails, QuoteChecksId, Rating, Status } from '@/types';
 import { formatDateToFrench } from '@/utils';
 import wording from '@/wording';
 
@@ -38,19 +40,29 @@ export default function ResultClient({
   quoteCheckId,
   showDeletedErrors,
 }: ResultClientProps) {
+  const pathname = usePathname();
   const isButtonSticky = useScrollPosition();
+
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
     initialDevis
   );
+  const [hasFeedbackBeenSubmitted, setHasFeedbackBeenSubmitted] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(
     !initialDevis || initialDevis.status === Status.PENDING
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isGlobalCommentModalOpen, setIsGlobalCommentModalOpen] =
+    useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [shouldRedirectToUpload, setShouldRedirectToUpload] =
     useState<boolean>(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     setCurrentDevis(initialDevis);
@@ -72,33 +84,49 @@ export default function ResultClient({
 
       try {
         const data = await quoteService.getQuote(quoteCheckId);
-        setCurrentDevis(data);
+
+        if (!data || !data.status) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(pollQuote, pollingInterval);
+          } else {
+            setIsLoading(false);
+          }
+          return;
+        }
 
         const isInvalidStatus = data.status === Status.INVALID;
-        const hasFileError =
-          data.error_details?.[0]?.category === Category.FILE;
-        if (isInvalidStatus && hasFileError) {
+        const fileErrors =
+          data.error_details?.filter(
+            (error: ErrorDetails) => error.category === Category.FILE
+          ) || [];
+        if (isInvalidStatus && fileErrors.length > 0) {
           setShouldRedirectToUpload(true);
           setIsLoading(false);
           return;
         }
 
+        setCurrentDevis(data);
+
         if (data.status === Status.VALID || data.status === Status.INVALID) {
           setIsLoading(false);
           isPollingActive = false;
-          return;
+        } else if (data.status === Status.PENDING) {
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(pollQuote, pollingInterval);
+          } else {
+            setIsLoading(false);
+          }
         }
-
-        if (data.status === Status.PENDING && retryCount < maxRetries) {
+      } catch (error) {
+        console.error('Error polling quote:', error);
+        if (retryCount < maxRetries) {
           retryCount++;
           setTimeout(pollQuote, pollingInterval);
         } else {
           setIsLoading(false);
-          isPollingActive = false;
         }
-      } catch {
-        setIsLoading(false);
-        isPollingActive = false;
       }
     };
 
@@ -238,8 +266,10 @@ export default function ResultClient({
         email,
         rating,
       });
+      document.body.style.overflow = 'unset';
       setIsModalOpen(false);
       setShowToast(true);
+      setHasFeedbackBeenSubmitted(true);
     } catch (error) {
       console.error('Error sending feedback:', error);
     }
@@ -268,6 +298,39 @@ export default function ResultClient({
           refreshError
         );
       }
+    }
+  };
+
+  const handleSubmitGlobalComment = async (
+    quoteCheckId: string,
+    comment: string
+  ) => {
+    try {
+      await quoteService.addQuoteComment(quoteCheckId, comment);
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+      setIsGlobalCommentModalOpen(false);
+    } catch (error) {
+      console.error('Error adding global comment:', error);
+    }
+  };
+
+  const handleDeleteGlobalComment = async (quoteCheckId: string) => {
+    try {
+      await quoteService.removeQuoteComment(quoteCheckId);
+      setCurrentDevis((prev) =>
+        prev
+          ? {
+              ...prev,
+              comment: '',
+            }
+          : null
+      );
+
+      const updatedDevis = await quoteService.getQuote(quoteCheckId);
+      setCurrentDevis(updatedDevis);
+    } catch (error) {
+      console.error('Error deleting global comment:', error);
     }
   };
 
@@ -317,13 +380,14 @@ export default function ResultClient({
           />
         ) : currentDevis ? (
           <InvalidQuote
-            key={`${currentDevis.id}-${JSON.stringify(
-              currentDevis.error_details
-            )}`}
             analysisDate={formatDateToFrench(currentDevis.finished_at)}
+            comment={currentDevis.comment || ''}
             deleteErrorReasons={deleteErrorReasons}
             gestes={currentDevis.gestes}
             id={currentDevis.id}
+            key={`${currentDevis.id}-${JSON.stringify(
+              currentDevis.error_details
+            )}`}
             list={(currentDevis.error_details || [])
               .filter((error) => showDeletedErrors || !error.deleted)
               .map((error) => ({
@@ -333,30 +397,43 @@ export default function ResultClient({
                   : '',
               }))}
             onAddErrorComment={handleAddErrorComment}
+            onAddGlobalComment={handleSubmitGlobalComment}
             onDeleteError={handleDeleteError}
             onDeleteErrorComment={handleDeleteErrorComment}
+            onDeleteGlobalComment={handleDeleteGlobalComment}
             onHelpClick={handleHelpClick}
+            onOpenGlobalCommentModal={() => setIsGlobalCommentModalOpen(true)}
             onUndoDeleteError={handleUndoDeleteError}
             uploadedFileName={currentDevis.filename || ''}
           />
         ) : null}
+        <GlobalCommentModal
+          isOpen={isGlobalCommentModalOpen}
+          onClose={() => setIsGlobalCommentModalOpen(false)}
+          onSubmitComment={(comment) =>
+            handleSubmitGlobalComment(quoteCheckId, comment)
+          }
+          quoteCheckId={quoteCheckId}
+        />
         <div className='fr-container flex flex-col relative'>
-          <div
-            className={`${
-              currentDevis?.status === Status.VALID
-                ? 'fixed bottom-14 md:right-37 right-4'
-                : isButtonSticky
-                ? 'fixed bottom-84 md:right-37 right-4'
-                : 'absolute bottom-[-40px] md:right-6 right-4'
-            } self-end z-20`}
-          >
-            <button
-              className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
-              onClick={() => setIsModalOpen(!isModalOpen)}
+          {!hasFeedbackBeenSubmitted && (
+            <div
+              className={`${
+                currentDevis?.status === Status.VALID
+                  ? 'fixed bottom-14 md:right-37 right-4'
+                  : isButtonSticky
+                  ? 'fixed bottom-14 md:right-37 right-4'
+                  : 'absolute bottom-[-40px] md:right-6 right-4'
+              } self-end z-20`}
             >
-              Donner mon avis
-            </button>
-          </div>
+              <button
+                className='fr-btn fr-btn--icon-right fr-icon-star-fill rounded-full'
+                onClick={() => setIsModalOpen(!isModalOpen)}
+              >
+                Donner mon avis
+              </button>
+            </div>
+          )}
           {isModalOpen && (
             <GlobalErrorFeedbacksModal
               isOpen={isModalOpen}
