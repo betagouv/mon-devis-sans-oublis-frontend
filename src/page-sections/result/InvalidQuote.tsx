@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import {
@@ -60,31 +60,10 @@ export default function InvalidQuote({
   onUndoDeleteError,
   uploadedFileName,
 }: InvalidQuoteProps) {
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment || '');
+  const [isFocused, setIsFocused] = useState(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        buttonRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     setEditedComment(comment || '');
@@ -166,84 +145,53 @@ export default function InvalidQuote({
               </div>
               <div className='px-6 w-full'>
                 <h6 className='fr-mb-1w'>Votre commentaire général</h6>
-                {isEditing ? (
-                  <textarea
-                    className='fr-input h-[150px] w-full'
-                    disabled={!isEditing}
-                    maxLength={1000}
-                    onChange={(e) => setEditedComment(e.target.value)}
-                    value={editedComment}
-                  />
-                ) : (
-                  <p>{comment}</p>
-                )}
-                {isEditing && (
-                  <div className='flex justify-end gap-2 mt-2'>
-                    <button
-                      className='fr-btn fr-btn--secondary'
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditedComment(comment || '');
-                      }}
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      className='fr-btn fr-btn--primary'
-                      disabled={editedComment === comment}
-                      onClick={() => {
-                        onAddGlobalComment?.(id, editedComment);
-                        setIsEditing(false);
-                      }}
-                    >
-                      Enregistrer
-                    </button>
-                  </div>
-                )}
-                {isEditing && (
-                  <div className='fr-hint-text text-right'>
-                    {editedComment.length}/1000 caractères
-                  </div>
+                <textarea
+                  className='fr-input h-[150px] w-full whitespace-pre-wrap'
+                  maxLength={1000}
+                  onChange={(e) => setEditedComment(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={(e) => {
+                    if (!e.relatedTarget?.classList.contains('fr-btn')) {
+                      setIsFocused(false);
+                    }
+                  }}
+                  value={editedComment}
+                />
+                {isFocused && editedComment !== comment && (
+                  <>
+                    <div className='fr-hint-text text-right mb-3 mt-2'>
+                      {editedComment.length}/1000 caractères
+                    </div>
+                    <div className='flex justify-end gap-2 mt-2'>
+                      <button
+                        className='fr-btn fr-btn--secondary'
+                        onClick={() => {
+                          setEditedComment(comment || '');
+                          setIsFocused(false);
+                        }}
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        className='fr-btn fr-btn--primary'
+                        onClick={() => {
+                          onAddGlobalComment?.(id, editedComment);
+                          setIsFocused(false);
+                        }}
+                      >
+                        Enregistrer
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
               <div className='relative'>
                 <button
-                  ref={buttonRef}
-                  className='fr-btn fr-btn--tertiary fr-btn--sm fr-icon-edit-line'
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className='fr-btn fr-btn--tertiary fr-btn--sm fr-icon-delete-line'
+                  onClick={() => {
+                    onDeleteGlobalComment?.(id);
+                  }}
                 />
-                {isMenuOpen && (
-                  <div
-                    ref={menuRef}
-                    className='absolute right-0 mt-2 w-fit bg-white rounded-md shadow-lg z-10'
-                  >
-                    <ul className='m-0! p-0!'>
-                      <li className='list-none whitespace-nowrap'>
-                        <button
-                          className='w-full px-4 py-3 text-left hover:bg-[var(--background-default-grey)] flex items-center gap-2'
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsEditing(true);
-                          }}
-                        >
-                          Modifier le commentaire
-                        </button>
-                      </li>
-                      <div className='border-t border-[var(--border-default-grey)] mx-3' />
-                      <li className='list-none whitespace-nowrap'>
-                        <button
-                          className='w-full px-4 py-3 text-left hover:bg-[var(--background-default-grey)] text-[var(--text-default-error)] flex items-center gap-2'
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            onDeleteGlobalComment?.(id);
-                          }}
-                        >
-                          Supprimer le commentaire
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
           ) : (
@@ -283,7 +231,7 @@ export default function InvalidQuote({
               <h6 className='fr-mb-2w'>
                 Commentaire général de votre conseiller
               </h6>
-              <p>{comment}</p>
+              <p className='whitespace-pre-wrap m-0! p-O!'>{comment}</p>
             </div>
           </div>
         ) : null}

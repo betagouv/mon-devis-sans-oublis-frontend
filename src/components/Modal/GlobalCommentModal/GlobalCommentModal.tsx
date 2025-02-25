@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 
@@ -19,6 +19,12 @@ const GlobalCommentModal: React.FC<GlobalCommentModalProps> = ({
   onSubmitComment,
 }) => {
   const [comment, setComment] = useState(initialComment);
+
+  useEffect(() => {
+    if (isOpen) {
+      setComment('');
+    }
+  }, [isOpen]);
 
   const handleSubmit = () => {
     onSubmitComment(comment);
@@ -58,12 +64,15 @@ const GlobalCommentModal: React.FC<GlobalCommentModalProps> = ({
             </span>
           </label>
           <textarea
-            className='fr-input fr-mt-1v h-[88px]'
+            className='fr-input fr-mt-1v h-[200px]'
             id='global-comment'
             maxLength={1000}
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
+          <div className='fr-hint-text text-right mb-3 mt-2'>
+            {comment.length}/1000 caractères
+          </div>
         </div>
         <div className='mt-8 flex justify-end gap-4'>
           <button
