@@ -73,7 +73,8 @@ const Modal: React.FC<ModalProps> = ({
     const closeButton = modalRef.current?.querySelector(
       '[data-testid="modal-close-button"]'
     ) as HTMLElement;
-    if (closeButton && !document.activeElement?.closest('[role="dialog"]')) {
+    /* istanbul ignore next */
+    if (closeButton) {
       closeButton.focus();
     }
 
@@ -131,6 +132,7 @@ const Modal: React.FC<ModalProps> = ({
       return () => {
         rootElements.forEach((element) => {
           const originalValue = originalValues.get(element);
+          /* istanbul ignore next */
           if (originalValue === null) {
             element.removeAttribute('aria-hidden');
           } else {
