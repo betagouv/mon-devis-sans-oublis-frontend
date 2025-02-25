@@ -398,4 +398,20 @@ describe('Modal', () => {
 
     elements.forEach((el) => document.body.removeChild(el));
   });
+
+  it('handles null aria-hidden attribute correctly during cleanup', async () => {
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+
+    const { unmount } = renderModal(true);
+    await screen.findByTestId('modal-content');
+
+    expect(element).toHaveAttribute('aria-hidden', 'true');
+
+    unmount();
+
+    expect(element).not.toHaveAttribute('aria-hidden');
+
+    document.body.removeChild(element);
+  });
 });

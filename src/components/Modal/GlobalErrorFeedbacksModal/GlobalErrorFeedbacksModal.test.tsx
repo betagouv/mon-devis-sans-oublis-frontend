@@ -211,4 +211,40 @@ describe('GlobalErrorFeedbacksModal', () => {
 
     expect(mockOnSubmitFeedback).not.toHaveBeenCalled();
   });
+
+  it('does not submit form when other keys are pressed', () => {
+    render(<GlobalErrorFeedbacksModal {...defaultProps} />);
+
+    const commentTextarea = screen.getByLabelText((content) =>
+      content.includes(COMMENT_LABEL_TEXT.trim())
+    );
+    fireEvent.change(commentTextarea, {
+      target: { value: 'Test comment' },
+    });
+    fireEvent.click(screen.getByTestId('rating-2'));
+
+    const container = screen.getByText(
+      'Que pensez-vous de ces retours ?'
+    ).parentElement;
+
+    fireEvent.keyDown(container!, { key: 'Space' });
+    fireEvent.keyDown(container!, { key: 'Tab' });
+    fireEvent.keyDown(container!, { key: 'Escape' });
+
+    expect(mockOnSubmitFeedback).not.toHaveBeenCalled();
+  });
+
+  it('resets body overflow and calls onClose when modal is closed', () => {
+    const originalStyle = document.body.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+
+    render(<GlobalErrorFeedbacksModal {...defaultProps} />);
+
+    fireEvent.click(screen.getByTestId('modal-close-button'));
+    expect(document.body.style.overflow).toBe('unset');
+    expect(mockOnClose).toHaveBeenCalled();
+
+    document.body.style.overflow = originalStyle;
+  });
 });
