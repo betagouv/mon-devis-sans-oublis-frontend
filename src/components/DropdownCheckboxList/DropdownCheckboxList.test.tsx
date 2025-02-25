@@ -139,7 +139,7 @@ describe('DropdownCheckboxList', () => {
 
   it('handles optional flag correctly', () => {
     render(<DropdownCheckboxList {...defaultProps} optionnal={true} />);
-    expect(screen.getByText('- Optionnel')).toBeInTheDocument();
+    expect(screen.getByText('Optionnel')).toBeInTheDocument();
   });
 
   it('handles custom input deselection', async () => {

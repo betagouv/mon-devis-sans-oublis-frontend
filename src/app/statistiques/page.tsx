@@ -1,20 +1,14 @@
-import { use } from 'react';
-
 import { Notice } from '@/components';
 import { statService } from '@/lib/api';
 import wording from '@/wording';
 
-export default function Statistics() {
-  const fetchStatistics = async () => {
-    try {
-      return await statService.getStats();
-    } catch (error) {
-      console.error('Error fetching statistics:', error);
-      return null;
-    }
-  };
-
-  const statistics = use(fetchStatistics());
+export default async function Statistics() {
+  let statistics = null;
+  try {
+    statistics = await statService.getStats();
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
+  }
 
   if (!statistics) {
     return (

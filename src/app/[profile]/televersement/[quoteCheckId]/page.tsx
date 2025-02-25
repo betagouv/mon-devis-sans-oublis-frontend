@@ -1,27 +1,25 @@
-import { use } from 'react';
-
 import { Notice } from '@/components';
 import { quoteService } from '@/lib/api';
 import { ResultClient } from '@/page-sections';
 import wording from '@/wording';
 
-export default function Result({
+export default async function Result({
   params: initialParams,
 }: {
   params: Promise<{ profile: string; quoteCheckId: string }>;
 }) {
-  const params = use(initialParams);
+  const params = await initialParams;
 
-  const fetchCurrentDevis = async () => {
-    try {
-      return await quoteService.getQuote(params.quoteCheckId);
-    } catch (error) {
-      console.error('Error fetching devis:', error);
-      return null;
-    }
-  };
+  if (!params.quoteCheckId) {
+    console.error('Erreur : quoteCheckId est undefined !');
+  }
 
-  const currentDevis = use(fetchCurrentDevis());
+  let currentDevis = null;
+  try {
+    currentDevis = await quoteService.getQuote(params.quoteCheckId);
+  } catch (error) {
+    console.error('Error fetching devis:', error);
+  }
 
   return (
     <>

@@ -1,28 +1,22 @@
-import { use } from 'react';
-
 import { Notice } from '@/components';
 import { quoteService } from '@/lib/api';
 import { UploadClient } from '@/page-sections';
 import { Metadata } from '@/types';
 import wording from '@/wording';
 
-export default function Upload({
+export default async function Upload({
   params: initialParams,
 }: {
   params: Promise<{ profile: string }>;
 }) {
-  const params = use(initialParams);
+  const params = await initialParams;
 
-  const fetchMetadata = async (): Promise<Metadata> => {
-    try {
-      return await quoteService.getQuoteMetadata();
-    } catch (error) {
-      console.error('Error fetching metadata:', error);
-      return { aides: [], gestes: [] };
-    }
-  };
-
-  const metadata = use(fetchMetadata());
+  let metadata: Metadata = { aides: [], gestes: [] };
+  try {
+    metadata = await quoteService.getQuoteMetadata();
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+  }
 
   return (
     <>

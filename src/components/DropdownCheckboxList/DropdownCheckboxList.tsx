@@ -230,7 +230,7 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
     <div className='fr-select-group relative fr-mb-4w' ref={containerRef}>
       <label className='fr-label' htmlFor='multiselect'>
         {label}
-        {optionnal && <span className='fr-hint-text'> - Optionnel</span>}
+        {optionnal && <span className='fr-hint-text'>Optionnel</span>}
       </label>
       <button
         aria-controls='dropdown-content'
