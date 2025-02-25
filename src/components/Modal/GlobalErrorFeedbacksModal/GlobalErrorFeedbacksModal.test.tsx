@@ -227,7 +227,6 @@ describe('GlobalErrorFeedbacksModal', () => {
       'Que pensez-vous de ces retours ?'
     ).parentElement;
 
-    // Tester avec d'autres touches
     fireEvent.keyDown(container!, { key: 'Space' });
     fireEvent.keyDown(container!, { key: 'Tab' });
     fireEvent.keyDown(container!, { key: 'Escape' });
@@ -236,24 +235,16 @@ describe('GlobalErrorFeedbacksModal', () => {
   });
 
   it('resets body overflow and calls onClose when modal is closed', () => {
-    // Sauvegarder le style original
     const originalStyle = document.body.style.overflow;
 
-    // Définir un style pour tester
     document.body.style.overflow = 'hidden';
 
     render(<GlobalErrorFeedbacksModal {...defaultProps} />);
 
-    // Cliquer sur le bouton de fermeture de la modal
     fireEvent.click(screen.getByTestId('modal-close-button'));
-
-    // Vérifier que le style a été réinitialisé
     expect(document.body.style.overflow).toBe('unset');
-
-    // Vérifier que onClose a été appelé
     expect(mockOnClose).toHaveBeenCalled();
 
-    // Restaurer le style original
     document.body.style.overflow = originalStyle;
   });
 });

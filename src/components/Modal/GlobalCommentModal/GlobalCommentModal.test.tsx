@@ -64,9 +64,6 @@ describe('GlobalCommentModal', () => {
     fireEvent.change(textarea, { target: { value: 'Nouveau commentaire' } });
 
     expect(textarea).toHaveValue('Nouveau commentaire');
-
-    // Utiliser une expression régulière pour trouver le texte qui peut être divisé
-    // et pour s'adapter au nombre exact de caractères (18 ou 19)
     expect(screen.getByText(/1[89].*\/1000 caractères/)).toBeInTheDocument();
   });
 
@@ -99,7 +96,6 @@ describe('GlobalCommentModal', () => {
   });
 
   it('works correctly when onClose is undefined', () => {
-    // Créer des props sans onClose
     const propsWithoutOnClose = {
       ...defaultProps,
       onClose: undefined,
@@ -110,15 +106,12 @@ describe('GlobalCommentModal', () => {
     const textarea = screen.getByLabelText(/Commentaire/);
     fireEvent.change(textarea, { target: { value: 'Nouveau commentaire' } });
 
-    // Vérifier que le bouton est activé
     expect(
       screen.getByRole('button', { name: 'Enregistrer' })
     ).not.toBeDisabled();
 
-    // Cliquer sur le bouton d'enregistrement ne devrait pas causer d'erreur
     fireEvent.click(screen.getByRole('button', { name: 'Enregistrer' }));
 
-    // Vérifier que onSubmitComment a été appelé
     expect(mockOnSubmitComment).toHaveBeenCalledWith('Nouveau commentaire');
   });
 
@@ -152,7 +145,6 @@ describe('GlobalCommentModal', () => {
       />
     );
 
-    // Le useEffect devrait réinitialiser le commentaire à vide
     const textarea = screen.getByLabelText(/Commentaire/);
     expect(textarea).toHaveValue('');
   });
@@ -161,18 +153,14 @@ describe('GlobalCommentModal', () => {
     render(<GlobalCommentModal {...defaultProps} />);
 
     const textarea = screen.getByLabelText(/Commentaire/);
-
-    // Créer une chaîne de 1010 caractères
     const longComment = 'a'.repeat(1010);
 
     fireEvent.change(textarea, { target: { value: longComment } });
 
-    // Vérifier que le textarea a l'attribut maxLength à 1000
     expect(textarea).toHaveAttribute('maxLength', '1000');
   });
 
   it('uses default empty string when initialComment is undefined', () => {
-    // Créer des props sans initialComment
     const propsWithoutInitialComment = {
       isOpen: defaultProps.isOpen,
       onClose: defaultProps.onClose,
@@ -183,11 +171,9 @@ describe('GlobalCommentModal', () => {
 
     render(<GlobalCommentModal {...propsWithoutInitialComment} />);
 
-    // Vérifier que le textarea est vide (valeur par défaut '')
     const textarea = screen.getByLabelText(/Commentaire/);
     expect(textarea).toHaveValue('');
 
-    // Vérifier que le compteur de caractères est à 0
     expect(screen.getByText('0/1000 caractères')).toBeInTheDocument();
   });
 });
