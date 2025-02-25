@@ -69,7 +69,7 @@ jest.mock('../Modal/ErrorDetailsModal/ErrorDetailsModal', () => {
   return function MockErrorDetailsModal({
     isOpen,
     onClose,
-    onSubmitFeedback,
+    onSubmitComment,
   }: // eslint-disable-next-line
   any) {
     if (!isOpen) return null;
@@ -79,13 +79,13 @@ jest.mock('../Modal/ErrorDetailsModal/ErrorDetailsModal', () => {
           Close
         </button>
         <button
-          onClick={() => onSubmitFeedback('Updated comment')}
+          onClick={() => onSubmitComment('Updated comment')}
           data-testid='update-comment'
         >
           Update Comment
         </button>
         <button
-          onClick={() => onSubmitFeedback('')}
+          onClick={() => onSubmitComment('')}
           data-testid='delete-comment'
         >
           Delete Comment

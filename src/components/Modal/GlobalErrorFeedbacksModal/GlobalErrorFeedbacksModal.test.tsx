@@ -211,4 +211,49 @@ describe('GlobalErrorFeedbacksModal', () => {
 
     expect(mockOnSubmitFeedback).not.toHaveBeenCalled();
   });
+
+  it('does not submit form when other keys are pressed', () => {
+    render(<GlobalErrorFeedbacksModal {...defaultProps} />);
+
+    const commentTextarea = screen.getByLabelText((content) =>
+      content.includes(COMMENT_LABEL_TEXT.trim())
+    );
+    fireEvent.change(commentTextarea, {
+      target: { value: 'Test comment' },
+    });
+    fireEvent.click(screen.getByTestId('rating-2'));
+
+    const container = screen.getByText(
+      'Que pensez-vous de ces retours ?'
+    ).parentElement;
+
+    // Tester avec d'autres touches
+    fireEvent.keyDown(container!, { key: 'Space' });
+    fireEvent.keyDown(container!, { key: 'Tab' });
+    fireEvent.keyDown(container!, { key: 'Escape' });
+
+    expect(mockOnSubmitFeedback).not.toHaveBeenCalled();
+  });
+
+  it('resets body overflow and calls onClose when modal is closed', () => {
+    // Sauvegarder le style original
+    const originalStyle = document.body.style.overflow;
+
+    // Définir un style pour tester
+    document.body.style.overflow = 'hidden';
+
+    render(<GlobalErrorFeedbacksModal {...defaultProps} />);
+
+    // Cliquer sur le bouton de fermeture de la modal
+    fireEvent.click(screen.getByTestId('modal-close-button'));
+
+    // Vérifier que le style a été réinitialisé
+    expect(document.body.style.overflow).toBe('unset');
+
+    // Vérifier que onClose a été appelé
+    expect(mockOnClose).toHaveBeenCalled();
+
+    // Restaurer le style original
+    document.body.style.overflow = originalStyle;
+  });
 });

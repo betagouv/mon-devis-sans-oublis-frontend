@@ -48,14 +48,14 @@ jest.mock('../../Modal/Modal', () => {
 
 describe('ErrorDetailsModal', () => {
   const mockOnClose = jest.fn();
-  const mockOnSubmitFeedback = jest.fn();
+  const mockOnSubmitComment = jest.fn();
 
   const defaultProps = {
     errorDetailsId: 'error-123',
     initialComment: 'Initial comment',
     isOpen: true,
     onClose: mockOnClose,
-    onSubmitFeedback: mockOnSubmitFeedback,
+    onSubmitComment: mockOnSubmitComment,
     problem: 'Test problem',
     solution: 'Test solution',
     title: 'Test Error',
@@ -122,31 +122,31 @@ describe('ErrorDetailsModal', () => {
     ).not.toBeDisabled();
   });
 
-  it('calls onSubmitFeedback with empty string when deleting comment', () => {
+  it('calls onSubmitComment with empty string when deleting comment', () => {
     render(<ErrorDetailsModal {...defaultProps} />);
 
     fireEvent.click(screen.getByTitle('Supprimer le commentaire'));
     fireEvent.click(screen.getByRole('button', { name: 'Supprimer' }));
 
-    expect(mockOnSubmitFeedback).toHaveBeenCalledWith('', 'error-123');
+    expect(mockOnSubmitComment).toHaveBeenCalledWith('', 'error-123');
     expect(mockOnClose).toHaveBeenCalled();
   });
 
-  it('calls onSubmitFeedback with updated comment when saving', () => {
+  it('calls onSubmitComment with updated comment when saving', () => {
     render(<ErrorDetailsModal {...defaultProps} />);
 
     const textarea = screen.getByLabelText('Votre commentaire');
     fireEvent.change(textarea, { target: { value: 'Updated comment' } });
     fireEvent.click(screen.getByRole('button', { name: 'Enregistrer' }));
 
-    expect(mockOnSubmitFeedback).toHaveBeenCalledWith(
+    expect(mockOnSubmitComment).toHaveBeenCalledWith(
       'Updated comment',
       'error-123'
     );
     expect(mockOnClose).toHaveBeenCalled();
   });
 
-  it('does not call onSubmitFeedback when comment is empty and there was no initial comment', () => {
+  it('does not call onSubmitComment when comment is empty and there was no initial comment', () => {
     render(<ErrorDetailsModal {...defaultProps} initialComment='' />);
 
     expect(
@@ -159,7 +159,7 @@ describe('ErrorDetailsModal', () => {
 
     fireEvent.click(screen.getByTestId('modal-close-button'));
 
-    expect(mockOnSubmitFeedback).not.toHaveBeenCalled();
+    expect(mockOnSubmitComment).not.toHaveBeenCalled();
     expect(mockOnClose).toHaveBeenCalled();
   });
 
@@ -184,9 +184,17 @@ describe('ErrorDetailsModal', () => {
 
     render(<ErrorDetailsModal {...defaultProps} />);
 
-    const textarea = screen.getByLabelText('Commentaire de votre conseiller');
-    expect(textarea).toHaveAttribute('readOnly');
-    expect(textarea).toHaveClass('pointer-events-none');
+    // Find the label element
+    const label = screen.getByText('Commentaire de votre conseiller');
+    expect(label).toBeInTheDocument();
+
+    // Find the paragraph element that contains the comment
+    const commentParagraph = screen.getByText('Initial comment');
+    expect(commentParagraph).toBeInTheDocument();
+    expect(commentParagraph.tagName).toBe('P');
+    expect(commentParagraph).toHaveClass('whitespace-pre-wrap');
+
+    // Verify that there's no editable textarea or save button
     expect(
       screen.queryByRole('button', { name: 'Enregistrer' })
     ).not.toBeInTheDocument();
@@ -205,7 +213,7 @@ describe('ErrorDetailsModal', () => {
       errorDetailsId: defaultProps.errorDetailsId,
       isOpen: defaultProps.isOpen,
       onClose: defaultProps.onClose,
-      onSubmitFeedback: defaultProps.onSubmitFeedback,
+      onSubmitComment: defaultProps.onSubmitComment,
       problem: defaultProps.problem,
       solution: defaultProps.solution,
       title: defaultProps.title,
