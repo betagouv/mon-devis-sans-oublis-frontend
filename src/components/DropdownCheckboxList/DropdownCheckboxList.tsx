@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, JSX } from 'react';
 
 import CheckboxGroup from '../CheckboxGroup/CheckboxGroup';
 
