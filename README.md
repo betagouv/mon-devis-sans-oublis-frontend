@@ -4,22 +4,10 @@
 
 ### Variables d'environnement requises
 
-Avant de lancer l'application, créez un fichier `.env` à la racine du projet avec les variables d'environnement suivantes :
+Avant de lancer l'application :
 
-```bash copy
-- NEXT_PUBLIC_API_AUTH
-- NEXT_PUBLIC_API_QUOTE_CHECKS
-- NEXT_PUBLIC_API_QUOTE_CHECKS_ID
-- NEXT_PUBLIC_API_QUOTE_CHECKS_ID_FEEDBACKS
-- NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID_FEEDBACKS
-- NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA
-- NEXT_PUBLIC_API_STATS
-- NEXT_PUBLIC_SENTRY_DSN
-- NEXT_PUBLIC_SENTRY_ORG
-- NEXT_PUBLIC_SENTRY_PROJECT
-- NEXT_PUBLIC_SENTRY_URL
-- NODE_ENV
-```
+- copiez le fichier `.env.example` en `.env`
+- remplissez les valeurs des variables d'environnement selon votre environnement
 
 ## Prise en main
 
