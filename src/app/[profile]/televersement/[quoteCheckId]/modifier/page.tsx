@@ -1,25 +1,28 @@
-import { use } from 'react';
-
 import { quoteService } from '@/lib/api';
 import { EditClient } from '@/page-sections';
 
-export default function Modifier({
+type DeleteErrorReason = {
+  id: string;
+  label: string;
+};
+
+export default async function Modifier({
   params: initialParams,
 }: {
   params: Promise<{ profile: string; quoteCheckId: string }>;
 }) {
-  const params = use(initialParams);
+  const params = await initialParams;
 
-  const fetchDeleteErrorReasons = async () => {
-    try {
-      return await quoteService.getDeleteErrorDetailReasons();
-    } catch (error) {
-      console.error('Error fetching delete error reasons:', error);
-      return [];
-    }
-  };
+  if (!params.quoteCheckId) {
+    console.error('Erreur : quoteCheckId est undefined !');
+  }
 
-  const deleteErrorReasons = use(fetchDeleteErrorReasons());
+  let deleteErrorReasons: DeleteErrorReason[] = [];
+  try {
+    deleteErrorReasons = await quoteService.getDeleteErrorDetailReasons();
+  } catch (error) {
+    console.error('Error fetching delete error reasons:', error);
+  }
 
   return <EditClient deleteErrorReasons={deleteErrorReasons} params={params} />;
 }
