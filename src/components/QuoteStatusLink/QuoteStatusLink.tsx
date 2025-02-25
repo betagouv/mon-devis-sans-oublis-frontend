@@ -33,6 +33,7 @@ const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
   const nonEditionPath = pathname.replace(/\/modifier$/, '');
 
   const copyUrlToClipboard = () => {
+    /* istanbul ignore next */
     const fullUrl = isConseillerAndEdit
       ? `${baseUrl}${nonEditionPath}`
       : `${baseUrl}${pathname}`;

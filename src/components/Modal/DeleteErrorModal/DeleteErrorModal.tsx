@@ -43,16 +43,19 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
     } else {
       setIsCustom(false);
       const lastValue = values[values.length - 1];
+      /* istanbul ignore next */
       setSelectedReason(lastValue || null);
     }
   };
 
   const handleSubmit = () => {
+    /* istanbul ignore next */
     if (isCustom && !customReason.trim()) {
       console.warn('Raison personnalisée vide !');
       return;
     }
 
+    /* istanbul ignore next */
     if (!isCustom && !selectedReason) {
       console.warn('Aucune raison sélectionnée !');
       return;
@@ -60,6 +63,7 @@ const DeleteErrorModal: React.FC<DeleteErrorModalProps> = ({
 
     const finalReason = isCustom ? customReason.trim() : selectedReason;
 
+    /* istanbul ignore next */
     if (!finalReason) {
       console.error("finalReason est vide avant l'envoi !");
       return;

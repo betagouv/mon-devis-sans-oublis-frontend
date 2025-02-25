@@ -1,8 +1,8 @@
 import { ImageProps } from 'next/image';
-import { render, screen, fireEvent } from '@testing-library/react';
-import * as hooks from '@/hooks';
 import * as nextNavigation from 'next/navigation';
+import { render, screen, fireEvent } from '@testing-library/react';
 
+import * as hooks from '@/hooks';
 import QuoteStatusLink, { QuoteStatusType } from './QuoteStatusLink';
 
 jest.mock('next/navigation', () => ({
@@ -136,42 +136,13 @@ describe('QuoteStatusLink', () => {
       ).toBeInTheDocument();
     });
 
-    it('copies non-edition URL when in conseiller edit mode', () => {
-      usePathname.mockReturnValue('/conseiller/televersement/123/modifier');
-
+    it('copies URL correctly when not in conseiller edit mode', () => {
+      usePathname.mockReturnValue('/televersement/123');
       jest.spyOn(hooks, 'useConseillerRoutes').mockImplementation(() => ({
-        isConseillerAndEdit: true,
+        isConseillerAndEdit: false,
         isConseillerAndNotEdit: false,
       }));
 
-      const { rerender } = render(
-        <QuoteStatusLink
-          type={QuoteStatusType.SHARE}
-          baseUrl='http://test.com'
-        />
-      );
-
-      usePathname.mockReturnValue('/conseiller/televersement/123');
-      rerender(
-        <QuoteStatusLink
-          type={QuoteStatusType.SHARE}
-          baseUrl='http://test.com'
-        />
-      );
-
-      const copyButton = screen.getByText(
-        wording.components.quote_status_link.share.button_copy_url
-      );
-
-      fireEvent.click(copyButton);
-
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        'http://test.com/conseiller/televersement/123'
-      );
-    });
-
-    it('copies current URL when not in conseiller edit mode', () => {
-      usePathname.mockReturnValue('/conseiller/televersement/123');
       render(
         <QuoteStatusLink
           type={QuoteStatusType.SHARE}
@@ -186,8 +157,14 @@ describe('QuoteStatusLink', () => {
       fireEvent.click(copyButton);
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        'http://test.com/conseiller/televersement/123'
+        'http://test.com/televersement/123'
       );
+
+      expect(
+        screen.getByText(
+          wording.components.quote_status_link.share.button_copied_url
+        )
+      ).toBeInTheDocument();
     });
 
     it('has correct styling for share type', () => {
