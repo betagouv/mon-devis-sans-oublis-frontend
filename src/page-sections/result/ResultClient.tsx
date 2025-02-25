@@ -318,6 +318,15 @@ export default function ResultClient({
   const handleDeleteGlobalComment = async (quoteCheckId: string) => {
     try {
       await quoteService.removeQuoteComment(quoteCheckId);
+      setCurrentDevis((prev) =>
+        prev
+          ? {
+              ...prev,
+              comment: '',
+            }
+          : null
+      );
+
       const updatedDevis = await quoteService.getQuote(quoteCheckId);
       setCurrentDevis(updatedDevis);
     } catch (error) {

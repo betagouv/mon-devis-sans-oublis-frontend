@@ -124,7 +124,7 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
               <>
                 <textarea
                   aria-describedby='textarea-input-messages'
-                  className='fr-input h-24'
+                  className='fr-input h-40 whitespace-pre-wrap'
                   id='textarea-input'
                   onChange={handleCommentChange}
                   value={comment}
@@ -136,7 +136,9 @@ const ErrorDetailsModal: React.FC<ErrorDetailsModalProps> = ({
                 />
               </>
             ) : (
-              <p className='h-20 overflow-y-auto'>{comment}</p>
+              <p className='whitespace-pre-wrap h-40 overflow-y-auto'>
+                {comment}
+              </p>
             )}
           </div>
           {isConseillerAndEdit && (
