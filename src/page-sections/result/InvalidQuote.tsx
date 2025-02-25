@@ -61,7 +61,6 @@ export default function InvalidQuote({
   uploadedFileName,
 }: InvalidQuoteProps) {
   const [editedComment, setEditedComment] = useState(comment || '');
-  const [isFocused, setIsFocused] = useState(false);
 
   const { isConseillerAndEdit } = useConseillerRoutes();
 
@@ -146,44 +145,35 @@ export default function InvalidQuote({
               <div className='px-6 w-full'>
                 <h6 className='fr-mb-1w'>Votre commentaire général</h6>
                 <textarea
-                  className='fr-input h-[150px] w-full whitespace-pre-wrap'
+                  className='fr-input h-[200px] w-full whitespace-pre-wrap'
                   maxLength={1000}
                   onChange={(e) => setEditedComment(e.target.value)}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={(e) => {
-                    if (!e.relatedTarget?.classList.contains('fr-btn')) {
-                      setIsFocused(false);
-                    }
-                  }}
                   value={editedComment}
                 />
-                {isFocused && editedComment !== comment && (
-                  <>
-                    <div className='fr-hint-text text-right mb-3 mt-2'>
-                      {editedComment.length}/1000 caractères
-                    </div>
-                    <div className='flex justify-end gap-2 mt-2'>
-                      <button
-                        className='fr-btn fr-btn--secondary'
-                        onClick={() => {
-                          setEditedComment(comment || '');
-                          setIsFocused(false);
-                        }}
-                      >
-                        Annuler
-                      </button>
-                      <button
-                        className='fr-btn fr-btn--primary'
-                        onClick={() => {
-                          onAddGlobalComment?.(id, editedComment);
-                          setIsFocused(false);
-                        }}
-                      >
-                        Enregistrer
-                      </button>
-                    </div>
-                  </>
-                )}
+                <div className='fr-hint-text text-right mb-3 mt-2'>
+                  {editedComment.length}/1000 caractères
+                </div>
+                <div className='flex justify-end gap-2 mt-2'>
+                  <button
+                    className='fr-btn fr-btn--secondary'
+                    onClick={() => {
+                      setEditedComment(comment || '');
+                    }}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    className='fr-btn fr-btn--primary'
+                    disabled={
+                      !editedComment.trim() || editedComment === comment
+                    }
+                    onClick={() => {
+                      onAddGlobalComment?.(id, editedComment);
+                    }}
+                  >
+                    Enregistrer
+                  </button>
+                </div>
               </div>
               <div className='relative'>
                 <button
