@@ -59,6 +59,8 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
     useState<string[]>(selectedValues);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
@@ -96,6 +98,7 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
   }, [isOpen]);
 
   const isFirstItemFocused = () => {
+    if (typeof window === 'undefined') return false;
     const firstCheckbox = dropdownRef.current?.querySelector(
       'input[type="checkbox"]'
     );
@@ -103,6 +106,7 @@ export const DropdownCheckboxList: React.FC<DropdownCheckboxListProps> = ({
   };
 
   const isLastItemFocused = () => {
+    if (typeof window === 'undefined') return false;
     const checkboxes = dropdownRef.current?.querySelectorAll(
       'input[type="checkbox"]'
     );

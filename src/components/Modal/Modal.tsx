@@ -37,6 +37,8 @@ const Modal: React.FC<ModalProps> = ({
   const isDesktop = useIsDesktop();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     setMounted(true);
     const element = document.createElement('div');
     element.setAttribute('id', 'modal-root');
@@ -51,6 +53,7 @@ const Modal: React.FC<ModalProps> = ({
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     if (isOpen) {
       setShouldRender(true);
       setTimeout(() => {
@@ -68,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (typeof window === 'undefined' || !isOpen) return;
 
     const closeButton = modalRef.current?.querySelector(
       '[data-testid="modal-close-button"]'
@@ -119,47 +122,45 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (isOpen) {
-      const rootElements = document.querySelectorAll(
-        'body > *:not(#modal-root)'
-      );
+    if (typeof window === 'undefined' || !isOpen) return;
 
-      const originalValues = new Map();
+    const rootElements = document.querySelectorAll('body > *:not(#modal-root)');
+
+    const originalValues = new Map();
+    rootElements.forEach((element) => {
+      originalValues.set(element, element.getAttribute('aria-hidden'));
+      element.setAttribute('aria-hidden', 'true');
+    });
+
+    return () => {
       rootElements.forEach((element) => {
-        originalValues.set(element, element.getAttribute('aria-hidden'));
-        element.setAttribute('aria-hidden', 'true');
+        const originalValue = originalValues.get(element);
+
+        if (originalValue === null) {
+          element.removeAttribute('aria-hidden');
+        } else {
+          element.setAttribute('aria-hidden', originalValue);
+        }
       });
-
-      return () => {
-        rootElements.forEach((element) => {
-          const originalValue = originalValues.get(element);
-
-          if (originalValue === null) {
-            element.removeAttribute('aria-hidden');
-          } else {
-            element.setAttribute('aria-hidden', originalValue);
-          }
-        });
-      };
-    }
+    };
   }, [isOpen]);
 
   useEffect(() => {
-    if (isOpen && portalElement) {
-      const siblingElements = Array.from(document.body.children).filter(
-        (child) => child !== portalElement
-      );
+    if (typeof window === 'undefined' || !isOpen || !portalElement) return;
 
+    const siblingElements = Array.from(document.body.children).filter(
+      (child) => child !== portalElement
+    );
+
+    siblingElements.forEach((element) => {
+      element.setAttribute('inert', '');
+    });
+
+    return () => {
       siblingElements.forEach((element) => {
-        element.setAttribute('inert', '');
+        element.removeAttribute('inert');
       });
-
-      return () => {
-        siblingElements.forEach((element) => {
-          element.removeAttribute('inert');
-        });
-      };
-    }
+    };
   }, [isOpen, portalElement]);
 
   const modalContent = shouldRender && (
