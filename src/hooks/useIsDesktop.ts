@@ -6,6 +6,8 @@ export const useIsDesktop = (breakpoint = 768) => {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= breakpoint);
     };
