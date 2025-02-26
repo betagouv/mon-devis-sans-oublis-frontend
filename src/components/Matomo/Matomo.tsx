@@ -18,8 +18,6 @@ const MatomoContent = () => {
         url: process.env.NEXT_PUBLIC_MATOMO_URL,
       });
 
-      push(['disableJavaScriptDetection']);
-
       setInitialised(true);
     }
   }, [initialised]);
