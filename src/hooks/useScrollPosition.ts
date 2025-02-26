@@ -7,6 +7,8 @@ export const useScrollPosition = (threshold = 0.9) => {
   const [isButtonSticky, setIsButtonSticky] = useState<boolean>(true);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
