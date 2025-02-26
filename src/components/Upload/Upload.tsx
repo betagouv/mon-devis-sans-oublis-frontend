@@ -51,11 +51,11 @@ const Upload: React.FC<UploadProps> = ({
       return;
     }
 
-    const allowedTypes = ['application/pdf'];
+    const allowedTypes = ['application/pdf', 'image/*'];
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      if (!allowedTypes.includes(file.type)) {
+      if (!allowedTypes.some(type => file.type.startsWith(type.replace(/\/\*$/, '/')))) {
         const error = wording.components.upload.error_file_type;
         setLocalError(error);
         setError(error);
@@ -130,7 +130,7 @@ const Upload: React.FC<UploadProps> = ({
         </p>
       </span>
       <input
-        accept='application/pdf'
+        accept='{allowedTypes.join(",")}'
         data-testid='file-upload'
         id='file-upload'
         name='file-upload'
