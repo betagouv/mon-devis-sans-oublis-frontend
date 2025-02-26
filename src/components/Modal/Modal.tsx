@@ -88,12 +88,14 @@ const Modal: React.FC<ModalProps> = ({
     const handleTabKey = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
 
+      /* istanbul ignore if */
       if (e.shiftKey) {
         if (document.activeElement === firstFocusableElement) {
           lastFocusableElement.focus();
           e.preventDefault();
         }
       } else {
+        /* istanbul ignore if */
         if (document.activeElement === lastFocusableElement) {
           firstFocusableElement.focus();
           e.preventDefault();

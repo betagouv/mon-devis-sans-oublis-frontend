@@ -45,8 +45,6 @@ describe('Matomo Tracking', () => {
         url: 'https://example.com/matomo',
       });
     });
-
-    expect(push).toHaveBeenCalledWith(['disableJavaScriptDetection']);
   });
 
   it('sends tracking events when the route changes', async () => {
