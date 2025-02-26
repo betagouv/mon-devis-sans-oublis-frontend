@@ -95,7 +95,9 @@ export default function UploadClient({
   useEffect(() => {
     if (fileUploadedError) {
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }, 0);
     }
   }, [fileUploadedError]);

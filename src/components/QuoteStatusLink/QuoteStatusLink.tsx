@@ -20,7 +20,7 @@ export interface QuoteStatusLinkProps {
 }
 
 const QuoteStatusLink: React.FC<QuoteStatusLinkProps> = ({
-  baseUrl = window.location.origin,
+  baseUrl = typeof window !== 'undefined' ? window.location.origin : '',
   className,
   type,
 }) => {
