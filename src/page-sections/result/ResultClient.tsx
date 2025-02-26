@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import InvalidQuote from './InvalidQuote';
 import ValidQuote from './ValidQuote';
@@ -41,6 +41,7 @@ export default function ResultClient({
   showDeletedErrors,
 }: ResultClientProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const isButtonSticky = useScrollPosition();
 
   const [currentDevis, setCurrentDevis] = useState<QuoteChecksId | null>(
@@ -141,9 +142,9 @@ export default function ResultClient({
 
   useEffect(() => {
     if (shouldRedirectToUpload) {
-      window.location.href = `/${profile}/televersement?error=${FILE_ERROR}`;
+      router.push(`/${profile}/televersement?error=${FILE_ERROR}`);
     }
-  }, [shouldRedirectToUpload, profile]);
+  }, [shouldRedirectToUpload, profile, router]);
 
   const handleAddErrorComment = async (
     quoteCheckId: string,
@@ -268,7 +269,9 @@ export default function ResultClient({
         email,
         rating,
       });
-      document.body.style.overflow = 'unset';
+      if (typeof window !== 'undefined') {
+        document.body.style.overflow = 'unset';
+      }
       setIsModalOpen(false);
       setShowToast(true);
       setHasFeedbackBeenSubmitted(true);

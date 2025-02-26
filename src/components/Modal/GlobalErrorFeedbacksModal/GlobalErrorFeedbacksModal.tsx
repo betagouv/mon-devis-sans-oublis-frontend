@@ -46,7 +46,9 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
   };
 
   const handleClose = () => {
-    document.body.style.overflow = 'unset';
+    if (typeof window !== 'undefined') {
+      document.body.style.overflow = 'unset';
+    }
     onClose?.();
   };
 
