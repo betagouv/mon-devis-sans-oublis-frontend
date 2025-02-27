@@ -116,7 +116,7 @@ export default function UploadClient({
       )}
       <>
         <Upload
-          maxFileSize={50}
+          maxFileSize={50} // TODO: get from API
           onFileUpload={handleFileUpload}
           setError={setFileError}
         />

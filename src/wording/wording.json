@@ -88,9 +88,9 @@
       "satisfactory": "Très satisfaisante"
     },
     "upload": {
-      "description": "Taille maximale : {maxFileSize}Mo. Format supporté : image ou pdf. Un seul fichier possible.",
+      "description": "Taille maximale : {maxFileSize}Mo. Formats supportés : {fileTypes}. Un seul fichier possible.",
       "error_file_size": "Le fichier dépasse la taille maximale de {maxFileSize}Mo.",
-      "error_file_type": "Le fichier doit être au format image ou PDF.",
+      "error_file_type": "Le fichier doit être au format {fileTypes}.",
       "label": "Ajouter un fichier",
       "none_selected_file": "Aucun fichier sélectionné",
       "select_file": "Choisir le fichier"
