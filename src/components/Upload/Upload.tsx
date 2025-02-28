@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import wording from '@/wording';
 
 export interface UploadProps {
-  maxFileSize: number;
+  maxFileSize: number; // in MB
   onFileUpload: (file: File) => void;
   setError: (error: string | null) => void;
 }
@@ -20,6 +20,10 @@ const Upload: React.FC<UploadProps> = ({
   const [localError, setLocalError] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // TODO: Fetch file types from API
+  const fileTypes = 'image ou PDF';
+  const allowedTypes = ['application/pdf', 'image/*'];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -43,6 +47,9 @@ const Upload: React.FC<UploadProps> = ({
 
     if (file.size > maxFileSize * 1024 * 1024) {
       const error = wording.components.upload.error_file_size.replace(
+        '{fileTypes}',
+        fileTypes
+      ).replace(
         '{maxFileSize}',
         maxFileSize.toString()
       );
@@ -51,7 +58,6 @@ const Upload: React.FC<UploadProps> = ({
       return;
     }
 
-    const allowedTypes = ['application/pdf', 'image/*'];
     const reader = new FileReader();
 
     reader.onloadend = () => {
@@ -97,6 +103,9 @@ const Upload: React.FC<UploadProps> = ({
         {wording.components.upload.label}
         <span data-testid='upload-description' className='fr-hint-text'>
           {wording.components.upload.description.replace(
+            '{fileTypes}',
+            fileTypes
+          ).replace(
             '{maxFileSize}',
             maxFileSize.toString()
           )}
