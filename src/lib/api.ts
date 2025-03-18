@@ -478,6 +478,7 @@ export const statService = {
     try {
       const response = await fetch(statsUrl, {
         headers: API_CONFIG.headers,
+        cache: "no-store"
       });
 
       if (!response.ok) {
