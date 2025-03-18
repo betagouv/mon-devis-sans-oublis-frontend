@@ -37,7 +37,7 @@ export const WhatWeDo: Story = {
           <span className='fr-icon-map-pin-2-line text-[var(--background-action-high-blue-france)] mt-1' />
           <div className='flex flex-col'>
             <p className='font-bold text-[var(--text-title-grey)]'>
-              Fluidifier l’instructions des aides
+              Fluidifier l’instruction des aides
             </p>
             <p className='text-[var(--text-mention-grey)]'>
               Création d’un modèle d’analyse automatique qui compare les devis

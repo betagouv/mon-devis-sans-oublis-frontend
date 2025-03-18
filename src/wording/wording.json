@@ -103,7 +103,7 @@
           {
             "description": "Création d’un modèle d’analyse automatique qui compare les devis de rénovation énergétique avec les exigences des demandes d’aides.",
             "icon": "fr-icon-map-pin-2-line",
-            "title": "Fluidifier l’instructions des aides"
+            "title": "Fluidifier l’instruction des aides"
           },
           {
             "description": "Réduction du nombre d’allers-retours avec les instructeurs d’aides avec un pré-contrôle gratuit et instantané.",
@@ -306,7 +306,7 @@
     "analysis_in_progress_title": "Analyse en cours",
     "badge_correction": "{number} correction",
     "badge_correction_plural": "{number} corrections",
-    "quotation_alert_ko": "Le devis n’est pas conforme aux attentes des aides énergétique, il risque d’être retoqué.",
+    "quotation_alert_ko": "Le devis n’est pas conforme aux attentes des aides énergétiques, il risque d’être retoqué.",
     "quotation_alert_ok": "Bravo, votre devis est complet. Il est conforme aux aides de rénovation énergétique et pourra être instruit sans demande complémentaire.",
     "subtitle": "Pas de panique, voici les corrections à apporter ⬇️",
     "title": "Résultat de l’analyse"
