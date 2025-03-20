@@ -1,5 +1,4 @@
 import { ErrorDetails, Profile, Rating } from '@/types';
-import { headers } from 'next/headers';
 
 interface QuoteUpdateData {
   status?: string;
