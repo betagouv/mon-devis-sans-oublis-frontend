@@ -1,4 +1,5 @@
 import { ErrorDetails, Profile, Rating } from '@/types';
+import { headers } from 'next/headers';
 
 interface QuoteUpdateData {
   status?: string;
@@ -18,12 +19,17 @@ interface QuoteResponse {
   error_details?: ErrorDetails[];
 }
 
-const API_CONFIG = {
-  headers: {
+const apiHeaders = () => {
+  const apiAuth = process.env.NEXT_PUBLIC_API_AUTH;
+  if (!apiAuth) {
+    throw new Error("❌ NEXT_PUBLIC_API_AUTH is missing!");
+  }
+
+  return {
     accept: 'application/json',
-    Authorization: `Basic ${process.env.NEXT_PUBLIC_API_AUTH}`,
-  },
-};
+    Authorization: `Basic ${apiAuth}`,
+  };
+}
 
 // Quote Service
 export const quoteService = {
@@ -47,9 +53,7 @@ export const quoteService = {
 
       const response = await fetch(uploadUrl, {
         method: 'POST',
-        headers: {
-          ...API_CONFIG.headers,
-        },
+        headers: apiHeaders(),
         body: formData,
       });
 
@@ -78,23 +82,19 @@ export const quoteService = {
       throw new Error('NEXT_PUBLIC_API_QUOTE_CHECKS_ID is not defined.');
     }
 
-    try {
-      const url = quoteUrl.replace(':quote_check_id', quoteCheckId);
+    const url = quoteUrl.replace(':quote_check_id', quoteCheckId);
 
-      const response = await fetch(url, {
-        headers: API_CONFIG.headers,
-      });
+    const response = await fetch(url, {
+      headers: apiHeaders(),
+    });
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch quote: ${response.status} ${response.statusText}`
-        );
-      }
-
-      return await response.json();
-    } catch (error) {
-      throw error;
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch quote: ${response.status} ${response.statusText}`
+      );
     }
+
+    return await response.json();
   },
 
   async updateQuote(
@@ -113,7 +113,7 @@ export const quoteService = {
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
-          ...API_CONFIG.headers,
+          ...apiHeaders(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedData),
@@ -145,7 +145,7 @@ export const quoteService = {
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
-          ...API_CONFIG.headers,
+          ...apiHeaders(),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ comment }),
@@ -191,7 +191,7 @@ export const quoteService = {
 
     try {
       const response = await fetch(metadataUrl, {
-        headers: API_CONFIG.headers,
+        headers: apiHeaders(),
       });
 
       if (!response.ok) {
@@ -231,7 +231,10 @@ export const quoteService = {
 
     const response = await fetch(finalUrl, {
       method: 'DELETE',
-      headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+      headers: {
+        ...apiHeaders(),
+        'Content-Type': 'application/json'
+      },
       cache: 'no-store',
     });
 
@@ -259,7 +262,10 @@ export const quoteService = {
 
       const response = await fetch(url, {
         method: 'POST',
-        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+        headers: {
+          ...apiHeaders(),
+          'Content-Type': 'application/json'
+        },
       });
 
       if (!response.ok) {
@@ -294,7 +300,7 @@ export const quoteService = {
 
     try {
       const response = await fetch(deleteErrorDetailReasonsUrl, {
-        headers: API_CONFIG.headers,
+        headers: apiHeaders(),
       });
 
       if (!response.ok) {
@@ -341,7 +347,10 @@ export const quoteService = {
 
       const response = await fetch(url, {
         method: 'PATCH',
-        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+        headers: {
+          ...apiHeaders(),
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ comment }),
       });
 
@@ -409,7 +418,10 @@ export const quoteService = {
 
       const response = await fetch(url, {
         method: 'POST',
-        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+        headers: {
+          ...apiHeaders(),
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ comment }),
       });
 
@@ -448,7 +460,10 @@ export const quoteService = {
 
       const response = await fetch(url, {
         method: 'POST',
-        headers: { ...API_CONFIG.headers, 'Content-Type': 'application/json' },
+        headers: {
+          ...apiHeaders(),
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ ...feedback }),
       });
 
@@ -477,7 +492,7 @@ export const statService = {
 
     try {
       const response = await fetch(statsUrl, {
-        headers: API_CONFIG.headers,
+        headers: apiHeaders(),
         cache: "no-store"
       });
 
