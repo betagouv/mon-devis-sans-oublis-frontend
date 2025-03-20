@@ -22,8 +22,8 @@ const Upload: React.FC<UploadProps> = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // TODO: Fetch file types from API
-  const fileTypes = 'image ou PDF';
-  const allowedTypes = ['application/pdf', 'image/*'];
+  const fileTypes = 'PDF'; // 'image ou PDF'
+  const allowedTypes = ['application/pdf']; // , 'image/*'];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
