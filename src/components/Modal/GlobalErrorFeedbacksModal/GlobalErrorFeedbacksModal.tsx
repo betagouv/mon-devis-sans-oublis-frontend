@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Modal, { ModalPosition } from '../Modal';
 import RoundCheckboxGroup from '../../RoundCheckboxGroup/RoundCheckboxGroup';
@@ -45,12 +45,17 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
     }
   };
 
-  const handleClose = () => {
-    if (typeof window !== 'undefined') {
-      document.body.style.overflow = 'unset';
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
-    onClose?.();
-  };
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   return (
     <Modal
@@ -58,7 +63,7 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
         wording.components.global_error_feedbacks_modal.back_button_label
       }
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={onClose}
       position={ModalPosition.CENTER}
     >
       <div onKeyDown={handleKeyDown} className='flex flex-col'>
@@ -97,9 +102,9 @@ const GlobalErrorFeedbacksModal: React.FC<GlobalErrorFeedbacksModalProps> = ({
           <textarea
             className='fr-input'
             id='feedback-comment'
-            value={comment}
             onChange={(e) => setComment(e.target.value)}
             aria-required='true'
+            value={comment}
           />
         </div>
 
