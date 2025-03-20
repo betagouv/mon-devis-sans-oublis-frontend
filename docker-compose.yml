@@ -12,7 +12,7 @@ services:
       - NEXT_PUBLIC_API_QUOTE_CHECKS_ID_FEEDBACKS=http://host.docker.internal:3001/api/v1/quote_checks/:quote_check_id/feedbacks
       - NEXT_PUBLIC_API_QUOTE_CHECKS_ID_ERROR_DETAILS_ID_FEEDBACKS=http://host.docker.internal:3001/api/v1/quote_checks/:quote_check_id/error_details/:error_detail_id/feedbacks
       - NEXT_PUBLIC_API_QUOTE_CHECKS_METADATA=http://host.docker.internal:3001/api/v1/quote_checks/metadata
-      - NEXT_TELEMETRY_DEBUG=0
+      - NEXT_TELEMETRY_DISABLED=1
     command: npm run dev
     volumes:
       - .:/app
