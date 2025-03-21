@@ -62,7 +62,10 @@ const Upload: React.FC<UploadProps> = ({
 
     reader.onloadend = () => {
       if (!allowedTypes.some(type => file.type.startsWith(type.replace(/\/\*$/, '/')))) {
-        const error = wording.components.upload.error_file_type;
+        const error = wording.components.upload.error_file_type.replace(
+          '{fileTypes}',
+          fileTypes
+        )
         setLocalError(error);
         setError(error);
         return;
